@@ -52,6 +52,8 @@ decision (`AD-*`).
 - **S (S-4), a cloud-hosted system:** Which mission impact level do the kinds of data set
   (CLOUD-002)? Do you validate the activity tracking checklist and accept any activity no one
   performs?
+- **A (A-1):** What independence must the assessor have for this system, and do you accept
+  the SCA proposed? Does any reuse of earlier results need your approval?
 - **A (A-2):** Do you approve the assessment plan, its scope exclusions and schedule? May
   assessors test on live networks?
 - **R (R-2, R-4):** Is the overall risk acceptable for the mission? Which decision, with

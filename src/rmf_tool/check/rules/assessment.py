@@ -6,6 +6,7 @@ statement found (A-3), how findings are triaged (A-5) and how the POA&M records 
 from __future__ import annotations
 
 import datetime as dt
+import re
 from collections.abc import Callable, Iterable
 from typing import Any
 
@@ -304,9 +305,15 @@ def _reused(r: dict[str, Any], sap: dict[str, Any], err: Err) -> None:
         err(f"{rid}: {(start - assessed).days} days since the previous assessment, beyond the "
             f"{limit} the organization's reuse policy allows")
     required = _block(sap, "assessor_independence").get("required")
-    if _rank(r.get("independence")) < _rank(required):
+    # a lower-independence result an assessor of this team witnessed or re-performs in part is
+    # evidence the team examined, not an unexamined reuse (F-11-3)
+    seen = _block(r, "corroboration")
+    corroborated = seen.get("by") in _team(sap) and seen.get("how") in (
+        "witnessed", "reperformed") and bool(seen.get("extent"))
+    if _rank(r.get("independence")) < _rank(required) and not corroborated:
         err(f"{rid}: a previous assessment of independence {r.get('independence')} cannot be "
-            f"reused when the current assessment requires {required}")
+            f"reused when the current assessment requires {required}, unless an assessor of "
+            "the team witnessed it or re-performs a sample (corroboration)")
     if r.get("approved_by") not in (AO, AODR):
         err(f"{rid}: reusing assessment results is approved by the users of the assessment "
             f"results, not {r.get('approved_by')}")
@@ -327,6 +334,16 @@ def _reused(r: dict[str, Any], sap: dict[str, Any], err: Err) -> None:
             err(f"{rid}: the component product checks do not show {', '.join(failed)}")
 
 
+def _policy_answer(ctx: Context, source: Any) -> bool:
+    """An interview answer of the CISO or the AO that states the reuse policy (F-11-7)."""
+    m = re.fullmatch(r"(INT-\d{3})\.A\d+", str(source))
+    if m is None:
+        return False
+    return any((i.front or {}).get("interview_id") == m[1]
+               and (i.front or {}).get("persona") in ("PER-CISO", AO, AODR)
+               for i in ctx.interviews)
+
+
 def reuse(ctx: Context) -> list[RunFinding]:
     sap = _sap(ctx)
     if sap is None:
@@ -334,11 +351,22 @@ def reuse(ctx: Context) -> list[RunFinding]:
     out, err = _reporter("ASMT-003", SAP_FILE)
     records = _records(sap, "reused_results")
     source = _block(sap, "reuse_policy").get("source")
-    if records and source != ORG_CONTEXT:
+    if records and source != ORG_CONTEXT and not _policy_answer(ctx, source):
         err(f"the reuse requirements are established by the organization ({ORG_CONTEXT}), not "
             f"{source}")
     for r in records:
         _reused(r, sap, err)
+    env = _block(sap, "assessed_environment")
+    if env.get("kind") == "representative":
+        # evidence from a twin of the authorized instance stands only with its basis and a
+        # procedure that confirms the production configuration (F-11-9)
+        procedures = {str(p.get("id")) for p in _records(sap, "procedures")}
+        if not env.get("representativeness"):
+            err("the assessment runs on a representative instance and states no basis for its "
+                "representativeness")
+        if env.get("confirmation_procedure") not in procedures:
+            err("the assessment runs on a representative instance and no procedure of the plan "
+                f"confirms the production configuration ({env.get('confirmation_procedure')})")
     return out
 
 
@@ -361,6 +389,8 @@ def _provider(p: dict[str, Any], sap: dict[str, Any], packaged: bool, err: Err) 
     if _late(review.get("date"), _day(_block(sap, "approval").get("date"))):
         err(f"{pid}: the contract or agreement was reviewed on {review.get('date')}, after the "
             "assessment plan was approved")
+    if p.get("relationship") == "interconnection":
+        return  # a connected system: no inherited controls to judge (F-11-5)
     found = _block(p, "provider_assessment")
     # Evidence may still be on request while the plan is made; the package needs it (A-4, R-2).
     evidence = found.get("evidence")
@@ -374,7 +404,9 @@ def _provider(p: dict[str, Any], sap: dict[str, Any], packaged: bool, err: Err) 
     if found.get("procedures_reviewed_by") not in _team(sap):
         err(f"{pid}: the assessment procedures it employed are reviewed by assessors, "
             f"not {found.get('procedures_reviewed_by')}")
-    if found.get("meets_protection_needs") is not True:
+    # an open finding (FND-###) that tracks the gap lets the plan proceed (F-11-5)
+    tracked = re.fullmatch(r"FND-\d{3}", str(found.get("open_finding") or "")) is not None
+    if found.get("meets_protection_needs") is not True and tracked is False:
         err(f"{pid}: the externally provided controls do not meet the protection needs of the "
             "organization, so they cannot be leveraged")
     if p.get("kind") != "usg" and p.get("under_usg_authority") is not True \
@@ -394,7 +426,10 @@ def external(ctx: Context) -> list[RunFinding]:
         if ident not in covered:
             err(f"external {ident} has no external_providers record, so the assessment "
                 "procedures are not adjusted for it")
-    packaged = not {"A-4", "R-2"}.isdisjoint(scope.active_tasks(ctx.run))
+    # the package needs the evidence once A-4 or R-2 has started, i.e. one of its outputs
+    # exists; being in scope is not enough (F-11-4)
+    packaged = any(isinstance(d.data, dict) and not {"A-4", "R-2"}.isdisjoint(
+        d.data.get("touched_by") or ()) for d in ctx.docs.values())
     for p in records:
         _provider(p, sap, packaged, err)
     return out
@@ -402,7 +437,8 @@ def external(ctx: Context) -> list[RunFinding]:
 
 # --- ASMT-005: each determination statement produces a finding ---------------------------------
 
-def _statements(cat: catalog.Catalog, d: dict[str, Any], err: Err) -> dict[Any, Any]:
+def _statements(cat: catalog.Catalog, d: dict[str, Any], err: Err,
+                providers: frozenset[str] = frozenset()) -> dict[Any, Any]:
     cid, result = d.get("control_id"), d.get("result")
     records = _records(d, "statements")
     found = {s.get("id"): s.get("result") for s in records}
@@ -416,6 +452,13 @@ def _statements(cat: catalog.Catalog, d: dict[str, Any], err: Err) -> dict[Any, 
     for s in records:
         if s.get("result") == NOT_APPLICABLE and not str(s.get("reason") or "").strip():
             err(f"{cid}: {s.get('id')} is not applicable without a reason")
+        if s.get("result") == "not-yet-occurred" and not str(s.get("reason") or "").strip():
+            err(f"{cid}: {s.get('id')} has not yet occurred, and no reason says what")
+        if s.get("basis") == "assumption" and not s.get("assumption"):
+            err(f"{cid}: {s.get('id')} rests on an assumption and names none")
+        if s.get("basis") == "provider-assessment" and s.get("provider") not in providers:
+            err(f"{cid}: {s.get('id')} rests on a provider assessment, and "
+                f"{s.get('provider')} is no external provider of the plan")
     against = [label for label, r in found.items() if r in (OTHER, "not-evaluated")]
     if result == SATISFIED and against:
         err(f"{cid} is satisfied, yet the determination statement {', '.join(against)} is not")
@@ -435,8 +478,14 @@ def _planned(sap: dict[str, Any]) -> dict[Any, set[Any]]:
 
 
 def _used(d: dict[str, Any], sap: dict[str, Any], err: Err) -> None:
-    """The determination against the plan: its methods and the reused results it rests on."""
+    """The determination against the plan: its methods, its date and the reused results it
+    rests on."""
     cid = d.get("control_id")
+    when, schedule = _day(d.get("assessed_on")), _block(sap, "schedule")
+    start, end = _day(schedule.get("start")), _day(schedule.get("end"))
+    if when and start and end and not start <= when <= end:
+        # the assessment date sits in the approved schedule (F-12-2)
+        err(f"{cid} was assessed on {when}, outside the assessment schedule {start} to {end}")
     planned = _planned(sap).get(cid)
     if planned is not None:
         for method in sorted(set(_seq(d, "methods", cid, err)) - planned):
@@ -476,12 +525,45 @@ def _finding(f: dict[str, Any], found: dict[Any, dict[Any, Any]], err: Err) -> N
         err(f"{fid} notes no potential compromise to confidentiality, integrity or availability")
 
 
+def _reassessed(d: dict[str, Any], found: dict[Any, Any], err: Err) -> dict[Any, Any]:
+    """The current result of each statement: A-3's, overlaid in date order by the
+    reassessments of A-4 or A-5, which leave A-3's record as it was (F-14-5)."""
+    cid, current = d.get("control_id"), dict(found)
+    assessed = _day(d.get("assessed_on"))
+    for r in sorted(_records(d, "reassessments"), key=lambda r: str(r.get("date"))):
+        when = _day(r.get("date"))
+        if assessed and when and when < assessed:
+            err(f"{cid}: the {r.get('task')} reassessment of {when} comes before the "
+                f"assessment of {assessed}")
+        for s in _records(r, "statements"):
+            if s.get("id") not in found:
+                err(f"{cid}: the reassessment names {s.get('id')}, no determination statement "
+                    "of the control")
+                continue
+            current[s.get("id")] = s.get("result")
+    return current
+
+
+def _still_open(f: dict[str, Any], current: dict[Any, dict[Any, Any]], err: Err) -> None:
+    """An open finding whose every affected statement a reassessment found satisfied is
+    closed, not left open."""
+    affected = f.get("affected_statements") or ()
+    now = current.get(f.get("control_id"), {})
+    if affected and all(now.get(label) == SATISFIED for label in affected):
+        err(f"{f.get('id')} stays open, yet a reassessment found every statement it affects "
+            "satisfied: close it")
+
+
+SAR_SUMMARY_FILE = "artifacts/data/sar-summary.yaml"
+
+
 def determinations(ctx: Context) -> list[RunFinding]:
     if not scope.produced_or_seeded(ctx.run, "ART-SAR"):
         return []
     out: list[RunFinding] = []
     sap = _sap(ctx) or {}
     found: dict[Any, dict[Any, Any]] = {}
+    current: dict[Any, dict[Any, Any]] = {}
     every = list(family_records(ctx, SAR_DIR, "findings"))
     # A closed finding still names what it found: remediation does not change initial findings.
     named = {label for _, f in every for label in f.get("affected_statements") or ()}
@@ -493,15 +575,28 @@ def determinations(ctx: Context) -> list[RunFinding]:
         assert cat is not None
         err = _at(out, "ASMT-005", rel)
         cid = d.get("control_id")
-        found[cid] = _statements(cat, d, err)
+        found[cid] = _statements(cat, d, err, frozenset(
+            str(p.get("id")) for p in _records(sap, "external_providers")))
         _used(d, sap, err)
         unnamed = [s for s, r in found[cid].items() if r == OTHER and s not in named]
         if unnamed:
             err(f"{cid}: no finding names the other than satisfied statement "
                 f"{', '.join(unnamed)}")
+        current[cid] = _reassessed(d, found[cid], err)
     for rel, f in findings:
         _finding(f, found, _at(out, "ASMT-005", rel))
+        _still_open(f, current, _at(out, "ASMT-005", rel))
     _named_in_report(ctx, sap, _at(out, "ASMT-005", SAR_DOC))
+    # each additional procedure of the plan has a result once A-3 closes with its summary
+    # (F-13-2)
+    if ctx.run.path(SAR_SUMMARY_FILE).is_file():
+        done = {str(r.get("apr_id")) for _, r in family_records(ctx, SAR_DIR,
+                                                                "additional_results")}
+        for apr in _records(sap, "additional_procedures"):
+            if str(apr.get("id")) not in done:
+                _at(out, "ASMT-005", SAR_SUMMARY_FILE)(
+                    f"the additional procedure {apr.get('id')} of the plan has no result in "
+                    "any family file's additional_results")
     return out
 
 

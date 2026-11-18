@@ -61,6 +61,11 @@ representative. Appointed by the PM or SO.
   is it distributed (IR-8)? How is the security plan reviewed and distributed (PL-2)?
 - **I (I-2):** Which plan statements did later records make stale (ca-7, pl-2, cm-6)? Who
   approves the plan update under change management (PER-AO, PER-AODR or PER-CCB)?
+- **R (R-1):** Which identity proofing, authenticator and federation assurance does the
+  identity service give, and who confirms its profile (DIAS)?
+- **R (R-2):** What is your technical advice to the AO on each risk: exploitability,
+  mitigations in place, and whether the residual level holds?
+- **R (R-5):** How is the registry entry annotated with the decision, and who records it?
 
 ## Artifacts owned-approved
 

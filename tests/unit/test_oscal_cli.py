@@ -129,3 +129,13 @@ def test_locate_prefers_env_then_path_then_bootstrapped_copy(tmp_path, monkeypat
     assert oscal_cli.locate(path_lookup=False, root=tmp_path).path is None
     monkeypatch.setenv(oscal_cli.ENV, str(boot))
     assert oscal_cli.locate(path_lookup=False).path == str(boot)
+
+
+def test_a_false_alarm_of_the_pinned_release_is_not_reported():
+    """The objective-cardinality constraint fails on every non-objective assessment part (a
+    rules-of-engagement part, say); OSCAL-003 leaves it out, and a log of only that is clean."""
+    sarif = {"runs": [{"results": [
+        {"kind": "fail", "ruleId": "oscal-assesment-part-objective-cardinality",
+         "message": {"text": "The cardinality '0' is below the required minimum '1'"}}]}]}
+    assert oscal_cli._results(sarif) == []
+    assert oscal_cli._failed(sarif)

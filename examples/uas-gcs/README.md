@@ -17,7 +17,9 @@ POA&M items.
 What this example does not show: it was produced on framework contract 0.1.0, before the
 organization-level and system-level Prepare records existed, so it holds no
 `org-context.yaml`, `scrm-org.yaml`, `bia.yaml`, `requirements.yaml`, `ra.yaml` or
-`authorizations.yaml` ledger. For the shape of those records, read `templates/data/` (or
+`authorizations.yaml` ledger, and its `sap.yaml` predates the preparation, rigor, sampling,
+external provider and privacy blocks, with no `test-strategy.yaml`: do not copy its
+A-step records. For the shape of those records, read `templates/data/` (or
 `uv run rmf schema template NAME`), the fixture run `tests/fixtures/runs/valid_minimal/`,
 and the dry run `dryrun-review/efras/runs/20261118-synthetic-01/`, which goes through every
 task on the current contract.

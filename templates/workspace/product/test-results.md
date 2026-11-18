@@ -21,3 +21,9 @@ provider that manages the setting.
 The date and scope of each account review, the accounts found and what was done. For each
 departed user, the date they left and the date each account was disabled, so that the
 termination timeliness (PS-4, AC-2) can be judged either way.
+
+## Records an assessor may test
+
+Out-processing records (notice dates against disable dates), checklist reviews of the
+application containers, exercise records and anything else an assessor would test that no
+scan produces. Without them, A-3 can only record that the evidence was missing.

@@ -52,8 +52,8 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv), [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Contingency plan (ART-CP)](../../MANUAL.md#art-cp), [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
-| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon), [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca), [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | — |
+| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv), [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Contingency plan (ART-CP)](../../MANUAL.md#art-cp), [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia), [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
+| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon), [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca), [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap), [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | — |
 | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) | Monitor | [AO](../../MANUAL.md#per-ao) | — | [System risk assessment (ART-RA)](../../MANUAL.md#art-ra), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | — |
 | [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [System risk assessment (ART-RA)](../../MANUAL.md#art-ra), [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | — |
 | [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [Security and privacy posture report (ART-SECRPT)](../../MANUAL.md#art-secrpt) | — | — |
@@ -109,6 +109,7 @@ Also active in this phase (described in their primary phase): [Prepare 3: Risk A
 | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
 | [Contingency plan (ART-CP)](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
 | [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
+| [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -188,6 +189,7 @@ Also active in this phase (described in their primary phase): [Prepare 3: Risk A
 | [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | updates | core |
 | [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca) | Cybersecurity service agreements | updates | supporting |
 | [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | updates | core |
+| [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | STIG/SRG summary | updates | supporting |
 
 **Entry criteria**
 

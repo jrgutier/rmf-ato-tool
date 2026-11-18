@@ -2,7 +2,7 @@
 artifact_id: ART-POAM
 run_id: hybrid-minimal
 produced_by_task: A-6
-touched_by: [A-6]
+touched_by: [A-6, R-4]
 sources: [INT-010.A1]
 handling: CUI
 ---

@@ -133,3 +133,18 @@ def test_check_without_options_follows_progress(minimal_run):
         sum(f.severity == "E" for f in final) - sum(f.severity == "E" for f in shown))
     assert {f.rule for f in engine.select(run, ev, family="si", final=True)} == {"SSP-COV-001"}
     assert engine.select(run, ev, rules=["TRACE-001"], final=True) == []
+
+
+def test_the_decision_floor_names_what_sets_it(minimal_run):
+    """F-15-1: `rmf status` gives R-4 the earliest decision date the run's records allow."""
+    import datetime as dt
+
+    from rmf_tool.run.status import decision_floor
+
+    def before(d):
+        d["items"][0].update({"recommended_completion": "before-authorization",
+                              "scheduled_completion": "2099-01-31"})
+    edit_yaml(minimal_run / "artifacts/poam/items.yaml", before)
+    floor, why = decision_floor(open_run(minimal_run, REPO_ROOT))
+    assert floor == dt.date(2099, 1, 31)
+    assert why and why[0].endswith("(MPOA-001)")

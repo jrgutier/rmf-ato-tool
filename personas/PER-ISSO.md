@@ -51,6 +51,12 @@ by the PM or SO.
   disabled)?
 - **A (A-3), as asked by the assessor:** Show the last account review record. Which units are
   behind on updates, and since when? Who uses the shared account, and how is it controlled?
+- **M (M-1):** Which changes reached the system in the cycle, and which did the drift scans
+  catch that no change request covers? Up to which day do the monitoring records go?
+- **M (M-2):** Show the cycle's account reviews, log reviews, patch and configuration status.
+  Which tool stopped running as its upkeep says?
+- **M (M-3), M-5:** What is the status of each open POA&M item you own, and what does the
+  posture report say about the controls you operate?
 
 ## Artifacts owned-approved
 

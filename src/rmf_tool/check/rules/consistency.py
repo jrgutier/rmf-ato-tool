@@ -17,6 +17,7 @@ from rmf_tool.check.rules.content import (
     SSP_DIR,
     family_records,
     inconsequential,
+    monitor_owner,
 )
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import scope
@@ -204,7 +205,9 @@ def rar_links(ctx: Context) -> list[RunFinding]:
     for f in sar:
         if f.get("status") != "closed" and f.get("id") not in covered \
                 and not inconsequential(f):
-            err(f"open SAR finding {f.get('id')} ({f.get('control_id')}) maps to no risk")
+            out.append(make("RAR-001", f"open SAR finding {f.get('id')} "
+                            f"({f.get('control_id')}) maps to no risk", RAR_FILE,
+                            owners=monitor_owner(f)))
     return out
 
 

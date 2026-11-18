@@ -2132,7 +2132,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [Authorize 1: Authorization Package (R-1)](#task-r-1) | Authorize | [PM/SO](#per-pm) | [Authorization package manifest (ART-PKG)](#art-pkg), [Digital Identity Acceptance Statement (ART-DIAS)](#art-dias) | — | [MS C](#ms-c), [PRR](#rv-prr) |
 | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | Authorize | [AO](#per-ao) | [Risk assessment report (ART-RAR)](#art-rar) | [System risk assessment (ART-RA)](#art-ra) | [MS C](#ms-c) |
 | [Authorize 3: Risk Response (R-3)](#task-r-3) | Authorize | [AO](#per-ao) | — | [Plan of action and milestones (ART-POAM)](#art-poam), [Risk assessment report (ART-RAR)](#art-rar) | [MS C](#ms-c) |
-| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](#per-ao) | [AO decision memo (ART-AODM)](#art-aodm) | [Authorization ledger (ART-AUTHREC)](#art-authrec) | [MS C](#ms-c), [IOC](#ms-ioc), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](#per-ao) | [AO decision memo (ART-AODM)](#art-aodm) | [Authorization ledger (ART-AUTHREC)](#art-authrec), [Plan of action and milestones (ART-POAM)](#art-poam) | [MS C](#ms-c), [IOC](#ms-ioc), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
 | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | Authorize | [AO](#per-ao) | [Authorization report (ART-AUTHRPT)](#art-authrpt) | [System registration (ART-REG)](#art-reg) | [MS C](#ms-c) |
 
 Also active in this phase (described in their primary phase): [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5).
@@ -2853,6 +2853,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|---|---|
 | [AO decision memo (ART-AODM)](#art-aodm) | AO decision memo | produces | core |
 | [Authorization ledger (ART-AUTHREC)](#art-authrec) | Authorization ledger | updates | core |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | updates | core |
 
 **Entry criteria**
 
@@ -3054,8 +3055,8 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | Monitor | [PM/SO](#per-pm) | [Change log and security impact analyses (ART-CHG)](#art-chg) | [Hardware and software inventory (ART-INV)](#art-inv), [Configuration management plan (ART-CMP)](#art-cmp), [Plan of action and milestones (ART-POAM)](#art-poam), [Security assessment report (ART-SAR)](#art-sar), [System Security Plan (ART-SSP)](#art-ssp), [Contingency plan (ART-CP)](#art-cp), [Business impact and criticality analysis (ART-BIA)](#art-bia) | [IOC](#ms-ioc), [PCA](#rv-pca) |
-| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | Monitor | [SCA](#per-sca) | — | [Security assessment report (ART-SAR)](#art-sar), [Continuous monitoring strategy (ART-CONMON)](#art-conmon), [Cybersecurity service agreements (ART-SVCA)](#art-svca), [Security assessment plan (ART-SAP)](#art-sap) | — |
+| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | Monitor | [PM/SO](#per-pm) | [Change log and security impact analyses (ART-CHG)](#art-chg) | [Hardware and software inventory (ART-INV)](#art-inv), [Configuration management plan (ART-CMP)](#art-cmp), [Plan of action and milestones (ART-POAM)](#art-poam), [Security assessment report (ART-SAR)](#art-sar), [System Security Plan (ART-SSP)](#art-ssp), [Contingency plan (ART-CP)](#art-cp), [Business impact and criticality analysis (ART-BIA)](#art-bia), [Incident response plan (ART-IRP)](#art-irp) | [IOC](#ms-ioc), [PCA](#rv-pca) |
+| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | Monitor | [SCA](#per-sca) | — | [Security assessment report (ART-SAR)](#art-sar), [Continuous monitoring strategy (ART-CONMON)](#art-conmon), [Cybersecurity service agreements (ART-SVCA)](#art-svca), [Security assessment plan (ART-SAP)](#art-sap), [STIG/SRG summary (ART-STIG)](#art-stig) | — |
 | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) | Monitor | [AO](#per-ao) | — | [System risk assessment (ART-RA)](#art-ra), [Plan of action and milestones (ART-POAM)](#art-poam), [Risk assessment report (ART-RAR)](#art-rar), [Security assessment report (ART-SAR)](#art-sar) | — |
 | [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | Monitor | [PM/SO](#per-pm) | — | [System Security Plan (ART-SSP)](#art-ssp), [Security assessment report (ART-SAR)](#art-sar), [Plan of action and milestones (ART-POAM)](#art-poam), [System risk assessment (ART-RA)](#art-ra), [Incident response plan (ART-IRP)](#art-irp) | — |
 | [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) | Monitor | [PM/SO](#per-pm) | [Security and privacy posture report (ART-SECRPT)](#art-secrpt) | — | — |
@@ -3111,6 +3112,7 @@ Also active in this phase (described in their primary phase): [Prepare 3: Risk A
 | [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
 | [Contingency plan (ART-CP)](#art-cp) | Contingency plan | updates | core |
 | [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | updates | supporting |
+| [Incident response plan (ART-IRP)](#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -3190,6 +3192,7 @@ Also active in this phase (described in their primary phase): [Prepare 3: Risk A
 | [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | updates | core |
 | [Cybersecurity service agreements (ART-SVCA)](#art-svca) | Cybersecurity service agreements | updates | supporting |
 | [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | updates | core |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | STIG/SRG summary | updates | supporting |
 
 **Entry criteria**
 
@@ -3856,12 +3859,12 @@ listed data files; OSCAL documents are built from that data.
 | [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | core | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 | [Configuration management plan (ART-CMP)](#art-cmp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 | [Contingency plan (ART-CP)](#art-cp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | — |
-| [Incident response plan (ART-IRP)](#art-irp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | — |
+| [Incident response plan (ART-IRP)](#art-irp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | — |
 | [Cybersecurity service agreements (ART-SVCA)](#art-svca) | supporting | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
-| [STIG/SRG summary (ART-STIG)](#art-stig) | supporting | [Implement 1: Control Implementation (I-1)](#task-i-1) | [Assess 3: Control Assessments (A-3)](#task-a-3) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | supporting | [Implement 1: Control Implementation (I-1)](#task-i-1) | [Assess 3: Control Assessments (A-3)](#task-a-3), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
 | [Security assessment plan (ART-SAP)](#art-sap) | core | [Assess 2: Assessment Plan (A-2)](#task-a-2) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
 | [Security assessment report (ART-SAR)](#art-sar) | core | [Assess 3: Control Assessments (A-3)](#task-a-3) | [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
-| [Plan of action and milestones (ART-POAM)](#art-poam) | core | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | core | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
 | [Risk assessment report (ART-RAR)](#art-rar) | core | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
 | [Authorization package manifest (ART-PKG)](#art-pkg) | supporting | [Authorize 1: Authorization Package (R-1)](#task-r-1) | — | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 | [Digital Identity Acceptance Statement (ART-DIAS)](#art-dias) | core | [Authorize 1: Authorization Package (R-1)](#task-r-1) | — | — |
@@ -4207,7 +4210,7 @@ Incident response roles, procedures and reporting, aligned with the cybersecurit
 | Data files | `artifacts/data/incident-response.yaml` (schema `incident-response`) |
 | OSCAL | — |
 | Produced by | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
-| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
+| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
 | Used by | — |
 
 Citations:
@@ -4245,7 +4248,7 @@ STIG and SRG applicability per inventory item, scan results and open findings by
 | Data files | `artifacts/data/stig-summary.yaml` (schema `stig-summary`) |
 | OSCAL | `assessment-results#results.observations` |
 | Produced by | [Implement 1: Control Implementation (I-1)](#task-i-1) |
-| Updated by | [Assess 3: Control Assessments (A-3)](#task-a-3) |
+| Updated by | [Assess 3: Control Assessments (A-3)](#task-a-3), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
 | Used by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
 
 Citations:
@@ -4301,7 +4304,7 @@ Remediation plan for weaknesses from the assessment and STIG findings, with mile
 | Data files | `artifacts/poam/items.yaml` (schema `poam-items`) |
 | OSCAL | `poam#poam-items` |
 | Produced by | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
-| Updated by | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
+| Updated by | [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
 | Used by | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
 
 Citations:

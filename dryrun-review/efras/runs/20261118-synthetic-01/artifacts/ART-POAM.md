@@ -2,7 +2,7 @@
 artifact_id: ART-POAM
 run_id: 20261118-synthetic-01
 produced_by_task: A-6
-touched_by: [A-6, R-3, M-1, M-3]
+touched_by: [A-6, R-3, R-4, M-1, M-3]
 sources: [ART-SAR, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-180.A1, INT-180.A2, INT-180.A4, INT-180.A5, INT-181.A1, INT-181.A3, INT-182.A1, ASM-024, ART-CHG]
 handling: CUI  # at a minimum CUI, or the classification level of the system (DoDI 8530.01)
 ---

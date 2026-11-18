@@ -83,7 +83,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [Authorize 1: Authorization Package (R-1)](#task-r-1) | Authorize | [PM/SO](../../MANUAL.md#per-pm) | [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg), [Digital Identity Acceptance Statement (ART-DIAS)](../../MANUAL.md#art-dias) | — | [MS C](#ms-c), [PRR](#rv-prr) |
 | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | Authorize | [AO](../../MANUAL.md#per-ao) | [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | [MS C](#ms-c) |
 | [Authorize 3: Risk Response (R-3)](#task-r-3) | Authorize | [AO](../../MANUAL.md#per-ao) | — | [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | [MS C](#ms-c) |
-| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](../../MANUAL.md#per-ao) | [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](../../MANUAL.md#per-ao) | [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
 | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | Authorize | [AO](../../MANUAL.md#per-ao) | [Authorization report (ART-AUTHRPT)](../../MANUAL.md#art-authrpt) | [System registration (ART-REG)](../../MANUAL.md#art-reg) | [MS C](#ms-c) |
 
 Also active in this phase (described in their primary phase): [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5).
@@ -804,6 +804,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 |---|---|---|---|
 | [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | AO decision memo | produces | core |
 | [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
 
 **Entry criteria**
 

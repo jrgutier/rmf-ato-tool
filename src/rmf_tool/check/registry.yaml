@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 393 rules, 38 repo-scope and 355 run-scope. Authoritative;
+# Rule registry (plan §6.5): 395 rules, 38 repo-scope and 357 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -1300,6 +1300,16 @@ rules:
     hint: An le-ci change names the AO or AODR it was coordinated with, on or before implementation, through change control; a lawful one is not disapproved.
     enforces:
       - REQ-DODI8500.01-0260
+  - id: MCHG-004
+    scope: run
+    severity: W
+    ac: [AC-18]
+    phase: p11
+    since: 0.2.0
+    applies_after: M-1
+    summary: the monitoring data a Monitor task rests on ends before the authorization in force
+    fixture: tests/fixtures/negative/MCHG-004.yaml
+    hint: changes.yaml monitoring.unauthorized_changes.data_through falls before the latest authorization; record monitoring data from after the decision, or state in an ASSUMPTION what the gap leaves unknown.
   - id: MCON-001
     scope: run
     severity: E
@@ -4178,6 +4188,16 @@ rules:
       - REQ-DODI8530.01-0277
       - REQ-DODI8530.01-0306
       - REQ-DODI8530.01-0313
+  - id: PLANREF-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: S-4
+    summary: an SSP statement calls cp-2, ir-8 or cm-9 implemented while its plan is not approved
+    fixture: tests/unit/test_check_rules.py::test_planref_001_fires_on_a_plan_control_implemented_before_approval
+    hint: "Keep the control partial until the plan's record (contingency.yaml, incident-response.yaml, cm-plan.yaml) holds plan_approval {by, date}."
   - id: SSPR-001
     scope: run
     severity: E
@@ -6956,7 +6976,7 @@ rules:
     ac: [AC-16]
     phase: p11
     since: 0.2.0
-    applies_after: A-1
+    applies_after: A-2
     summary: "the decision on assessor independence is not informed by consulting the CIO, the SAOP and the SISO"
     fixture: tests/fixtures/negative/INDEP-001.yaml
     hint: "In sap.yaml assessor_independence.consulted, list PER-CIO, PER-PRIV and PER-CISO, whom the AO consults on assessor independence, and the Office of the Inspector General by name where the organization has one."

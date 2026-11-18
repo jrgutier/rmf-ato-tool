@@ -192,6 +192,7 @@ RULES: dict[str, Rule] = {
     "MCHG-001": monitor.change_lifecycle,
     "MCHG-002": monitor.unauthorized_changes,
     "MCHG-003": monitor.le_ci,
+    "MCHG-004": monitor.monitoring_data,
     "MCON-001": monitor.connections,
     "MLEV-001": monitor.inheritance,
     "RECIP-001": receiving.package_review,

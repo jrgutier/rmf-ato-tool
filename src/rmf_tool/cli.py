@@ -647,6 +647,8 @@ def status(
         nxt = data["next"]
         fam = f" family {nxt['family']}" if nxt.get("family") else ""
         typer.echo(f"next: {nxt['label']}{fam} ({nxt['playbook']})")
+        if floor := nxt.get("not_before"):
+            typer.echo(f"decision not before {floor['date']}: {', '.join(floor['because'])}")
     raise typer.Exit(EXIT_OK)
 
 

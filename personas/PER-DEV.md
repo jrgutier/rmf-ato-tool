@@ -41,6 +41,8 @@ controls in the product, and supports developer test events and assessments.
   How are updates built, signed and installed?
 - **A (A-3), as asked by the assessor:** Show the DT results for these mechanisms. What did
   the scans cover? Which issues are fixed in which bundle?
+- **A (A-5):** Which findings did you fix during the assessment? Show the change (commit,
+  configuration, new scan) and the date it reached the assessed environment.
 - **I (I-1, I-2):** Which scan tool ran, against which benchmark releases, and when? Which
   rules are open, by V-/SV- ID and CAT? What changed since the security plan was written?
 

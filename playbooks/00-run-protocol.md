@@ -74,7 +74,9 @@ directory, for example `runs/20261105-synthetic-01`.
 A synthetic run covers months in hours. When a task records events after the run's current
 date (the assessment window, the decision, monitoring), first move the clock with
 `uv run rmf run clock set YYYY-MM-DD` and journal a NOTE for what happened in between. Date
-rules read the clock, so do not invent progress to satisfy them.
+rules read the clock, so do not invent progress to satisfy them. An interview or a determination
+dated by a scheduled event (an A-3 test on its plan date) comes after the clock reaches that
+date, so the journal and the records tell one timeline.
 
 ## Entering past P-1
 

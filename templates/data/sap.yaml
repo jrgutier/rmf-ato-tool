@@ -23,6 +23,7 @@ assessor_independence:
   rationale: "<<FILL: why this degree>>"
   basis: [ART-CAT, ART-RA]  # the categorization and the risk the degree rests on
   sufficiency: {determined_by: PER-AO, sufficient: true, date: "2026-01-01", rationale: "<<FILL: why the degree gives confidence in the results>>"}
+  consulted: [PER-CIO, PER-PRIV, PER-CISO]  # whom the AO consulted on independence (INDEP-001)
   achieved_by: assessor  # assessor | independent-review (then `review: {by: [PER-...], situation: "..."}` names the independent team of experts that reviews the results)
 objectives: "<<FILL: the objective of the control assessment>>"
 level_of_effort: "<<FILL: the expected level of effort>>"
@@ -74,10 +75,19 @@ procedures:  # every scoped control in a record, each method once per control; s
       - {method: interview, types: [{type: PER-ISSM, number: 1}], specific: ["<<FILL: the individuals deemed important>>"], selection: targeted, bias_control: "<<FILL: how bias is avoided>>"}
       - {method: test, types: [{type: mechanisms, number: 2}, {type: activities, number: 1}], specific: ["<<FILL: component ids>>"], selection: random-and-targeted, bias_control: "<<FILL>>", extent: [{measure: test cases, count: 10}]}  # extent: mechanism tests only; specific: focused or comprehensive coverage
 optimization: {reviewed_by: PER-SCA, tailoring_guidance: "<<FILL: the organization's tailoring guidance, or that it gives none>>", notes: "<<FILL: how procedures were sequenced and consolidated>>"}
-additional_procedures: []  # {id: APR-001, requirement, statements, methods, objects, rationale} for anything outside SP 800-53
-reuse_policy: {max_age_days: 365, source: ART-ORG-CONTEXT}
-reused_results: []  # playbooks/A/A-2.md lists the fields of a record
-external_providers: []  # one for each external boundary component and leveraged authorization
+additional_procedures: []  # e.g. {id: APR-001, requirement: "Section 508 conformance of the web UI", statements: ["..."], methods: [test], objects: [mechanisms], rationale: "..."}, for anything outside SP 800-53
+# RIGR-003: focused or comprehensive coverage needs `specific` objects on each sampling
+# record, not only on comprehensive ones; each sampling record's `types` equal the
+# procedure's objects for that method (personas for interview).
+reuse_policy: {max_age_days: 365, source: ART-ORG-CONTEXT}  # or the CISO's or AO's answer stating it (INT-###.A#)
+reused_results: []  # playbooks/A/A-2.md lists the fields; a result of lower independence than required needs corroboration: {by: PER-SCA, how: witnessed | reperformed, extent}
+# assessed_environment: {kind: representative, representativeness: "<<FILL: why pre-production stands for production>>", confirmation_procedure: PRC-001}  # when evidence comes from a twin of the authorized instance
+external_providers: []  # one for each external boundary component and leveraged authorization; a connected system whose controls are not inherited is relationship: interconnection
+# privacy:  # a system processing PII (PASM-001)
+#   assessors: [PER-PRIV]
+#   controls: [pt-2, pt-3]
+#   methodology: {identified_by: PER-PRIV, methods: [examine, interview], metrics: "<<FILL: what shows the privacy controls effective>>"}
+#   sources: [INT-001.A1]
 schedule:
   start: "2026-01-01"
   end: "2026-01-31"
@@ -85,6 +95,7 @@ schedule:
     - date: "2026-01-01"
       description: "<<FILL: event>>"
       kind: kickoff  # kickoff | dt-e | ot-e | scan | interview | out-brief | penetration-test | other
+      live: false  # true on a live network or with operational data: needs an IATT first (AODM-006)
 # penetration_test:  # ca-8 selected, a cATO, or the organization adds one (PENT-001)
 #   scope:
 #     environment: ["<<FILL: facilities, users, organizational groups subject to testing>>"]

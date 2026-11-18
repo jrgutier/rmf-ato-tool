@@ -59,6 +59,9 @@ work under the CISO's assessment program.
 - **A (A-1, A-2), consulted:** Who is the SCA for this system: you, or a delegate? What
   independence does the Component require? Does the plan follow the Component assessment
   process?
+- **A (A-4), consulted:** Your quality review of the assessment report: is the assessment
+  of sufficient quality, did the team have the capacity, does it give visibility into the
+  system's risk, and were the controls judged effective on sound evidence?
 - **R (R-2..R-4), consulted:** Is the program's implementation adequate in your view? What
   would you advise the AO?
 - **M (M-1, M-5), as responsible:** Which changes must be reported to you? What posture

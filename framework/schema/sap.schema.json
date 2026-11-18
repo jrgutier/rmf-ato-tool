@@ -586,6 +586,32 @@
         }
       }
     },
+    "assessed_environment": {
+      "title": "Where the assessment runs: the authorized instance (in-boundary) or a representative one, such as pre-production built from the production templates (ASMT-003)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "in-boundary",
+            "representative"
+          ]
+        },
+        "representativeness": {
+          "title": "Why the representative instance stands for the authorized one",
+          "type": "string",
+          "minLength": 1
+        },
+        "confirmation_procedure": {
+          "title": "The procedure that confirms the production configuration before the decision; the SAR carries the difference as a limitation",
+          "type": "string",
+          "pattern": "^PRC-\\d{3}$"
+        }
+      }
+    },
     "reuse_policy": {
       "title": "The reuse requirements established by the organization",
       "type": "object",
@@ -601,7 +627,7 @@
           "minimum": 1
         },
         "source": {
-          "title": "The organization's reuse policy",
+          "title": "The organization's reuse policy: ART-ORG-CONTEXT, or the answer of the CISO or AO that states it (INT-###.A#)",
           "$ref": "#/$defs/source"
         }
       }
@@ -720,6 +746,34 @@
             "title": "Additional assessment activities that supplement the result",
             "type": "string",
             "minLength": 1
+          },
+          "corroboration": {
+            "title": "How an assessor of this team corroborates a result of lower independence than the assessment requires: witnessed it, or re-performs a stated sample (ASMT-003)",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "by",
+              "how",
+              "extent"
+            ],
+            "properties": {
+              "by": {
+                "title": "The team member who witnessed or re-performs it",
+                "type": "string",
+                "pattern": "^PER-[A-Z]+$"
+              },
+              "how": {
+                "enum": [
+                  "witnessed",
+                  "reperformed"
+                ]
+              },
+              "extent": {
+                "title": "What was witnessed or the sample re-performed",
+                "type": "string",
+                "minLength": 1
+              }
+            }
           },
           "product_review": {
             "title": "Review of a component product's information",
@@ -1068,13 +1122,36 @@
           "covers",
           "agreement_review",
           "procedure_adjustment",
-          "provider_assessment",
           "sources"
         ],
+        "if": {
+          "not": {
+            "properties": {
+              "relationship": {
+                "const": "interconnection"
+              }
+            },
+            "required": [
+              "relationship"
+            ]
+          }
+        },
+        "then": {
+          "required": [
+            "provider_assessment"
+          ]
+        },
         "properties": {
           "id": {
             "type": "string",
             "pattern": "^EXT-\\d{3}$"
+          },
+          "relationship": {
+            "title": "provider: the system inherits its controls (default); interconnection: a connected system or data source whose controls are not inherited, so only the agreement review and the procedure adjustment apply (ASMT-004)",
+            "enum": [
+              "provider",
+              "interconnection"
+            ]
           },
           "provider": {
             "type": "string",
@@ -1130,7 +1207,10 @@
                   "interagency-agreement",
                   "line-of-business",
                   "licensing",
-                  "supply-chain"
+                  "supply-chain",
+                  "memorandum-of-agreement",
+                  "interconnection-security-agreement",
+                  "onboarding-approval"
                 ]
               },
               "reference": {
@@ -1217,6 +1297,11 @@
               "meets_protection_needs": {
                 "title": "Whether the provider's controls meet the protection needs of the organization",
                 "type": "boolean"
+              },
+              "open_finding": {
+                "title": "When meets_protection_needs is false: the finding or POA&M item that tracks the gap; the controls are then not leveraged",
+                "type": "string",
+                "minLength": 1
               },
               "other_assessments": {
                 "title": "Other assessments conducted or in progress for this external system",

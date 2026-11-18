@@ -63,7 +63,8 @@ fork owns. A fork may delete `examples/`.
 - INV-7: Use only public references from the allowed domains (`refs/domains.py`; ADR-0006),
   with TLS verification on (no `verify=False`, no User-Agent spoofing). Put CUI in a fork only if the host, the
   machines and the LLM endpoint are all authorized for it.
-- INV-8: Write run-data files whole; never append to or patch them partially.
+- INV-8: Write run-data files whole; never append to or patch them partially. An editor's
+  in-place replacement that leaves the file whole and valid counts as a whole write.
 
 ## CLI commands
 

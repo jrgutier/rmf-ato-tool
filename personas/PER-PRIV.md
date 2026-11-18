@@ -79,6 +79,11 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
 - **S (S-4):** How does the system meet PT-2 (authority to process PII), PT-3 (purposes)
   and RA-8 (the privacy impact assessment), and what remains for the privacy office? What
   goes into the privacy plan, and are the plans kept together or separate?
+- **A (A-1, A-2), system processing PII only:** Who assesses the privacy controls: you, or an
+  independent assessor? Which methodologies and metrics do you set for the privacy
+  assessment, and do you approve its scope?
+- **A (A-4), system processing PII only:** Which privacy assessors documented the privacy
+  results, on what date, and have you provided them to the AO or AODR?
 - **R (R-1):** Is the privacy part of the package complete enough for authorization? Did you
   review the package for compliance with privacy requirements and for privacy risk before
   the decision, and on what date?

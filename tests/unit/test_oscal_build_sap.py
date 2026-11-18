@@ -8,6 +8,7 @@ from ruamel.yaml import YAML
 
 from rmf_tool import baseline as baseline_mod
 from rmf_tool.oscal import build_sap, schema_validate
+from rmf_tool.oscal.common import party_uuid
 from rmf_tool.oscal.uuids import uuid_for
 from rmf_tool.run.model import open_run
 
@@ -85,9 +86,14 @@ def test_exclusions_subjects_and_team(minimal_run):
          "type": "inventory-item"}]
     assert ap["assessment-subjects"][1]["include-subjects"][0]["subject-uuid"] == \
         uuid_for("FDR-0001", "ssp", "party/PER-ISSO")
-    assert [r["id"] for r in ap["metadata"]["roles"]] == ["PER-ISSE", "PER-SCA"]
-    team = ap["terms-and-conditions"]["parts"][1]["prose"]
-    assert team == "PER-SCA (Lead assessor, independent); PER-ISSE (Test lead)"
+    assert [r["id"] for r in ap["metadata"]["roles"]] == ["PER-ISSE", "PER-SCA", "assessor"]
+    # the team is the assessor role's responsible party, as in NIST's example plan
+    [team] = [p for p in ap["metadata"]["responsible-parties"] if p["role-id"] == "assessor"]
+    assert team["party-uuids"] == [party_uuid("FDR-0001", "PER-SCA"),
+                                   party_uuid("FDR-0001", "PER-ISSE")]
+    assert team["remarks"] == ("Assessment team: PER-SCA (Lead assessor, independent); "
+                               "PER-ISSE (Test lead).")
+    assert [p["name"] for p in ap["terms-and-conditions"]["parts"]] == ["rules-of-engagement"]
 
 
 def test_not_buildable_lists_reasons(minimal_run):

@@ -41,6 +41,8 @@ say which provider an answer is for.
   system configure or report? What evidence can the system cite?
 - **A (A-3), as asked by the assessor:** What evidence shows your part is in place for this
   system?
+- **A (A-4, A-5):** What is your response to a finding on your part? Did you fix it during
+  the assessment, and what evidence shows the fix in this system's environment?
 - **A (A-6):** For a weakness in your part: what is your fix and date?
 - **S (S-2), consulted:** Which inherited controls carry parameters the provider sets, and
   with which values?

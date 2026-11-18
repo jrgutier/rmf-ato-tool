@@ -51,6 +51,9 @@ control provider for the controls it operates; say which service an answer is ab
 - **S (S-5), consulted:** Which monitoring do you perform continuously, and what do you
   report to the system and the AO? What events should trigger a review of the system's
   authorization?
+- **S (S-5), DODIN awareness:** Of threats, traffic, fault, performance, bandwidth, route,
+  network management and employee use, which do you (or the access point, or the cloud
+  provider) give awareness of for this system, and through which feed? Which does nobody?
 - **M (M-2), consulted:** What did your monitoring and scans show for this system since the
   last assessment?
 - **M (M-3), consulted:** Which new vulnerabilities or incidents need a risk response or a

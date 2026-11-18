@@ -25,6 +25,7 @@ has cited them. Replace the guidance in each file with your system's material.
 | `capability-document.md` | the capability document or user agreement: kind, version, approval date, KPPs, OMS/MP, protection content |
 | `registry.md` | IT registry (DITPR, eMASS) and PPSM registration records |
 | `test-results.md` | developer and developmental test results, scans and records the assessor may reuse |
+| `test-strategy.md` | the TEMP or test strategy: approval, objectives, and the DT and OT events with dates, conductors and representativeness |
 | `monitoring/` | continuous monitoring data for M-2 (EXT-MONITORING): see `monitoring/README.md`; needed only when the run includes M-2 |
 
 ## Stable identifiers

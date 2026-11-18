@@ -101,6 +101,15 @@
                 "completed": {
                   "title": "When the milestone was met",
                   "$ref": "#/$defs/date"
+                },
+                "approves": {
+                  "title": "The plan this milestone approves; once completed, the plan's record holds the approval (MPOA-001, reconciled at M-2)",
+                  "enum": [
+                    "security-plan",
+                    "cm-plan",
+                    "contingency",
+                    "incident-response"
+                  ]
                 }
               }
             }
@@ -244,6 +253,13 @@
                 }
               }
             }
+          },
+          "response": {
+            "title": "The chosen response: remediate the weakness, or seek the AO's acceptance of it (accept); an accept item stays planned until the AO decides, and R-3 puts it to the AO",
+            "enum": [
+              "remediate",
+              "accept"
+            ]
           }
         }
       }
@@ -935,6 +951,11 @@
                 "additionalProperties": false,
                 "required": [],
                 "properties": {
+                  "not_quantified": {
+                    "title": "Why the cost factors are weighed without numbers (no asset value or loss rate the program can state); the method is then chosen on the qualitative weighing this names (VULN-005)",
+                    "type": "string",
+                    "minLength": 20
+                  },
                   "asset_value": {
                     "type": "number",
                     "minimum": 0
@@ -1015,6 +1036,11 @@
           }
         }
       }
+    },
+    "planned_decision": {
+      "title": "The date the authorization decision is planned for, as A-6 knows it; a before-authorization item falls on or before it (MPOA-001)",
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
     }
   },
   "$defs": {
