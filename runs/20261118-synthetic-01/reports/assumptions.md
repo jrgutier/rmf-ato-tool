@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (11)
+## Assumptions (14)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -19,8 +19,11 @@ Mode: synthetic. Human respondents: none.
 | ASM-009 | P-13 | PER-PM | Extract files in the landing zone are deleted 7 days after a successful load, report exports and the report cache expire after 30 days, the training extract is replaced and the previous one deleted at each retraining, and supply status history follows the 5-year window, as the PM states in INT-032. | product/privacy.md#minimization gives only the 5-year purge of maintainer PII; the product names no retention for landing files, exports, the report cache or the training extract, which the P-13 life cycle needs for each disposition stage. |
 | ASM-010 | P-14 | PER-PM | The program protection plan EFRAS-PPP v1.1, the cybersecurity strategy v1.1 and its approvals and reviews, the acquisition strategy approval, the ERST task order award, the decision point dates and the PM's SCRM actions are as the PM states them in INT-037; the dates of the pathway decision (2025-09-15) and execution entry (2026-03-02) come from the PM and conops.md#program. | P-14 reads EXT-PPP, EXT-CSS and EXT-SEP from the product directory, which holds none of them; protection.yaml, cybersecurity-strategy.yaml and scrm.yaml pm_actions need their content. |
 | ASM-011 | P-14 | PER-PRIV | The PIA review, approval, submission and publication dates in pia.yaml (2027-01-20 to 2027-01-29) are planned dates the privacy officer gave, not events: as of 2026-11-18 the PIA is a draft (v0.9) that neither PER-CISO nor PER-PRIV has reviewed and PER-CIO has not approved. | pia.schema.json requires reviews, an approval with a date, a submission and a publication, and has no way to record a draft PIA; product/conops.md#limitations item 7 discloses that the PIA is not approved. |
+| ASM-012 | P-14 | PER-PM | scrm.yaml criticality.functions holds CF-01 (nightly ingest and integrity of readiness data, on INV-004, INV-008 and INV-010) only because scrm.schema.json requires at least one entry; the BIA rates no EFRAS function mission-critical, and CF-01 is the program's most important function, not a mission-critical one. Treating its suppliers ERST (SUP-01) and the cloud provider (SUP-03) as critical, with the SCRAs SA-01 and SA-02, the focal point and TAC request TAC-01 and the added TSN practices, follows from that entry. | The honest value, an empty functions list, fails RUN-FM-001 (dry-run finding F-02-1); upstream fixes are deferred, so the run records the closest true entry and says why. |
+| ASM-013 | P-15 | PER-SPONSOR | The capability needs statement for fleet readiness analytics v1.0, validated by the fleet readiness directorate on 2025-08-01, exists with the protection content the sponsor describes in INT-041.A2 and the two key attributes the lead systems engineer describes in INT-046.A2; the ConOps mission section and user journeys stand in for an operational mode summary and mission profiles. | P-15 reads EXT-CAPDOC from the product directory, which holds no capability document; stakeholders.md#roles only names it, and the product has no OMS or mission profiles. |
+| ASM-014 | P-18 | PER-ISSM | EFRAS is registered in the Component's eMASS instance as record EFRAS-0001 since 2025-10-01, and port 443 through the access point is registered in the DoD PPSM Registry as PPSM-EFRAS-0443 since 2026-10-15, as the ISSM states in INT-056; both identifiers are fictional. | P-18 reads EXT-REGISTRY, which the product directory does not hold; the product names no registry, record or PPSM registration. |
 
-## Interview answers (123; SIMULATED 123)
+## Interview answers (161; SIMULATED 161)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -37,4 +40,8 @@ Mode: synthetic. Human respondents: none.
 | P-11 | 2 | 7 | 0 |
 | P-12 | 4 | 13 | 0 |
 | P-13 | 3 | 9 | 0 |
-| P-14 | 5 | 18 | 0 |
+| P-14 | 7 | 23 | 0 |
+| P-15 | 6 | 15 | 0 |
+| P-16 | 5 | 7 | 0 |
+| P-17 | 4 | 7 | 0 |
+| P-18 | 2 | 4 | 0 |

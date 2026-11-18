@@ -3,7 +3,7 @@ artifact_id: ART-RA
 run_id: 20261118-synthetic-01
 produced_by_task: P-14
 touched_by: [P-14]
-sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-034.A6, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-037.A3, INT-037.A4, INT-037.A5, INT-038.A1, INT-038.A2, ASM-010, ART-ORG-CONTEXT, ART-BIA, ART-INFOTYPES, ART-BND, ART-INV]
+sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-034.A6, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-037.A3, INT-037.A4, INT-037.A5, INT-038.A1, INT-038.A2, INT-039.A1, INT-039.A2, INT-040.A1, INT-040.A2, ASM-010, ASM-012, ART-ORG-CONTEXT, ART-BIA, ART-INFOTYPES, ART-BND, ART-INV]
 ---
 # System risk assessment
 
@@ -103,8 +103,15 @@ the web framework, the factory base image) were reviewed against the six DoWI 84
 and the open-source ones for governance, community and license [[INT-038.A2]]. The forecast model
 is an AI-enabled capability: its use-case risk, benchmarks, pre-deployment verification,
 monitoring and bias handling are in `ra.yaml` [[INT-038.A1]]. The supplier records, threat
-analysis and the PM's SCRM actions (moderate supply chain risk tolerance, no mission-critical
-item, no TAC request) are in `artifacts/data/scrm.yaml` [[INT-037.A5]].
+analysis and the PM's SCRM actions (moderate supply chain risk tolerance) are in
+`artifacts/data/scrm.yaml` [[INT-037.A5]]. The BIA rates no EFRAS function mission-critical.
+The C-SCRM record must still name one function, so it names CF-01, the nightly ingest and the
+integrity of the readiness data it loads, which is the program's most important function and not a
+mission-critical one [[INT-039.A1]] [[ASM-012]]. Following from that entry, ERST (SUP-01) and the
+cloud provider (SUP-03) are treated as critical suppliers. Their supply chain risk assessments
+SA-01 and SA-02 cover every Table 28 factor and find low, non-adversarial risk at SCRSS level 1,
+within tolerance and accepted [[INT-040.A1]] [[INT-040.A2]]. A threat analysis request (TAC-01) went
+through the Component TSN focal point on 2026-11-18 and has no report yet [[INT-039.A2]].
 
 Program protection and strategy records the assessment read: `protection.yaml` holds the tailored
 PPP EFRAS-PPP v1.1 (critical item CI-001, countermeasures CM-001 and CM-002, technical risks

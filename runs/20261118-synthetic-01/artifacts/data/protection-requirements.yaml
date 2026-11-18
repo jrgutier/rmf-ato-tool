@@ -1,0 +1,33 @@
+read:
+  ppp: "EFRAS-PPP"
+  date: "2026-11-18"
+  st_protection_plans: []
+  tapps: []
+  horizontal_protection: []
+capability_document:
+  id: "Capability needs statement for fleet readiness analytics v1.0"
+  kind: cns
+  validated: "2025-08-01"
+  protection_content:
+    - {topic: scrm, included: true, addressed_by: [PRQ-001]}
+    - {topic: export-control, included: false, raised_to: PER-SPONSOR, addressed_by: []}
+    - {topic: anti-tamper, included: false, raised_to: PER-SPONSOR, addressed_by: []}
+    - {topic: counterintelligence-security-support, included: false, raised_to: PER-SPONSOR, addressed_by: []}
+    - {topic: threat-information, included: true, addressed_by: [PRQ-002]}
+requirements:
+  - id: PRQ-001
+    statement: "Every EFRAS image is built on the software factory, gated by its scans, SBOM-tagged and signed, and only signed images are admitted to the cluster."
+    kind: process
+    derived_from: [CM-001, "Capability needs statement for fleet readiness analytics v1.0"]
+  - id: PRQ-002
+    statement: "Ingress only through ECAP, three-tier segmentation and an egress allow-list protect the readiness data processing function against the threats of the Component threat assessment."
+    kind: design
+    derived_from: [CM-002, "Capability needs statement for fleet readiness analytics v1.0"]
+solicitations:
+  - id: "CA-001 ERST development task order, modification of 2026-11-18"
+    kind: contract
+    countermeasures: [CM-001, CM-002]
+    cyber_resilient_requirements: ["Immutable container images rebuilt from source for every release", "Tested point-in-time restore of the database"]
+    assurance_remediation: [software-assurance]
+reassessments: []
+sources: [INT-041.A2, INT-046.A1, INT-052.A2, ASM-013, ART-RA]

@@ -1,27 +1,35 @@
 criticality:
-  method: "Criticality analysis in the PPP (EFRAS-PPP v1.1) against the business impact analysis: a function is mission critical when its loss would degrade a mission-essential function; EFRAS has none, since every business process tolerates at least 72 hours and squadrons fall back to EMIS. The readiness data processing function is criticality level III and protected by the PPP countermeasures."
-  functions: []
+  method: "Criticality analysis in the PPP (EFRAS-PPP v1.1) against the business impact analysis: a function is mission critical when its loss would degrade a mission-essential function, and EFRAS has none, since every business process tolerates at least 72 hours and squadrons fall back to EMIS. Because this record must name at least one function, it names the program's most important function, CF-01, and treats the suppliers of its items as critical (ASM-012)."
+  functions:
+    - id: CF-01
+      function: "Nightly ingest of the EMIS and supply extracts and the integrity of the readiness data it loads; the program's most important function, recorded because the schema requires an entry, not because the BIA rates it mission-critical (ASM-012)"
+      items: [INV-004, INV-008, INV-010]
+      assurance: "Software assurance through the authorized software factory pipeline: static and dependency scans, SBOM, signed images verified at admission and the ERST secure development attestation; platform assurance inherited from the cloud provider's IL4 provisional authorization."
+      sources: [INT-039.A1, INT-039.A2, ASM-012]
   focal_point:
-    threat_analysis: not-required
-    guidance: "No mission-critical function or critical component, so no TSN threat analysis request was made; the Component C-SCRM program's supplier guidance applies."
-    sources: [INT-037.A5, ART-BIA]
+    threat_analysis: requested
+    guidance: "Interim guidance of the Component TSN focal point: keep the factory gates and signed images, rely on the cloud provider's authorization for its hardware and data center supply chain, and flag any change of ownership of ERST or the cloud provider; the DIA SCRM TAC report has not come back."
+    sources: [INT-039.A2, ASM-012]
   tsn:
     - criticality-analysis
     - all-source-threat-assessment
     - software-assurance
+    - hardware-assurance
     - procurement-strategies
+    - anti-counterfeit
     - scrm-countermeasures
     - cyber-test-and-evaluation
-  sources: [INT-037.A3, INT-037.A5, ART-BIA]
+  sources: [INT-037.A3, INT-037.A5, INT-039.A1, INT-039.A2, ART-BIA, ASM-012]
 suppliers:
   - id: SUP-01
     name: "Example Readiness Software Team (ERST)"
     kind: developer
     items: [INV-002, INV-003, INV-004, INV-005, INV-006]
     supply_chain: SC-01
-    criticality: non-critical
+    criticality: critical
+    functions: [CF-01]
     priority: 1
-    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-039.A1, ASM-012]
   - id: SUP-02
     name: "Example Software Factory"
     kind: in-house-shared-service
@@ -35,9 +43,10 @@ suppliers:
     kind: cloud-service-provider
     items: [INV-001, INV-008, INV-009, INV-010, INV-011, INV-012, INV-013, INV-014]
     supply_chain: SC-03
-    criticality: non-critical
+    criticality: critical
+    functions: [CF-01]
     priority: 1
-    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1, INT-039.A1, ASM-012]
   - id: SUP-04
     name: "example-imagelib open-source project"
     kind: open-source
@@ -70,14 +79,311 @@ threat_analysis:
   likelihood_horizon: P1Y
   acceptable_level: moderate
   sources: [INT-034.A2, INT-034.A4, INT-038.A2]
-assessments: []
+assessments:
+  - id: SA-01
+    supplier: SUP-01
+    conducted_by:
+      points_of_contact: [PER-ISSM, PER-PM]
+      non_federal_support: []
+    date: "2026-11-18"
+    temporal_findings:
+      - "No change of ownership of ERST as of 2026-11-18; re-checked at each annual review."
+      - "The software factory ERST builds on carries an open POA&M of its own provider authorization."
+    source_profile:
+      legal_name: "Example Readiness Software Team (fictional)"
+      domicile: "Domestic; fictional address on the shared contract vehicle record"
+      identifiers:
+        - "Fictional unique entity identifier on the shared development vehicle"
+      family_tree: "No parent or subsidiary companies"
+    covered_articles:
+      - item: INV-004
+        name: "efras-ingest"
+        identifier: "1.5.0"
+        description: "Nightly ingest worker container; pulls EMIS and supply extracts, validates and loads the database"
+      - item: INV-003
+        name: "efras-api"
+        identifier: "1.5.0"
+        description: "Readiness API container serving the data the ingest loads"
+    purpose:
+      life_cycle_phase: "Software pathway execution phase, before the first production authorization"
+      context: "Supplier of CF-01, the function scrm.yaml records because its schema requires an entry (ASM-012); assessed as a critical supplier for that reason."
+    methodology:
+      reference: "Component C-SCRM program office SCRA methodology, mapped to SP 800-161 Rev. 1 Appendix E Table 28 and the SCRSS of Table 29"
+      deviations: []
+    factors:
+      - factor: purpose
+        status: assessed
+        finding: "Develops and maintains the five EFRAS containers under the ERST task order."
+        agency_factor: "Purpose of the procurement"
+        sources: [INT-040.A1, INT-037.A4]
+      - factor: criticality
+        status: assessed
+        finding: "Supplies INV-004, which performs CF-01; rated critical for the record (ASM-012)."
+        agency_factor: "Criticality to the system"
+        sources: [INT-039.A1, ASM-012]
+      - factor: information-and-data
+        status: assessed
+        finding: "ERST staff reach CUI readiness data and maintainer PII through the administration path and the sandbox extract."
+        agency_factor: "Access to agency information"
+        sources: [INT-040.A1, product/hw-sw-inventory.md#items]
+      - factor: reliance
+        status: assessed
+        finding: "High dependence: a single development team with no second source."
+        agency_factor: "Dependence on the source"
+        sources: [INT-040.A1]
+      - factor: operational-environment
+        status: assessed
+        finding: "Builds only on the authorized software factory; deploys through the factory pipeline to the EFRAS cluster."
+        agency_factor: "Operating environment"
+        sources: [INT-040.A1]
+      - factor: external-interdependencies
+        status: assessed
+        finding: "Depends on the software factory and on open-source components (INV-015, INV-016)."
+        agency_factor: "External dependencies"
+        sources: [INT-040.A1, INT-038.A2]
+      - factor: functionality
+        status: assessed
+        finding: "The containers do what the ConOps describes; no undocumented functions found in factory scans."
+        agency_factor: "Functionality of the article"
+        sources: [INT-040.A1, INT-038.A2]
+      - factor: company-information
+        status: assessed
+        finding: "Domestic firm, no parent company, prime on the shared development vehicle."
+        agency_factor: "Company profile"
+        sources: [INT-040.A1]
+      - factor: quality-past-performance
+        status: assessed
+        finding: "No reported performance problems or intrusions."
+        agency_factor: "Past performance"
+        sources: [INT-040.A1]
+      - factor: personnel
+        status: assessed
+        finding: "Staff hold favorable background investigations."
+        agency_factor: "Personnel security"
+        sources: [INT-040.A1]
+      - factor: physical
+        status: assessed
+        finding: "No program hardware; development happens in the software factory, which is separately authorized."
+        agency_factor: "Physical security"
+        sources: [INT-040.A1]
+      - factor: geopolitical
+        status: assessed
+        finding: "Domestic operations only; no foreign locations found."
+        agency_factor: "Geopolitical exposure"
+        sources: [INT-040.A1]
+      - factor: foci
+        status: assessed
+        finding: "Searches of public FOCI information found no foreign ownership, control or influence."
+        agency_factor: "Foreign ownership, control or influence"
+        sources: [INT-040.A1]
+      - factor: compliance-legal
+        status: assessed
+        finding: "No exclusion, debarment or legal action found."
+        agency_factor: "Compliance and legal"
+        sources: [INT-040.A1]
+      - factor: fraud-corruption-sanctions
+        status: assessed
+        finding: "Exclusion and sanctions list searches found nothing."
+        agency_factor: "Fraud, corruption and sanctions"
+        sources: [INT-040.A1]
+      - factor: cybersecurity
+        status: assessed
+        finding: "Secure development attestation signed at release 1.5.0; no reported intrusions."
+        agency_factor: "Cybersecurity posture"
+        sources: [INT-040.A1, INT-023.A5]
+      - factor: counterfeit-nonconforming
+        status: assessed
+        finding: "Signed images and SBOMs make substituted or tampered builds detectable at admission."
+        agency_factor: "Counterfeit and non-conforming products"
+        sources: [INT-039.A2]
+      - factor: supply-chain-relationships
+        status: assessed
+        finding: "Relies on the software factory and two open-source projects; no subcontractors."
+        agency_factor: "Supply chain relationships"
+        sources: [INT-040.A1, INT-038.A2]
+    findings:
+      summary: "Domestic sole developer with a clean record, building on the authorized factory; the main concern is reliance on one source."
+      analysis: "No adversarial indicator in ownership, sanctions, intrusions or personnel; the dependence on a single team is a continuity concern, not a threat."
+      rationale: "Low risk: no adversarial indicator, and the reliance is offset by the factory pipeline and code held in the program's repository."
+      threat_type: non-adversarial
+      assumptions:
+        - "Public and Component sources searched are complete as of 2026-11-18."
+        - "CF-01 is recorded for the schema, not because the BIA rates it mission-critical (ASM-012)."
+      confidence: moderate
+    impact: "Loss of ERST would delay releases and fixes; it would not stop the running service, which squadrons can do without for 72 hours."
+    tolerance: within-tolerance
+    severity:
+      level: 1
+      agency_score: "Low"
+      explanation: "Agency low or moderate risk: nothing adversarial and not high, so it is managed within the program's C-SCRM process."
+    escalation:
+      legal_counsel: false
+      fasc: none
+    response: accept
+    review:
+      reviewed_by: [PER-ISSM, PER-PM]
+      senior_leadership: false
+      legal_counsel: false
+    handling:
+      marking: "CUI"
+      retention: "Six years in the C-SCRM program office repository"
+      dissemination: "AO, AODR and the C-SCRM program office only"
+    sources: [INT-040.A1, INT-040.A2, ASM-012]
+  - id: SA-02
+    supplier: SUP-03
+    conducted_by:
+      points_of_contact: [PER-ISSM, PER-PM]
+      non_federal_support: []
+    date: "2026-11-18"
+    temporal_findings:
+      - "No change of ownership of the cloud provider as of 2026-11-18; re-checked at each annual review."
+    source_profile:
+      legal_name: "Example GovCloud (fictional)"
+      domicile: "Domestic; data centers in the continental United States"
+      identifiers:
+        - "Fictional unique entity identifier on the cloud contract vehicle"
+      family_tree: "Fictional parent cloud company; the government region is a separate business unit"
+    covered_articles:
+      - item: INV-008
+        name: "managed Kubernetes"
+        identifier: "1.33"
+        description: "Managed Kubernetes service that runs the ingest worker"
+      - item: INV-010
+        name: "managed PostgreSQL"
+        identifier: "16.4"
+        description: "Managed database the ingest loads"
+    purpose:
+      life_cycle_phase: "Software pathway execution phase, before the first production authorization"
+      context: "Supplier of CF-01, the function scrm.yaml records because its schema requires an entry (ASM-012); assessed as a critical supplier for that reason."
+    methodology:
+      reference: "Component C-SCRM program office SCRA methodology, mapped to SP 800-161 Rev. 1 Appendix E Table 28 and the SCRSS of Table 29"
+      deviations: []
+    factors:
+      - factor: purpose
+        status: assessed
+        finding: "Provides the IL4 region and the managed services EFRAS runs on."
+        agency_factor: "Purpose of the procurement"
+        sources: [INT-040.A1, product/architecture.md#leveraged]
+      - factor: criticality
+        status: assessed
+        finding: "Supplies INV-008 and INV-010, which perform CF-01; rated critical for the record (ASM-012)."
+        agency_factor: "Criticality to the system"
+        sources: [INT-039.A1, ASM-012]
+      - factor: information-and-data
+        status: assessed
+        finding: "Stores all EFRAS data encrypted with program-owned keys."
+        agency_factor: "Access to agency information"
+        sources: [INT-040.A1, product/hw-sw-inventory.md#items]
+      - factor: reliance
+        status: assessed
+        finding: "High dependence: re-hosting would take months."
+        agency_factor: "Dependence on the source"
+        sources: [INT-040.A1]
+      - factor: operational-environment
+        status: assessed
+        finding: "Government region under a DoD IL4 provisional authorization."
+        agency_factor: "Operating environment"
+        sources: [INT-040.A1, product/architecture.md#leveraged]
+      - factor: external-interdependencies
+        status: assessed
+        finding: "Depends on its own hardware and network suppliers, covered by its authorization."
+        agency_factor: "External dependencies"
+        sources: [INT-040.A1]
+      - factor: functionality
+        status: assessed
+        finding: "Managed services behave as documented by the provider; no deviation seen."
+        agency_factor: "Functionality of the article"
+        sources: [INT-040.A1]
+      - factor: company-information
+        status: assessed
+        finding: "Domestic company; the government region is a separate business unit."
+        agency_factor: "Company profile"
+        sources: [INT-040.A1]
+      - factor: quality-past-performance
+        status: assessed
+        finding: "No reported outages beyond its service level or intrusions affecting the region."
+        agency_factor: "Past performance"
+        sources: [INT-040.A1]
+      - factor: personnel
+        status: assessed
+        finding: "Region staff are screened under the provider's authorization."
+        agency_factor: "Personnel security"
+        sources: [INT-040.A1]
+      - factor: physical
+        status: assessed
+        finding: "Data centers in the continental United States, protected under the provider's authorization."
+        agency_factor: "Physical security"
+        sources: [INT-040.A1]
+      - factor: geopolitical
+        status: assessed
+        finding: "Domestic data centers only."
+        agency_factor: "Geopolitical exposure"
+        sources: [INT-040.A1]
+      - factor: foci
+        status: assessed
+        finding: "Searches of public FOCI information found no foreign ownership, control or influence."
+        agency_factor: "Foreign ownership, control or influence"
+        sources: [INT-040.A1]
+      - factor: compliance-legal
+        status: assessed
+        finding: "Holds a DoD IL4 provisional authorization; no exclusion or legal action found."
+        agency_factor: "Compliance and legal"
+        sources: [INT-040.A1]
+      - factor: fraud-corruption-sanctions
+        status: assessed
+        finding: "Exclusion and sanctions list searches found nothing."
+        agency_factor: "Fraud, corruption and sanctions"
+        sources: [INT-040.A1]
+      - factor: cybersecurity
+        status: assessed
+        finding: "Authorized at IL4 with continuous monitoring by its own authorizing official."
+        agency_factor: "Cybersecurity posture"
+        sources: [INT-040.A1, product/architecture.md#leveraged]
+      - factor: counterfeit-nonconforming
+        status: assessed
+        finding: "Hardware assurance and anti-counterfeit measures are the provider's and inherited through its authorization."
+        agency_factor: "Counterfeit and non-conforming products"
+        sources: [INT-039.A2, INT-040.A1]
+      - factor: supply-chain-relationships
+        status: assessed
+        finding: "Its hardware and network supply chain is managed under its own C-SCRM controls."
+        agency_factor: "Supply chain relationships"
+        sources: [INT-040.A1]
+    findings:
+      summary: "Domestic, authorized cloud provider with a clean record; the main concern is the program's dependence on it."
+      analysis: "No adversarial indicator in ownership, sanctions or intrusions; the dependence is a continuity concern, addressed by contingency planning."
+      rationale: "Low risk: no adversarial indicator, and its authorization covers its own supply chain."
+      threat_type: non-adversarial
+      assumptions:
+        - "Public and Component sources searched are complete as of 2026-11-18."
+        - "CF-01 is recorded for the schema, not because the BIA rates it mission-critical (ASM-012)."
+      confidence: moderate
+    impact: "Loss of the region would stop the service; squadrons fall back to EMIS within the 72-hour tolerance."
+    tolerance: within-tolerance
+    severity:
+      level: 1
+      agency_score: "Low"
+      explanation: "Agency low or moderate risk: nothing adversarial and not high, so it is managed within the program's C-SCRM process."
+    escalation:
+      legal_counsel: false
+      fasc: none
+    response: accept
+    review:
+      reviewed_by: [PER-ISSM, PER-PM]
+      senior_leadership: false
+      legal_counsel: false
+    handling:
+      marking: "CUI"
+      retention: "Six years in the C-SCRM program office repository"
+      dissemination: "AO, AODR and the C-SCRM program office only"
+    sources: [INT-040.A1, INT-040.A2, ASM-012]
 aggregation:
   method: "Supplier risks are reported in the Component portfolio risk register by shared platform (cloud region, software factory) and aggregated by the C-SCRM program office."
   reported_to:
     - level-1
     - level-2
   sources: [INT-037.A5, ART-ORG-CONTEXT]
-sources: [INT-034.A4, INT-037.A5, INT-038.A2]
+sources: [INT-034.A4, INT-037.A5, INT-038.A2, INT-039.A1, INT-039.A2, INT-040.A1, INT-040.A2, ASM-012]
 pm_actions:
   started: "2025-08-15"
   risk_tolerance:
@@ -91,7 +397,11 @@ pm_actions:
   illumination:
     maintained: false
     considered: "No mission-critical item and authorized providers for every service; illumination judged not worth its cost at moderate tolerance."
-  tac_requests: []
+  tac_requests:
+    - id: TAC-01
+      subjects: ["Example Readiness Software Team (ERST)", "Example GovCloud"]
+      to: DIA-SCRM-TAC
+      date: "2026-11-18"
   reports: []
   mission_critical:
     - {item: CI-001, measure: scrm-countermeasure, detail: "PPP countermeasures CM-001 (factory gates, signed images, SBOMs) and CM-002 (boundary hardening)."}
@@ -101,4 +411,4 @@ pm_actions:
   mitigations:
     - {id: SCM-01, kind: acquisition, measure: "Development only on the authorized software factory, required by the ERST task order", informed_by: [TA-001]}
     - {id: SCM-02, kind: engineering, measure: "Signed images verified at admission; dependency and image scans gate every release", informed_by: [TA-001]}
-  sources: [INT-037.A5, ASM-010]
+  sources: [INT-037.A5, INT-039.A2, ASM-010, ASM-012]

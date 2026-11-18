@@ -2,8 +2,8 @@
 artifact_id: ART-BND
 run_id: 20261118-synthetic-01
 produced_by_task: P-11
-touched_by: [P-11]
-sources: [INT-025.A1, INT-025.A2, INT-025.A3, INT-025.A4, INT-026.A1, INT-026.A2, INT-026.A3, product/architecture.md#boundary, product/architecture.md#network, product/data-flows.md#top, ASM-008]
+touched_by: [P-11, P-16]
+sources: [INT-025.A1, INT-025.A2, INT-025.A3, INT-025.A4, INT-026.A1, INT-026.A2, INT-026.A3, INT-047.A1, INT-047.A2, INT-048.A1, INT-048.A2, INT-049.A1, INT-050.A1, INT-051.A1, product/architecture.md#boundary, product/architecture.md#network, product/data-flows.md#top, ASM-008, ART-INFOTYPES]
 ---
 # Authorization boundary, network architecture and data flows
 
@@ -58,7 +58,8 @@ The flows DF-1 to DF-10 are the complete set [[INT-025.A3]] [[product/data-flows
 Maintainer PII crosses the boundary in DF-3 and moves inside in DF-5 and DF-6; pseudonymized
 records leave the database in DF-7 exports and the DF-8 training extract, which the product
 discloses as re-identifiable until release 1.6 [[INT-025.A3]] [[product/conops.md#limitations]].
-The information types of PII are named once P-12 identifies them. Diagram:
+The PII belongs to information types INF-03 (maintainer records) and INF-05 (audit records)
+[[ART-INFOTYPES]]. Diagram:
 `artifacts/diagrams/data-flows.md` [[ASM-008]].
 
 ## External components
@@ -76,7 +77,48 @@ The information types of PII are named once P-12 identifies them. Diagram:
 [[product/architecture.md#leveraged]] [[product/architecture.md#interconnections]] [[INT-026.A2]].
 C-1 adds the leveraged authorizations.
 
-<!-- P-16 appends "## Connections and approvals": each external connection of
-     artifacts/data/boundary.yaml by CONN ID, the approvals it needs and their status, any
-     cross-domain solution and mission partner terms, and whether the system is on the DODIN or
-     outside it under a waiver; it adds P-16 to touched_by. -->
+## Enterprise Architecture (P-16)
+
+**Placement.** EFRAS is a business-support capability in the Component's aviation logistics and
+readiness portfolio. It is a read-only consumer downstream of EMIS and the supply status service,
+and it feeds readiness views to the fleet [[INT-049.A1]]. In the security architecture it is a
+tenant of the Component's IL4 cloud, behind the enterprise access point and identity broker, and
+monitored by the Component CSSP. It adds no enterprise service [[INT-049.A1]].
+
+In the privacy architecture, EFRAS is a downstream holder of records under the Component's
+aviation maintenance records SORN. EMIS stays the collecting system, and the privacy office's
+program controls are common controls EFRAS relies on [[INT-050.A1]].
+
+**National Security System.** EFRAS is not a National Security System. It holds no classified
+information and performs no intelligence, cryptologic, command and control or weapons function.
+As a logistics business application it falls under the statutory exclusion [[INT-051.A1]]. It
+still uses the CNSSI 1253 baselines under DoD policy. No NSA assessment is owed, so
+`nss-assessments.yaml` records `nss: false` [[INT-051.A1]].
+
+**Hosting.** EFRAS is hosted in the IL4 cloud region, cloud first for a new start. It is not in a
+DECC. It cannot be an application in an existing enclave, because no Component enclave offers
+the managed platform at IL4. The cloud hosting assessment found it can be cloud-hosted without
+compromising security or integrity. Five enterprise services are reused rather than built anew:
+the cloud region, the access point, the identity broker, the software factory and the CSSP
+[[INT-048.A1]] [[INT-048.A2]].
+
+### Connections and approvals
+
+EFRAS is on the DODIN; no waiver is needed [[INT-047.A1]]. Its one DISN attachment is CONN-01,
+through the ECAP to NIPRNet. That connection goes through the DISA cloud connection process. The
+production request was submitted on 2026-10-15 and is still requested, not approved
+[[INT-047.A1]].
+
+The other six connections are reached through the cloud and that attachment, over the egress
+allow-list. They need no DISA approval of their own:
+
+- CONN-02: cloud region, bidirectional.
+- CONN-03: identity broker, bidirectional.
+- CONN-04: EMIS, inbound. Interim e-mail approval; the agreement is under legal review.
+- CONN-05: supply status service, inbound.
+- CONN-06: software factory, inbound.
+- CONN-07: CSSP, outbound.
+
+Their ports, protocols and data are in `boundary.yaml`; the system-to-system agreements are with
+the external components above [[INT-047.A2]]. No connection crosses a security domain, and there
+is no mission partner interconnection [[INT-047.A1]].

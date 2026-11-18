@@ -1,0 +1,487 @@
+needs:
+  - id: NEED-01
+    stakeholder: PER-SPONSOR
+    kind: trust-expectation
+    concern: "The readiness figures must match what the maintenance system recorded; altered data must never be published."
+    success_criteria: "Every nightly load is checked against the EMIS signature and checksum and a failed check stops the load; no published figure differs from EMIS in a reconciliation test."
+    priority: 1
+    rationale: "Wrong readiness figures mislead fleet decisions; the sponsor ranks integrity first."
+    sources: [INT-041.A1, ART-STAKE]
+  - id: NEED-02
+    stakeholder: PER-SPONSOR
+    kind: security-concern
+    concern: "An adversary must not see aggregated fleet readiness."
+    success_criteria: "Only CAC-authenticated DoD users reach the service, each sees only their own echelon, and no endpoint is reachable from the internet."
+    priority: 2
+    rationale: "Aggregated readiness is CUI an adversary values; second to integrity for the sponsor."
+    sources: [INT-041.A1, ART-STAKE]
+  - id: NEED-03
+    stakeholder: PER-IO
+    kind: loss-concern
+    concern: "Loss of integrity of maintenance and readiness data, then disclosure of maintainer records."
+    assets: [AST-003, AST-004]
+    success_criteria: "Every change to stored data comes from the ingest or a logged administrator action; records are encrypted at rest and in transit."
+    priority: 1
+    rationale: "The data steward sets integrity first, then confidentiality, for the data the service holds."
+    sources: [INT-042.A1, ART-INFOTYPES]
+  - id: NEED-04
+    stakeholder: PER-IO
+    kind: security-concern
+    concern: "A de-identified export must stay de-identified; nobody holding DoD ID numbers can re-identify a person."
+    success_criteria: "A re-identification test against a list of DoD ID numbers matches no record in an export or the training extract."
+    priority: 2
+    rationale: "Known limitation 1 shows exports re-identifiable today; top privacy need until release 1.6."
+    sources: [INT-042.A1, product/conops.md#limitations]
+  - id: NEED-05
+    stakeholder: PER-PRIV
+    kind: loss-concern
+    concern: "Maintainer PII must be processed only as the SORN, the PIA and the Privacy Act allow."
+    assets: [AST-004]
+    success_criteria: "PIA approved before production use with real PII; no disclosure outside routine uses; access and amendment requests reach the privacy office."
+    priority: 2
+    rationale: "About 30,000 people are affected; the privacy risk assessment rates the impact moderate."
+    sources: [INT-043.A1, INT-043.A2, ART-RA]
+  - id: NEED-06
+    stakeholder: PER-UR
+    kind: trust-expectation
+    concern: "Dashboards back within a day of an outage and never more than 72 hours late; CAC-only sign-in; usable with assistive technology."
+    success_criteria: "A restore test returns the previous day's data within 24 hours; sign-in uses CAC only; pages pass an accessibility test."
+    priority: 3
+    rationale: "Users fall back to slower EMIS reports beyond 72 hours; availability is the lower-ranked need."
+    sources: [INT-044.A1, product/conops.md#availability]
+  - id: NEED-07
+    stakeholder: PER-PM
+    kind: security-concern
+    concern: "Releases must pass the factory's security gates and the service must keep inheriting from authorized providers."
+    success_criteria: "Every release has passing gates, an SBOM and signed images; no provider authorization lapses."
+    priority: 3
+    rationale: "The program's protection rests on the factory and the providers it inherits from."
+    sources: [INT-045.A1]
+requirements:
+  - id: REQ-01
+    allocated_to: [CMP-WEB, CMP-API, common-control-provider]
+    statement: "Every human user authenticates with a DoD CAC through the enterprise identity broker before reaching any EFRAS function; no local passwords exist for application users."
+    kind: security
+    needs: [NEED-02, NEED-06]
+    policy: [DP-IDENTITY-ASSURANCE]
+    priority: 2
+    criticality: 2
+    measure: {kind: performance, statement: "Share of sign-ins through the broker with CAC: 100 percent; local application accounts: 0."}
+    verification: {method: test, description: "Attempt sign-in without CAC and with a local account; both are refused."}
+    included_in: [performance-specification]
+    sources: [INT-041.A3, INT-044.A1, product/architecture.md#identity]
+  - id: REQ-02
+    allocated_to: [CMP-API, CMP-REPORT]
+    statement: "Each user sees and exports only the data of their own echelon (squadron, air wing or fleet), and privileged functions are limited to the roles that need them."
+    kind: security
+    needs: [NEED-02]
+    policy: [DP-SW-SECURE-ARCH]
+    priority: 2
+    criticality: 2
+    measure: {kind: performance, statement: "Cross-echelon access attempts allowed: 0 in the role test suite."}
+    verification: {method: test, description: "Role test suite requests another echelon's data for each role; every request is denied."}
+    included_in: [performance-specification]
+    sources: [INT-041.A3, product/architecture.md#identity]
+  - id: REQ-03
+    allocated_to: [CMP-EDGE, CMP-DB, CMP-OBJ, CMP-KMS]
+    statement: "Data in transit uses TLS 1.2 or higher with DoD-approved cipher suites, and data at rest is encrypted with program-owned keys in the key management service."
+    kind: security
+    needs: [NEED-02, NEED-03]
+    policy: [DP-DATA-PROTECTION, DP-CRYPTO-INTEROP]
+    priority: 2
+    criticality: 2
+    measure: {kind: performance, statement: "Unencrypted listeners or unencrypted stores found by configuration scan: 0."}
+    verification: {method: inspection, description: "Inspect load balancer, database, storage and key configuration; all show encryption with program keys."}
+    included_in: [performance-specification]
+    sources: [INT-042.A2, INT-046.A2]
+  - id: REQ-04
+    allocated_to: [CMP-INGEST]
+    statement: "The nightly ingest verifies the EMIS signature, the checksum and the schema of each extract, and stops the load without publishing when a check fails."
+    kind: security
+    needs: [NEED-01, NEED-03]
+    policy: [DP-SW-INPUT-VALIDATION]
+    priority: 1
+    criticality: 1
+    measure: {kind: performance, statement: "Tampered or malformed test extracts published: 0 of the injected cases."}
+    verification: {method: test, description: "Inject altered and malformed extracts; each load stops and alerts, and the published data is unchanged."}
+    included_in: [performance-specification]
+    sources: [INT-041.A1, INT-041.A3, INT-042.A2, product/data-flows.md#top]
+  - id: REQ-05
+    allocated_to: [CMP-LOGS, common-control-provider]
+    statement: "User and administrator actions and every change to stored data are logged, forwarded to the CSSP, and retained one year by the program."
+    kind: security
+    needs: [NEED-03]
+    policy: [DP-RESILIENCE-AUDIT]
+    priority: 2
+    criticality: 2
+    measure: {kind: performance, statement: "Retention of the program's own audit copy: 365 days."}
+    verification: {method: inspection, description: "Inspect log store and archive settings and a sample of forwarded events at the CSSP."}
+    included_in: [performance-specification, product-support]
+    sources: [INT-042.A2, INT-045.A2, product/architecture.md#logging]
+  - id: REQ-06
+    allocated_to: [CMP-DB, CMP-K8S, common-control-provider]
+    statement: "The service recovers from loss of the cluster or database within 24 hours with at most one nightly load lost."
+    kind: security
+    needs: [NEED-06]
+    policy: [DP-SW-RESILIENCE]
+    priority: 3
+    criticality: 3
+    measure: {kind: performance, statement: "Recovery time objective 24 hours; recovery point objective 24 hours."}
+    verification: {method: demonstration, description: "Restore and failover exercise returns the previous day's data within 24 hours."}
+    included_in: [performance-specification, product-support]
+    sources: [INT-044.A1, INT-046.A2, product/conops.md#availability]
+  - id: REQ-07
+    allocated_to: [CMP-K8S, common-control-provider, contract]
+    statement: "Every release is built only on the software factory, passes its static, dependency and image scans, carries an SBOM and signed images, and runs only if its signature verifies at admission."
+    kind: security
+    needs: [NEED-07]
+    policy: [DP-SW-PRACTICES, DP-SW-SECURITY-QUALITY, DP-SW-COMMON-REQUIREMENTS]
+    priority: 2
+    criticality: 2
+    measure: {kind: assurance, statement: "Releases deployed without passing gates, SBOM or verified signature: 0."}
+    verification: {method: inspection, description: "Inspect pipeline gate records, SBOMs and admission controller logs for each release."}
+    included_in: [performance-specification, product-support]
+    sources: [INT-045.A1, INT-046.A3, product/test-results.md#pipeline-1-5]
+  - id: REQ-08
+    allocated_to: [CMP-K8S, CMP-DB]
+    statement: "Operating system, container and database configurations meet the applicable STIGs and SRGs, checked with SCAP-validated tools each month and at each release."
+    kind: security
+    needs: [NEED-07]
+    policy: [DP-SCAP]
+    priority: 3
+    criticality: 3
+    measure: {kind: performance, statement: "Open CAT I findings: 0; CAT II findings tracked in the POA&M."}
+    verification: {method: test, description: "SCAP compliance scan of each configuration item."}
+    included_in: [performance-specification, product-support]
+    sources: [INT-046.A3, product/test-results.md#stig-scan]
+  - id: REQ-09
+    allocated_to: [CMP-WEB, CMP-REPORT]
+    statement: "Every page, export and briefing slide carries the CUI banner and the designation indicator, and exports carry CUI metadata."
+    kind: security
+    needs: [NEED-03]
+    policy: [DP-MARKING-METADATA]
+    priority: 3
+    criticality: 3
+    measure: {kind: performance, statement: "Unmarked exports in the export test set: 0."}
+    verification: {method: inspection, description: "Inspect a sample of pages, exports and slides for marking and metadata."}
+    included_in: [performance-specification]
+    sources: [INT-042.A2, product/conops.md#information]
+  - id: REQ-10
+    allocated_to: [CMP-EDGE, CMP-K8S, common-control-provider]
+    statement: "All user traffic enters only through ECAP over NIPRNet; the system has no public endpoint, keeps web, application and data tiers segmented, and allows only listed egress."
+    kind: security
+    needs: [NEED-02]
+    policy: [DP-CYBER-ARCH, DP-ENTERPRISE-ARCH, DP-ARCH-PRINCIPLES]
+    priority: 2
+    criticality: 2
+    measure: {kind: performance, statement: "Endpoints reachable from the internet: 0; flows outside the allow-list: 0."}
+    verification: {method: test, description: "External reachability scan and review of security group and egress rules."}
+    included_in: [performance-specification]
+    sources: [INT-041.A3, INT-045.A1, product/architecture.md#network]
+  - id: REQ-11
+    allocated_to: [CMP-API, CMP-INGEST]
+    statement: "The protocols and standards the system uses (TLS, SAML federation, REST over HTTPS, PostgreSQL) are selected from the DoD IT Standards Registry and suffice for its interfaces with ECAP, the identity broker, EMIS and the CSSP."
+    kind: security
+    needs: [NEED-07]
+    policy: [DP-STANDARDS-REGISTRY, DP-STANDARDS-SUFFICIENT]
+    priority: 4
+    criticality: 4
+    measure: {kind: assurance, statement: "Interfaces using a standard not in the registry: 0."}
+    verification: {method: analysis, description: "Compare the interface standards list with the registry."}
+    included_in: [performance-specification]
+    sources: [INT-046.A1, product/architecture.md#interconnections]
+  - id: REQ-12
+    allocated_to: [CMP-WEB]
+    statement: "The web interface meets Section 508 accessibility standards and does not block assistive technology."
+    kind: security
+    needs: [NEED-06]
+    policy: [DP-ASSISTIVE-TECH]
+    priority: 4
+    criticality: 4
+    measure: {kind: performance, statement: "Section 508 test failures: 0."}
+    verification: {method: test, description: "Accessibility test of the dashboards with a screen reader."}
+    included_in: [performance-specification]
+    sources: [INT-044.A1]
+  - id: REQ-13
+    allocated_to: [contract]
+    statement: "Every security requirement has a measurable verification run at each release, traces to the function it protects (CF-01 or a business process BP-01 to BP-03), and is reviewed for cyber resilience and zero trust suitability at each major release."
+    kind: security
+    needs: [NEED-01, NEED-07]
+    policy: [DP-SW-TRACEABLE]
+    priority: 3
+    criticality: 3
+    measure: {kind: assurance, statement: "Requirements without a verification result in the release record: 0."}
+    verification: {method: inspection, description: "Inspect the requirements traceability matrix and release verification records."}
+    included_in: [performance-specification]
+    sources: [INT-046.A1, INT-046.A3, ART-BIA]
+  - id: REQ-14
+    allocated_to: [CMP-REPORT, CMP-SANDBOX, CMP-INGEST, environment]
+    statement: "Exports and the training extract are treated as non-PII only after effective de-identification with salted, rotated pseudonyms; each export type has a privacy office minimization review; maintainer PII older than the 5-year window is purged monthly."
+    kind: privacy
+    needs: [NEED-04, NEED-05]
+    priority: 1
+    criticality: 1
+    measure: {kind: performance, statement: "Records re-identified in the re-identification test: 0; PII older than 5 years: 0."}
+    verification: {method: test, description: "Re-identification test of an export against a list of DoD ID numbers, and query for PII beyond the window."}
+    sources: [INT-043.A1, INT-042.A1, ART-RA]
+  - id: REQ-15
+    allocated_to: [environment, contract]
+    statement: "Maintainer records are handled under the covering SORN and the Privacy Act: no disclosure without consent outside routine uses and statutory exceptions; no record of First Amendment activity; access and amendment requests referred to the privacy office, with corrections made in EMIS; rules of conduct and penalties briefed to everyone handling the records; Privacy Act clauses in the ERST task order."
+    kind: privacy
+    needs: [NEED-05]
+    priority: 2
+    criticality: 2
+    measure: {kind: assurance, statement: "Disclosures outside routine uses: 0; staff with records access briefed: 100 percent."}
+    verification: {method: inspection, description: "Inspect disclosure records, the data dictionary, the referral procedure, training records and the task order clauses."}
+    sources: [INT-043.A2, product/privacy.md#authority]
+  - id: REQ-16
+    allocated_to: [environment]
+    statement: "The PIA on DD Form 2930 is approved before production use with real PII, and updated at each major change."
+    kind: privacy
+    needs: [NEED-05]
+    priority: 2
+    criticality: 2
+    measure: {kind: assurance, statement: "Production deployment with real PII before PIA approval: none."}
+    verification: {method: inspection, description: "Inspect the approved PIA and its date against the deployment record."}
+    sources: [INT-043.A1, INT-043.A3, product/privacy.md#pia]
+  - id: REQ-17
+    allocated_to: [contract]
+    statement: "The ERST task order requires development only on the authorized software factory with an SBOM and secure development attestation per release, reporting of any supply chain compromise or change of ownership to the ISSM within 72 hours, defined incident response roles, yearly revalidation by self-attestation and the factory's third-party pipeline assessment, and grounds for termination when a supply chain risk cannot be mitigated."
+    kind: security
+    needs: [NEED-07]
+    derived_from: [REQ-07]
+    priority: 2
+    criticality: 2
+    measure: {kind: assurance, statement: "Releases without SBOM and attestation: 0; supply chain events reported later than 72 hours: 0."}
+    verification: {method: inspection, description: "Inspect the task order clauses, release attestations and the COR's checks."}
+    included_in: [product-support]
+    sources: [INT-053.A1, ART-RA]
+  - id: REQ-18
+    allocated_to: [contract]
+    statement: "The cloud task order carries the DTM 24-001 clauses: accreditation boundary and licensing, incident notification to the CSSP, threat-representative testing, CSP data for the CSSP's defensive cyber operations, corrective action processes, access for inspection teams, and report delivery."
+    kind: security
+    needs: [NEED-07]
+    priority: 3
+    criticality: 3
+    measure: {kind: assurance, statement: "DTM 24-001 clauses missing from the cloud task order: 0 of 7."}
+    verification: {method: inspection, description: "Inspect the cloud task order for each clause."}
+    included_in: [product-support]
+    sources: [INT-053.A1, INT-048.A1]
+  - id: REQ-19
+    allocated_to: [contract]
+    statement: "Contractor personnel in cyberspace work roles (system administrators, software developers) meet the DoD cyberspace workforce qualification requirements under DFARS Subpart 239.71, with each person's qualification documented."
+    kind: security
+    needs: [NEED-07]
+    priority: 3
+    criticality: 3
+    measure: {kind: assurance, statement: "Contractor staff in cyberspace work roles without a documented qualification: 0."}
+    verification: {method: inspection, description: "COR inspection of ERST qualification records against the work roles."}
+    included_in: [product-support]
+    sources: [INT-053.A1]
+constraints:
+  - id: CON-01
+    origin: security
+    statement: "The service runs in the IL4 cloud region and is reached only over NIPRNet through ECAP."
+    sources: [INT-045.A1, product/conops.md#environment]
+  - id: CON-02
+    origin: operation
+    statement: "Two cloud console break-glass accounts use FIDO2 keys instead of CAC, because the provider console cannot federate when the identity broker is down; the AO must accept this deviation."
+    sources: [INT-045.A1, INT-045.A2, product/conops.md#limitations]
+  - id: CON-03
+    origin: implementation
+    statement: "All builds come from the software factory; no other build path exists."
+    sources: [INT-045.A1, product/architecture.md#leveraged]
+  - id: CON-04
+    origin: stakeholder
+    statement: "The MVCR must deploy to the operational environment by 2027-02-01."
+    sources: [INT-045.A1, product/conops.md#program]
+  - id: CON-05
+    origin: integration
+    statement: "The EMIS extract arrives under an interim e-mail approval until the interconnection agreement is signed (target 2026-12-31)."
+    sources: [INT-045.A1, product/conops.md#limitations]
+design_policy:
+  - statement: DP-RESILIENCE-AUDIT
+    applies: true
+    requirements: [REQ-05]
+    sources: [INT-046.A3]
+  - statement: DP-ARCH-PRINCIPLES
+    applies: true
+    requirements: [REQ-10]
+    sources: [INT-046.A1]
+  - statement: DP-BIOMETRICS
+    applies: false
+    reason: "EFRAS collects, stores and uses no biometric data; users authenticate with CAC."
+    sources: [product/conops.md#users, product/privacy.md#pii]
+  - statement: DP-ASSISTIVE-TECH
+    applies: true
+    requirements: [REQ-12]
+    sources: [INT-044.A1]
+  - statement: DP-CRYPTO-INTEROP
+    applies: true
+    requirements: [REQ-03]
+    sources: [INT-046.A2]
+  - statement: DP-CYBER-ARCH
+    applies: true
+    requirements: [REQ-10]
+    sources: [INT-046.A1]
+  - statement: DP-MARKING-METADATA
+    applies: true
+    requirements: [REQ-09]
+    sources: [INT-042.A2]
+  - statement: DP-IDENTITY-ASSURANCE
+    applies: true
+    requirements: [REQ-01]
+    sources: [INT-045.A1]
+  - statement: DP-ENTERPRISE-ARCH
+    applies: true
+    requirements: [REQ-10]
+    sources: [INT-046.A1]
+  - statement: DP-BIOS-MANAGE
+    applies: false
+    reason: "The program owns no hardware and so manages no BIOS; host firmware is the cloud provider's, inherited through its authorization."
+    sources: [ART-INV]
+  - statement: DP-BIOS-SPEC
+    applies: false
+    reason: "The program writes no PC client specification; it procures no computers."
+    sources: [ART-INV]
+  - statement: DP-TPM
+    applies: false
+    reason: "The program procures no new computer assets; privileged access workstations come from the Component workstation inventory."
+    sources: [ART-INV]
+  - statement: DP-TPM-TCG
+    applies: false
+    reason: "No TPM-bearing assets are procured by the program."
+    sources: [ART-INV]
+  - statement: DP-TPM-ON
+    applies: false
+    reason: "No computer assets are received by the program."
+    sources: [ART-INV]
+  - statement: DP-TPM-JUSTIFY
+    applies: false
+    reason: "No computer asset is procured, with or without a TPM."
+    sources: [ART-INV]
+  - statement: DP-SCAP
+    applies: true
+    requirements: [REQ-08]
+    sources: [INT-046.A3]
+  - statement: DP-STANDARDS-REGISTRY
+    applies: true
+    requirements: [REQ-11]
+    sources: [INT-046.A1]
+  - statement: DP-STANDARDS-SUFFICIENT
+    applies: true
+    requirements: [REQ-11]
+    sources: [INT-046.A1]
+  - statement: DP-DATA-PROTECTION
+    applies: true
+    requirements: [REQ-03]
+    sources: [INT-046.A2]
+  - statement: DP-SW-PRACTICES
+    applies: true
+    requirements: [REQ-07]
+    sources: [INT-046.A3]
+  - statement: DP-SW-TRACEABLE
+    applies: true
+    requirements: [REQ-13]
+    sources: [INT-046.A1]
+  - statement: DP-SW-SECURITY-QUALITY
+    applies: true
+    requirements: [REQ-07]
+    sources: [INT-046.A3]
+  - statement: DP-SW-COMMON-REQUIREMENTS
+    applies: true
+    requirements: [REQ-07]
+    sources: [INT-046.A3]
+  - statement: DP-SW-SECURE-ARCH
+    applies: true
+    requirements: [REQ-02]
+    sources: [INT-046.A3]
+  - statement: DP-SW-INPUT-VALIDATION
+    applies: true
+    requirements: [REQ-04]
+    sources: [INT-046.A1]
+  - statement: DP-SW-SAFETY
+    applies: false
+    reason: "EFRAS is decision support with no operational technology and no mission-critical function in the BIA; it commands nothing and writes nothing back to EMIS."
+    sources: [ART-BIA, product/conops.md#mission]
+  - statement: DP-SW-RESILIENCE
+    applies: true
+    requirements: [REQ-06]
+    sources: [INT-046.A3]
+agreement:
+  analysis: "Each protection need NEED-01 to NEED-07 was checked for at least one requirement that traces to it, each requirement for a measure and a verification method, and the set for conflicts with the constraints CON-01 to CON-05."
+  feedback: "Each stakeholder was shown the requirements that trace to their needs, the priorities, the issues and the known gaps (REQ-05 retention, REQ-14 de-identification and REQ-16 PIA approval not yet met)."
+  issues:
+    - {issue: "Program audit retention is 90 days, short of the Component's one year.", resolution: "REQ-05 keeps one year; the gap is tracked to release 1.6."}
+    - {issue: "CAC for every human user conflicts with the FIDO2 break-glass console accounts.", resolution: "REQ-01 covers users through the broker; the console exception is constraint CON-02 for the AO to accept."}
+    - {issue: "REQ-16 asks for an approved PIA before production use with real PII, while the PIA is a draft.", resolution: "REQ-16 kept as written; MVCR deployment depends on PIA approval, planned for January 2027."}
+  agreed:
+    - {stakeholder: PER-SPONSOR, date: "2026-11-18", decisions: "Integrity of the ingest first, with signature and checksum checks; authentication, echelon access and ECAP-only ingress for the aggregate."}
+    - {stakeholder: PER-IO, date: "2026-11-18", decisions: "Encryption, logged changes, marking and de-identification address the data concerns; REQ-14 due with release 1.6."}
+    - {stakeholder: PER-PRIV, date: "2026-11-18", decisions: "REQ-14 to REQ-16 carry the privacy requirements; REQ-16 not yet met."}
+    - {stakeholder: PER-UR, date: "2026-11-18", decisions: "Recovery within 24 hours, CAC-only sign-in and accessibility."}
+    - {stakeholder: PER-PM, date: "2026-11-18", decisions: "Priorities integrity, then privacy and confidentiality, then recovery; break-glass exception to the AO."}
+  sources: [INT-041.A3, INT-042.A2, INT-043.A3, INT-044.A2, INT-045.A2]
+workforce:
+  contracted_work_roles: ["System administrator (ERST cloud operations engineers)", "Software developer (ERST developers)"]
+  qualification_requirement: REQ-19
+  dfars_239_71: applied
+  qualifications_documented: true
+  sources: [INT-053.A1]
+derivation:
+  informed_by:
+    - {kind: capability-requirements, document: "Capability needs statement for fleet readiness analytics v1.0 (validated 2025-08-01)", sources: [INT-041.A2, ASM-013]}
+    - {kind: concept-of-operations, document: "EFRAS concept of operations", sources: [INT-046.A1, product/conops.md#top]}
+    - {kind: operational-mode-summary, document: "ConOps mission section: nightly ingest and daily reporting cycle", sources: [INT-046.A1, product/conops.md#mission, ASM-013]}
+    - {kind: mission-profiles, document: "ConOps user journeys: squadron view, air wing view, analyst export", sources: [INT-046.A1, product/conops.md#users, ASM-013]}
+  methods:
+    - {method: "Threat modeling of the architecture and data flows", addresses: [design, interfaces, access-points], requirements: [REQ-03, REQ-04, REQ-05, REQ-10, REQ-11], sources: [INT-046.A1]}
+    - {method: "Misuse cases on the API and the export function", addresses: [implementation, access-points], requirements: [REQ-01, REQ-02, REQ-09, REQ-14], sources: [INT-046.A1]}
+    - {method: "PPP criticality analysis of the readiness data processing function", addresses: [design, implementation], requirements: [REQ-04, REQ-06, REQ-07, REQ-13], sources: [INT-046.A1, ART-RA]}
+  key_performance:
+    - {name: "Availability key attribute (recovery within 24 hours, one load at most lost)", kind: kpp-attribute, establishes: [survivability, sustainment], requirements: [REQ-06], sources: [INT-046.A2]}
+    - {name: "Data protection key attribute (integrity-checked loads, encryption with program keys)", kind: kpp-attribute, establishes: [security], based_on: [confidentiality, integrity], measures: "EMIS signature and checksum verification of each load; TLS in transit; encryption at rest with program-owned keys", requirements: [REQ-03, REQ-04], sources: [INT-046.A2]}
+  exportability: []
+  exportability_none: "No foreign sales, co-development or foreign national access is planned (PPP exportability), so no exportability requirement is derived."
+  sources: [INT-046.A1, INT-046.A2, ASM-013]
+engineering:
+  practices:
+    - {area: cybersecurity, stages: [design, test, manufacture, sustainment], practice: "Threat modeling at design; SAST, dependency, image scans and DAST in the pipeline; signed, SBOM-tagged image builds; monthly node rolls and patching", principles: [least-privilege, defense-in-depth], sources: [INT-046.A3]}
+    - {area: cyber-resilience, stages: [design, test, manufacture, sustainment], practice: "Three-tier segmentation and database standby; restore tests; immutable images rebuilt from source; backup and point-in-time restore", principles: [domain-separation, protective-recovery], sources: [INT-046.A3]}
+    - {area: cyber-survivability, stages: [design, test, manufacture, sustainment], practice: "ECAP-only ingress and egress allow-list; developmental test event and penetration test; reproducible builds; CSSP monitoring", principles: [protective-defaults, defense-in-depth], sources: [INT-046.A3]}
+    - {area: program-protection, stages: [design, sustainment], practice: "PPP countermeasures CM-001 (factory gates, signed images, SBOMs) and CM-002 (boundary hardening)", sources: [INT-046.A3, ART-RA]}
+    - {area: privacy-engineering, stages: [design, test, sustainment], practice: "Pseudonymization and minimization of exports and the training extract, with re-identification tests", principles: [least-sharing], sources: [INT-046.A3, INT-043.A1]}
+  assurance:
+    level: "Moderate: automated evidence from the software factory gates on each release, not formal methods"
+    commensurate_with:
+      technology: "Mature managed cloud services and containers"
+      program: "Software pathway program with three-week releases"
+      system: "Moderate-impact system holding CUI and PII"
+      mission: "Decision support with a 72-hour outage tolerance and no mission-critical function in the BIA"
+    requirements: [REQ-07, REQ-13]
+  sources: [INT-046.A3]
+privacy_act:
+  - rule: direct-collection
+    applies: false
+    reason: "EFRAS collects nothing from individuals; all PII arrives in the EMIS extract and EMIS is the collecting system."
+    sources: [INT-043.A2, product/privacy.md#pii]
+  - rule: disclosure-bar
+    applies: true
+    requirements: [REQ-15]
+    sources: [INT-043.A2]
+  - rule: first-amendment
+    applies: true
+    requirements: [REQ-15]
+    sources: [INT-043.A2]
+  - rule: access-appeals
+    applies: true
+    requirements: [REQ-15]
+    sources: [INT-043.A2]
+  - rule: rules-of-conduct
+    applies: true
+    requirements: [REQ-15]
+    sources: [INT-043.A2]
+  - rule: contract-provisions
+    applies: true
+    requirements: [REQ-15]
+    sources: [INT-043.A2]

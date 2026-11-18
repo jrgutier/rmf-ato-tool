@@ -143,3 +143,93 @@ components:
     status: operational
     external: true
     sources: [product/architecture.md#components, product/architecture.md#leveraged, INT-026.A2]
+dodin:
+  position: inside
+  sources: [INT-047.A1]
+connections:
+  - id: CONN-01
+    component: CMP-ECAP
+    network: disn
+    cross_domain: false
+    detail:
+      ports_protocols: "HTTPS on 443, TLS 1.2 or 1.3 with DoD-approved cipher suites, NIPRNet to the load balancer"
+      data: "Readiness views, queries and exports; CUI"
+      direction: bidirectional
+    approvals:
+      - {authority: DISA, status: requested, date: "2026-10-15", reference: "CCP-EFRAS-PROD (fictional cloud connection request)", sources: [INT-047.A1]}
+    sources: [INT-047.A1, product/architecture.md#network]
+  - id: CONN-02
+    component: CMP-CSP
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Provider service APIs over private endpoints, HTTPS on 443"
+      data: "All EFRAS data at rest and in processing; CUI including PII"
+      direction: bidirectional
+    approvals: []
+    sources: [INT-047.A2]
+  - id: CONN-03
+    component: CMP-IDB
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "SAML/OIDC over HTTPS on 443 through the egress allow-list"
+      data: "Signed authentication assertions with DoD ID number, organization and groups; CUI with PII"
+      direction: bidirectional
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#interconnections]
+  - id: CONN-04
+    component: CMP-EMIS
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Nightly pull over mutual TLS on 443 through the egress allow-list"
+      data: "Signed, checksummed extract of maintenance actions and maintainer PII; CUI"
+      direction: inbound
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#interconnections, product/data-flows.md#top]
+  - id: CONN-05
+    component: CMP-SUPPLY
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Nightly API pull over TLS on 443 with an API token"
+      data: "Supply status (part numbers, requisitions, expected delivery); CUI"
+      direction: inbound
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#interconnections]
+  - id: CONN-06
+    component: CMP-SWF
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Registry pulls and pipeline deploy role over HTTPS on 443"
+      data: "Signed container images and infrastructure templates"
+      direction: inbound
+    approvals: []
+    sources: [INT-047.A2, product/data-flows.md#top]
+  - id: CONN-07
+    component: CMP-ECSSP
+    network: other
+    cross_domain: false
+    detail:
+      ports_protocols: "Log forwarding over TLS on 443 through the egress allow-list"
+      data: "Audit records with user identifiers; CUI"
+      direction: outbound
+    approvals: []
+    sources: [INT-047.A2, product/architecture.md#logging]
+hosting:
+  environment: cloud
+  decc:
+    status: cloud
+    reason: "Cloud first for a new start (DoDI 5000.82); the managed Kubernetes, database and pipeline model needs cloud services, and the IL4 region is authorized for CUI."
+  enclave_application:
+    status: not-possible
+    reason: "No authorized Component enclave offers a managed Kubernetes and database platform for business applications at IL4, and the data steward requires a program-controlled account; EFRAS is a major application under development with its own authorization."
+  cloud:
+    assessment: cloud-hosted
+    reason: "The cloud hosting assessment in the acquisition strategy (2026-02-16) found EFRAS can be cloud-hosted without compromising security or integrity in the IL4 region; it is now hosted there."
+  enterprise_services:
+    considered: ["Example GovCloud IL4 region", "Example Enterprise Cloud Access Point", "Enterprise identity broker", "Example Software Factory", "Example Cybersecurity Service Provider"]
+    outcome: "All five reused instead of building a unique hosting platform, boundary, sign-in, pipeline or monitoring."
+  sources: [INT-048.A1, INT-048.A2, product/architecture.md#leveraged]
