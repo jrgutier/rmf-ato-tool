@@ -1,0 +1,18 @@
+rule: MPOA-001
+bases:
+- minimal
+description: a milestone approving the CM plan is met, and the plan records no approval (F-15-9)
+mutations:
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.milestones.0.approves
+  value: cm-plan
+- op: set_field
+  file: artifacts/poam/items.yaml
+  path: items.0.milestones.0.completed
+  value: '2026-11-19'
+expect:
+  errors:
+  - MPOA-001
+  messages:
+  - records no approval on or before it

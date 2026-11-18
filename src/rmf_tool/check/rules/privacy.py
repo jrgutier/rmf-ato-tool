@@ -401,6 +401,10 @@ def privacy_monitoring(ctx: Context) -> list[RunFinding]:
             f"privacy controls, not {found.get('guidance_by')}")
     entries = _dicts(found.get("controls"))
     held = _strings([c.get("control") for c in entries])
+    if found.get("follows_frequencies") is True:
+        # the strategy takes the family frequencies for the controls it does not list (F-09-4)
+        families = {str(f.get("family")) for f in _dicts(data.get("frequencies"))}
+        held |= {c for c in _privacy_controls(ctx) if c.split("-")[0] in families}
     for control in sorted(_privacy_controls(ctx) - held):
         err(f"privacy control {control} has no assessment frequency in the privacy continuous "
             "monitoring strategy")
@@ -453,9 +457,14 @@ def legal_basis(ctx: Context) -> list[RunFinding]:
     if reqs is None or "P-15" not in scope.active_tasks(ctx.run):
         return out
     known = _strings([r.get("id") for r in _dicts(reqs.get("requirements"))])
+    # P-14 may name the requirement IDs, or P-15 may link each requirement back to the
+    # authority it carries (privacy_authorities), so P-14 makes no promise of IDs (F-02-13).
+    linked = {a for r in _dicts(reqs.get("requirements"))
+              for a in _strings(r.get("privacy_authorities"))}
     for item in legal:
         carried = _strings(item.get("requirements"))
-        if item.get("applies") is True and not carried & known:
+        if item.get("applies") is True and not carried & known \
+                and item.get("authority") not in linked:
             err(f"the applicable privacy requirement {item.get('authority')} is carried by no "
                 "requirement of ART-REQ", REQUIREMENTS, "P-15")
     sorn = _dict(_dict(_privacy(ctx)).get("sorn"))

@@ -412,3 +412,147 @@ def test_dodin_awareness_from_a_leveraged_provider(tmp_path, provider, flagged):
     run = open_run(run_dir, REPO_ROOT)
     found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "MRPT-001"]
     assert any("bandwidth" in m for m in found) is flagged, found
+
+
+def test_a_narrower_scoping_value_warns(tmp_path):
+    """F-08-6: a value the NSS column gives without an amount ("all configurable system
+    components") is compared word by word; a narrower one is a warning for a person."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/ssp/controls/cm.yaml",
+              lambda d: d["controls"][0]["parameters"].update(
+                  {"cm-06_odp.02": "the relay only"}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PVAL-002"]
+    assert any("differs from the NSS value" in m for m in found)
+
+
+def test_privacy_strategy_may_follow_the_family_frequencies(tmp_path):
+    """F-09-4: with follows_frequencies, a privacy control left out of the PCM strategy takes
+    its family's frequency instead of failing PRIV-006."""
+    run_dir = base_copy("pii", tmp_path / "pii")
+
+    def follow(d):
+        d["privacy"]["controls"][0]["control"] = "ac-2"
+        d["privacy"]["follows_frequencies"] = True
+        d.setdefault("frequencies", []).append(
+            {"family": "au", "frequency": "monthly", "method": "ISSO log review",
+             "responsible": "PER-ISSO", "criteria": ["ART-ORG-CONTEXT"]})
+
+    edit_yaml(run_dir / "artifacts/data/conmon.yaml", follow)
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PRIV-006"]
+    assert not any("au-2 has no assessment frequency" in m for m in found)
+
+
+def test_an_unproven_rto_needs_a_poam_item_from_a6(tmp_path):
+    """F-09-5: an RTO not yet proven names its exercise until A-6, then a POA&M item."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/data/contingency.yaml",
+              lambda d: d["strategy"].update(
+                  {"rto_gaps": [{"process": "BP-01", "unproven": True, "exercise": "EX-001"}]}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings
+             if f.rule in ("CPLAN-001", "RUN-FM-001")]
+    assert any("BP-01: the recovery time objective is not yet proven" in m for m in found)
+    assert not any("RUN-FM" in m or "schema" in m for m in found)
+
+
+def test_a_corroborated_self_test_may_be_reused(tmp_path):
+    """F-11-3: a lower-independence result an assessor witnessed or re-performs in part is
+    accepted; without the corroboration it is refused (ASMT-003.independence)."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/data/sap.yaml", lambda d: d["reused_results"][0].update(
+        {"independence": "self-assessment",
+         "corroboration": {"by": "PER-SCA", "how": "reperformed",
+                           "extent": "Five of the forty patch checks re-run by the SCA."}}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings
+             if f.rule in ("ASMT-003", "RUN-FM-001")]
+    assert not found
+
+
+def test_a_narrower_penetration_test_may_stand_beside_the_complete_one(tmp_path):
+    """F-11-6: a held partial penetration test is recordable as one."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def narrow(d):
+        extra = dict(d["events"][1])
+        extra.update({"id": "TE-009", "phase": "dt", "scope": "component",
+                      "includes_cssp": False})
+        d["events"].append(extra)
+
+    edit_yaml(run_dir / "artifacts/data/test-strategy.yaml", narrow)
+    run = open_run(run_dir, REPO_ROOT)
+    assert not [f for f in engine.evaluate(run).findings if f.rule == "TSTRAT-004"]
+
+
+def test_family_and_task_checks_agree_on_a_family_local_error(tmp_path):
+    """F-13-1: `--family` judges the family file at the task writing it, as `--task` does."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/sar/results/ac.yaml",
+              lambda d: d["determinations"][0].update({"assessed_on": "2020-01-01"}))
+    run = open_run(run_dir, REPO_ROOT)
+    ev = engine.evaluate(run)
+    by_family = [f.message for f in engine.select(run, ev, family="ac")
+                 if f.rule == "ASMT-005"]
+    by_task = [f.message for f in engine.select(run, ev, task="A-3") if f.rule == "ASMT-005"]
+    assert by_family and set(by_family) <= set(by_task)
+
+
+def test_before_authorization_items_fall_on_or_before_the_planned_decision(tmp_path):
+    """F-14-9: until the ledger holds a decision, MPOA-001 reads the planned decision date."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    (run_dir / "artifacts/data/authorizations.yaml").unlink()
+
+    def plan(d):
+        d.pop("ao_review", None)
+        d["planned_decision"] = "2026-11-20"
+        d["items"][0].update({"recommended_completion": "before-authorization",
+                              "scheduled_completion": "2026-12-31"})
+    edit_yaml(run_dir / "artifacts/poam/items.yaml", plan)
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "MPOA-001"]
+    assert any("before the planned system authorization of 2026-11-20" in m for m in found)
+
+
+def test_an_ao_review_of_the_poam_waits_for_the_risk_response(tmp_path):
+    """F-14-8: an AO review written before R-3 is reached is refused."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    ra = run_dir / "artifacts/ART-RA.md"
+    ra.write_text(ra.read_text().replace("touched_by: [P-14, C-3, R-2]", "touched_by: [P-14, C-3]"))
+    # only A-2's IATT on the ledger: no risk response is recorded yet
+    edit_yaml(run_dir / "artifacts/data/authorizations.yaml",
+              lambda d: d.update({"records": [r for r in d.get("records") or ()
+                                              if r.get("task") == "A-2"]}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "MPOA-001"]
+    assert any("is recorded before the risk response (R-3) is reached" in m for m in found)
+
+
+def test_a_monitor_finding_owes_its_poam_item_and_risk_at_m3(tmp_path):
+    """F-16-13: a finding M-2 raised gets its POA&M item and risk at M-3, not at A-6 or R-2."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def raise_at_m2(d):
+        new = dict(d["findings"][0])
+        new.update({"id": "FND-099", "raised_at": "M-2"})
+        d["findings"].append(new)
+    edit_yaml(run_dir / "artifacts/sar/results/ac.yaml", raise_at_m2)
+    run = open_run(run_dir, REPO_ROOT)
+    owners = {f.finding.rule: f.owners for f in engine.evaluate(run).findings
+              if "FND-099" in f.finding.message and f.finding.rule in ("SAR-POAM-001", "RAR-001")}
+    assert owners == {"SAR-POAM-001": frozenset({"M-3"}), "RAR-001": frozenset({"M-3"})}
+
+
+def test_planref_001_fires_on_a_plan_control_implemented_before_approval(tmp_path):
+    """F-07-1: cm-9 implemented while the CM plan holds no plan_approval; quiet once it does."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/ssp/controls/cm.yaml",
+              lambda d: d["controls"][0].update({"control_id": "cm-9", "status": "implemented"}))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "PLANREF-001"]
+    assert found and "cm-9 is implemented, but its plan" in found[0]
+    edit_yaml(run_dir / "artifacts/data/cm-plan.yaml",
+              lambda d: d.update({"plan_approval": {"by": "PER-PM", "date": "2026-11-01"}}))
+    run = open_run(run_dir, REPO_ROOT)
+    assert not [f for f in engine.evaluate(run).findings if f.rule == "PLANREF-001"]

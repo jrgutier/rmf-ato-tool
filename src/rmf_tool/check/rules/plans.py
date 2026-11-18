@@ -104,6 +104,11 @@ def _space(ctx: Context, data: dict[str, Any] | None = None) -> bool:
     return declared or forum_says or SPACE_OVERLAY in _overlays(ctx)
 
 
+def space_system(ctx: Context) -> bool:
+    """Whether the run holds a space NSS (RAPT-001 asks it too)."""
+    return _space(ctx)
+
+
 def _day(value: Any) -> dt.date | None:
     return ledger.parse_date(value)
 
@@ -185,6 +190,11 @@ def bia_times(ctx: Context) -> list[RunFinding]:
     bia = data.get("bia") if isinstance(data.get("bia"), dict) else {}
     strategy = data.get("strategy") if isinstance(data.get("strategy"), dict) else {}
     gaps = {g.get("process"): g.get("poam_item") for g in _dicts(strategy.get("rto_gaps"))}
+    # an RTO not yet proven names the exercise that will prove it until A-6 writes the
+    # POA&M, and a POA&M item from then on (F-09-5)
+    unproven = {g.get("process") for g in _dicts(strategy.get("rto_gaps"))
+                if g.get("unproven") is True}
+    posted = "A-6" in scope.active_tasks(ctx.run)
     poam = _poam_ids(ctx)
     for process in _dicts(bia.get("processes")):
         ident, mtd = process.get("id"), _hours(process.get("mtd_hours"))
@@ -193,7 +203,11 @@ def bia_times(ctx: Context) -> list[RunFinding]:
             err(f"{ident} supports an essential function, and its maximum tolerable downtime of "
                 f"{mtd:g} hours is over 12 hours")
         total = _hours(process.get("rto_hours")) + _hours(process.get("reprocessing_hours"))
-        if total > mtd and gaps.get(ident) not in poam:
+        if ident in unproven and posted and gaps.get(ident) not in poam:
+            err(f"{ident}: the recovery time objective is not yet proven, and from A-6 a Plan "
+                "of Action and Milestone item documents the gap")
+        if total > mtd and gaps.get(ident) not in poam and not (ident in unproven
+                                                                 and not posted):
             err(f"{ident}: the recovery time objective plus reprocessing time is {total:g} hours, "
                 f"over the maximum tolerable downtime of {mtd:g}, and no Plan of Action and "
                 "Milestone item documents the gap")
@@ -240,6 +254,11 @@ def operational_resilience(ctx: Context) -> list[RunFinding]:
     if proved_by not in [e.get("id") for e in exercises]:
         err(f"allocating information resources dynamically rests on {proved_by}, which is no "
             "exercise of this plan")
+    elif "A-3" in scope.active_tasks(ctx.run) and not any(
+            e.get("id") == proved_by and e.get("held_on") for e in exercises):
+        # a planned exercise proves nothing; by the assessment it has been held (F-09-5)
+        err(f"allocating information resources dynamically rests on {proved_by}, which has "
+            "not been held (no held_on)")
     return out
 
 
@@ -628,6 +647,34 @@ def telework(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- PLANREF-001: a plan control is implemented only once its plan is approved -------------
+
+# The controls an SSP statement fulfils by a task-level plan, and the plan's record (F-07-1).
+PLAN_CONTROLS = {"cp-2": CP_FILE, "ir-8": IR_FILE, "cm-9": CM_FILE}
+IMPLEMENTED = "implemented"
+
+
+def plan_statements(ctx: Context) -> list[RunFinding]:
+    """An SSP statement calls cp-2, ir-8 or cm-9 implemented only when the plan it promises is
+    on record and approved (`plan_approval`); until then the control is planned or partial."""
+    if not scope.produced_or_seeded(ctx.run, "ART-SSP"):
+        return []
+    out: list[RunFinding] = []
+    for rel, c in family_records(ctx, SSP_DIR, "controls"):
+        cid = c.get("control_id")
+        plan = PLAN_CONTROLS.get(str(cid))
+        if plan is None or c.get("status") != IMPLEMENTED:
+            continue
+        data = ctx.data(plan) if ctx.run.path(plan).is_file() else None
+        approval = data.get("plan_approval") if isinstance(data, dict) else None
+        approved = isinstance(approval, dict) and approval.get("date") is not None
+        if approved is False:
+            out.append(make("PLANREF-001", f"{cid} is implemented, but its plan {plan} is not "
+                            "on record with a plan_approval: the control is partial until the "
+                            "plan is approved", rel, None, {"S-4"}))
+    return out
+
+
 def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
     yield from (("CMPL-001", ci_register), ("CMPL-002", cm_tools), ("CPLAN-001", bia_times),
                 ("CPLAN-002", exercise_depth), ("CPLAN-003", operational_resilience),
@@ -635,4 +682,5 @@ def rules() -> Iterator[tuple[str, Callable[[Context], list[RunFinding]]]]:
                 ("SVCA-001", service_agreements), ("SVCA-002", service_effectiveness),
                 ("SSPR-001", plan_elements), ("FUND-001", funding), ("CRYP-001", cryptography),
                 ("CRYP-002", space_cryptography), ("CRYP-003", crypto_vulnerabilities),
-                ("TELE-001", telework), ("BYP-001", bypasses))
+                ("TELE-001", telework), ("BYP-001", bypasses),
+                ("PLANREF-001", plan_statements))

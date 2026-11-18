@@ -20,7 +20,9 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 ## Common controls available for inheritance
 
-<<FILL: per provider: what is offered, fully or in part, its authorization, and the system owner's and AO's determination (allocation.yaml providers) that it protects the system commensurate with risk, with tokens>>
+<<FILL: per provider: what is offered, fully or in part, and its authorization (S-1, from ART-ORG-CONTEXT), with tokens>>
+
+<!-- S-3 adds, per provider, the system owner's and AO's determination (allocation.yaml providers) that it protects the system commensurate with risk. -->
 
 ## Tailoring and allocation
 

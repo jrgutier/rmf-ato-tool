@@ -447,6 +447,9 @@ def technical_risk(ctx: Context) -> list[RunFinding]:
     itras = _dicts(inputs.get("itras"))
     read = {_dict(inputs.get("sep")).get("id")} | {i.get("id") for i in itras} \
         | {a.get("id") for a in _dicts(inputs.get("threat_assessments"))}
+    if _pathway(ctx) == MCA and not _dict(inputs.get("sep")):
+        err("the protection inputs name no SEP, which a major capability acquisition program "
+            "reads")
     security = [r for r in risks if r.get("security") is True]
     if not security:
         err("no technical risk is a cybersecurity or related system security risk")

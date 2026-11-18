@@ -68,8 +68,10 @@ FIELDS = (
     (ORG_CONTEXT_FILE, "external_entities", "provider"),
     ("artifacts/data/leveraged-authorizations.yaml", "leveraged_authorizations", "provider"),
     ("artifacts/data/allocation.yaml", "allocations", "provider"),
+    ("artifacts/data/allocation.yaml", "allocations", "also_provided_by"),
     ("artifacts/data/allocation.yaml", "providers", "provider"),
     ("artifacts/data/service-agreements.yaml", "agreements", "provider"),
+    ("artifacts/data/requirements.yaml", "requirements", "allocated_to"),
     ("artifacts/ssp/controls", "controls", "inherited_from"),
 )
 
@@ -84,3 +86,9 @@ def references(ctx: Context) -> Iterator[tuple[str, str, dict[str, Any]]]:
             for item in (data.get(key) or [] if isinstance(data, dict) else []):
                 if isinstance(item, dict) and field in item:
                     yield ctx.run.rel(path), field, item
+
+
+def of_allocation(record: dict[str, Any]) -> list[str]:
+    """Every provider of an allocation: `provider` and any `also_provided_by` (F-05-8)."""
+    names = [record.get("provider"), *(record.get("also_provided_by") or [])]
+    return [n for n in names if isinstance(n, str) and n.strip()]

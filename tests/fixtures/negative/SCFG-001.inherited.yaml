@@ -1,0 +1,18 @@
+rule: SCFG-001
+bases:
+- minimal
+description: a STIG setting marked inherited from a provider the system does not leverage (F-10-3)
+mutations:
+- op: set_field
+  file: artifacts/data/stig-summary.yaml
+  path: findings.0.status
+  value: inherited
+- op: set_field
+  file: artifacts/data/stig-summary.yaml
+  path: findings.0.provider
+  value: LA-09
+expect:
+  errors:
+  - SCFG-001
+  messages:
+  - which is no leveraged provider and carries no cm-6 for the system

@@ -98,6 +98,12 @@ def inconsequential(finding: dict[str, Any]) -> bool:
     return isinstance(triage, dict) and triage.get("action") == "inconsequential"
 
 
+def monitor_owner(finding: dict[str, Any]) -> set[str] | None:
+    """A finding an ongoing assessment raised (M-2) gets its POA&M item and risk at M-3, not at
+    A-6 or R-2 (F-16-13); None leaves the file's own producer."""
+    return {"M-3"} if finding.get("raised_at") == "M-2" else None
+
+
 def sar_poam(ctx: Context) -> list[RunFinding]:
     poam = ctx.data(POAM_FILE)
     linked = {i.get("finding_ref") for i in (poam or {}).get("items") or []
@@ -109,7 +115,7 @@ def sar_poam(ctx: Context) -> list[RunFinding]:
             cid = str(f.get("control_id", ""))
             out.append(make("SAR-POAM-001", f"SAR finding {f.get('id')} ({cid}, "
                             f"{f.get('status')}) has no POA&M item", POAM_FILE,
-                            family=family(cid) if cid else None))
+                            owners=monitor_owner(f), family=family(cid) if cid else None))
     return out
 
 

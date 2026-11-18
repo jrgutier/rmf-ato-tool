@@ -39,7 +39,7 @@ import inspect
 import json
 import re
 import sys
-from collections.abc import Callable, Iterable, Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
 from functools import cache
 from pathlib import Path
@@ -271,26 +271,87 @@ def _reads_field(node: ast.expr, plain: frozenset[str]) -> bool:
         and isinstance(first, ast.Constant) and isinstance(first.value, str)
 
 
+def _bindings(tree: ast.AST) -> Iterator[tuple[ast.expr, ast.expr | None]]:
+    """(target, value) for every binding of a name in ``tree``; the value is None where the
+    binding is not an assignment of one expression (a loop or comprehension variable, an
+    augmented assignment, a ``with`` or ``except`` name, a parameter, an import)."""
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                yield target, node.value
+        elif isinstance(node, ast.AnnAssign | ast.NamedExpr):
+            if node.value is not None:
+                yield node.target, node.value
+        elif isinstance(node, ast.AugAssign | ast.For | ast.AsyncFor | ast.comprehension):
+            yield node.target, None
+        elif isinstance(node, ast.With | ast.AsyncWith):
+            yield from ((i.optional_vars, None) for i in node.items if i.optional_vars)
+        elif isinstance(node, ast.ExceptHandler) and node.name:
+            yield ast.Name(node.name), None
+        elif isinstance(node, ast.arguments):
+            args = [*node.posonlyargs, *node.args, *node.kwonlyargs, node.vararg, node.kwarg]
+            yield from ((ast.Name(a.arg), None) for a in args if a is not None)
+        elif isinstance(node, ast.Import | ast.ImportFrom):
+            yield from ((ast.Name((a.asname or a.name).split(".")[0]), None) for a in node.names)
+        elif isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef):
+            yield ast.Name(node.name), None
+
+
+def _names(target: ast.expr, value: ast.expr | None) -> Iterator[tuple[str, ast.expr | None]]:
+    """(name, the expression it is bound to, or None) for one binding; an unpacking pairs
+    names with values only when both sides have the same length and no starred name."""
+    if isinstance(target, ast.Name):
+        yield target.id, value
+    elif isinstance(target, ast.Starred):
+        yield from _names(target.value, None)
+    elif isinstance(target, ast.Tuple | ast.List):
+        values: list[ast.expr | None] = [None] * len(target.elts)
+        if isinstance(value, ast.Tuple | ast.List) and len(value.elts) == len(target.elts) \
+                and not any(isinstance(e, ast.Starred) for e in (*target.elts, *value.elts)):
+            values = list(value.elts)
+        for name, part in zip(target.elts, values, strict=True):
+            yield from _names(name, part)
+
+
 def _plain_reads(source: str) -> frozenset[str]:
-    """Names only ever bound to a plain read of a field."""
+    """Names only ever bound to a plain read of a field: a name also bound anywhere else (a
+    loop or comprehension variable, a parameter, an augmented, annotated, unpacked or walrus
+    assignment of something else) reads no field."""
     plain: set[str] = set()
     other: set[str] = set()
-    for node in ast.walk(_parsed(source)):
-        if not isinstance(node, ast.Assign):
-            continue
-        for target in node.targets:
-            pairs: Iterable[tuple[ast.expr, ast.expr]] = [(target, node.value)]
-            if isinstance(target, ast.Tuple) and isinstance(node.value, ast.Tuple):
-                pairs = zip(target.elts, node.value.elts, strict=False)
-            for name, value in pairs:
-                if isinstance(name, ast.Name):
-                    (plain if _reads_field(value, frozenset()) else other).add(name.id)
+    for target, value in _bindings(_parsed(source)):
+        for name, bound in _names(target, value):
+            read = bound is not None and _reads_field(bound, frozenset())
+            (plain if read else other).add(name)
     return frozenset(plain - other)
 
 
+COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.GeneratorExp)
+
+
+def _filters_absence(node: ast.expr | None, plain: frozenset[str]) -> bool:
+    """Whether ``node`` is a comprehension whose filter keeps the members a field is absent
+    from: ``[k for k in KEYS if not r.get("x")]`` lists silences."""
+    return isinstance(node, COMPREHENSIONS) and any(
+        _tests_absence(cond, plain) for gen in node.generators for cond in gen.ifs)
+
+
+def _absence_lists(source: str, plain: frozenset[str]) -> frozenset[str]:
+    """Names only ever bound to a comprehension that filters on absence."""
+    found: set[str] = set()
+    other: set[str] = set()
+    for target, value in _bindings(_parsed(source)):
+        for name, bound in _names(target, value):
+            (found if _filters_absence(bound, plain) else other).add(name)
+    return frozenset(found - other)
+
+
 def _is_empty(node: ast.expr) -> bool:
+    """None, "", 0 or an empty literal; never a bool, which ``in ("", 0)`` would let False in:
+    ``x is False`` refuses an explicit false, a value."""
     if isinstance(node, ast.Constant):
-        return node.value is None or node.value in ("", 0)
+        value = node.value
+        return value is None or (not isinstance(value, bool) and value in ("", 0))
     if isinstance(node, ast.Dict):
         return not node.keys
     return isinstance(node, ast.List | ast.Tuple | ast.Set) and not node.elts
@@ -306,27 +367,48 @@ def _compares_empty(test: ast.Compare, plain: frozenset[str], negated: bool) -> 
             and all(_is_empty(e) for e in right.elts)
         held = bool(empties)
     elif isinstance(op, ast.Is | ast.Eq | ast.IsNot | ast.NotEq):
-        subject, positive = (left if _is_empty(right) else right), isinstance(op, ast.Is | ast.Eq)
-        held = _is_empty(left) or _is_empty(right)
+        empty = right if _is_empty(right) else left
+        subject, positive = (left if empty is right else right), isinstance(op, ast.Is | ast.Eq)
+        held = _is_empty(empty)
+        # 0 is an absence only as a count: `len(r.get("x")) == 0`; `r.get("score") == 0` refuses
+        # a value
+        if held and isinstance(empty, ast.Constant) and empty.value == 0:
+            held = _is_len(subject)
+    elif isinstance(op, ast.Lt | ast.LtE) and isinstance(right, ast.Constant) \
+            and not isinstance(right.value, bool) and _is_len(left):
+        # `len(r.get("x")) < 1` and `len(...) <= 0` count nothing
+        subject, positive = left, True
+        held = right.value == (1 if isinstance(op, ast.Lt) else 0)
     else:
         return False
     return held and _reads_field(subject, plain) and positive != negated
 
 
-def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False) -> bool:
+def _is_len(node: ast.expr) -> bool:
+    return isinstance(node, ast.Call) and isinstance(node.func, ast.Name) \
+        and node.func.id == "len"
+
+
+def _tests_absence(test: ast.expr, plain: frozenset[str], negated: bool = False,
+                   lists: frozenset[str] = frozenset()) -> bool:
     """Whether a failing path through ``test`` means the value is absent, however it is spelt.
     A negated bare name is absence only when the name is a plain read of a field: in
     ``critical and p > q and not driver`` the loop's ``driver`` is no field read, so the clause
-    refuses a wrong ``p``."""
+    refuses a wrong ``p``. A non-empty list of silences (``lists``, or a walrus binding one)
+    is absence too: ``if missing := [k for k in KEYS if not r.get("x")]``."""
     if isinstance(test, ast.UnaryOp) and isinstance(test.op, ast.Not):
-        return _tests_absence(test.operand, plain, not negated)
+        return _tests_absence(test.operand, plain, not negated, lists)
     if isinstance(test, ast.BoolOp):
-        found = [_tests_absence(value, plain, negated) for value in test.values]
+        found = [_tests_absence(value, plain, negated, lists) for value in test.values]
         return any(found) if isinstance(test.op, ast.And) != negated else all(found)
+    if isinstance(test, ast.NamedExpr):
+        if _filters_absence(test.value, plain):
+            return not negated
+        return _tests_absence(test.value, plain, negated, lists)
     if isinstance(test, ast.Compare):
         return _compares_empty(test, plain, negated)
     if not negated:
-        return False
+        return isinstance(test, ast.Name) and test.id in lists
     if isinstance(test, ast.Call):
         callee = test.func
         name = callee.attr if isinstance(callee, ast.Attribute) else getattr(callee, "id", "")
@@ -360,11 +442,20 @@ def _deletes(mutation: Mapping[str, Any]) -> bool:
     return False
 
 
+# run.yaml paths that only bring tasks into scope: the task list, the tasks past a lifecycle
+# stop, the seeded and the deferred tasks
+SCOPE_PATHS = ("scope", "include_after_stop", "seeded", "deferred")
+
+
 def _scaffolding(mutation: Mapping[str, Any]) -> bool:
     """A mutation that only brings a rule into scope: the run's task list in run.yaml, or a
     whole record appended (a ledger row) so the rule has something to read. What it refuses is
-    read from the other mutations, the ones that touch the record the rule judges."""
-    return mutation.get("file") == "run.yaml" or mutation["op"] == APPEND_TEXT
+    read from the other mutations, the ones that touch the record the rule judges. Any other
+    run.yaml mutation (the clock, the mode, the humans, the entry) is what a rule judges."""
+    if mutation["op"] == APPEND_TEXT:
+        return True
+    return mutation.get("file") == "run.yaml" and str(mutation.get("path") or "").startswith(
+        SCOPE_PATHS)
 
 
 def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:
@@ -376,7 +467,8 @@ def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:
         return PRESENCE
     clauses = failing_clauses(source, expect)
     plain = _plain_reads(source)
-    tested = any(_tests_absence(test, plain) for tests in clauses for test in tests)
+    lists = _absence_lists(source, plain)
+    tested = any(_tests_absence(test, plain, lists=lists) for tests in clauses for test in tests)
     return PRESENCE if tested or not clauses else CONSTRAINT
 
 
@@ -404,9 +496,10 @@ def _rule_fields(probe: Probe, item: Mapping[str, Any]) -> frozenset[str]:
     worded = _wording(source)
     # A declared message names a field the rule reads, or one it put there; the rule's own
     # wording ("assessors review ...") names none.
+    # a field name is matched as a word, its regex characters escaped (a dotted path)
     return frozenset(f for f in fields if f in named or (
-        (f'"{f}"' in source or not re.search(rf"\b{f}\b", worded))
-        and any(re.search(rf"\b{f}\b", m) for m in declared)))
+        (f'"{f}"' in source or not re.search(rf"\b{re.escape(f)}\b", worded))
+        and any(re.search(rf"\b{re.escape(f)}\b", m) for m in declared)))
 
 
 def _wording(source: str) -> str:

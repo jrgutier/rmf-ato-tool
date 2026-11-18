@@ -62,5 +62,5 @@ sources: ["<<FILL: trace tokens the whole artifact rests on>>"]
 
 <<FILL: the contact list, diagrams, inventory, interconnections and constraints of `appendices` in artifacts/data/contingency.yaml, or where each is kept, with tokens>>
 
-<!-- I-2 appends "## Implementation updates" (dated: what changed during implementation and
+<!-- I-2 appends "## Update Control Implementation Information (I-2)" (dated: what changed during implementation and
      why) and adds I-2 to touched_by. -->

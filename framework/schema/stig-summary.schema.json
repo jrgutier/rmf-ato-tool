@@ -56,6 +56,31 @@
           },
           "scan_date": {
             "$ref": "#/$defs/date"
+          },
+          "compliance_percent": {
+            "title": "The scan's compliance score, when the product gives a summary rather than every rule",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "open_unitemized": {
+            "title": "Open rules the product counts but does not list one by one; each still needs a finding before A-3",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "count",
+              "reason"
+            ],
+            "properties": {
+              "count": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
           }
         }
       }
@@ -130,8 +155,15 @@
               "not-a-finding",
               "not-applicable",
               "not-reviewed",
-              "exception"
-            ]
+              "exception",
+              "inherited"
+            ],
+            "description": "inherited: a setting a provider manages for this tenant; name the provider (SCFG-001). A program's own deviation is an exception for the AO or AODR."
+          },
+          "provider": {
+            "title": "For an inherited finding: the provider that manages the setting, an LA-## of leveraged-authorizations.yaml or a PRV-## common control provider",
+            "type": "string",
+            "pattern": "^(LA|PRV)-\\d{2,3}$"
           },
           "control_id": {
             "$ref": "#/$defs/control_id"

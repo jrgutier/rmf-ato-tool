@@ -27,6 +27,8 @@ LABELS = {
     "system_version": "System version",
     "operational_environment": "Operational environment",
     "lifecycle_phase": "Life-cycle phase",
+    "nss": "National security system",
+    "missions": "Missions and business functions",
 }
 
 
@@ -81,12 +83,20 @@ def display(facts: dict[str, Any], dotted: str) -> str | None:
         cia = "/".join(str(node.get(k, "?")).upper() for k in ("c", "i", "a"))
         overlays = ", ".join(node.get("overlays") or []) or "none"
         return f"C/I/A {cia}; overlays: {overlays}"
+    if dotted == "missions":
+        items = [i for i in node.get("items") or [] if isinstance(i, dict)]
+        return "; ".join(f"{i.get('id')} {i.get('name')}" for i in items) or None
     val = node.get("value")
     if dotted == "classification" and val is not None:
         marks = [*(node.get("compartments") or ()), *(node.get("handling_markings") or ())]
         return f"{val}; markings: {', '.join(map(str, marks)) or 'none'}"
     if dotted == "system_type" and val is not None:
         return f"{val}, {node.get('connectivity')}"
+    if dotted == "lifecycle_phase" and val is not None and node.get("pathway_phase"):
+        return f"{val} ({node['pathway_phase']})"
+    if dotted == "operational_environment" and val is not None and node.get("current") \
+            and node.get("current") != val:
+        return f"{val} (runs in {node['current']} today)"
     if dotted == "system_version" and val is not None and node.get("release_date"):
         return f"{val} (released {node['release_date']})"
     if isinstance(val, bool):

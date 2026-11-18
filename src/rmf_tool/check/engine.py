@@ -72,6 +72,11 @@ def select(run: Run, ev: Evaluation, task: str | None = None, family: str | None
             # the next task is the one being worked or the one a regression sent the run back
             # to, so its findings show (F-02-3, F-05-3)
             limit = pos[ev.status.next] if ev.status.next else len(pos)
+            if family is not None:
+                # a family check judges the family file at the task writing it, whatever the
+                # next task is, so it agrees with --task on a family-local error (F-13-1)
+                limit = max([limit, *(pos[w] for w in _family_writers(run, family)
+                                      if w in pos)])
             keep = status_mod.gate_open(run, f.rule, limit) and (
                 not f.owners or any(pos.get(o, len(pos)) <= limit for o in f.owners))
         if keep and family is not None:

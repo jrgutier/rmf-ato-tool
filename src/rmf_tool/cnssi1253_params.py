@@ -127,13 +127,56 @@ def classify(value: str) -> str:
     return "max"  # a bare duration is a time limit or an inactivity period
 
 
+_FOR_TYPE = re.compile(r"\bfor (\w+?)s?\s*$", re.I)
+
+
+def scoped(run_value: str, nss_value: str) -> str:
+    """The part of ``run_value`` the NSS value speaks to. An NSS value for one type ("not to
+    exceed 180 days for passwords") is compared with the run's clause for that type, not with
+    the first amount of a value that lists one period per authenticator type (F-06-5); clauses
+    are split on ";". A per-type value with no clause for that type has nothing to compare
+    (PVAL-002 then asks for the amount); a value of one clause stands whole."""
+    m = _FOR_TYPE.search(nss_value)
+    clauses = [c for c in run_value.split(";") if c.strip()]
+    if m is None or len(clauses) < 2:
+        return run_value
+    stem = re.compile(rf"\b{re.escape(m[1])}", re.I)
+    hits = [c for c in clauses if stem.search(c)]
+    return "; ".join(hits)
+
+
 def looser(run_value: str, nss: dict[str, Any]) -> bool | None:
     """Whether ``run_value`` is looser than the NSS value ``nss`` ({value, bound}); None when
     either has no comparable amount, the kinds differ, or the bound is none."""
-    a, b = amount(run_value), amount(nss["value"])
+    cases = _conditions(nss["value"])
+    if cases:
+        # one bound per condition ("if voluntary, ...; if involuntary, ..."): each is checked
+        # against the run's clause for the same condition (F-07-6)
+        mine = _conditions(run_value)
+        verdicts = [looser(mine[k], {**nss, "value": v}) if k in mine else None
+                    for k, v in cases.items()]
+        if True in verdicts:
+            return True
+        return None if None in verdicts else False
+    a, b = amount(scoped(run_value, nss["value"])), amount(nss["value"])
     if a is None or b is None or a[1] != b[1] or nss["bound"] == "none":
         return None
     return a[0] > b[0] if nss["bound"] == "max" else a[0] < b[0]
+
+
+_IF = re.compile(r"^\s*if (\w+)\b", re.I)
+
+
+def _conditions(value: str) -> dict[str, str]:
+    """``{"voluntary": "...", "involuntary": "..."}`` for a value of two or more clauses each
+    opening with "if <condition>"; empty otherwise."""
+    out: dict[str, str] = {}
+    for clause in value.split(";"):
+        m = _IF.match(clause)
+        if m is None:
+            return {}
+        out[m[1].lower()] = clause
+    return out if len(out) > 1 else {}
 
 
 # --- PDF geometry ------------------------------------------------------------------------

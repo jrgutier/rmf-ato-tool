@@ -61,6 +61,10 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
 - **P (P-12, P-13):** Which information types contain PII, about whom (U.S. persons, foreign
   nationals)? For each life-cycle stage, where is the PII created, stored, shared and
   disposed of?
+- **C (C-2):** For each privacy risk factor of the CNSSI 1253 privacy overlay appendix
+  (`uv run rmf refs show CNSSI1253F-ATT6-PRIVACY --page 94 --anchor "Appendix: Privacy
+  Risk Factors"`), how does the PII rate? What PII confidentiality impact follows, and do
+  you approve it as the privacy risk level?
 - **P (P-14):** What are the privacy risks to individuals if the PII is exposed, altered or
   misused?
 - **P (P-15, P-17):** Which privacy requirements apply, and which system elements must meet
@@ -72,6 +76,14 @@ controls. One persona covers both roles; say when an answer needs the SAOP's own
   (`rmf catalog show --run <run> --fields overlay`)? Before AC-2(8) or any control the
   overlays justify not selecting is selected, what do you find on coordinating it?
 - **S (S-3):** Which privacy controls are common, hybrid or system-specific for this system?
+- **S (S-4):** How does the system meet PT-2 (authority to process PII), PT-3 (purposes)
+  and RA-8 (the privacy impact assessment), and what remains for the privacy office? What
+  goes into the privacy plan, and are the plans kept together or separate?
+- **A (A-1, A-2), system processing PII only:** Who assesses the privacy controls: you, or an
+  independent assessor? Which methodologies and metrics do you set for the privacy
+  assessment, and do you approve its scope?
+- **A (A-4), system processing PII only:** Which privacy assessors documented the privacy
+  results, on what date, and have you provided them to the AO or AODR?
 - **R (R-1):** Is the privacy part of the package complete enough for authorization? Did you
   review the package for compliance with privacy requirements and for privacy risk before
   the decision, and on what date?

@@ -55,6 +55,8 @@ the DoD Component head (DoDI 8510.01 Table 8).
 - **P (P-3..P-7), consulted:** Does the organization-level risk assessment, the tailored
   baseline guidance, the common control list and the continuous monitoring strategy match
   Component policy?
+- **A (A-1), consulted:** Does the Component's assessment program supply the assessor, or
+  is one contracted? What independence does Component policy require?
 - **R (R-4), consulted:** For a system whose risk is High or Very High: do you concur, not
   concur, or concur with direction? What direction?
 

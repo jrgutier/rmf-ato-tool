@@ -76,7 +76,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [Prepare 18: System Registration (P-18)](#task-p-18) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [System registration (ART-REG)](../../MANUAL.md#art-reg) | — | [MS A](#ms-a) |
 | [Categorize 1: System Description (C-1)](#task-c-1) | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd), [System registration (ART-REG)](../../MANUAL.md#art-reg) | [MS A](#ms-a) |
 | [Categorize 2: Security Categorization (C-2)](#task-c-2) | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | [MS A](#ms-a) |
-| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | Categorize | [AO](../../MANUAL.md#per-ao) | — | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat), [System registration (ART-REG)](../../MANUAL.md#art-reg) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | Categorize | [AO](../../MANUAL.md#per-ao) | — | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat), [System registration (ART-REG)](../../MANUAL.md#art-reg), [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 
 Also active in this phase (described in their primary phase): [Prepare 16: Enterprise Architecture (P-16)](PH-TMRR.md#task-p-16).
 
@@ -1189,6 +1189,7 @@ Writes to `facts.yaml`: `categorization`.
 |---|---|---|---|
 | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | updates | core |
 | [System registration (ART-REG)](../../MANUAL.md#art-reg) | System registration | updates | supporting |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
 
 Writes to `facts.yaml`: `categorization.approved`.
 

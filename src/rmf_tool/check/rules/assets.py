@@ -24,6 +24,10 @@ ASSET_CLASSES = ("physical-environmental", "human", "technology", "mission-busin
 SOFTWARE_KINDS = ("software", "operating-system", "database", "firmware")
 IDENTIFIED_KINDS = ("hardware", "network-device", *SOFTWARE_KINDS)
 HARDWARE_KINDS = ("hardware", "network-device")
+# Replicas of a virtual machine or a cloud service are one configuration item; IUID (DoDI
+# 8320.04) covers tangible items, so software may carry a configuration-item ID instead of a
+# UII (dry-run finding F-02-5).
+COUNTED_KINDS = ("virtual-machine", "service")
 
 
 def _list(value: Any) -> list[Any]:
@@ -91,10 +95,12 @@ def inventory_items(ctx: Context) -> list[RunFinding]:
         err(f"the unique item identifier {uii} is shared by more than one item")
     for item in items:
         ident, kind = item.get("id"), item.get("kind")
-        if isinstance(item.get("quantity"), int) and item["quantity"] > 1:
+        if isinstance(item.get("quantity"), int) and item["quantity"] > 1 \
+                and kind not in COUNTED_KINDS:
             err(f"{ident} stands for {item.get('quantity')} units; each component is "
                 "individually identified")
-        if kind in IDENTIFIED_KINDS and not item.get("uii"):
+        if kind in IDENTIFIED_KINDS and not item.get("uii") \
+                and not (kind in SOFTWARE_KINDS and item.get("ci_id")):
             err(f"{ident} has no unique item identifier")
         if not item.get("owner"):
             err(f"{ident} names no system or component owner")

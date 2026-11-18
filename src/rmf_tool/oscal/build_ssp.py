@@ -19,6 +19,7 @@ from rmf_tool.oscal.common import (
     NotBuildable,
     doc_metadata,
     load_data,
+    party_uuid,
     persona_parties,
     prop,
     serialize,
@@ -211,10 +212,12 @@ def build_ssp(run: Run) -> str:
 
     def inventory_item(i: dict[str, Any]) -> dict[str, Any]:
         props = [prop("asset-id", i["id"], None), prop("asset-type", i["kind"], None)]
-        for key, name in (("vendor", "vendor-name"), ("product", "software-name"),
-                          ("version", "version"), ("hostname", "fqdn")):
+        # vendor-name is a component prop in the NIST namespace, not an inventory-item one
+        # (oscal-cli oscal-inventory-item-prop-name-values), so it carries this tool's namespace
+        for key, name, ns in (("vendor", "vendor-name", RMF_NS), ("product", "software-name", None),
+                              ("version", "software-version", None), ("hostname", "fqdn", None)):
             if i.get(key):
-                props.append(prop(name, str(i[key]), None))
+                props.append(prop(name, str(i[key]), ns))
         for key in ("virtual", "public"):
             if key in i:
                 props.append(prop(key, "yes" if i[key] else "no", None))
@@ -252,7 +255,10 @@ def build_ssp(run: Run) -> str:
             "uuid": uuid_for(sid, "ssp", f"requirement/{ctl}"), "control-id": ctl,
             "props": [prop("rmf-status", s["status"])]
             + [prop("trace", src) for src in s["sources"]],
-            "responsible-roles": [{"role-id": r} for r in s["responsible_roles"]],
+            # each role names its party, as the NIST example SSP does (oscal-cli
+            # oscal-implemented-requirement-index-metadata-party-uuid)
+            "responsible-roles": [{"role-id": r, "party-uuids": [party_uuid(sid, r)]}
+                                  for r in s["responsible_roles"]],
             "by-components": [],
         }
         if s.get("parameters"):
@@ -307,6 +313,11 @@ def build_ssp(run: Run) -> str:
     if inventory and inventory.get("items"):
         implementation["inventory-items"] = [inventory_item(i) for i in inventory["items"]]
 
+    # a user's role-ids resolve to metadata roles (oscal-cli oscal-index-metadata-role-id)
+    defined = {r["id"] for r in roles}
+    for rid in sorted({r for u in users["users"] for r in u.get("roles") or []
+                       if TOKEN_ID.match(r)} - defined):
+        roles.append({"id": rid, "title": f"System user role: {rid}"})
     metadata = doc_metadata(run, f"{name} System Security Plan (draft)")
     if roles:
         metadata.update({"roles": roles, "parties": parties, "responsible-parties": responsible})

@@ -1,0 +1,15 @@
+rule: MCHG-004
+bases:
+- minimal
+description: monitoring records that end before the authorization in force (F-16-1)
+mutations:
+- op: set_field
+  file: artifacts/data/changes.yaml
+  path: monitoring.unauthorized_changes.data_through
+  value: '2026-11-01'
+expect:
+  errors: []
+  warnings:
+  - MCHG-004
+  messages:
+  - 'the monitoring records end on 2026-11-01, before the authorization of 2026-11-20 in force: they describe the system before its decision'

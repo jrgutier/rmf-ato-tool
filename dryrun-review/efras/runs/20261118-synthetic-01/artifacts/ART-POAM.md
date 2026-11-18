@@ -2,7 +2,7 @@
 artifact_id: ART-POAM
 run_id: 20261118-synthetic-01
 produced_by_task: A-6
-touched_by: [A-6, R-3, M-1, M-3]
+touched_by: [A-6, R-3, R-4, M-1, M-3]
 sources: [ART-SAR, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-180.A1, INT-180.A2, INT-180.A4, INT-180.A5, INT-181.A1, INT-181.A3, INT-182.A1, ASM-024, ART-CHG]
 handling: CUI  # at a minimum CUI, or the classification level of the system (DoDI 8530.01)
 ---
@@ -26,6 +26,8 @@ handling: CUI  # at a minimum CUI, or the classification level of the system (Do
 | System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
 | Operational environment | production | C-1 |
 | Life-cycle phase | PH-PD | C-1 |
+| National security system | no | C-1 |
+| Missions and business functions | MSN-01 Naval aviation readiness: keeping aircraft mission-capable; MSN-02 Aircraft maintenance and readiness management; MSN-03 Daily readiness reporting for squadron, air wing and fleet (BP-01); MSN-04 Part failure forecasting for early part orders (BP-02); MSN-05 Fleet readiness analysis and de-identified data set export (BP-03) | P-8 |
 <!-- END rmf:facts -->
 
 ## How items were derived

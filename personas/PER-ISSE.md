@@ -40,7 +40,12 @@ Designs the security architecture, and allocates and builds controls into the de
   configurations, logs)?
 - **S (S-4):** How does each allocated component implement its part of the control? What is
   the hardening baseline and how is drift detected? How does authentication work for each
-  user group? What does the provider implement and what must the system configure?
+  user group? What does the provider implement and what must the system configure? How is
+  nonlocal maintenance authenticated, logged and ended (MA-4)?
+- **S (S-3):** Which components provide each security capability? Which controls need no
+  allocation to some components, and why?
+- **I (I-1, I-2):** Where does the built system deviate from the planned design? Which
+  checklist covers the program-built application software, and was it reviewed?
 
 ## Artifacts owned-approved
 

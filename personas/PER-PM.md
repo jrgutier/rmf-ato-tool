@@ -39,6 +39,12 @@ act when no PM is assigned.
 
 ## Question bank by step
 
+- **P (P-8), accountable:** Which missions and business functions does the system
+  support? Which are critical, and what does an outage of each cost and after how long?
+  What are the recovery objectives the mission can live with?
+- **P (P-9):** Who are the stakeholders: who uses, funds, depends on, connects to or
+  oversees the system? What does each need from the security and privacy work, and how
+  should each hear about decisions?
 - **P (P-10):** Which assets matter most to the mission, and why? Is anything planned but
   not yet fielded?
 - **P (P-11), optional:** What does the program control and fund? Which sites and units are
@@ -46,6 +52,12 @@ act when no PM is assigned.
 - **P (P-14):** What is the risk assessment for, which decisions will it support, and for how
   long? Which assumptions and constraints hold? Who receives the results, by what method, and
   what may be shared? Which risks of similar level come first for the mission, and why?
+- **P (P-14), program protection:** Is there a program protection plan (PPP)? What are its
+  critical program information and critical components, at which criticality level, and
+  which countermeasures does it name? Is there an approved cybersecurity strategy, and at
+  which decision points was it reviewed? Which supply chain risk management actions does
+  the program take in acquisition (contract clauses, supplier assessments, mission-critical
+  item measures)?
 - **C (C-1):** Confirm the official name, acronym and identifier. What is the lifecycle
   state? What does the system do, for whom, where? What does it connect to, under which
   agreements?
@@ -53,10 +65,40 @@ act when no PM is assigned.
   do you confirm the provisional C, I and A values? What would disclosure, tampering or loss
   cause?
 - **S (S-4), accountable:** Which budget lines fund control implementation, assessment and
-  sustainment through operations? What is unfunded, and which POA&M item tracks it?
+  sustainment through operations? What is unfunded, and which POA&M item tracks it? Where
+  is the system recorded in the Component's system inventory, and who keeps it (PM-5)?
 - **S (S-1), optional:** Do you accept the selected baseline and its resource demands?
+- **A (A-2):** Which test events (DT, OT, the CSSP's penetration test) does the program
+  schedule, in which environment, and which results may the assessor reuse? Do you accept
+  the plan's schedule and resources?
 - **A (A-6):** For each weakness: what is the fix, in which release, by when, with which
   resources? What interim mitigation is in place?
+- **A (A-4):** For each significant finding: what is your response, and which planned fix
+  should the report mention?
+- **A (A-5):** For each open finding: was it fixed during the assessment, how, when, and
+  with what evidence? Which fixes need more than existing resources and go to the POA&M?
+  Do you ask for any SSP statement to be updated, and has the CCB approved the change?
+- **R (R-1):** Is the package complete for submission? Who receives it: the IO and the owner
+  of each connected system?
+- **R (R-3):** Which POA&M milestones were met or slipped since the package, and on what
+  evidence? Which plan approvals did you sign, and on what date?
+- **R (R-4):** Which Intelligence Community threat assessment did you review for the
+  decision, issued when? What date does the deployment need the decision by?
+- **R (R-5):** Do you acknowledge receipt of the decision and its terms? Where is the
+  package retained, and until when?
+- **M (M-1):** Which changes did the system and its environment see in the cycle, who
+  requested and approved each, and which were significant? What caused an unauthorized one,
+  and what is the response?
+- **M (M-2):** For each new finding: remediate (POA&M), inconsequential, or a false
+  positive? On what risk basis?
+- **M (M-3):** Which risk response do you choose for each new or changed risk, and which
+  conditions of the authorization are met or slipping?
+- **M (M-5):** What does the posture report owe the AO this cycle, and which matters need
+  the AO's decision?
+- **S (S-2):** Which cost, schedule, performance or supply chain trade-offs did you weigh
+  in choosing controls, and what was the outcome?
+- **S (S-3):** Do you, as system owner, determine that each provider's common controls
+  protect the system commensurate with risk, having examined their parameters?
 
 ## Artifacts owned-approved
 

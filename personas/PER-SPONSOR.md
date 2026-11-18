@@ -53,6 +53,9 @@ sustainment trade-offs that delay remediation.
 
 - **P (P-8):** Which missions and mission processes does the system support? Which are most
   critical, and what is the consequence of losing the system during each?
+- **C (C-2):** For each business process in the BIA, does losing the system hurt the
+  mission more than the availability value says? If so, should the categorization rise, or
+  was the BIA wrong? Which components are critical to the mission?
 - **P (P-9):** Which organizations and roles have a stake in the system (users,
   interconnected programs, providers, oversight)?
 - **P (P-15):** Which cybersecurity, survivability and privacy requirements are in the
@@ -60,6 +63,10 @@ sustainment trade-offs that delay remediation.
 - **P (P-16):** Which mission segments and enterprise capabilities must the system work
   within?
 - **S (S-3), consulted:** Do the allocation decisions keep the mission requirements whole?
+- **S (S-4), mission owner of a cloud-hosted system:** Did you review the offering's
+  authorization package with the PM and AO? Who performs each activity on the activity
+  tracking checklist? Do you approve the external assessments (red team, pentest)? Who runs
+  user activity monitoring?
 - **A (A-6) and sustainment, as coordinated:** For a remediation the program wants to delay,
   what is the mission impact, and do you agree to the trade-off?
 

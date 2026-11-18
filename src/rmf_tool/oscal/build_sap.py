@@ -32,6 +32,7 @@ SAP_FILE = f"{OSCAL_DIR}/assessment-plan.json"
 SAP_DATA = "artifacts/data/sap.yaml"
 MODEL = "assessment-plan"
 METHODS = ("EXAMINE", "INTERVIEW", "TEST")
+ASSESSOR_ROLE = "assessor"  # the team's role, as in NIST's example assessment plan
 SUBJECT_KEYS = {"component": "component", "inventory-item": "inventory", "user": "user",
                 "location": "location"}
 
@@ -172,9 +173,11 @@ def build_sap(run: Run) -> str:
     team_text = "; ".join(
         f"{m['persona']} ({m['role']}"
         + (", independent" if m.get("independent") else "") + ")" for m in sap["team"])
+    # The team is the metadata's assessor role, as in NIST's example assessment plan; a
+    # terms-and-conditions part may not be named assessment-team (oscal-cli
+    # oscal-terms-and-conditions-part-name).
     terms = [{"name": "rules-of-engagement", "title": "Rules of engagement",
-              "prose": sap["rules_of_engagement"].strip()},
-             {"name": "assessment-team", "title": "Assessment team", "prose": team_text}]
+              "prose": sap["rules_of_engagement"].strip()}]
     body: dict[str, Any] = {
         "uuid": uuid_for(sid, MODEL, "assessment-plan"),
         "import-ssp": {"href": "ssp.json"},
@@ -182,7 +185,7 @@ def build_sap(run: Run) -> str:
         "assessment-subjects": subject_list,
         "assessment-assets": {"assessment-platforms": [
             {"uuid": uuid_for(sid, MODEL, "platform/team"), "title": "Assessment team",
-             "props": [prop("assessor", m["persona"]) for m in sap["team"]]}]},
+             "props": [prop("assessor", p) for p in dict.fromkeys(team)]}]},
         "tasks": [task],
         "terms-and-conditions": {"parts": terms},
     }
@@ -190,6 +193,12 @@ def build_sap(run: Run) -> str:
         body["local-definitions"] = {"activities": activities}
     metadata = doc_metadata(run, f"{name} Security Assessment Plan (draft)")
     metadata["props"] = trace_props(sap["sources"])
-    body = {"uuid": body.pop("uuid"),
-            "metadata": with_personas(run, sid, metadata, body), **body}
+    metadata = with_personas(run, sid, metadata, body, frozenset(team))
+    metadata.setdefault("roles", []).append({"id": ASSESSOR_ROLE,
+                                             "title": "Security control assessor"})
+    metadata.setdefault("responsible-parties", []).append(
+        {"role-id": ASSESSOR_ROLE,
+         "party-uuids": [party_uuid(sid, p) for p in dict.fromkeys(team)],
+         "remarks": f"Assessment team: {team_text}."})
+    body = {"uuid": body.pop("uuid"), "metadata": metadata, **body}
     return serialize(AssessmentPlan, body)

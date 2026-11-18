@@ -29,9 +29,10 @@ def test_unseeded_input_from_out_of_scope_producer_fails_run_cfg(hybrid_run):
 def test_unseeded_updated_output_from_out_of_scope_producer_fails_run_cfg(hybrid_run):
     drop_seed(hybrid_run, "ART-RA")
     needs = scope.seed_needs(open_run(hybrid_run, REPO_ROOT))
-    assert any(n.task == "R-2" and n.artifact == "ART-RA" and n.kind == "updated output"
+    # C-3 is the first in-scope task to update the risk assessment (contract 0.2.0)
+    assert any(n.task == "C-3" and n.artifact == "ART-RA" and n.kind == "updated output"
                for n in needs)
-    assert any("R-2 needs ART-RA (updated output)" in f.message
+    assert any("C-3 needs ART-RA (updated output)" in f.message
                for f in final_findings(hybrid_run, "RUN-CFG-001"))
 
 

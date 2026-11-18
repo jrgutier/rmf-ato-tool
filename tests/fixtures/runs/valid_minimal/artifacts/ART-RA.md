@@ -2,7 +2,7 @@
 artifact_id: ART-RA
 run_id: valid-minimal
 produced_by_task: P-14
-touched_by: [P-14, R-2]
+touched_by: [P-14, C-3, R-2]
 sources: [product/architecture.md]
 ---
 # System risk assessment
@@ -34,3 +34,7 @@ accounts until the POA&M closes it [[INT-011.A1]].
 
 The ISSM rated spoofed reports and radio-side attacks as the likeliest threat events
 [[INT-023.A1]].
+
+## Categorize 3: Categorization Review and Approval (C-3)
+
+With the categorization approved, the supplier risks keep the order already recorded; no risk level changed [[INT-005.A1]].

@@ -14,6 +14,16 @@ with a CNSSI 1253 baseline of 524 controls, an OSCAL 1.2.1 SSP, assessment plan,
 assessment results and POA&M, and the seeded weaknesses carried honestly into findings and
 POA&M items.
 
+What this example does not show: it was produced on framework contract 0.1.0, before the
+organization-level and system-level Prepare records existed, so it holds no
+`org-context.yaml`, `scrm-org.yaml`, `bia.yaml`, `requirements.yaml`, `ra.yaml` or
+`authorizations.yaml` ledger, and its `sap.yaml` predates the preparation, rigor, sampling,
+external provider and privacy blocks, with no `test-strategy.yaml`: do not copy its
+A-step records. For the shape of those records, read `templates/data/` (or
+`uv run rmf schema template NAME`), the fixture run `tests/fixtures/runs/valid_minimal/`,
+and the dry run `dryrun-review/efras/runs/20261118-synthetic-01/`, which goes through every
+task on the current contract.
+
 | Path | What it is |
 |---|---|
 | `product/` | the fictional product package the run read (`README.md` lists its files) |

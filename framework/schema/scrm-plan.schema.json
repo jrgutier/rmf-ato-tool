@@ -246,11 +246,34 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "approved_by",
-            "pmo",
-            "date"
+            "pmo"
           ],
+          "if": {
+            "not": {
+              "properties": {
+                "status": {
+                  "const": "draft"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            }
+          },
+          "then": {
+            "required": [
+              "approved_by",
+              "date"
+            ]
+          },
           "properties": {
+            "status": {
+              "title": "draft: written at S-4 and awaiting approval, which S-6 records (default approved)",
+              "enum": [
+                "draft",
+                "approved"
+              ]
+            },
             "approved_by": {
               "$ref": "#/$defs/persona"
             },

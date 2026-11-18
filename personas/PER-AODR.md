@@ -37,11 +37,15 @@ approvals of plans and categorizations, and the risk analysis behind the AO's de
 
 - **C (C-3):** Which information owners gave values? Why was any provisional value adjusted?
   Was any value lowered, and why? Why does each overlay apply or not?
+- **A (A-1):** Is the proposed assessor independent enough for the risk? Which assessment
+  results of providers or earlier events may the plan reuse?
 - **A (A-2):** Are any controls excluded from scope, and on what grounds? Which developer or
   test results will be reused, and are they independent enough?
 - **R (R-2):** Which findings share a threat event? What is the likelihood given the
   mitigations in place? What overall risk do you determine, and how does it compare to the
   tolerance? What response do you recommend per risk?
+- **S (S-3):** For each provider, do you agree the common controls protect the system
+  commensurate with risk? Were the parameters examined?
 
 ## Artifacts owned-approved
 

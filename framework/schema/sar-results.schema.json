@@ -18,6 +18,64 @@
       "type": "integer",
       "minimum": 1
     },
+    "additional_results": {
+      "title": "Results of the plan's additional procedures (APR-###) whose requirement sits with this family's controls; every APR has one once sar-summary.yaml is written (ASMT-005)",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "apr_id",
+          "statements",
+          "sources"
+        ],
+        "properties": {
+          "apr_id": {
+            "type": "string",
+            "pattern": "^APR-\\d{3}$"
+          },
+          "statements": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "text",
+                "result"
+              ],
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "result": {
+                  "enum": [
+                    "satisfied",
+                    "other-than-satisfied",
+                    "not-evaluated"
+                  ]
+                }
+              }
+            }
+          },
+          "finding_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^FND-\\d{3}$"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/source"
+            }
+          }
+        }
+      }
+    },
     "determinations": {
       "type": "array",
       "items": {
@@ -106,13 +164,34 @@
                     "satisfied",
                     "other-than-satisfied",
                     "not-evaluated",
-                    "not-applicable"
-                  ]
+                    "not-applicable",
+                    "not-yet-occurred"
+                  ],
+                  "description": "not-yet-occurred: the event the statement concerns has not happened yet (no exercise, no incident), a timing state, with a reason; it does not count against a satisfied control"
                 },
                 "reason": {
-                  "title": "Why the determination statement does not apply",
+                  "title": "Why the determination statement does not apply, or what has not yet occurred",
                   "type": "string",
                   "minLength": 1
+                },
+                "basis": {
+                  "title": "What the result rests on: product (a result the product states), simulated (a simulated test of a mechanism the product describes, with nothing contrary), assumption (no evidence; name it), provider-assessment (a provider's part of a hybrid control, judged on its package; name the provider)",
+                  "enum": [
+                    "product",
+                    "simulated",
+                    "assumption",
+                    "provider-assessment"
+                  ]
+                },
+                "provider": {
+                  "title": "For basis provider-assessment: the EXT-### of sap.yaml external_providers whose package shows the statement met",
+                  "type": "string",
+                  "pattern": "^EXT-\\d{3}$"
+                },
+                "assumption": {
+                  "title": "The ASM-### the result rests on when no evidence could show it, so the SAR shows which determinations rest on an assumption",
+                  "type": "string",
+                  "pattern": "^ASM-(?:[A-Z]+-)?\\d{3}$"
                 }
               }
             }
@@ -182,10 +261,74 @@
               "comprehensive"
             ]
           },
+          "assessed_on": {
+            "title": "When the control was assessed: a date inside sap.yaml schedule (ASMT-005); the POA&M's assessment date derives from it",
+            "type": "string",
+            "format": "date"
+          },
           "gap_closed": {
             "title": "What closed the gap the SSP or a STIG finding records, when the control is determined satisfied (XCON-001)",
             "type": "string",
             "minLength": 1
+          },
+          "reassessments": {
+            "title": "Later reassessments of some determination statements (A-5), kept apart from A-3's results; the latest result of a statement is its current one (ASMT-005)",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "task",
+                "date",
+                "statements",
+                "sources"
+              ],
+              "properties": {
+                "task": {
+                  "title": "The task that reassessed",
+                  "enum": [
+                    "A-4",
+                    "A-5"
+                  ]
+                },
+                "date": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                },
+                "statements": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "result"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "result": {
+                        "enum": [
+                          "satisfied",
+                          "other-than-satisfied",
+                          "not-evaluated"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "sources": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/$defs/source"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -316,6 +459,14 @@
                 "minLength": 1
               }
             }
+          },
+          "raised_at": {
+            "title": "The task that raised the finding: A-3 when absent, M-2 for an ongoing assessment after authorization, whose POA&M item and risk M-3 owes (SAR-POAM-001, RAR-001)",
+            "enum": [
+              "A-3",
+              "A-5",
+              "M-2"
+            ]
           }
         }
       }

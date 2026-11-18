@@ -80,7 +80,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | [Select 3: Control Allocation (S-3)](#task-s-3) | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | [PDR](#rv-pdr) |
 | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | Select | [PM/SO](../../MANUAL.md#per-pm) | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp), [Contingency plan (ART-CP)](../../MANUAL.md#art-cp), [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp), [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
 | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | Select | [PM/SO](../../MANUAL.md#per-pm) | [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
-| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | Select | [AO](../../MANUAL.md#per-ao) | — | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | [MS B](#ms-b) |
+| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | Select | [AO](../../MANUAL.md#per-ao) | — | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | [MS B](#ms-b) |
 
 Also active in this phase (described in their primary phase): [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14), [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15), [Prepare 18: System Registration (P-18)](PH-MSA.md#task-p-18), [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1), [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](PH-MSA.md#task-c-3).
 
@@ -592,6 +592,7 @@ Writes to `facts.yaml`: `baseline_id`.
 | Output | What it is | This task | Package |
 |---|---|---|---|
 | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | updates | core |
 
 **Entry criteria**
 

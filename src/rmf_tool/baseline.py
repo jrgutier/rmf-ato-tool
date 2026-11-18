@@ -236,6 +236,11 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
     if method == CNSSI:
         origin = cnssi_origins(tables, cat)
         baseline_id = f"CNSSI1253-{_letters(cat)}"
+        # A system that records the NSS privacy control baseline as not applying, with its
+        # basis, leaves out what only that baseline selects (F-05-10).
+        privacy_choice = cat.get("privacy_baseline")
+        if isinstance(privacy_choice, dict) and privacy_choice.get("applies") is False:
+            origin = {cid: o for cid, o in origin.items() if o != "privacy-baseline"}
     else:
         profile_rel = PROFILE_PATHS[level]
         profile_path = run.repo / profile_rel
@@ -254,7 +259,9 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
     if removed and method != CNSSI:
         raise BaselineError("an overlay that tailors controls out is written against a CNSSI 1253 "
                             f"baseline; method {method} cannot apply its removals")
-    privacy = privacy_column(tables) if removed and method == CNSSI else set()
+    privacy = privacy_column(tables) if removed and method == CNSSI and not (
+        isinstance(cat.get("privacy_baseline"), dict)
+        and cat["privacy_baseline"].get("applies") is False) else set()
     for cid in removed:
         if origin.get(cid) == "baseline" and cid in privacy:
             origin[cid] = "privacy-baseline"

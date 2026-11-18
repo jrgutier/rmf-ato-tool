@@ -70,17 +70,37 @@ def locate(path_lookup: bool = True, root: Path | None = None) -> Located:
     return Located(found, "")
 
 
+# Constraints of oscal-cli 3.2.0 that fail on documents NIST's own model allows, kept out of
+# OSCAL-003 with the reason. The builders never write an assessment part named "objective".
+FALSE_ALARMS = {
+    # Its target, `.[@name='objective']/prop[...@name='method']`, is evaluated on every
+    # assessment part: any part not named objective, such as the rules-of-engagement part of
+    # terms-and-conditions, counts 0 and fails min-occurs 1.
+    "oscal-assesment-part-objective-cardinality":
+        "fires on every assessment part that is not an objective",
+}
+
+
 def _results(sarif: dict[str, Any]) -> list[tuple[str, str]]:
-    """(oscal-cli rule ID, message) per failed constraint in a SARIF log."""
+    """(oscal-cli rule ID, message) per failed constraint in a SARIF log, less the false
+    alarms of the pinned release."""
     out = []
     for run in sarif.get("runs") or []:
         for result in run.get("results") or []:
             if result.get("kind", "fail") != "fail":
                 continue
             rule = result.get("ruleId") or "schema"
+            if rule in FALSE_ALARMS:
+                continue
             text = " ".join(str((result.get("message") or {}).get("text", "")).split())
             out.append((rule, text))
     return out
+
+
+def _failed(sarif: dict[str, Any]) -> bool:
+    """Whether the SARIF log holds any failed constraint, false alarms included."""
+    return any(r.get("kind", "fail") == "fail" for run in sarif.get("runs") or []
+               for r in run.get("results") or [])
 
 
 def _grouped(results: list[tuple[str, str]]) -> list[str]:
@@ -121,9 +141,12 @@ def problems(exe: str, path: Path) -> list[str]:
         results: list[tuple[str, str]] = []
         if sarif_path.is_file():
             try:
-                results = _results(json.loads(sarif_path.read_text(encoding="utf-8")))
+                sarif = json.loads(sarif_path.read_text(encoding="utf-8"))
+                results = _results(sarif)
             except (ValueError, AttributeError) as exc:
                 return [f"oscal-cli wrote an unreadable SARIF log: {exc}"]
+            if not results and _failed(sarif):
+                return []  # every failure was a false alarm of the pinned release
         if results:
             return _grouped(results)
         if proc.returncode == 0:

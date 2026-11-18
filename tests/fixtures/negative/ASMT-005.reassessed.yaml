@@ -1,0 +1,21 @@
+rule: ASMT-005
+bases:
+- minimal
+description: an open finding whose every affected statement a later reassessment found satisfied (F-14-5)
+mutations:
+- op: set_field
+  file: artifacts/sar/results/ac.yaml
+  path: determinations.0.reassessments
+  value:
+  - task: A-5
+    date: '2026-12-31'
+    statements:
+    - id: AC-02j.
+      result: satisfied
+    sources:
+    - INT-009.A1
+expect:
+  errors:
+  - ASMT-005
+  messages:
+  - stays open, yet a reassessment found every statement it affects satisfied

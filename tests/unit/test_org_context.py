@@ -329,3 +329,12 @@ def test_no_posture_review_is_due_on_the_day_operations_start(tmp_path):
     edit_yaml(run_dir / "run.yaml", lambda d: d.update(include_after_stop=["M-6"]))
     edit_yaml(run_dir / ORG, lambda d: d.update(posture_reviews=[]))
     assert _rule_errors(run_dir, "OCTX-011") == []
+
+
+def test_a_space_nss_by_its_records_may_have_its_ao_appointed_by_usspacecom(tmp_path):
+    """RAPT-001 and CRYP-002 agree on what a space system is: `space_nss` in ssp-records.yaml
+    makes the run one, as it does for the space cryptography rule."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/data/ssp-records.yaml", lambda d: d.update(space_nss=True))
+    edit_yaml(run_dir / ORG, _usspacecom_appoints_the_ao_of_a_space_system)
+    assert _rule_errors(run_dir, "RAPT-001") == []

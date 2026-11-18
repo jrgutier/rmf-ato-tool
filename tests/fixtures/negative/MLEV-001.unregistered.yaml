@@ -1,0 +1,16 @@
+rule: MLEV-001
+bases:
+- minimal
+description: a common allocation to a provider neither P-5 nor C-1 records (F-08-1)
+mutations:
+- op: set_field
+  file: artifacts/data/allocation.yaml
+  path: allocations.4.provider
+  value: Unregistered enclave
+expect:
+  errors:
+  - MLEV-001
+  also:
+  - TLR-010
+  messages:
+  - neither org-context.yaml common_controls nor leveraged-authorizations.yaml names it

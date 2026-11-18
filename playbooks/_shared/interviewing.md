@@ -6,7 +6,7 @@ behind most run claims: artifacts cite their answers as `INT-###.A#`.
 ## Steps
 
 1. **Pick the respondents.** Use the personas in the playbook's `## Interviews` section.
-   Look up each one's stakeholder in `artifacts/ART-STAKE.md`. Why: the RACI in the header
+   Look up each one's stakeholder in `artifacts/ART-STAKE.md` (from P-9 on; before P-9 writes it, use the product's `stakeholders.md` and ART-ORG-CONTEXT). Why: the RACI in the header
    says who is responsible or consulted; the register says who speaks for them in this run.
 2. **Number the interview.** Find the highest `INT-###` under `interviews/` and add 1
    (start at `INT-001`). Numbers are global to the run, never per task, and never reused.
@@ -21,6 +21,12 @@ behind most run claims: artifacts cite their answers as `INT-###.A#`.
      (`## What they know and don't know`). Ground each answer in the product material or an
      earlier answer, and list that grounding in `basis`. Why: an ungrounded simulated
      answer is invention that later reviewers cannot check.
+   - **Simulated evidence (an A-3 test or re-performance):** a simulated test may reproduce
+     only a result the product states, or exercise a mechanism the product describes with
+     nothing to the contrary (statement `basis: simulated`). A test aimed at an open item,
+     or at something the product never mentions, is "not demonstrated" under an ASSUMPTION
+     (`basis: assumption`, naming the `ASM-###`). Why: each choice changes R-2's risk
+     picture, so the line must be the same in every run.
    - **Hybrid mode, persona listed in `run.yaml:humans` with a name:** ask the human in chat
      and record their words (`_shared/hybrid-mode.md`).
    - When the persona would not know the answer, say so in character and either ask the
@@ -40,7 +46,9 @@ run_id: 20261105-synthetic-01
 task: S-4
 persona: PER-ISSO
 date: 2026-11-05
-topics: [account management, audit logging]
+topics:
+  - "account management"
+  - "audit logging"
 ---
 # INT-007 — S-4 — PER-ISSO
 

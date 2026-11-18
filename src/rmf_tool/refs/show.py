@@ -40,9 +40,12 @@ def section(root: Path, entry: Any, wanted: str) -> str:
     matches = [i for i, e in enumerate(entries) if e.num.casefold() == key] or \
         [i for i, e in enumerate(entries) if key in (e.title.casefold(), e.anchor.casefold())]
     match = matches[-1] if matches else None
-    if match is None:
-        raise NotFound(f"{entry['id']}: no section {wanted!r} in {toc_path.name}")
     lines = md.read_text(encoding="utf-8").splitlines()
+    if match is None:
+        found = _caption(lines, wanted)
+        if found is None:
+            raise NotFound(f"{entry['id']}: no section {wanted!r} in {toc_path.name}")
+        return found
     heading_lines = [n for n, line in enumerate(lines) if _HEADING.match(line)]
     if len(heading_lines) != len(entries):
         raise NotFound(f"{entry['id']}: {toc_path.name} lists {len(entries)} headings but the "
@@ -51,6 +54,26 @@ def section(root: Path, entry: Any, wanted: str) -> str:
     end = next((heading_lines[k] for k in range(match + 1, len(entries))
                 if entries[k].level <= level), len(lines))
     return "\n".join(lines[start:end]).rstrip() + "\n"
+
+
+_CAPTION = re.compile(r"^(table|figure|exhibit)\s+[a-z]?[-.\d]+\b", re.I)
+CAPTION_LINES = 120
+
+
+def _caption(lines: list[str], wanted: str) -> str | None:
+    """A table or figure by its caption ("Table 29"), which the TOC does not list: from the
+    last line starting with the caption to the next heading, capped at CAPTION_LINES (dry-run
+    finding F-03-12)."""
+    key = " ".join(wanted.split()).casefold()
+    if not _CAPTION.match(key):
+        return None
+    pattern = re.compile(r"^\W*" + re.escape(key).replace(r"\ ", r"\s+") + r"(?!\d)", re.I)
+    starts = [n for n, line in enumerate(lines) if pattern.match(line.strip())]
+    if not starts:
+        return None
+    start = starts[-1]
+    end = next((n for n in range(start + 1, len(lines)) if _HEADING.match(lines[n])), len(lines))
+    return "\n".join(lines[start:min(end, start + CAPTION_LINES)]).rstrip() + "\n"
 
 
 def _pages(md: Path) -> dict[int, tuple[str, str]]:

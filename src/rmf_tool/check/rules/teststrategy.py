@@ -168,12 +168,16 @@ def penetration_tests(ctx: Context) -> list[RunFinding]:
         if e.get("independent") is not True or e.get("threat_representative") is not True:
             err(f"{e.get('id')}: penetration and exploitation testing is independent and threat "
                 "representative")
-        if e.get("scope") != "complete-system" or e.get("includes_cssp") is not True:
-            err(f"{e.get('id')}: penetration and exploitation testing evaluates the complete "
-                "system cyberspace defenses, including the controls and protection provided by "
-                "cybersecurity service providers")
-    phases = {e.get("phase") for e in pens}
-    if pens and (not phases & {"dt", "integrated"} or not phases & {"ot", "integrated"}):
+    # narrower penetration tests may stand beside them; the DT&E and the OT&E each hold one of
+    # the complete system defenses with the CSSP, or one integrated test does (F-11-6)
+    whole = [e for e in pens
+             if e.get("scope") == "complete-system" and e.get("includes_cssp") is True]
+    if pens and not whole:
+        err(f"{pens[0].get('id')}: penetration and exploitation testing evaluates the complete "
+            "system cyberspace defenses, including the controls and protection provided by "
+            "cybersecurity service providers")
+    phases = {e.get("phase") for e in whole}
+    if whole and (not phases & {"dt", "integrated"} or not phases & {"ot", "integrated"}):
         err("penetration and exploitation testing is planned and resourced as part of both the "
             "DT&E and the OT&E")
     return out

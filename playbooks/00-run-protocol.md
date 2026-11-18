@@ -22,7 +22,7 @@ directory, for example `runs/20261105-synthetic-01`.
    `## Interviews` section names. Why: the header is synced from `framework/tasks/*.yaml`, so it
    is the authoritative contract; the body tells you how to meet it.
 4. **Read only the listed inputs.** Open the files the playbook's `## Inputs` section names
-   and nothing else from the run. Read reference passages with
+   and the `## Outputs` files you will rewrite, and nothing else from the run. Read reference passages with
    `uv run rmf refs show <REF> --section "<S>"` and control text with
    `uv run rmf catalog show ...`. Why: every extra file costs context you need for the
    writing steps, and unlisted inputs produce untraceable claims.
@@ -44,6 +44,10 @@ directory, for example `runs/20261105-synthetic-01`.
      there;
    - facts: rewrite `facts.yaml` whole when the playbook says so, keeping every field other
      tasks wrote.
+   - a data file an earlier task wrote (S-3 changing C-1's `leveraged-authorizations.yaml`):
+     write it whole, add your answers to the changed records' `sources`, and journal a NOTE
+     naming the file and the records. Data files carry no `touched_by`, and `rmf status`
+     charges their findings to the task that owns the file.
 
    Tag and trace every claim per
    `_shared/tagging-and-traceability.md`. Why: the CLI derives OSCAL and status from these
@@ -70,7 +74,9 @@ directory, for example `runs/20261105-synthetic-01`.
 A synthetic run covers months in hours. When a task records events after the run's current
 date (the assessment window, the decision, monitoring), first move the clock with
 `uv run rmf run clock set YYYY-MM-DD` and journal a NOTE for what happened in between. Date
-rules read the clock, so do not invent progress to satisfy them.
+rules read the clock, so do not invent progress to satisfy them. An interview or a determination
+dated by a scheduled event (an A-3 test on its plan date) comes after the clock reaches that
+date, so the journal and the records tell one timeline.
 
 ## Entering past P-1
 
@@ -121,7 +127,9 @@ The product material lives in the directory `run.yaml:product` names; cite it as
 
 ## Artifact front-matter
 
-Every `artifacts/ART-*.md` starts with exactly these 5 keys (RUN-FM-001):
+Every `artifacts/ART-*.md` starts with these 5 keys (RUN-FM-001), plus `handling` (CUI or
+the classification level) where its template carries it (ART-CMP, ART-POAM, ART-SAR,
+ART-STIG):
 
 ```yaml
 ---

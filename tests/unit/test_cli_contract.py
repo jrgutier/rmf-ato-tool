@@ -54,10 +54,11 @@ def test_doctor_json(monkeypatch):
     result = invoke("doctor", "--format", "json")
     data = json.loads(result.stdout)
 
-    assert result.exit_code == 1
-    assert data["ok"] is False
+    # qpdf is optional for runs (F-00-5): only `rmf refs fetch` and `rmf refs import` need it
     qpdf = next(c for c in data["checks"] if c["name"] == "qpdf")
-    assert (qpdf["ok"], qpdf["required"]) == (False, True)
+    assert (qpdf["ok"], qpdf["required"]) == (False, False)
+    assert result.exit_code == (0 if data["ok"] else 1)
+    assert data["ok"] is all(c["ok"] for c in data["checks"] if c["required"])
 
 
 def test_doctor_text_ok(monkeypatch):

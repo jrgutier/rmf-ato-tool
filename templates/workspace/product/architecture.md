@@ -21,6 +21,10 @@ Interfaces, networks, permitted traffic (ports, protocols, directions) and segme
 
 Each connected system: direction, agreement and its own authorization.
 
+| Connection | Other system | Its AO | Direction | Agreement (ISA, MOA, MOU, SLA) | Reference | Status (signed, draft, interim approval) | Date | Signatories |
+|---|---|---|---|---|---|---|---|---|
+| CONN-01 | example system | title of its AO | in, out or both | ISA | ISA-0001 | signed | 2026-01-01 | both AOs |
+
 ## Leveraged authorizations
 
 Each separately authorized provider whose controls the system inherits, what it covers, the
@@ -29,7 +33,9 @@ decision and the date authorized.
 ## Identity and access
 
 How each user group authenticates, how accounts are requested, approved, reviewed and
-removed, local or shared accounts, lockout and session settings.
+removed, local or shared accounts, lockout and session settings. Name the identity service
+and its assurance (identity proofing, authenticator), and for federation how assertions are
+protected: signed only, encrypted, or bound to the holder's key.
 
 ## Logging
 

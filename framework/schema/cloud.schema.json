@@ -109,11 +109,19 @@
             "minLength": 1
           },
           "service_model": {
-            "title": "Service model of the offering",
-            "enum": [
-              "iaas",
-              "paas",
-              "saas"
+            "title": "Service model of the offering, or a list when the system uses it under several (PaaS for managed Kubernetes, IaaS for the network)",
+            "anyOf": [
+              {
+                "$ref": "#/$defs/service_model"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/service_model"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
             ]
           },
           "leveraged_authorization": {
@@ -1305,6 +1313,13 @@
     }
   },
   "$defs": {
+    "service_model": {
+      "enum": [
+        "iaas",
+        "paas",
+        "saas"
+      ]
+    },
     "date": {
       "description": "ISO date.",
       "type": "string",

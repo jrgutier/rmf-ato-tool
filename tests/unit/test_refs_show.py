@@ -144,3 +144,11 @@ def test_cli_show(rr, monkeypatch, args, code, needle):
     result = runner.invoke(app, ["refs", "show", *args])
     assert result.exit_code == code
     assert needle in result.output
+
+
+def test_caption_resolves_a_table_the_toc_does_not_list():
+    lines = ["# 1 Intro", "Table 2. Not this one", "text", "Table 29. Risk severity schema",
+             "| a | b |", "# 2 Next"]
+    assert show._caption(lines, "Table 29") == "Table 29. Risk severity schema\n| a | b |\n"
+    assert show._caption(lines, "Table 3") is None
+    assert show._caption(lines, "Intro") is None

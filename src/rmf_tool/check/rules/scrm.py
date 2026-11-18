@@ -544,6 +544,10 @@ def plan_content(ctx: Context) -> list[RunFinding]:
     if approver is not None and approver not in ctx.run.personas:
         err(f"the plan's approver {approver} is no framework persona, so no role is stated as "
             "responsible for the plan")
+    if _obj(plan, "approval").get("status") == "draft" and _active(ctx, "S-6"):
+        # a plan may stay a draft at S-4; the plan review approves it (F-09-3)
+        out.append(make("SCRM-009", "the C-SCRM plan is still a draft; the plan review "
+                        "records its approval", PLAN_FILE, None, {"S-6"}))
     pmo = _obj(_doc(ctx, ORG_FILE), "governance").get("pmo")
     if pmo in ("dedicated", "matrixed") and _obj(plan, "approval").get("pmo") != "coordinated":
         err("the plan's approval was not coordinated with the C-SCRM PMO the organization "

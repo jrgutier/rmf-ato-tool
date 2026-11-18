@@ -18,7 +18,9 @@ from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, family_records
 from rmf_tool.run import authorization as ledger
-from rmf_tool.run import clock, scope
+from rmf_tool.run import clock, scope, status
+
+ORG_CONTEXT_FILE = "artifacts/data/org-context.yaml"
 
 CHANGES_FILE = "artifacts/data/changes.yaml"
 REPORTS_FILE = "artifacts/data/posture-reports.yaml"
@@ -190,6 +192,25 @@ def unauthorized_changes(ctx: Context) -> list[RunFinding]:
     return out
 
 
+# --- MCHG-004: monitoring data from after the authorization in force -----------------------
+
+def monitoring_data(ctx: Context) -> list[RunFinding]:
+    """A Monitor task that rests on records ending before the authorization in force describes
+    the system before its decision (F-16-1)."""
+    data = ctx.data(CHANGES_FILE)
+    if not _in_play(ctx, "ART-CHG") or not isinstance(data, dict):
+        return []
+    out, err = _collector("MCHG-004", CHANGES_FILE, "M-1")
+    through = _day(_block(_block(data, "monitoring"), "unauthorized_changes").get("data_through"))
+    effect_of = ledger.effects(ctx.run)
+    decided = [d for d in (_day(r.get("date")) for r in ctx.ledger or ()
+                           if effect_of.get(r.get("decision")) == "authorize") if d]
+    if through is not None and decided and through < max(decided):
+        err(f"the monitoring records end on {through}, before the authorization of "
+            f"{max(decided)} in force: they describe the system before its decision")
+    return out
+
+
 # --- MCHG-003: lawful LE/CI tools, accommodated and coordinated with the AO -----------------
 
 def le_ci(ctx: Context) -> list[RunFinding]:
@@ -253,9 +274,24 @@ def inheritance(ctx: Context) -> list[RunFinding]:
     allocation = ctx.data(ALLOCATION_FILE)  # S-3 writes it after C-1
     # a provider of hybrid controls supplies the common part of them (F-05-1)
     pk = providers.keyer(ctx)
-    offering = {pk(a.get("provider")) for a in _items(allocation, "allocations")
-                if a.get("type") in ("common", "hybrid")}
-    for r in _items(data, "leveraged_authorizations"):
+    offering = {pk(name) for a in _items(allocation, "allocations")
+                if a.get("type") in ("common", "hybrid")
+                for name in providers.of_allocation(a)}
+    records = _items(data, "leveraged_authorizations")
+    # the reverse direction (F-08-1): the provider of a control S-3 allocates as wholly
+    # common is either a P-5 common control provider or one whose authorization C-1 leverages
+    org = ctx.data(ORG_CONTEXT_FILE)
+    known = {pk(c.get("provided_by")) for c in _items(org, "common_controls")}
+    known |= {pk(r.get("provider")) for r in records}
+    common = {pk(a.get("provider")) for a in _items(allocation, "allocations")
+              if a.get("type") == "common"}
+    checked = isinstance(org, dict) and "common_controls" in org
+    for name in sorted(str(p) for p in common if checked and p and p not in known):
+        out.append(make("MLEV-001", f"{providers.shown(ctx)(name)} provides common "
+                        "controls in allocation.yaml, and neither org-context.yaml "
+                        "common_controls nor leveraged-authorizations.yaml names it, so it is no "
+                        "approved common control provider", ALLOCATION_FILE, None, {"S-3"}))
+    for r in records:
         lid, arrangement = r.get("id"), r.get("arrangement")
         if ENTERPRISE in r:
             continue
@@ -287,6 +323,38 @@ def inheritance(ctx: Context) -> list[RunFinding]:
 
 # --- MPOA-001: the POA&M and the outside findings it takes ----------------------------------
 
+# The record that holds each plan's approval, for a milestone that `approves` it (F-15-9).
+PLAN_APPROVALS = {"cm-plan": "artifacts/data/cm-plan.yaml",
+                  "contingency": "artifacts/data/contingency.yaml",
+                  "incident-response": "artifacts/data/incident-response.yaml",
+                  "security-plan": "artifacts/data/ssp-records.yaml"}
+
+
+def _approved_on(ctx: Context, plan: str) -> list[dt.date]:
+    data = ctx.data(PLAN_APPROVALS[plan])
+    if not isinstance(data, dict):
+        return []
+    found = [_block(data, "plan_approval").get("date")]
+    if plan == "security-plan":
+        found += [a.get("date") for a in _items(data, "approvals")]
+    return [d for d in map(_day, found) if d]
+
+
+def _approvals_reconciled(ctx: Context, items: list[dict[str, Any]]) -> list[RunFinding]:
+    """A completed milestone that approves a plan finds that approval in the plan's record, on
+    or before the milestone; M-2 reconciles what R-3 recorded as met (F-15-9)."""
+    out = []
+    for i in items:
+        for m in _items(i, "milestones"):
+            plan, done = m.get("approves"), _day(m.get("completed"))
+            if plan not in PLAN_APPROVALS or done is None:
+                continue
+            if not any(d <= done for d in _approved_on(ctx, plan)):
+                out.append(make("MPOA-001", f"{i.get('id')}: the milestone approving the {plan} "
+                                f"was met on {done}, but {PLAN_APPROVALS[plan]} records no "
+                                "approval on or before it", POAM_FILE, None, {"M-2"}))
+    return out
+
 def poam_sources(ctx: Context) -> list[RunFinding]:
     data = ctx.data(POAM_FILE)
     if not _in_play(ctx, "ART-POAM") or not isinstance(data, dict):
@@ -301,20 +369,40 @@ def poam_sources(ctx: Context) -> list[RunFinding]:
     documented |= {r.get("id") for key in ("directed_actions", "vdp_reports", "vulnerabilities")
                    for r in _items(data, key)}
     first = _first_authorization(ctx)
+    # before a decision exists, the planned decision date A-6 records is the floor (F-14-9)
+    floor = first or _day(data.get("planned_decision"))
     for i in items:
         iid, recommended = i.get("id"), i.get("recommended_completion")
         if recommended not in COMPLETIONS:
             err(f"{iid}: the task carries no recommendation for completion before or after "
                 "system authorization")
         scheduled = _day(i.get("scheduled_completion"))
-        if recommended == COMPLETIONS[0] and first and scheduled and scheduled > first:
-            err(f"{iid}: recommended for completion before system authorization of {first}, but "
-                f"scheduled for {scheduled}")
+        if recommended == COMPLETIONS[0] and floor and scheduled and scheduled > floor:
+            if first:
+                err(f"{iid}: recommended for completion before system authorization of "
+                    f"{floor}, but scheduled for {scheduled}")
+            else:
+                err(f"{iid}: recommended for completion before the planned system authorization "
+                    f"of {floor}, but scheduled for {scheduled}")
         if i.get("finding_ref") not in documented:
             err(f"{iid}: the deficiency {i.get('finding_ref')} is not documented in the "
                 "assessment reports")
+    # the AO's review is R-4's to record with the decision (F-15-7)
+    def err_r4(message: str) -> None:
+        out.append(make("MPOA-001", message, POAM_FILE, None, {"R-4"}))
+
     if first is not None and _block(data, "ao_review").get("by") not in AO_OR_DR:
-        err("the plan of action and milestones is not reviewed by the authorizing official")
+        err_r4("the plan of action and milestones is not reviewed by the authorizing official")
+    # an AO review is recorded at R-3 or R-4, never by A-6 ahead of the work it rests on
+    # (F-14-8): R-3 is reached once every task before it has written its outputs; a ledger
+    # that already holds a record past A-2's IATT shows the risk response was made
+    reviewed = _day(_block(data, "ao_review").get("reviewed"))
+    decided = any(r.get("task") not in (None, "A-2") for r in ctx.ledger or ())
+    if (reviewed and not decided and "R-3" in ctx.run.tasks
+            and not status.reached(ctx.run, "R-3")):
+        err(f"the AO review of the POA&M on {reviewed} is recorded before the risk response "
+            "(R-3) is reached: R-3 or R-4 records it")
+    out += _approvals_reconciled(ctx, items)
     decisions = {r.get("id") for r in ctx.ledger or ()}
     for f in external:
         fid, verified = f.get("id"), _block(f, "verified")
@@ -446,8 +534,8 @@ def posture_reports(ctx: Context) -> list[RunFinding]:
         _awareness(ctx, err)
     for c in _items(changes, "changes"):
         if external and "external_service" not in c:
-            err(f"{c.get('id')}: the change does not say which external service it touches, or "
-                "null for none, while the system leverages one")
+            err(f"{c.get('id')}: the change does not say which external service's status it "
+                "alters, or null for none, while the system leverages one")
         if c.get("external_service") in external and c.get("id") not in reported:
             err(f"{c.get('id')}: the status change of the external service is not reported "
                 "through the network operations chain of command to the Commander, USCYBERCOM")
@@ -644,14 +732,17 @@ def measurement(ctx: Context) -> list[RunFinding]:
             continue
         limits = _block(measure, "acceptable")
         low, high, value = limits.get("min"), limits.get("max"), r.get("value")
-        if not isinstance(value, int | float) or isinstance(value, bool):
-            err(f"{r.get('id')}: the measurement result {value!r} is no number the acceptable "
-                "parameters can judge")
-            continue
-        within = (low is None or value >= low) and (high is None or value <= high)
-        if r.get("within_parameters") is not within:
-            err(f"{r.get('id')}: performance outside acceptable parameters is not recorded as "
-                "such")
+        # no value this cycle (a mean over nothing closed), with the reason saying so (F-16-9)
+        undefined = value is None and bool(str(r.get("undefined_reason") or "").strip())
+        if not undefined:
+            if not isinstance(value, int | float) or isinstance(value, bool):
+                err(f"{r.get('id')}: the measurement result {value!r} is no number the "
+                    "acceptable parameters can judge")
+                continue
+            within = (low is None or value >= low) and (high is None or value <= high)
+            if r.get("within_parameters") is not within:
+                err(f"{r.get('id')}: performance outside acceptable parameters is not recorded "
+                    "as such")
         if missing := sorted(_strings(measure, "users") - _strings(r, "informed")):
             err(f"{r.get('id')}: the measurement users {', '.join(missing)} are not informed")
     return out
@@ -681,6 +772,10 @@ def plan_reviews(ctx: Context) -> list[RunFinding]:
             err(f"{c.get('version')}: the system plan update is not tracked by change "
                 f"management: {c.get('change_ref')} is not in the change log")
         if c.get("approved_by") not in PLAN_APPROVERS:
-            err(f"{c.get('version')}: the update to the system plan is approved under change "
-                f"management, by {' or '.join(PLAN_APPROVERS)}, not {c.get('approved_by')}")
+            # charged to the task that logged the update, so its own check shows it (F-10-2)
+            task = c.get("task") if isinstance(c.get("task"), str) else "M-4"
+            out.append(make("MPLAN-001", f"{c.get('version')}: the update to the system plan "
+                            "is approved under change management, by "
+                            f"{' or '.join(PLAN_APPROVERS)}, not {c.get('approved_by')}",
+                            PLAN_REVIEWS_FILE, None, {task}))
     return out

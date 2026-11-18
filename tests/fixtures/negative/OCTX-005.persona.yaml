@@ -1,15 +1,21 @@
 rule: OCTX-005
 bases:
 - minimal
-description: a provider persona with no role
+description: a provider persona with no role, and a provider not registered in providers
 mutations:
 - op: set_field
   file: artifacts/data/org-context.yaml
   path: common_controls.0.persona
   value: PER-CSSP
+- op: set_field
+  file: artifacts/data/org-context.yaml
+  path: common_controls.0.provided_by
+  value: Unregistered enclave
 expect:
   errors:
   - OCTX-005
+  also:
+  - OCTX-006
+  - MLEV-001
   messages:
-  - 'Analysis enclave (PRV-01): the common control provider PER-CSSP holds no role in
-    roles'
+  - 'Unregistered enclave: the common control provider PER-CSSP holds no role in roles'

@@ -18,8 +18,8 @@ from rmf_tool import labels
 from rmf_tool.catalog import family
 from rmf_tool.check import rules_by_id
 from rmf_tool.check.findings import RunFinding
+from rmf_tool.run import clock, frontmatter, interviews, scope
 from rmf_tool.run import facts as facts_mod
-from rmf_tool.run import frontmatter, interviews, scope
 from rmf_tool.run.model import Run, YamlError
 
 FAMILY_TASKS = {"S-4": "ssp", "A-3": "sar"}  # next action refined per control family
@@ -113,6 +113,35 @@ def _artifact_problems(run: Run, task: str) -> list[str]:
     return problems
 
 
+# Rules that stay quiet until the task touches its output, so the status line would not show
+# them before the task starts (F-14-2): (task, rule, data file, key, what is owed).
+QUIET_OWED = (("A-4", "PASM-002", "artifacts/data/sar-report.yaml", "privacy",
+               "the privacy assessment results for the AO (sar-report.yaml privacy)"),)
+
+
+def _processes_pii(run: Run) -> bool:
+    try:
+        data = run.data("artifacts/data/infotypes.yaml")
+    except (YamlError, OSError):
+        return False
+    items = data.get("information_types") if isinstance(data, dict) else None
+    return any(isinstance(i, dict) and i.get("privacy") is True for i in items or ())
+
+
+def _quiet_owed(run: Run, task: str) -> list[tuple[str, str]]:
+    out = []
+    for t, rule, rel, key, what in QUIET_OWED:
+        if t != task or not run.holds("0.2.0") or not _processes_pii(run):
+            continue
+        try:
+            data = run.data(rel) if run.path(rel).is_file() else None
+        except YamlError:
+            data = None
+        if not (isinstance(data, dict) and data.get(key)):
+            out.append((rule, f"{rule}: owes {what}"))
+    return out
+
+
 def reached(run: Run, task: str) -> bool:
     """Progress, not scope: every active task before ``task`` has written its outputs, so a
     decision recorded at ``task`` cannot precede the work it rests on."""
@@ -144,6 +173,7 @@ def derive(run: Run, findings: list[RunFinding]) -> Status:
                 if f.error and t in f.owners and gate_open(run, f.rule, run.position[t]):
                     errors[f.rule] = errors.get(f.rule, 0) + 1
             missing += [f"{rule}: {n} error(s)" for rule, n in sorted(errors.items())]
+            missing += [m for rule, m in _quiet_owed(run, t) if rule not in errors]
         tasks[t] = TaskStatus(t, task.get("name", ""), sc.state, sc.rationale,
                               sc.state == scope.ACTIVE and not missing, missing)
     nxt = next((t for t in run.order if tasks[t].state == scope.ACTIVE and not tasks[t].done
@@ -162,6 +192,53 @@ def derive(run: Run, findings: list[RunFinding]) -> Status:
     )
 
 
+DECISION_TASK = "R-4"
+
+
+def decision_floor(run: Run) -> tuple[dt.date | None, list[str]]:
+    """The earliest date an authorization decision may carry, by the run's own records, and
+    why (F-15-1): the run's date, the PIA approval (PRIV-003) and the latest scheduled
+    completion of a POA&M item recommended before authorization (MPOA-001)."""
+
+    def day(value: Any) -> dt.date | None:
+        try:
+            return dt.date.fromisoformat(str(value))
+        except ValueError:
+            return None
+
+    def read(rel: str) -> Any:
+        try:
+            return run.data(rel) if run.path(rel).is_file() else None
+        except YamlError:
+            return None
+
+    found: list[tuple[dt.date, str]] = []
+    if (now := clock.today(run.config)) is not None:
+        found.append((now, "the run's date"))
+    pia = read("artifacts/data/pia.yaml")
+    if isinstance(pia, dict) and pia.get("status", "approved") == "approved":
+        approved = day((pia.get("approval") or {}).get("date"))
+        if approved:
+            found.append((approved, "the PIA approval (PRIV-003)"))
+    poam = read("artifacts/poam/items.yaml")
+    for item in (poam.get("items") or []) if isinstance(poam, dict) else []:
+        if isinstance(item, dict) and item.get("recommended_completion") == "before-authorization":
+            when = day(item.get("scheduled_completion"))
+            if when:
+                found.append((when, f"{item.get('id')} (MPOA-001)"))
+    if not found:
+        return None, []
+    floor = max(d for d, _ in found)
+    return floor, [why for d, why in found if d == floor]
+
+
+def _floor(run: Run, task: str) -> dict[str, Any]:
+    if task != DECISION_TASK:
+        return {}
+    floor, why = decision_floor(run)
+    return {"not_before": {"date": floor.isoformat(), "because": why}} if floor else {}
+
+
 def to_json(run: Run, st: Status, gaps: bool = False) -> dict[str, Any]:
     active = [s for s in st.tasks.values() if s.state == scope.ACTIVE]
     out: dict[str, Any] = {
@@ -175,6 +252,7 @@ def to_json(run: Run, st: Status, gaps: bool = False) -> dict[str, Any]:
             "step": st.next.split("-")[0],
             "playbook": run.tasks[st.next].get("playbook"),
             **({"family": st.family} if st.family else {}),
+            **_floor(run, st.next),
         },
         "counts": {"active": len(active), "done": sum(s.done for s in active),
                    "deferred": len(st.tasks) - len(active)},

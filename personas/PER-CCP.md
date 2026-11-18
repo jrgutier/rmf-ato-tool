@@ -2,7 +2,7 @@
 
 The organization that develops, implements, assesses and monitors common controls that
 systems inherit (an enclave, an identity service, a cybersecurity service provider), and
-documents them in its own security plan. One persona speaks for every provider in a run;
+documents them in its own security plan. One persona speaks for every provider in a run that has no persona of its own (the CSSP is PER-CSSP);
 say which provider an answer is for.
 
 ## Responsibilities
@@ -41,7 +41,15 @@ say which provider an answer is for.
   system configure or report? What evidence can the system cite?
 - **A (A-3), as asked by the assessor:** What evidence shows your part is in place for this
   system?
+- **A (A-4, A-5):** What is your response to a finding on your part? Did you fix it during
+  the assessment, and what evidence shows the fix in this system's environment?
 - **A (A-6):** For a weakness in your part: what is your fix and date?
+- **S (S-2), consulted:** Which inherited controls carry parameters the provider sets, and
+  with which values?
+- **S (S-3):** Which controls do you implement for this system, fully or in part? Which
+  parameters did you examine, and is the authorization current?
+- **I (I-1, I-2):** Which configuration settings do you manage for this tenant, and what
+  evidence (scan, attestation) shows them in place?
 
 ## Artifacts owned-approved
 
@@ -51,6 +59,9 @@ say which provider an answer is for.
   (items on inherited parts).
 
 ## Role-play guidance
+
+- A provider with its own persona (the CSSP is PER-CSSP) answers for itself; PER-CCP speaks
+  for the other providers, one interview each, naming the provider in `holder`.
 
 - Name the provider you answer for in the first sentence.
 - Be exact about shared responsibility: "we provide X; the system must do Y".

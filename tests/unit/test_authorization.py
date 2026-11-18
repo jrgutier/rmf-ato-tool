@@ -456,6 +456,11 @@ def test_example_migrates_onto_the_ledger(tmp_path):
                 "artifacts/data/service-agreements.yaml", "artifacts/ART-PIA.md",
                 "artifacts/ART-BIA.md", "artifacts/data/bia.yaml", "artifacts/ART-REG.md"):
         shutil.copy(VALID_MINIMAL / rel, run_dir / rel)
+    # outputs the 0.2.0 contract added to C-3 and S-6 (outputs_since)
+    for name, old, new in (("ART-RA", "[P-14, R-2, M-3]", "[P-14, C-3, R-2, M-3]"),
+                           ("ART-CONMON", "[S-5, M-2]", "[S-5, S-6, M-2]")):
+        doc = run_dir / f"artifacts/{name}.md"
+        doc.write_text(doc.read_text().replace(f"touched_by: {old}", f"touched_by: {new}"))
     assert _check(run_dir, rules.records_valid) == ""
     assert "needs threat_assessment" in _check(run_dir, rules.threat_assessment)
 

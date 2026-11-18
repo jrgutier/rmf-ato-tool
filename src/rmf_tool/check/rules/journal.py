@@ -28,6 +28,21 @@ ENTRY = re.compile(
 )
 
 
+def _diagnose(line: str) -> str:
+    """The first part of an entry header that does not match (F-09-8)."""
+    parts = line[3:].split(" · ")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?Z", parts[0].strip()):
+        return f"the time {parts[0].strip()!r} is not YYYY-MM-DDTHH:MMZ"
+    if len(parts) < 2 or parts[1].strip() not in ("CHECKPOINT", "DECISION", "RETRY",
+                                                     "CORRECTION", "NOTE"):
+        return f"the type {parts[1].strip() if len(parts) > 1 else ''!r} is unknown"
+    if len(parts) < 3 or not re.fullmatch(
+            r"task [PCSIARM]-\d{1,2}|artifact ART-[A-Z]+(?:-[A-Z]+)*|run", parts[2].strip()):
+        return (f"the scope {parts[2].strip() if len(parts) > 2 else ''!r} is not 'task T', "
+                "'artifact ART-X' or 'run'")
+    return "a trailing part is not 'key: value'"
+
+
 def journal(ctx: Context, done: set[str]) -> list[RunFinding]:
     run = ctx.run
     path = run.path(JOURNAL_FILE)
@@ -47,9 +62,9 @@ def journal(ctx: Context, done: set[str]) -> list[RunFinding]:
             continue
         m = ENTRY.match(line)
         if m is None:
-            out.append(make(RULE, "malformed entry; expected '## <YYYY-MM-DDTHH:MMZ> · "
-                            "<CHECKPOINT|DECISION|RETRY|CORRECTION|NOTE> · task <T>|artifact "
-                            "<ART>|run[ · key: value]'", JOURNAL_FILE, lineno))
+            out.append(make(RULE, f"malformed entry ({_diagnose(line)}); expected '## "
+                            "<YYYY-MM-DDTHH:MMZ> · <CHECKPOINT|DECISION|RETRY|CORRECTION|NOTE> · "
+                            "task <T>|artifact <ART>|run[ · key: value]'", JOURNAL_FILE, lineno))
             continue
         if m.group("type") == "CHECKPOINT":
             if not m.group("subject").startswith("task "):

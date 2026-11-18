@@ -63,7 +63,8 @@ fork owns. A fork may delete `examples/`.
 - INV-7: Use only public references from the allowed domains (`refs/domains.py`; ADR-0006),
   with TLS verification on (no `verify=False`, no User-Agent spoofing). Put CUI in a fork only if the host, the
   machines and the LLM endpoint are all authorized for it.
-- INV-8: Write run-data files whole; never append to or patch them partially.
+- INV-8: Write run-data files whole; never append to or patch them partially. An editor's
+  in-place replacement that leaves the file whole and valid counts as a whole write.
 
 ## CLI commands
 
@@ -73,7 +74,7 @@ error. Commands that report support `--format json`.
 | Command | What it does |
 |---|---|
 | `rmf --version` | print the tool version |
-| `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, qpdf, LFS hooks); report optional extract/OCR tools and oscal-cli |
+| `rmf doctor` | check required tools (python, uv, git, git-lfs, jq, LFS hooks); report qpdf (refs fetch and import only), optional extract/OCR tools and oscal-cli |
 | `rmf ci [--profile P] [--slow] [--release] [--no-tests]` | fast lane (ruff, pytest with coverage >= 85%) plus every check of the profile's phases; `--no-tests` leaves out pytest; only `--release` repeats the suite in a fork clone (marker `release`) |
 | `rmf lessons check` | LES-002 (LESSONS.md format, IDs, dates, append-only vs `resolve_base()`), LES-003 (no `pending`) |
 | `rmf refs fetch [--id ID] [--accept-new --note TEXT]` | download `acquisition: auto` references (ranged-GET probe, allowed domains on every redirect hop, `%PDF-` + `qpdf --check`), pin SHA-256; a changed upstream is reported and kept unless `--accept-new` |
@@ -82,10 +83,10 @@ error. Commands that report support `--format json`.
 | `rmf refs extract [--id ID] [--extractor E] [--ocr] [--check] [--full]` | PDF to `references/text/<ID>.md` + `.toc.yaml`, recorded in index.yaml; `--check` is REF-003 (needs `EXTRACT=1` only to extract) |
 | `rmf refs index [--check]` | render `references/INDEX.md` from index.yaml; `--check` is REF-004 |
 | `rmf refs sync` | fetch missing, extract stale, render INDEX.md, verify |
-| `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction |
+| `rmf refs show ID --section S` / `--page N --anchor A` | print a cited passage from the text extraction; `--section "Table 29"` also finds a table or figure by its caption |
 | `rmf validate [--profile P] [--stats] [--format json] [--root DIR]` | framework rules FW-* active in the profile (schema, IDs, references, producers and order, I/O, RACI, DAG, citations, 47-task set); `--stats` adds counts |
 | `rmf new SLUG [--dir D] [--mode M] [--run-id ID] [--force]` | scaffold a workspace: `product/` from `templates/workspace/product/`, `runs/`, and a first run |
-| `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash` and its `upstream_hash_basis`, versions); a scenario adds product, scope, seeds and control subset |
+| `rmf run init [--mode synthetic\|hybrid] [--run-id ID] [--scenario FILE] [--controls FILE]` | start `runs/<run-id>/` in the cwd; stamps run.yaml (`upstream_hash` and its `upstream_hash_basis`, versions); a scenario adds product, scope, seeds and control subset; `--controls` limits a rehearsal run to listed controls (`-SUBSET-<n>`) |
 | `rmf run clock show [RUN]`, `rmf run clock set DATE [RUN]` | a synthetic run's simulated date: `set` moves `run.yaml clock` forward only, and the date rules (ASMT-010, MPOA-001, reciprocity) read it instead of `as_of`; journal a NOTE for what happened in between |
 | `rmf run migrate [RUN]` | move a run to the current framework contract: `decision.yaml` becomes the `authorizations.yaml` ledger plus ART-AUTHREC, `framework_version` is bumped, provider names become `PRV-##` IDs registered in org-context.yaml `providers`; safe to repeat; what the old contract never recorded (the R-2 determination, the risk executive, the deployment scope, ART-DIAS, the R-5 report, the ledger's `system_status`, the conmon.yaml sections ISCM-001..006 read, the P-14 `ra.yaml`, the RAR residual levels and control counts, `requirements.yaml` for ART-REQ, the `connections` and `dodin` of `boundary.yaml`, the `vulnerability_management` of `conmon.yaml`) is reported by `rmf check`, not invented |
 | `rmf status [RUN] [--family-gaps]` | task completion derived from disk (outputs touched, facts, interviews, rules) and the next action; writes `reports/status.md` and `reports/metrics.json` |

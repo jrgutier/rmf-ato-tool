@@ -11,6 +11,19 @@ failures and open items.
 
 ## Configuration compliance
 
-For each STIG or SRG checked: the benchmark and its version, the date, the tool, the number
-of open findings by category (CAT I, II, III), and the rule IDs of any open finding with its
-planned fix or accepted deviation.
+For each STIG or SRG checked: the benchmark title and release, the date, the scan tool, the
+compliance score, the number of open findings by category (CAT I, II, III), and for each
+open or inherited rule its V-/SV- ID, its CAT and its planned fix, accepted deviation or the
+provider that manages the setting.
+
+## Account review
+
+The date and scope of each account review, the accounts found and what was done. For each
+departed user, the date they left and the date each account was disabled, so that the
+termination timeliness (PS-4, AC-2) can be judged either way.
+
+## Records an assessor may test
+
+Out-processing records (notice dates against disable dates), checklist reviews of the
+application containers, exercise records and anything else an assessor would test that no
+scan produces. Without them, A-3 can only record that the evidence was missing.
