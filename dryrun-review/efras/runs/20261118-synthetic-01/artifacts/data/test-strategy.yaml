@@ -1,0 +1,161 @@
+# artifacts/data/test-strategy.yaml (A-2; schema test-strategy). Written whole from the
+# chief developmental tester's and the operational test agency's answers (INT-149, INT-150);
+# the product holds no test strategy document, only test results (product/test-results.md).
+document:
+  id: "EFRAS test strategy v1.1"
+  kind: test-strategy
+  pathway: PW-SWP
+  date: "2026-02-16"
+oversight:
+  dote: false
+  usdre: false
+financial_functions: false
+approvals:
+  - {part: document, by: component, date: "2026-02-27"}
+objectives:
+  cybersecurity:
+    - "Maintainer PII stays confidential: no access outside the five roles and the squadron scope, no re-identifiable export"
+    - "Squadron and air wing scoping holds through the UI, the API and the report export"
+    - "EMIS extracts are accepted only when signed and well formed"
+    - "The system is recovered within the recovery objectives after loss of the database or the region"
+    - "The CSSP detects and responds to attacks on the system"
+  entrance_exit: "Each release enters DT when the pipeline gates pass with no open high or critical finding other than an accepted one; it exits DT when the DT event's cybersecurity cases pass or each failure has a fix release; the MVCR enters operational assessment when the SCA's assessment is complete and exits when the adversarial assessment's findings are rated and planned."
+evaluation_frameworks: [def, oef]
+events:
+  - id: TE-001
+    kind: cooperative-vulnerability-identification
+    phase: dt
+    conducted_by: "ERST with the ARSPO test lead (pipeline security gates on every build)"
+    independent: false
+    threat_representative: false
+    scope: complete-system
+    includes_cssp: false
+    evaluates: [cybersecurity]
+    date: "2026-10-20"
+    decision_point: DP-SWP-MVCR
+    resources: "Software factory pipeline scanners (static, dependency, image, infrastructure policy, authenticated dynamic scan)"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "Release 1.5.0, all five services, deployed to pre-production from the production templates"
+    conditions: "Automated gates on each build; the SCA did not witness them, so A-3 examines them and re-performs a sample rather than reusing them as results"
+    results_reused: false
+  - id: TE-002
+    kind: cybersecurity-dt
+    phase: dt
+    conducted_by: "ARSPO developmental test team (DT-2)"
+    independent: false
+    threat_representative: false
+    scope: complete-system
+    includes_cssp: true
+    evaluates: [cybersecurity, performance]
+    date: "2026-10-06"
+    decision_point: DP-SWP-MVCR
+    resources: "ARSPO test team, pre-production test accounts for the five roles, 212 crafted API requests"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "Release 1.5.0 in pre-production with synthetic data, 2026-10-06 to 2026-10-17"
+    conditions: "Pilot squadron users over NIPRNet through the access point; export audit events forwarded to the CSSP; regional failover not tested"
+    results_reused: false
+  - id: TE-003
+    kind: cybersecurity-dt
+    phase: dt
+    conducted_by: "ARSPO ISSO with the SCA witnessing (STIG and SRG scan)"
+    independent: true
+    threat_representative: false
+    scope: subsystem
+    includes_cssp: false
+    evaluates: [cybersecurity]
+    date: "2026-10-22"
+    decision_point: DP-SWP-MVCR
+    resources: "SCAP scanner with DoD STIG content"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "Worker nodes and the managed database of the pre-production cluster, release 1.5.0"
+    conditions: "Authenticated scan, witnessed by the SCA team; reused by A-3 as RR-001"
+    results_reused: true
+  - id: TE-004
+    kind: cybersecurity-dt
+    phase: dt
+    conducted_by: "Component red team (penetration test of the externally reachable surface)"
+    independent: true
+    threat_representative: true
+    scope: complete-system
+    includes_cssp: false
+    evaluates: [cybersecurity]
+    date: "2026-10-27"
+    decision_point: DP-SWP-MVCR
+    resources: "Two red team testers for five days"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "Release 1.5.0 in pre-production; PT-1 retested on release 1.5.1 on 2026-11-10"
+    conditions: "From NIPRNet through the access point, 2026-10-27 to 2026-10-31; the CSSP's detection and response were not evaluated, so this is recorded as a DT cybersecurity event and TE-005 is the penetration and exploitation test of the complete defenses; reused by A-3 as RR-002"
+    results_reused: true
+  - id: TE-005
+    kind: penetration-exploitation
+    phase: integrated
+    conducted_by: "Component red team, observed by the SCA, with the CSSP defending"
+    independent: true
+    threat_representative: true
+    scope: complete-system
+    includes_cssp: true
+    evaluates: [cybersecurity]
+    date: "2026-11-30"
+    decision_point: DP-SWP-MVCR
+    resources: "Two red team testers for five days; SCA observers; CSSP analysts on shift"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "Release 1.5.1 in pre-production with synthetic data, 2026-11-30 to 2026-12-04"
+    conditions: "NIPRNet and insider paths; PT-3 retest; shared DT and OT event whose report goes to the SCA, the test lead and the operational test agency"
+    results_reused: true
+  - id: TE-006
+    kind: cvpa
+    phase: ot
+    conducted_by: "Component operational test agency"
+    independent: true
+    threat_representative: false
+    scope: complete-system
+    includes_cssp: true
+    evaluates: [cybersecurity, effectiveness, suitability]
+    date: "2027-01-05"
+    decision_point: DP-SWP-MVCR
+    resources: "Operational test agency cyber team, pilot squadron users"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "The MVCR release to be deployed, in pre-production with synthetic data"
+    conditions: "Pilot squadrons doing their real tasks; after the SCA's out-brief, so not reused at A-3"
+    results_reused: false
+  - id: TE-007
+    kind: adversarial-assessment
+    phase: ot
+    conducted_by: "Component red team as threat-representative opposing force, for the operational test agency"
+    independent: true
+    threat_representative: true
+    scope: complete-system
+    includes_cssp: true
+    evaluates: [cybersecurity, effectiveness]
+    date: "2027-01-18"
+    decision_point: DP-SWP-MVCR
+    resources: "Red team, operational test agency observers, CSSP analysts"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "The MVCR release to be deployed, in pre-production with synthetic data"
+    conditions: "Pilot squadrons operating while the opposing force attacks; the CSSP defends as in production"
+    results_reused: false
+  - id: TE-008
+    kind: dco-evaluation
+    phase: ot
+    conducted_by: "Component operational test agency"
+    independent: true
+    threat_representative: true
+    scope: complete-system
+    includes_cssp: true
+    evaluates: [cybersecurity]
+    date: "2027-01-18"
+    decision_point: DP-SWP-MVCR
+    resources: "Operational test agency evaluators embedded with the CSSP"
+    system: production-representative
+    environment: operationally-representative
+    configuration: "The MVCR release to be deployed, in pre-production with synthetic data"
+    conditions: "Evaluates the CSSP's detection, reporting and response during the adversarial assessment"
+    results_reused: false
+sources: [INT-149.A1, INT-149.A2, INT-150.A1, product/test-results.md#top]

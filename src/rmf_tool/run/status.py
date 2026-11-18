@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from rmf_tool import baseline as baseline_mod
+from rmf_tool import labels
 from rmf_tool.catalog import family
 from rmf_tool.check import rules_by_id
 from rmf_tool.check.findings import RunFinding
@@ -93,15 +94,16 @@ def _artifact_problems(run: Run, task: str) -> list[str]:
     problems = []
     for aid in run.tasks[task].get("outputs") or []:
         art = run.artifacts.get(aid, {})
+        shown = labels.named(aid, art.get("name", ""))
         if art.get("generated"):
             # the CLI's own output (schema null), not data an agent writes beside it
             made = [d for d in art.get("data") or [] if d.get("schema") is None]
             if not any(run.path(d["path"]).is_file() for d in made):
-                problems.append(f"{aid} not generated")
+                problems.append(f"{shown} not generated")
             continue
         md = run.artifact_md(aid)
         if not md.is_file():
-            problems.append(f"{aid} missing ({run.rel(md)})")
+            problems.append(f"{shown} missing ({run.rel(md)})")
             continue
         data: Any = frontmatter.parse(md.read_text(encoding="utf-8")).data or {}
         if task not in (data.get("touched_by") or []):
@@ -169,6 +171,7 @@ def to_json(run: Run, st: Status, gaps: bool = False) -> dict[str, Any]:
         "done": st.done,
         "next": None if st.next is None else {
             "task": st.next, "name": st.tasks[st.next].name,
+            "label": labels.task_label(st.next, st.tasks[st.next].name, run.repo),
             "step": st.next.split("-")[0],
             "playbook": run.tasks[st.next].get("playbook"),
             **({"family": st.family} if st.family else {}),
@@ -177,7 +180,9 @@ def to_json(run: Run, st: Status, gaps: bool = False) -> dict[str, Any]:
                    "deferred": len(st.tasks) - len(active)},
         "ssp": {"baseline": st.baseline, "statements": st.statements},
         "sar": {"baseline": st.baseline, "determinations": st.determinations},
-        "tasks": [{"id": s.id, "name": s.name, "state": s.state, "done": s.done,
+        "tasks": [{"id": s.id, "name": s.name,
+                   "label": labels.task_label(s.id, s.name, run.repo),
+                   "state": s.state, "done": s.done,
                    "missing": s.missing, **({"rationale": s.rationale} if s.rationale else {})}
                   for s in st.tasks.values()],
     }

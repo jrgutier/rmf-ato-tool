@@ -34,9 +34,9 @@ def test_header_generated_from_yaml(tmp_path):
     path.write_text(f"{playbooks_sync.BEGIN}\n{playbooks_sync.END}\n{BODY}")
     assert "playbooks/P/P-10.md" in playbooks_sync.sync(root)
     text = path.read_text()
-    assert "# P-10 · Asset Identification" in text
-    assert "| Outputs | ART-INV (produces) |" in text
-    assert "[PER-PM](../../personas/PER-PM.md)" in text
+    assert "# Prepare 10: Asset Identification (P-10)" in text
+    assert "(ART-INV), produces |" in text
+    assert "(PER-PM)](../../personas/PER-PM.md)" in text
     assert text.endswith(BODY)
 
 
@@ -71,7 +71,7 @@ def test_generated_body_rendered_when_body_generated(tmp_path):
     assert rel in playbooks_sync.sync(root)  # a missing playbook is created, generated
     text = (root / rel).read_text()
     head, _, body = text.partition(f"\n{playbooks_sync.GENERATED}\n")
-    assert head.startswith(playbooks_sync.BEGIN) and "# S-5 · " in head
+    assert head.startswith(playbooks_sync.BEGIN) and "# Select 5: " in head
     assert playbooks_sync._missing_sections(body, 2) == []
     for needle in ("`artifacts/data/conmon.yaml`", "templates/artifacts/ART-CONMON.md",
                    "uv run rmf check <run> --task S-5", "| PER-ISSM (",
@@ -113,7 +113,7 @@ def test_org_context_playbook_has_section_per_task(tmp_path):
     for n in range(1, 8):
         begin, end = playbooks_sync._markers(f"P-{n}")
         assert text.index(f"## Task P-{n}\n{begin}\n") < text.index(end)
-    assert "**P-3 · Risk Assessment—Organization**" in text
+    assert "**Prepare 3: Risk Assessment—Organization (P-3)**" in text
     assert at(playbooks_sync.check(root), rel) == []
     assert playbooks_sync.sync(root) == []
 

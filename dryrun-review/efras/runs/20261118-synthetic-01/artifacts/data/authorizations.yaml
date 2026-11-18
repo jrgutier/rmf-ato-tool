@@ -1,0 +1,59 @@
+# artifacts/data/authorizations.yaml (A-2, updated by R-4 and M-6; schema authorizations).
+# Started at A-2 with no record: EFRAS held no authorization, and no test event of the
+# assessment plan ran on a live network or with live data, so no IATT was needed
+# (artifacts/data/sap.yaml schedule; INT-147.A4, INT-151.A3). R-4 adds the first decision.
+system_status:
+  status: ATO-with-conditions
+  termination_date: "2028-01-25"
+  security_review_date: "2026-12-11"
+records:
+  - id: AUTH-001
+    decision: AD-ATOC
+    subject: system
+    basis: initial
+    approach: traditional
+    decided_by: PER-AO
+    task: R-4
+    date: "2027-01-25"
+    risk_level: moderate
+    risk_acceptance: "I understand and accept the residual moderate risk of operating EFRAS on the terms and conditions of this decision, to organizational operations, organizational assets and individuals, including the break-glass FIDO2 deviation (RSK-007, POAM-020) with its compensating measures; I have reviewed the POA&M and agree with it."
+    signature: pki
+    conveyed_to: [PER-PM, PER-ISSM, PER-AODR, PER-CISO, PER-PRIV, PER-IO, PER-MDA, PER-UR]
+    authorization_termination_date: "2028-01-25"
+    conditions:
+      - id: COND-01
+        description: "No real maintainer record enters production until the SCA verifies the salted pseudonyms and the approved PIA (POAM-001, POAM-010) and the leaver step (POAM-004, POAM-005)."
+        due: "2027-02-26"
+      - id: COND-02
+        description: "The report container is rebuilt and rescanned with no high vulnerability (POAM-002, POAM-003, POAM-017); until then, if the date is missed, PDF and slide exports are switched off."
+        due: "2027-02-15"
+      - id: COND-03
+        description: "EMIS data flows into production only under the signed EFRAS-EMIS memorandum of agreement, recorded in the boundary record and the ca-3 statement (POAM-011)."
+        due: "2027-03-05"
+      - id: COND-04
+        description: "The combined incident and contingency tabletop and the regional failover test are held, with the after-action report (POAM-009, POAM-015)."
+        due: "2027-03-01"
+      - id: COND-05
+        description: "The SCA verifies the configuration fixes (POAM-006, POAM-007, POAM-008, POAM-021) at the first ongoing assessment and closes STG-001 and STG-002 or reports them."
+        due: "2027-03-31"
+      - id: COND-06
+        description: "The ISSM sends monthly POA&M updates and the roll-up to the AODR (POAM-023, POAM-024); a missed condition date is an event-driven trigger for the AO's review."
+        due: "2027-02-28"
+    rar_ref: ART-RAR
+    threat_assessment:
+      issued_by: "Component intelligence office: naval aviation cyber threat assessment (fictional)"
+      issued: "2026-07-15"
+      reviewed_by: PER-PM
+      reviewed: "2027-01-18"
+      sources: [INT-195.A1, INT-034.A2]
+    risk_executive:
+      by: PER-RE
+      consulted: "2026-12-18"
+      analyzed_by: PER-AO
+      input: "The software factory's late hardened base image is a shared dependency risk across the portfolio and is to be tracked as such; the 2027-02-01 fielding date is fixed by operational need, and the risk board prefers a conditioned authorization that keeps real maintainer data out until the privacy fixes land over a slipped fielding."
+      sources: [INT-190.A1, INT-198.A4]
+    privacy_coordination: {by: PER-PRIV, date: "2027-01-25", sources: [INT-196.A1, INT-185.A1]}
+    deployment:
+      scope: component
+    rationale: "The overall risk is moderate (ART-RAR): within the tolerance for operations and assets, with no high finding and no open CAT I. Two moderate risks fall on maintainers, whose tolerance is low, and their fixes are met but unverified; the report container still carries two highs; the EMIS agreement is unsigned; recovery is unproven. The conditions fence those risks before real maintainer data flows and track the factory dependency the risk executive named; one year rather than three, so the first monitoring cycle shows the fixes hold. The break-glass deviation has no fix and is accepted with its compensating measures."
+    sources: [ART-RAR, ART-POAM, INT-198.A1, INT-198.A2, INT-198.A3, INT-198.A4, INT-197.A1]

@@ -75,7 +75,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
 {% for t in p.tasks %}
-| {{ L(t.id) }} {{ t.name | cell }}{{ " *(optional)*" if t.optional else "" }} | {{ t.step_name }} | {{ L(t.raci.A) }} | {{ L.many(t.output_rows | selectattr(1, "equalto", "produces") | map(attribute=0)) }} | {{ L.many(t.output_rows | selectattr(1, "equalto", "updates") | map(attribute=0)) }} | {{ L.many(t.aligned.milestones + t.aligned.reviews + t.aligned.decisions) }} |
+| {{ L(t.id) }}{{ " *(optional)*" if t.optional else "" }} | {{ t.step_name }} | {{ L(t.raci.A) }} | {{ L.many(t.output_rows | selectattr(1, "equalto", "produces") | map(attribute=0)) }} | {{ L.many(t.output_rows | selectattr(1, "equalto", "updates") | map(attribute=0)) }} | {{ L.many(t.aligned.milestones + t.aligned.reviews + t.aligned.decisions) }} |
 {% endfor %}
 {% else %}
 No task has this as its primary phase.

@@ -1,0 +1,10 @@
+# artifacts/ssp/controls/ma.yaml (S-4; schema ssp-controls). Written whole.
+family: ma
+controls:
+  - control_id: ma-4
+    status: implemented
+    statement: "All maintenance of EFRAS is nonlocal; the program has no hardware of its own. The six ERST cloud operations engineers maintain CMP-K8S, the database and the cloud account through the provider's privileged access path from ERST privileged access workstations. Approval and monitoring (a): routine changes go through the pipeline with ISSO sign-off; a diagnostic console session is announced in the operations channel, and the hourly drift scan reports any manual change to the ISSO. Tools (b): only the provider console, the cluster command-line client and the pipeline, as this plan and the runbook list. Strong authentication (c): CAC at the identity broker; the two sealed break-glass accounts use FIDO2 keys (see ia-2). Records (d): the cluster audit log and the cloud account activity log record each session in CMP-LOGS. Termination (e): console sessions end at sign-out and expire after one hour, and cluster credentials are short-lived and expire with the session. The provider maintains the managed services in announced windows under its own authorization."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-K8S]
+    automation: "Hourly drift scan; session and credential expiry are enforced by the provider's access path."
+    sources: [INT-100.A1, product/architecture.md#network, product/architecture.md#identity, product/architecture.md#configuration, product/architecture.md#logging]

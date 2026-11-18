@@ -16,6 +16,7 @@ from collections.abc import Callable, Iterator
 from typing import Any
 
 from rmf_tool import baseline as baseline_mod
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.consistency import POAM_FILE
@@ -352,10 +353,11 @@ def service_agreements(ctx: Context) -> list[RunFinding]:
         return out
     baseline = _baseline(ctx)
     documented: dict[str, set[str]] = {}
+    pk, show = providers.keyer(ctx), providers.shown(ctx)
     for a in _agreements(data):
         ident, provider = a.get("id"), a.get("provider")
         controls = {c for s in _services(a) for c in s.get("controls") or ()}
-        documented.setdefault(str(provider), set()).update(controls)
+        documented.setdefault(str(pk(provider)), set()).update(controls)
         if a.get("instrument") not in INSTRUMENTS:
             err(f"{ident}: cybersecurity services are implemented under policy, an MOA, a contract "
                 f"or a support agreement, not {a.get('instrument')}")
@@ -384,10 +386,10 @@ def service_agreements(ctx: Context) -> list[RunFinding]:
     if data.get("dodin_connected") is True and "cssp" not in roles:
         err("no agreement names the system's CSSP")
     for path, control in family_records(ctx, SSP_DIR, "controls"):
-        cid, provider = control.get("control_id"), control.get("inherited_from")
+        cid, provider = control.get("control_id"), pk(control.get("inherited_from"))
         if provider in documented and cid not in documented[provider]:
             err(f"the implemented security control {cid} ({path}) is not documented in the "
-                f"agreement with {provider}")
+                f"agreement with {show(provider)}")
     if not _cato_in_force(ctx):
         return out
     cssps = [a for a in _agreements(data) if a.get("role") == "cssp"]
@@ -401,11 +403,11 @@ def service_agreements(ctx: Context) -> list[RunFinding]:
         err(f"the scope and parameters of CSSP support leave out {', '.join(sorted(uncovered))}")
     if "vulnerability-detection" not in [s.get("kind") for a in cssps for s in _services(a)]:
         err("no CSSP sensors and tools detect vulnerabilities")
-    named = {a.get("provider") for a in _agreements(data)}
-    inherited = {c.get("inherited_from") for _, c in family_records(ctx, SSP_DIR, "controls")
+    named = {pk(a.get("provider")) for a in _agreements(data)}
+    inherited = {pk(c.get("inherited_from")) for _, c in family_records(ctx, SSP_DIR, "controls")
                  if c.get("status") == "inherited"}
     for provider in sorted(p for p in inherited if p and p not in named):
-        err(f"inherited controls integrate with {provider} and no agreement documents it")
+        err(f"inherited controls integrate with {show(provider)} and no agreement documents it")
     return out
 
 

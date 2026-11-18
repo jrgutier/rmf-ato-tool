@@ -1,0 +1,159 @@
+subcontractors: false
+requirements: [REQ-07, REQ-17]
+terms:
+  - term: qualifying-condition
+    requirements: [REQ-07, REQ-17]
+    statement: "The contractor develops only on the authorized software factory and delivers an SBOM and a secure development attestation with each release."
+    sources: [INT-053.A1]
+  - term: revalidation
+    requirements: [REQ-17]
+    statement: "The contractor's C-SCRM posture is revalidated yearly by self-attestation and the factory's third-party pipeline assessment."
+    sources: [INT-053.A1]
+  - term: reporting
+    requirements: [REQ-17]
+    statement: "The contractor reports any supply chain compromise or change of ownership to the ISSM within 72 hours."
+    sources: [INT-053.A1]
+  - term: response-roles
+    requirements: [REQ-17]
+    statement: "The contractor, the ISSM and the software factory each carry a defined role in a supply chain incident response."
+    sources: [INT-053.A1]
+  - term: termination
+    requirements: [REQ-17]
+    statement: "The government may terminate when a change to supply chain risk cannot be mitigated."
+    sources: [INT-053.A1]
+revalidation:
+  methods: [self-attestation, third-party-assessment]
+  interval: P1Y
+  sources: [INT-053.A1]
+charge_card_purchases: false
+procurement_steps:
+  - step: plan-procurement
+    considerations: "The acquisition strategy names authorized providers and the software factory as the only build path."
+    sources: [INT-053.A3]
+  - step: define-requirements
+    considerations: "REQ-07 and REQ-17 are written into the statement of work."
+    sources: [INT-053.A3]
+  - step: market-analysis
+    considerations: "Vendor research of 2025-08-15 covered ownership and prior intrusions."
+    sources: [INT-053.A3, INT-037.A5]
+  - step: complete-procurement
+    considerations: "Supplier screenings and C-SCRM clauses are completed before award or modification."
+    sources: [INT-053.A3]
+  - step: ensure-compliance
+    considerations: "The COR checks SBOMs and attestations at each release."
+    sources: [INT-053.A3]
+  - step: monitor-performance
+    considerations: "The ISSM reviews factory reports and supplier changes monthly."
+    sources: [INT-053.A3]
+selection:
+  - supplier: SUP-01
+    due_diligence: "Prime on the shared development vehicle; SCRA SA-01 found low, non-adversarial risk; screened against every prohibited supplier list."
+    approved_source: qualified-supplier
+    screening:
+      - {list: sdn, result: clear, date: "2026-11-18"}
+      - {list: ssi, result: clear, date: "2026-11-18"}
+      - {list: fse, result: clear, date: "2026-11-18"}
+      - {list: sam-exclusions, result: clear, date: "2026-11-18"}
+      - {list: capta, result: clear, date: "2026-11-18"}
+      - {list: blocked-persons, result: clear, date: "2026-11-18"}
+      - {list: bis-unverified, result: clear, date: "2026-11-18"}
+      - {list: ndaa-889, result: clear, date: "2026-11-18"}
+      - {list: other-federal-restriction, result: clear, date: "2026-11-18"}
+    selected: true
+    other_agency_requirements: "DFARS 252.204-7012 and NIST SP 800-171 requirements under other agencies' contracts."
+    vendor:
+      oem_or_authorized: true
+      prior_intrusions: false
+      cmmc_level: "Level 2 (fictional certification)"
+    ownership: "Domestic firm with no parent company; no influence or control by threat actors found."
+    technology_relationships: "None found with companies under the influence or control of threat actors."
+    sources: [INT-053.A2, INT-040.A1]
+  - supplier: SUP-02
+    due_diligence: "Government shared service with its own ATO; its open POA&M is watched by the ISSM."
+    approved_source: qualified-supplier
+    screening:
+      - {list: sdn, result: clear, date: "2026-11-18"}
+      - {list: ssi, result: clear, date: "2026-11-18"}
+      - {list: fse, result: clear, date: "2026-11-18"}
+      - {list: sam-exclusions, result: clear, date: "2026-11-18"}
+      - {list: capta, result: clear, date: "2026-11-18"}
+      - {list: blocked-persons, result: clear, date: "2026-11-18"}
+      - {list: bis-unverified, result: clear, date: "2026-11-18"}
+      - {list: ndaa-889, result: clear, date: "2026-11-18"}
+      - {list: other-federal-restriction, result: clear, date: "2026-11-18"}
+    selected: true
+    other_agency_requirements: "Its own ATO conditions and the DoD DevSecOps reference design requirements."
+    vendor:
+      oem_or_authorized: true
+      prior_intrusions: false
+      cmmc_level: "Not applicable: government shared service"
+    ownership: "Government-owned; no influence or control by threat actors."
+    technology_relationships: "None found with companies under the influence or control of threat actors."
+    sources: [INT-053.A2, product/architecture.md#leveraged]
+  - supplier: SUP-03
+    due_diligence: "On the DoD approved cloud offerings list with an IL4 provisional authorization; SCRA SA-02 found low, non-adversarial risk."
+    approved_source: approved-products-list
+    screening:
+      - {list: sdn, result: clear, date: "2026-11-18"}
+      - {list: ssi, result: clear, date: "2026-11-18"}
+      - {list: fse, result: clear, date: "2026-11-18"}
+      - {list: sam-exclusions, result: clear, date: "2026-11-18"}
+      - {list: capta, result: clear, date: "2026-11-18"}
+      - {list: blocked-persons, result: clear, date: "2026-11-18"}
+      - {list: bis-unverified, result: clear, date: "2026-11-18"}
+      - {list: ndaa-889, result: clear, date: "2026-11-18"}
+      - {list: other-federal-restriction, result: clear, date: "2026-11-18"}
+    selected: true
+    other_agency_requirements: "FedRAMP and DoD Cloud Computing SRG requirements."
+    vendor:
+      oem_or_authorized: true
+      prior_intrusions: false
+      cmmc_level: "Not applicable: covered by its DoD IL4 provisional authorization"
+    ownership: "Domestic company; the government region is a separate business unit; no influence or control by threat actors found."
+    technology_relationships: "None found with companies under the influence or control of threat actors."
+    sources: [INT-053.A2, INT-040.A1]
+  - supplier: SUP-04
+    due_diligence: "Open-source library taken only from the software factory's vetted library; its two open high-severity vulnerabilities are tracked (VUL-02)."
+    approved_source: vetted-library
+    screening:
+      - {list: sdn, result: clear, date: "2026-11-18"}
+      - {list: ssi, result: clear, date: "2026-11-18"}
+      - {list: fse, result: clear, date: "2026-11-18"}
+      - {list: sam-exclusions, result: clear, date: "2026-11-18"}
+      - {list: capta, result: clear, date: "2026-11-18"}
+      - {list: blocked-persons, result: clear, date: "2026-11-18"}
+      - {list: bis-unverified, result: clear, date: "2026-11-18"}
+      - {list: ndaa-889, result: clear, date: "2026-11-18"}
+      - {list: other-federal-restriction, result: clear, date: "2026-11-18"}
+    selected: true
+    other_agency_requirements: "None; an open-source project carries no contract requirements."
+    vendor:
+      oem_or_authorized: true
+      prior_intrusions: false
+      cmmc_level: "Not applicable: open-source project"
+    ownership: "Community project; no influence or control by threat actors found in public sources."
+    technology_relationships: "None found with companies under the influence or control of threat actors."
+    sources: [INT-053.A2, INT-038.A2]
+  - supplier: SUP-05
+    due_diligence: "Open-source framework taken only from the software factory's vetted library."
+    approved_source: vetted-library
+    screening:
+      - {list: sdn, result: clear, date: "2026-11-18"}
+      - {list: ssi, result: clear, date: "2026-11-18"}
+      - {list: fse, result: clear, date: "2026-11-18"}
+      - {list: sam-exclusions, result: clear, date: "2026-11-18"}
+      - {list: capta, result: clear, date: "2026-11-18"}
+      - {list: blocked-persons, result: clear, date: "2026-11-18"}
+      - {list: bis-unverified, result: clear, date: "2026-11-18"}
+      - {list: ndaa-889, result: clear, date: "2026-11-18"}
+      - {list: other-federal-restriction, result: clear, date: "2026-11-18"}
+    selected: true
+    other_agency_requirements: "None; an open-source project carries no contract requirements."
+    vendor:
+      oem_or_authorized: true
+      prior_intrusions: false
+      cmmc_level: "Not applicable: open-source project"
+    ownership: "Open-source foundation; no influence or control by threat actors found in public sources."
+    technology_relationships: "None found with companies under the influence or control of threat actors."
+    sources: [INT-053.A2, INT-038.A2]
+sources: [INT-053.A1, INT-053.A2, INT-053.A3]

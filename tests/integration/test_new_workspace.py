@@ -26,7 +26,7 @@ def test_new_then_run_init_then_status(tmp_path, monkeypatch):
     assert result.exit_code == 0, result.output
     result = runner.invoke(app, ["status", "runs/hybrid-run"])
     assert result.exit_code == 0, result.output
-    assert "next: P-1 Risk Management Roles" in result.stdout
+    assert "next: Prepare 1: Risk Management Roles (P-1)" in result.stdout
     assert result.stdout.startswith("now: 20")
     data = json.loads(runner.invoke(app, ["status", "runs/hybrid-run", "--format", "json"]).stdout)
     assert data["mode"] == "hybrid" and data["next"]["task"] == "P-1" and not data["done"]

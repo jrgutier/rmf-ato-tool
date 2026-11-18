@@ -1,0 +1,47 @@
+# artifacts/ssp/controls/au.yaml (S-4; schema ssp-controls). Written whole.
+family: au
+controls:
+  - control_id: au-2
+    status: implemented
+    statement: "CMP-EDGE logs every request and WAF rule hit; CMP-API logs sign-in, role changes, data exports, admin actions and failed authorization; the CMP-K8S cluster audit log records every API server call; the CMP-DB audit extension records logins, privilege changes and schema changes; the cloud account activity log records console and API actions. All write to CMP-LOGS as they occur. The event list was chosen with the CSSP, whose use cases need the export and privileged events, and it is adequate for after-the-fact investigation because it shows who saw, exported or changed which unit's data. The ISSO reviews the event list annually and with each major release."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-EDGE, CMP-API, CMP-K8S, CMP-DB, CMP-LOGS]
+    parameters:
+      au-02_odp.01: "requests and WAF hits, sign-in, role changes, data exports, admin actions, failed authorization, cluster API calls, database logins and privilege and schema changes, cloud console and API actions"
+      au-02_odp.02: "all event types in au-02_odp.01"
+      au-02_odp.03: "each occurrence"
+      au-02_odp.04: "annually and with each major release"
+    planned_io: "Inputs: events from CMP-EDGE, CMP-API, CMP-K8S, CMP-DB and the cloud account activity log. Output: audit records in CMP-LOGS, forwarded to the CSSP."
+    sources: [INT-090.A1, product/architecture.md#logging]
+  - control_id: au-6
+    status: implemented
+    statement: "Hybrid. The CSSP correlates the forwarded stream from CMP-LOGS 24x7 against its use cases and opens a ticket to the ISSO and ISSM on any finding. The system's part: the ISSO reviews a weekly CMP-LOGS report of privileged actions, exports and denied requests; break-glass use and export volume spikes page the on-call engineer. The ISSO reports findings to the ISSM, and possible misuse of PII also to the Component privacy office, as the Privacy Overlay asks. When the CSSP or the Component raises the threat level, the review becomes daily."
+    responsible_roles: [PER-ISSO, PER-CSSP]
+    components: [CMP-LOGS]
+    inherited_from: PRV-04
+    parameters:
+      au-06_odp.01: "weekly, and daily when the threat level is raised"
+      au-06_odp.02: "privileged actions, data exports, denied requests, break-glass use and export volume spikes"
+      au-06_odp.03: "the EFRAS ISSM, and the Component privacy office for possible misuse of PII"
+    automation: "Alerts on break-glass use and export volume spikes page the on-call engineer; the CSSP's correlation is automated."
+    inherited_risks: "If the log forwarder fails, the CSSP's 24x7 review stops until noticed; the ISSO's weekly review remains."
+    assurance:
+      addressed: "The weekly review reports, the pager alert history and the CSSP tickets are the evidence; the assessor examines a sample and interviews the ISSO."
+      status: satisfied
+    sources: [INT-090.A2, INT-091.A1, INT-072.A1, product/architecture.md#logging]
+  - control_id: au-9
+    status: implemented
+    statement: "The CMP-LOGS store is write-once for 90 days; only the ISSO and the auditor role can read it and no role can delete records. A change to the store's access policy alerts the ISSO and the ISSM."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-LOGS]
+    parameters:
+      au-09_odp: "the EFRAS ISSO and ISSM"
+    sources: [INT-090.A2]
+  - control_id: au-11
+    status: partial
+    statement: "Partial. The tailored retention is one year. CMP-LOGS keeps audit records 90 days. The CSSP keeps its forwarded copy for one year, but that copy is the CSSP's own and does not meet the program's retention duty. Missing: the program's one-year copy. Plan: an archive tier in release 1.6 (planned 2027-01-15); until then the gap is an open item for the POA&M. Update (M-1, CHG-003, plan change 1.3): the CSSP agreement was amended on 2027-01-08 for the one-year copy and its return on request, and release 1.6 with the archive tier reached pre-production on 2027-01-15; the control stays partial until the SCA verifies one-year retention in the production account (POAM-019)."
+    responsible_roles: [PER-ISSO, PER-ISSE]
+    components: [CMP-LOGS]
+    parameters:
+      au-11_odp: "one year"
+    sources: [INT-090.A3, INT-091.A1, product/conops.md#limitations, INT-074.A3, INT-204.A1, INT-202.A4]

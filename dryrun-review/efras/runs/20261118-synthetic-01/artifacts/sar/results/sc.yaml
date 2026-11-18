@@ -1,0 +1,70 @@
+# artifacts/sar/results/sc.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. sc-7 follows PRC-012 with RR-002 supplemented by the second penetration test
+# (2026-11-30 to 2026-12-04, ASM-022); sc-8, sc-12, sc-28 follow PRC-011.
+family: sc
+determinations:
+  - control_id: sc-7
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the templates for the three subnet tiers and their security groups, the WAF rules at CMP-EDGE, the egress allow-list and its change of 2026-11-03, the access point agreement (EXT-002, not tested) and the connection records for EMIS, the supply service and the identity broker. Tested the EFRAS side: ingress reaches only CMP-EDGE on 443 from the access point path, no node has a public address, the tiers pass only the documented ports, and denied traffic is logged in CMP-LOGS; the edge sits alone in its subnet. Reused the first penetration test (RR-002): no unauthenticated access, PT-3 sandbox egress to a public mirror. The allow-list wildcard behind PT-3 is removed in the configuration, but the red team's retest has not shown that the sandbox can no longer reach a public destination (ASM-022), so control of egress at the external interface is not demonstrated. Interviewed the ISSE."
+    finding_refs: [FND-023]
+    statements:
+      - {id: "SC-07a.[01]", result: satisfied}
+      - {id: "SC-07a.[02]", result: other-than-satisfied}
+      - {id: "SC-07a.[03]", result: satisfied}
+      - {id: "SC-07a.[04]", result: satisfied}
+      - {id: "SC-07b.", result: satisfied}
+      - {id: "SC-07c.", result: satisfied}
+    reused: [RR-002]
+    sources: [INT-169.A2, ASM-022, product/architecture.md#network, product/test-results.md#pentest]
+  - control_id: sc-8
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the load balancer TLS policy (TLS 1.2 and 1.3, DoD-approved suites), the service certificates from the provider's private authority, the mutual TLS and signature check on the EMIS pull and certificate verification to the database, on the provider's FIPS 140-validated modules. Tested every external endpoint and store connection in the sample: no plaintext or weaker protocol was accepted, and the tampered extract case re-run under sa-11 was rejected as in DT-2. Interviewed the ISSE."
+    statements:
+      - {id: "SC-08", result: satisfied}
+    reused: []
+    sources: [INT-169.A3, product/architecture.md#network, product/architecture.md#interconnections, product/test-results.md#dt-2]
+  - control_id: sc-12
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the key service: program-owned customer-managed keys, the key policies granting use only to the named workload identities and two key administrators, yearly rotation, the 30-day deletion waiting period and key-use logging to CMP-LOGS, per NIST SP 800-57. Tested that a workload identity outside the policy is refused a key operation and that each use appears in the log. Interviewed the ISSE."
+    statements:
+      - {id: "SC-12[01]", result: satisfied}
+      - {id: "SC-12[02]", result: satisfied}
+    reused: []
+    sources: [INT-169.A3, product/architecture.md#components]
+  - control_id: sc-28
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the encryption settings of the database, its snapshots and every bucket (program-owned keys, AES-256 in an authenticated mode) and the pipeline's infrastructure policy check (pass for 1.5.0). Tested each PII store in the sample: encryption is on with the program's key, and the policy check refused a template defining an unencrypted bucket. Interviewed the ISSE."
+    statements:
+      - {id: "SC-28", result: satisfied}
+    reused: []
+    sources: [INT-169.A3, product/test-results.md#pipeline-1-5, product/architecture.md#components]
+findings:
+  - id: FND-023
+    control_id: sc-7
+    title: "The fix for the sandbox egress to a public mirror (PT-3) has not been retested"
+    description: "SC-7 requires communications at external managed interfaces to be controlled; the plan allows sandbox egress only to the listed endpoints. The first penetration test downloaded packages from a public mirror through the NAT allow-list wildcard (PT-3, low). The wildcard was removed on 2026-11-03, but the retest the plan scheduled in the second penetration test has no result, so the closure is not demonstrated. Evidence: the allow-list change, the penetration test report, the ISSE's interview (ASM-022)."
+    status: open
+    severity: low
+    recommendation: "Have the red team retest egress from CMP-SANDBOX against public destinations and close PT-3 on a passing result; add a periodic automated egress probe from the sandbox."
+    affected_statements: ["SC-07a.[02]"]
+    state_difference: "Expected: egress controlled to the allow-list, verified by test. Actual: the configuration is narrowed, but the control's effect is unverified since PT-3 was found."
+    potential_compromise: [confidentiality, integrity]
+    sources: [INT-169.A2, ASM-022, product/test-results.md#pentest]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-178.A2]
+      rationale: "VUL-08 of the risk assessment. The allow-list was narrowed on 2026-11-03, but the developer's own check is no retest the assessor can re-perform, so the fix is not reassessed and the finding stays open; it goes to the POA&M for the red team's retest."

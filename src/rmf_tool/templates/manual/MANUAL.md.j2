@@ -54,7 +54,9 @@ Conventions:
 
 - IDs are stable and never reused: `PH-` phases, `MS-` milestones and decision points, `RV-`
   technical reviews, `AD-` authorization decisions, `PER-` personas, `ART-` artifacts, `EXT-`
-  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`).
+  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`). Tasks are shown by step
+  and number with their name, and the ID in brackets: "Prepare 1: Risk Management Roles (P-1)"
+  is SP 800-37 Rev. 2 Prepare task 1.
 - A citation reads `REFERENCE, section "heading"` or `REFERENCE, p. N, "quoted words"`. The page is
   the PDF page. To read the passage, run `uv run rmf refs show REFERENCE --section "heading"` or
   `uv run rmf refs show REFERENCE --page N --anchor "quoted words"`.
@@ -90,7 +92,7 @@ authorization decision.
 | Step | Purpose | Tasks | Primary phases |
 |---|---|---|---|
 {% for s in m.steps %}
-| <a id="{{ anchor('steps', s.id) }}"></a>{{ s.id }} {{ s.name | cell }} | {{ s.purpose | cell }} | {{ L.many(s.tasks) }} | {{ L.many(s.primary_phases) }} |
+| <a id="{{ anchor('steps', s.id) }}"></a>{{ s.name | cell }} ({{ s.id }}) | {{ s.purpose | cell }} | {{ L.many(s.tasks) }} | {{ L.many(s.primary_phases) }} |
 {% endfor %}
 
 {% include "raci_matrix.md.j2" %}

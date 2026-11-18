@@ -1,0 +1,56 @@
+# artifacts/ssp/controls/cm.yaml (S-4; schema ssp-controls). Written whole.
+family: cm
+controls:
+  - control_id: cm-2
+    status: implemented
+    statement: "The baseline configuration is the version-controlled infrastructure templates and the release manifest of image digests: edge and WAF settings (CMP-EDGE), node groups and workloads (CMP-K8S) and database parameters (CMP-DB). Only the pipeline deploys it, so the deployed state equals the baseline, and an hourly drift scan reports manual changes to the ISSO. The baseline is reviewed and updated at every release (every three weeks) and at least annually, when a change affects safeguards addressed in the PIA or SORN or is significant, and whenever components are installed or upgraded."
+    responsible_roles: [PER-ISSE, PER-DEV]
+    components: [CMP-K8S, CMP-DB, CMP-EDGE]
+    parameters:
+      cm-02_odp.01: "at least annually and at each release"
+      cm-02_odp.02: "a change affecting the administrative, technical or physical safeguards addressed in the published PIA or SORN, or a significant change"
+    automation: "Hourly drift scan against the templates; any difference is reported to the ISSO."
+    assurance:
+      addressed: "The template repository history, release manifests and drift scan reports are the evidence."
+      status: satisfied
+    sources: [INT-093.A1, product/architecture.md#configuration, INT-074.A3]
+  - control_id: cm-3
+    status: implemented
+    statement: "Every change to code, images, infrastructure templates or cluster configuration on CMP-K8S is configuration-controlled and reaches the cluster only through the pipeline. Each change is a pull request reviewed by a second engineer with a security and privacy impact note, passes the pipeline gates (static, dependency, image and dynamic scans, policy checks) and is signed off by the ISSO before deploy. The EFRAS configuration control board meets monthly and reviews major releases and any change affecting safeguards in the PIA or SORN. Pull requests, gate results and sign-offs are retained in the repository and pipeline records for the life of the system plus one year; the hourly drift scan monitors for changes made outside the process."
+    responsible_roles: [PER-DEV, PER-ISSO, PER-CCB]
+    components: [CMP-K8S]
+    parameters:
+      cm-03_odp.01: "the life of the system plus one year"
+      cm-03_odp.02: "the EFRAS configuration control board"
+      cm-03_odp.03: "monthly; when a change affects safeguards addressed in the published PIA or SORN, or for a major release"
+      cm-03_odp.04: "monthly"
+      cm-03_odp.05: "a change affecting safeguards addressed in the published PIA or SORN, or a major release"
+    assurance:
+      addressed: "Pull request reviews, gate results, ISSO sign-offs and board minutes are the evidence; the assessor samples changes from release 1.5.0 and 1.5.1."
+      status: satisfied
+    sources: [INT-094.A1, product/architecture.md#configuration, INT-074.A3]
+  - control_id: cm-6
+    status: partial
+    statement: "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S, BM-01), the software factory's hardened base image standard (BM-03), the PostgreSQL STIG as far as the managed service allows (CMP-DB, BM-02) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. As implemented (ART-STIG): the SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being control plane checks the managed Kubernetes service does not expose, and the database 88% with six open CAT II items. Four are engine settings not configurable on the managed service; they are the cloud provider's settings under its IL4 provisional authorization (LA-01) and are recorded in the STIG summary as not applicable to the program's configuration (STG-003 to STG-006), not as program deviations; no configuration exception has been approved, and any program deviation would need the AO's or AODR's approval. Two are program-fixable: connection logging verbosity (STG-001) and password complexity for the local break-glass database role (STG-002). No CAT I item is open. Missing as well: no Application Security and Development STIG review of the five application containers (BM-04) is recorded; the ISSE asks the assessor to perform it at assessment. Plan: STG-001 and STG-002 fixed in release 1.5.2, planned 2026-12-10, and rescanned. Update (M-1, CHG-003, plan change 1.3): release 1.5.2 did not ship; release 1.6 carried the STG-001 and STG-002 settings and a pipeline check of the container baseline, and reached pre-production on 2027-01-15; no rescan result is recorded yet, and the container checklist results are not yet in the STIG summary, so the control stays partial until the SCA verifies (COND-05)."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [CMP-K8S, CMP-DB, CMP-EDGE]
+    parameters:
+      cm-06_odp.01: "DISA STIGs (Kubernetes, PostgreSQL) and the software factory's hardened base images"
+      cm-06_odp.02: "the managed Kubernetes control plane and the managed PostgreSQL engine"
+      cm-06_odp.03: "settings the managed service does not expose to the program"
+    information_sources:
+      - "SCAP and STIG compliance scan of 2026-10-22"
+      - "Hourly drift scan"
+    sources: [INT-093.A1, product/test-results.md#stig-scan, product/architecture.md#configuration, ART-STIG, INT-136.A1, INT-136.A2, INT-138.A1, INT-204.A1]
+  - control_id: cm-8
+    status: implemented
+    statement: "The inventory is the INV-### list in the program's inventory record: one entry per item with its component, supplier, product, version, quantity and criticality, every item inside the boundary, none counted twice or assigned to another system. The release pipeline flags a new image or managed service that is not listed, and the ISSE and the ISSO review the inventory monthly and at every release."
+    responsible_roles: [PER-ISSE, PER-ISSO]
+    components: [this-system]
+    parameters:
+      cm-08_odp.01: "component, supplier, product, version, quantity and criticality"
+      cm-08_odp.02: "monthly and at every release"
+    assurance:
+      addressed: "The inventory record and its review history are the evidence; the assessor compares it with the cluster and account listings."
+      status: satisfied
+    sources: [INT-093.A2, product/hw-sw-inventory.md#items, ART-INV]

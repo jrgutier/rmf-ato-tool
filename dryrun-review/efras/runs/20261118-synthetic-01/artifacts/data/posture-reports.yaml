@@ -1,0 +1,33 @@
+# artifacts/data/posture-reports.yaml (M-5; schema posture-reports). Written whole (INV-8). One
+# record per report. SPR-001 is the first posture report and the first monthly roll-up (COND-06),
+# issued on 2027-02-01 for the first cycle; the records behind it end on 2026-11-15 (ASM-026).
+# No DoD body has required POA&M updates or vulnerability coordination (conmon.yaml
+# reporting.dodin has no required_by), so none is delivered outside the conmon.yaml recipients.
+reports:
+  - id: SPR-001
+    period: {from: "2026-11-01", to: "2027-01-31"}
+    issued: "2027-02-01"
+    marking: CUI
+    plan_changes: ["1.1", "1.2", "1.3"]
+    deliveries:
+      - {recipient: PER-AO, date: "2027-02-01", content: [posture, poam, findings]}
+      - {recipient: PER-AODR, date: "2027-02-01", content: [posture, poam, findings]}
+      - {recipient: PER-PM, date: "2027-02-01", content: [posture, poam, findings]}
+      - {recipient: PER-ISSM, date: "2027-02-01", content: [posture, poam, findings]}
+    scorecard: {reported: "2027-02-01", vdp_metrics: false}
+    findings_shared: []
+    vulnerability_status:
+      - {poam_item: POAM-020, status: risk-accepted}
+    service_changes: []
+    sharing:
+      display: automated
+      audiences: [superior, peer]
+      qualities: [visible, accessible, understandable, trusted, interoperable]
+    sources: [INT-212.A1, INT-212.A2, INT-212.A3, INT-213.A1, INT-213.A3, INT-214.A1, ART-CONMON, ART-POAM, ASM-026]
+organization_tier:
+  reviews:
+    - {by: PER-RE, reviewed: "2027-02-01", determination: "Within the organization's tolerance while the AO's conditions hold: overall risk moderate; the risk to individuals is held within the low tolerance only by keeping real maintainer records out (COND-01); the factory's late base image is tracked as a portfolio risk; a missed COND-02 is to switch the exports off, not slip again."}
+    - {by: PER-CISO, reviewed: "2027-02-01", determination: "Report accepted as honest, but it does not yet show effective controls in operation (25 open POA&M items, both measures outside their limits, records ending ten weeks before the decision); for P-7: monitoring records from the deployed environment must reach the system owner monthly, and the organization's strategy must assign DODIN awareness of faults, performance, bandwidth, routes and network management for cloud systems behind the access point."}
+  open_poam_items: 25
+  feeds: P-7
+sources: [INT-212.A1, INT-213.A1, INT-215.A1, INT-216.A1]

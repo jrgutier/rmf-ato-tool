@@ -74,6 +74,9 @@ def main(
     """Deterministic tooling for the DoD RMF manual and agent simulation template."""
 
 
+ROSTER_MAX = 8
+
+
 def _emit_findings(findings: list[Finding], rules: list[str], fmt: OutputFormat) -> None:
     if fmt is OutputFormat.json:
         typer.echo(json.dumps(report(findings, rules), indent=2))
@@ -82,7 +85,9 @@ def _emit_findings(findings: list[Finding], rules: list[str], fmt: OutputFormat)
         (err_console if f.severity == "E" else console).print(f.render(), markup=False)
     errors = sum(f.severity == "E" for f in findings)
     warnings = len(findings) - errors
-    console.print(f"{', '.join(rules)}: {errors} error(s), {warnings} warning(s)", markup=False)
+    # a long rule roster buries the result (F-01-18, F-07-2); name the rules only when few
+    shown = ", ".join(rules) if len(rules) <= ROSTER_MAX else f"{len(rules)} rule(s)"
+    console.print(f"{shown}: {errors} error(s), {warnings} warning(s)", markup=False)
 
 
 @app.command()
@@ -539,6 +544,36 @@ def run_migrate(run: RunArg = None) -> None:
         typer.echo(line)
 
 
+clock_app = typer.Typer(help="Read or advance a run's simulated clock.", no_args_is_help=True)
+run_app.add_typer(clock_app, name="clock")
+
+
+@clock_app.command("show")
+def clock_show(run: RunArg = None) -> None:
+    """Print the date the run has reached (its clock, else the day it started)."""
+    from rmf_tool.run import clock
+
+    r = _open(run)
+    typer.echo(f"{clock.today(r.config)} ({'clock' if r.config.get(clock.FIELD) else 'as_of'})")
+
+
+@clock_app.command("set")
+def clock_set(
+    date: Annotated[str, typer.Argument(help="The simulated date reached, YYYY-MM-DD.")],
+    run: RunArg = None,
+) -> None:
+    """Move the run's simulated clock forward; date rules (ASMT-010, MPOA-001, reciprocity)
+    read it. Record why in the journal."""
+    from rmf_tool.run import clock
+
+    r = _open(run)
+    try:
+        old, new = clock.set_clock(r, date)
+    except clock.ClockError as exc:
+        raise _usage_error(str(exc)) from exc
+    typer.echo(f"clock {old} -> {new}; journal a NOTE saying what happened in between")
+
+
 @run_app.command("init")
 def run_init(
     mode: ModeOption = "synthetic",
@@ -588,7 +623,7 @@ def status(
             continue
         mark = "done" if t["done"] else "todo"
         detail = "" if t["done"] else "  (" + "; ".join(t["missing"]) + ")"
-        typer.echo(f"  {mark:<5}{t['id']:<6}{t['name']}{detail}")
+        typer.echo(f"  {mark:<5}{t['label']}{detail}")
     for fam, gaps in (data.get("family_gaps") or {}).items():
         typer.echo(f"  gaps {fam}: ssp {', '.join(gaps['ssp']) or '-'}; "
                       f"sar {', '.join(gaps['sar']) or '-'}")
@@ -597,7 +632,7 @@ def status(
     else:
         nxt = data["next"]
         fam = f" family {nxt['family']}" if nxt.get("family") else ""
-        typer.echo(f"next: {st.next} {nxt['name']}{fam} ({nxt['playbook']})")
+        typer.echo(f"next: {nxt['label']}{fam} ({nxt['playbook']})")
     raise typer.Exit(EXIT_OK)
 
 
@@ -866,6 +901,9 @@ def check(
     final: Annotated[
         bool, typer.Option("--final", help="Every rule, regardless of progress (scope-aware).")
     ] = False,
+    errors_only: Annotated[
+        bool, typer.Option("--errors-only", help="Print errors only, not warnings.")
+    ] = False,
     fmt: FormatOption = OutputFormat.text,
 ) -> None:
     """Run-scope rules (plan §6.5) on a run; writes reports/check.json and check.md.
@@ -896,6 +934,12 @@ def check(
     if fmt is OutputFormat.json:
         typer.echo(json.dumps(data, indent=2))
         raise typer.Exit(EXIT_VIOLATIONS if data["summary"]["errors"] else EXIT_OK)
+    hidden = 0 if final else engine.hidden_errors(r, ev, findings)
+    if hidden:
+        typer.echo(f"note: {hidden} error(s) outside this selection (later tasks, other "
+                   "families or rules) are not shown; `--final` shows every one", err=True)
+    if errors_only:
+        findings = [f for f in findings if f.severity == "E"]
     _exit_findings(findings, data["summary"]["rules_run"], fmt)
 
 
@@ -941,6 +985,38 @@ def render(
     _changed(written, "wrote")
     _changed(removed, "removed")
     typer.echo(f"rmf render: {len(written) + len(removed)} file(s) changed")
+
+
+schema_app = typer.Typer(help="Show a run-data schema's fields or a YAML skeleton of it.",
+                         no_args_is_help=True)
+app.add_typer(schema_app, name="schema")
+
+
+@schema_app.command("show")
+def schema_show(
+    name: Annotated[str, typer.Argument(help="Schema name or data file, e.g. allocation or "
+                                            "artifacts/data/allocation.yaml")],
+) -> None:
+    """Print every field of a run-data record: required (*), type or values, and title."""
+    from rmf_tool import schema_show as mod
+
+    try:
+        typer.echo("\n".join(mod.outline(mod.load(repo_root(), name))))
+    except mod.SchemaError as exc:
+        raise _usage_error(str(exc)) from exc
+
+
+@schema_app.command("template")
+def schema_template(
+    name: Annotated[str, typer.Argument(help="Schema name or data file")],
+) -> None:
+    """Print a YAML skeleton holding every required field, with <<FILL>> tokens."""
+    from rmf_tool import schema_show as mod
+
+    try:
+        typer.echo(mod.skeleton(mod.load(repo_root(), name)), nl=False)
+    except mod.SchemaError as exc:
+        raise _usage_error(str(exc)) from exc
 
 
 report_app = typer.Typer(help="Write generated run reports.", no_args_is_help=True)

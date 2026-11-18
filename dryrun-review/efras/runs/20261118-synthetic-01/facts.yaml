@@ -1,0 +1,126 @@
+# runs/<run-id>/facts.yaml: the only home of system facts (INV-4); schema
+# framework/schema/facts.schema.json. Each fact is written by exactly one task:
+#   boundary_id (P-11); system_id, system_name, acronym, aliases, lifecycle_state (C-1);
+#   categorization (C-2); categorization.approved (C-3); baseline_id (S-1).
+#   categorization.documented_in (C-2) names the capability document of protection-requirements.yaml
+#   (ACQLC-005). acquisition.pathways lists every pathway a program combines; a software pathway
+#   program states acquisition.covered_dbs (ACQLC-001).
+# Rewrite the file whole and keep every field another task wrote (INV-8).
+system_id:
+  value: "EFRAS"
+  set_by_task: C-1
+  sources: [INT-058.A2, ART-ORG-CONTEXT]
+system_name:
+  value: "Example Fleet Readiness Analytics Service"
+  set_by_task: C-1
+  sources: [INT-058.A1, product/profile.yaml]
+acronym:
+  value: "EFRAS"
+  set_by_task: C-1
+  sources: [INT-058.A1, product/profile.yaml]
+aliases:
+  value: []
+  set_by_task: C-1
+  sources: [INT-058.A1]
+lifecycle_state:
+  value: under-development
+  set_by_task: C-1
+  sources: [INT-058.A3, product/conops.md#program]
+classification:
+  value: unclassified
+  compartments: []
+  handling_markings: [CUI]
+  set_by_task: C-1
+  sources: [INT-060.A5, product/conops.md#information]
+system_type:
+  value: major-application
+  connectivity: networked
+  dodin_connection: direct
+  rationale: "A government-owned web application with its own authorization boundary, hosted as a tenant in an IL4 cloud region; it is not an enclave hosting other systems, not a general support system and not platform IT. It attaches to NIPRNet through the enterprise cloud access point (CONN-01, a DISN connection), so its DODIN connection is direct."
+  set_by_task: C-1
+  sources: [INT-058.A4, INT-058.A5, INT-047.A1, product/conops.md#environment]
+owning_organization:
+  value: "Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional)"
+  set_by_task: C-1
+  sources: [INT-058.A4, product/conops.md#program]
+system_version:
+  value: "1.5 (MVCR)"
+  release_date: "2026-10-27"
+  set_by_task: C-1
+  sources: [INT-058.A3, ASM-015]
+operational_environment:
+  value: production
+  description: "The authorization covers the program-owned production cloud account in the Example GovCloud IL4 region; release 1.5 runs today in the separate pre-production account for three pilot squadrons on synthetic data, which is not part of this authorization."
+  set_by_task: C-1
+  sources: [INT-058.A4, product/conops.md#program, product/architecture.md#boundary]
+lifecycle_phase:
+  value: PH-PD
+  set_by_task: C-1
+  sources: [INT-058.A3, product/profile.yaml]
+categorization:
+  c: moderate
+  i: moderate
+  a: low
+  overlays: [CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT]
+  method: cnssi1253
+  factors_reviewed: [organization, environment, mission, use, data-sharing, national-interest, aggregation, pii, time-criticality]
+  adjustments: []
+  documented_in: "Capability needs statement for fleet readiness analytics v1.0"
+  revisit: "At any significant change (a new information type, interconnection or reliance by the fleet), at any situational change (a new threat or a change of mission), and at least every three years with the risk assessment update"
+  set_by_task: C-2
+  sources: [INT-061.A1, INT-061.A2, INT-061.A3, INT-062.A1, INT-063.A1, INT-063.A2, INT-064.A4, INT-065.A1, INT-065.A2, INT-065.A3, ART-INFOTYPES]
+  approved:
+    value: true
+    approved_by: PER-AODR
+    date: "2026-11-18"
+    privacy:
+      pii: true
+      by: PER-PRIV
+      date: "2026-11-18"
+      overlays: [CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT]
+      logs_pii: true
+    set_by_task: C-3
+    sources: [INT-068.A4, INT-067.A1, INT-067.A2, INT-067.A3]
+boundary_id:
+  value: EFRAS-BND-1
+  set_by_task: P-11
+  sources: [INT-026.A3]
+nss:
+  value: false
+  basis: "A logistics decision-support application with no classified information; it meets no criterion of 44 U.S.C. 3552(b)(6) (the CIO's P-16 determination)."
+  set_by_task: C-1
+  sources: [INT-051.A1]
+baseline_id:
+  value: CNSSI1253-M-M-L-SUBSET-50
+  set_by_task: S-1
+  sources: [INT-070.A1, INT-070.A2, INT-073.A1]
+missions:
+  set_by_task: P-8
+  identified_by: PER-SPONSOR
+  sources: [INT-018.A1, INT-018.A2]
+  items:
+    - id: MSN-01
+      name: "Naval aviation readiness: keeping aircraft mission-capable"
+      kind: mission
+      essential: false
+      sources: [INT-018.A1, INT-018.A2]
+    - id: MSN-02
+      name: "Aircraft maintenance and readiness management"
+      kind: business-function
+      essential: false
+      sources: [INT-018.A1, INT-018.A2]
+    - id: MSN-03
+      name: "Daily readiness reporting for squadron, air wing and fleet (BP-01)"
+      kind: mission-business-process
+      essential: false
+      sources: [INT-018.A1, INT-018.A2]
+    - id: MSN-04
+      name: "Part failure forecasting for early part orders (BP-02)"
+      kind: mission-business-process
+      essential: false
+      sources: [INT-018.A1, INT-018.A2]
+    - id: MSN-05
+      name: "Fleet readiness analysis and de-identified data set export (BP-03)"
+      kind: mission-business-process
+      essential: false
+      sources: [INT-018.A1, INT-018.A2]

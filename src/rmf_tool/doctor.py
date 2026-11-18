@@ -66,7 +66,8 @@ def run_checks(root: Path) -> list[Check]:
         _tool("git", True, "install git", ("--version",)),
         _tool("git-lfs", True, "make bootstrap", ("version",)),
         _tool("jq", True, "make bootstrap", ("--version",)),
-        _tool("qpdf", True, "make bootstrap", ("--version",)),
+        _tool("qpdf", True, "make bootstrap; needed only by `rmf refs fetch`, not by runs",
+              ("--version",)),
     ]
     if shutil.which("git") and (root / ".git").exists():
         lfs = _first_line(["git", "config", "--get", "filter.lfs.process"], cwd=root)

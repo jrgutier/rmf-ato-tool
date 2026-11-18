@@ -15,6 +15,7 @@ from typing import Any
 
 from rmf_tool import baseline as baseline_mod
 from rmf_tool import refs
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import SAR_DIR, SSP_DIR, family_records
@@ -585,14 +586,16 @@ def strategy(ctx: Context) -> list[RunFinding]:
             if e.get("accepted_by") not in SENIOR:
                 err(f"{e.get('id')}: the risk of the relationship with {e.get('name')} is "
                     f"accepted by {e.get('accepted_by')}, not a senior leader")
-        named = {_key(e.get("name")) for e in entities}
+        pk = providers.keyer(ctx)
+        named = {pk(e.get("name")) for e in entities} | {pk(e.get("provider")) for e in entities}
         leveraged = ctx.data(LEVERAGED_FILE)
         records = leveraged.get("leveraged_authorizations") if isinstance(leveraged, dict) \
             else None
         for la in _dicts(records):
-            if _key(la.get("provider")) not in named:
+            if pk(la.get("provider")) not in named:
                 err(f"{la.get('id')}: the system leverages an authorization from "
-                    f"{la.get('provider')}, which external_entities does not list")
+                    f"{providers.shown(ctx)(la.get('provider'))}, which external_entities does "
+                    "not list")
     return out
 
 
@@ -605,8 +608,9 @@ def common_controls(ctx: Context) -> list[RunFinding]:
     if "P-5" in scope.active_tasks(ctx.run) and "common_controls" not in data:
         err("org-context.yaml has no common_controls, which P-5 records")
     holders = _holders(data)
+    show = providers.shown(ctx)
     for cc in _dicts(data.get("common_controls")):
-        provider = cc.get("provided_by")
+        provider = show(cc.get("provided_by"))
         if _key(cc.get("persona")) not in holders:
             err(f"{provider}: the common control provider {cc.get('persona')} holds no role in "
                 "roles")
@@ -646,11 +650,12 @@ def inherited_assessment(ctx: Context) -> list[RunFinding]:
     data, out, err = _record(ctx, "OCTX-006", "A-3")
     if data is None or "common_controls" not in data:
         return out
-    packages = {_key(cc.get("provided_by")): cc for cc in _dicts(data.get("common_controls"))}
-    inherited = {_key(c.get("control_id")): _key(c.get("inherited_from"))
+    pk = providers.keyer(ctx)
+    packages = {pk(cc.get("provided_by")): cc for cc in _dicts(data.get("common_controls"))}
+    inherited = {_key(c.get("control_id")): pk(c.get("inherited_from"))
                  for _, c in family_records(ctx, SSP_DIR, "controls")
                  if c.get("status") == "inherited" and _key(c.get("inherited_from"))}
-    leveraged = {_key(la.get("provider")) for la in _dicts(
+    leveraged = {pk(la.get("provider")) for la in _dicts(
         _section_of(ctx, LEVERAGED_FILE).get("leveraged_authorizations"))}
     # Both dates belong to this assessment: when its report was first delivered, and when the
     # provider's results it rests on were made available (recorded on the determination).

@@ -265,12 +265,12 @@ def test_a_control_inherited_through_a_leveraged_authorization_rests_on_its_pack
     """An inherited control may come from an external provider whose authorization the system
     leverages (C-1), not only from an organizational common control provider."""
     run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
-    provider = "Analysis enclave boundary (common control)"
+    provider = "PRV-01"
     edit_yaml(run_dir / ORG, lambda d: d["common_controls"][0].update(provided_by="Other"))
     assert _rule_errors(run_dir, "OCTX-006")
     edit_yaml(run_dir / "artifacts/data/leveraged-authorizations.yaml",
               lambda d: d["leveraged_authorizations"][0].update(provider=provider))
-    edit_yaml(run_dir / ORG, lambda d: d["external_entities"][0].update(name=provider))
+    edit_yaml(run_dir / ORG, lambda d: d["external_entities"][0].update(provider=provider))
     assert _rule_errors(run_dir, "OCTX-006") == []
 
 

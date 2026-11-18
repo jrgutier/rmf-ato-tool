@@ -225,7 +225,9 @@ def offerings(ctx: Context) -> list[RunFinding]:
         if la is None:
             err(f"{oid}: leverages no authorization in leveraged-authorizations.yaml, so the "
                 "existing authorization and its documentation are not reused")
-        elif la.get("arrangement") != "external-service":
+        elif la.get("arrangement") not in ("external-service", "common-control-provider"):
+            # a cloud offering that also provides common controls keeps the common control
+            # provider arrangement, so MLEV-001 still checks it (F-06-2)
             err(f"{oid}: {la.get('id')} is not an IT service authorized by another "
                 f"organization (arrangement {la.get('arrangement')})")
         elif la.get("decision") != "AD-ATO":
@@ -664,8 +666,10 @@ def hosting(ctx: Context) -> list[RunFinding]:
             "an assessment that it is, or can and would be, cloud-hosted")
     if environment == "cloud" and cloud != "cloud-hosted":
         err(f"the system is hosted in the cloud and its cloud assessment says {cloud}")
-    environments = _strings(_mapping(ctx.data(AGREEMENTS_FILE)).get("system_environments"))
-    if cloud == "cloud-hosted" and "cloud" not in environments:
+    # S-4 writes service-agreements.yaml; until then P-16 cannot be held to it (F-03-2)
+    agreements = ctx.data(AGREEMENTS_FILE)
+    environments = _strings(_mapping(agreements).get("system_environments"))
+    if cloud == "cloud-hosted" and isinstance(agreements, dict) and "cloud" not in environments:
         err("the cloud assessment says the system is cloud-hosted and service-agreements.yaml "
             "does not name the cloud among its environments")
     return out

@@ -262,6 +262,7 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
             del origin[cid]
     for cid in added:
         origin.setdefault(cid, "overlay")
+    tailored: set[str] = set()
     tailoring = run.path(TAILORING_FILE)
     if tailoring.is_file():
         try:
@@ -276,6 +277,7 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
             cid, kind = action.get("control_id"), action["action"]
             if kind == "add":
                 origin.setdefault(cid, "tailored-in")
+                tailored.add(cid)
             elif kind == "remove":
                 origin.pop(cid, None)
             elif kind == "compensating" and compensating and cid:
@@ -284,7 +286,9 @@ def resolve(run: Run, method: str | None = None) -> dict[str, Any]:
     if unknown:
         raise BaselineError(f"controls not in the catalog: {', '.join(unknown)}")
     subset = run.config.get("control_subset")
-    selected = [c for c in origin if not subset or c in subset]
+    # the subset limits the selected baseline, not what tailoring adds to it (F-05-5)
+    selected = [c for c in origin if not subset or c in subset or c in tailored
+                or origin[c] == "compensating"]
     selected.sort(key=lambda c: order[c])
     if subset:
         # The configured subset size, not the post-tailoring count: S-2/S-3 tailoring must not

@@ -1,0 +1,92 @@
+# artifacts/data/incident-response.yaml (S-4; schema incident-response). Written whole (INV-8).
+# ART-IRP says why. The plan is a draft until the PM approves it by 2026-12-15 (ir-8 planned).
+reporting_paths:
+  - case: cssp-incident
+    reference: "Service agreement SVA-001 with the Example Cybersecurity Service Provider"
+    recipients: [CSSP, PER-ISSO]
+    owner: "Whoever discovers it: users, administrators, ERST engineers, the cloud provider or the access point"
+    timeline: "Within 1 hour of discovery"
+  - case: cnssi-1010
+    reference: "CNSSI 1010"
+    recipients: [CSSP, JFHQ-DODIN]
+    owner: "The CSSP, through the DoD CERT channel"
+    timeline: "Within the DoD cyber incident handling timelines, after the program's 1-hour report"
+  - case: incident-to-ao
+    reference: "DoDI 8510.01 and the Component RMF policy"
+    recipients: [PER-AO, PER-AODR, chain-of-command]
+    owner: "PER-ISSO"
+    timeline: "Within 1 hour through the AODR; PII or privileged-identity incidents at once"
+  - case: pii-loss
+    reference: "DoD 5400.11-R"
+    recipients: [PER-PRIV, Component senior component official for privacy]
+    owner: "PER-ISSO to the Component privacy office, which reports onward"
+    timeline: "Within 1 hour of a suspected or confirmed breach"
+  - case: cui-disclosure
+    reference: "DoDM 5200.01 Volume 4"
+    recipients: [Component CUI program office, PER-ISSM]
+    owner: "PER-ISSO"
+    timeline: "Within 1 hour of discovery"
+  - case: classified-compromise
+    reference: "DoDM 5200.01 Volume 3"
+    recipients: [Component security manager, PER-ISSM, PER-AODR]
+    owner: "PER-ISSO"
+    timeline: "Immediately on discovery"
+    identified_as: negligent-discharge
+    determines: [willful, negligent, inadvertent]
+  - case: classified-spillage
+    reference: "DoDM 5200.01 Volume 3"
+    recipients: [Component security manager, CSSP, PER-ISSM]
+    owner: "PER-ISSO"
+    timeline: "Immediately on discovery; the affected storage is isolated until sanitized"
+  - case: cleared-contractor-loss
+    applies: true
+    reference: "DoD 5220.22-M"
+    recipients: [DCSA, PER-ISSM]
+    owner: "ERST facility security officer, with the program ISSO"
+    timeline: "As DoD 5220.22-M requires, and the ISSO within 1 hour"
+  - case: dodin-deficiency
+    reference: "DoDI 8500.01"
+    recipients: [IG DoD, PER-AO]
+    owner: "PER-ISSM"
+    timeline: "With the after-action report"
+  - case: federal-law-violation
+    reference: "DoDI 8500.01"
+    recipients: [DCIO, law-enforcement, IG DoD]
+    owner: "PER-ISSM, through the Component's legal office"
+    timeline: "As soon as the incident appears to violate federal law"
+  - case: anomalous-user-activity
+    reference: "DoDI 8500.01"
+    recipients: [component-investigative-authority, PER-ISSM]
+    owner: "PER-ISSO"
+    timeline: "On detection"
+    audit_data: chain-of-custody
+triage:
+  procedures: "The CSSP's handling playbook covers the common types (unauthorized access, malicious code, denial of service, improper usage); the program adds runbooks for its urgent processes: containing a workload, revoking a workload identity or console role, blocking a source at CMP-EDGE, and the PII breach and spillage paths."
+  risk_factors: "The data at risk (maintainer PII or readiness data first), whether a privileged identity is involved, whether the attack is active, and how far it reaches across components."
+  intake: "The CSSP reviews alerts from the forwarded logs; users, engineers, the cloud provider and the access point report to the CSSP operations center or the ISSO, and the ISSO reviews each report and opens a ticket."
+  categories: "The CSSP's categories: unauthorized access, malicious code, denial of service, improper usage, PII breach, spillage; each category selects its runbook."
+  escalation: "Tickets are tracked by the ISSO; PII or privileged-identity incidents go to the ISSM and the AODR at once, and an incident not contained within 24 hours to the PM and the AO."
+  tracked_fields: [detection time, report time, category, affected components, affected data, actions taken, decision maker, status, closure]
+  incident_lead: "PER-ISSO, who keeps the ticket and every response record"
+  evidence: "The CSSP and the on-call engineer preserve logs, workload and database snapshots and cloud activity records; the ISSO logs the chain of custody, and evidence is kept for the life of the system plus one year or as the investigating authority directs."
+  containment_criteria: "Containment holds until the CSSP confirms no further activity for 72 hours; eradication is a rebuild from signed images with credential rotation, verified before recovery."
+recovery:
+  start_criteria: "The CSSP and the ISSO agree containment holds and eradication is verified, and the PM authorizes recovery."
+  authorizations: "The PM authorizes; the AODR is told; a rebuild in the second region activates the contingency plan."
+  action_selection: "The ISSO and the ISSE choose between redeploying in place and a rebuild, scope it to the affected configuration items, and reassess after each step."
+  asset_integrity: "Image signatures are verified at admission and snapshot hashes before restore; only a snapshot from before the compromise is used."
+  restoration_order: "Database, ingest, API, web, then the rest, as the contingency plan orders; the CSSP watches the restored system closely for 30 days."
+  restored_integrity: "The restored account is scanned and compared with the templates and the data validated before users return."
+  end_criteria: "The restored system passes the checks and the PM declares normal operations; the ISSO writes the after-action report within 10 working days."
+notifications:
+  asset_owners: "The ISSO keeps the PM, the information owner and the fleet readiness directorate informed at each status change."
+  laws_and_agreements: "CNSSI 1010 and the DoD incident handling timelines through the CSSP; DoD 5400.11-R for PII; DoDM 5200.01 Volumes 3 and 4 for classified and CUI; DoD 5220.22-M for the cleared contractor; the service agreements SVA-001 and SVA-002."
+  coordination: "The CSSP coordinates with JFHQ-DODIN and the cloud provider; the ISSO with the program team, the privacy office and the providers; incident information is shared only with those holding a role."
+  recovery_communications: "The ISSO sends recovery progress to the PM, the AODR and the fleet readiness directorate at least daily."
+  public_updates: "None by the program; any public statement goes through the Component public affairs office, and notice to affected maintainers through the privacy office."
+detection:
+  cti_sources: ["CSSP threat intelligence feeds and JFHQ-DODIN advisories", "Software factory vulnerability advisories", "Cloud provider security bulletins"]
+  cti_used_in: [log-analysis, correlation, adverse-event-analysis]
+  correlation: "The CSSP's SIEM gathers the forwarded CMP-LOGS stream (edge, application, cluster, database and cloud activity logs) with the access point's traffic logs and correlates them against its use cases and the threat intelligence."
+  estimates: "The CSSP's analyst and the ISSO estimate impact and scope from the affected components and data and refine them as containment reveals more."
+sources: [INT-125.A1, INT-125.A2, INT-125.A3, INT-127.A2, INT-098.A1, INT-098.A2, INT-099.A1, INT-099.A2, INT-099.A3, INT-118.A2]

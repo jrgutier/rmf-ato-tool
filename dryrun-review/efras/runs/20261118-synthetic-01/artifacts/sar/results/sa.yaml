@@ -1,0 +1,75 @@
+# artifacts/sar/results/sa.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. sa-11 follows PRC-015 (DT-2 cases re-performed 2026-12-02) and carries the plan's
+# additional procedures APR-001 (REQ-11) and APR-002 (REQ-12) of 2026-12-03, whose results the
+# schema has no field for: they are stated in the summary and in FND-022.
+family: sa
+determinations:
+  - control_id: sa-9
+    result: satisfied
+    methods: [examine, interview]
+    depth: focused
+    coverage: focused
+    summary: "Examined the five provider instruments (ART-SVCA, service-agreements.yaml): each requires the provider to keep its authorization and the controls it carries for EFRAS, to meet the Component's security and privacy requirements and to report changes and breaches, and defines oversight (ISSM), day-to-day contact (ISSO) and signatory (PM). Examined the ISSM's review log: the cloud region's October deliverable, the CSSP's October report and tickets and the factory's release notes and open POA&M item were each reviewed in the month received; the external provider reviews of the plan (EXT-001 to EXT-007) found every provider's assessment evidence received. Interviewed the ISSM."
+    statements:
+      - {id: "SA-09a.[01]", result: satisfied}
+      - {id: "SA-09a.[02]", result: satisfied}
+      - {id: "SA-09a.[03]", result: satisfied}
+      - {id: "SA-09b.[01]", result: satisfied}
+      - {id: "SA-09b.[02]", result: satisfied}
+      - {id: "SA-09c.", result: satisfied}
+    reused: []
+    sources: [INT-167.A5, ART-SVCA, product/architecture.md#leveraged]
+  - control_id: sa-11
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined ERST's test and evaluation plan (security and privacy cases), every pipeline gate of 1.5.0, every DT-2 test card and the flaw tickets (examined, not reused as results, POL-02). Re-performed 12 DT-2 cases on 2026-12-02, drawn at random plus the tampered extract and the API scoping cases: each gave the DT-2 result again. Flaw remediation is verifiable (tickets with severity and due date, closed on a passing retest, as PT-1 on 2026-11-10). Flaws found in testing are not all corrected: the two report container highs are open past their due date and the PT-3 retest has not been done (ASM-022). APR-001 (REQ-11, standards registry) and APR-002 (REQ-12, Section 508): the program holds no standards list checked against the registry and no accessibility test, so neither requirement is demonstrated (ASM-023). Interviewed the developer lead. The SSP records sa-11 as partial."
+    finding_refs: [FND-021, FND-022]
+    statements:
+      - {id: "SA-11a.[01]", result: satisfied}
+      - {id: "SA-11a.[02]", result: satisfied}
+      - {id: "SA-11a.[03]", result: satisfied}
+      - {id: "SA-11a.[04]", result: satisfied}
+      - {id: "SA-11b.", result: other-than-satisfied}
+      - {id: "SA-11c.[01]", result: satisfied}
+      - {id: "SA-11c.[02]", result: satisfied}
+      - {id: "SA-11d.", result: satisfied}
+      - {id: "SA-11e.", result: other-than-satisfied}
+    reused: []
+    sources: [INT-172.A2, ASM-022, ASM-023, product/test-results.md#pipeline-1-5, product/test-results.md#dt-2, product/test-results.md#pentest]
+findings:
+  - id: FND-021
+    control_id: sa-11
+    title: "Flaws found in developer and penetration testing are not all corrected: the report container highs and the PT-3 retest"
+    description: "SA-11 requires the developer to correct flaws identified during testing and evaluation. The two high vulnerabilities found in the efras-report image on 2026-10-20 are not corrected (release 1.5.2 not verified, FND-019), and PT-3, the sandbox egress to a public mirror, was narrowed on 2026-11-03 but has not been retested, so its correction is not verified (ASM-022). PT-1 shows the remediation process works when the fix is in the program's hands. Evidence: pipeline records, the flaw tickets, the penetration test report, the developer's interview."
+    status: open
+    severity: low
+    recommendation: "Close both flaws on a passing retest: rescan efras-report after release 1.5.2 and have the red team retest the sandbox egress, then close the tickets."
+    affected_statements: ["SA-11e."]
+    state_difference: "Expected: every flaw found in testing corrected and retested. Actual: two highs uncorrected and one low corrected but not retested."
+    potential_compromise: [confidentiality, integrity]
+    sources: [INT-172.A2, ASM-022, product/test-results.md#pipeline-1-5, product/test-results.md#pentest]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-177.A1, INT-178.A1, INT-178.A2]
+      rationale: "Neither flaw is corrected and retested: the report container waits on release 1.5.2 and the sandbox egress on the red team's retest. It goes to the POA&M."
+  - id: FND-022
+    control_id: sa-11
+    title: "REQ-11 (DoD IT Standards Registry) and REQ-12 (Section 508) are not verified"
+    description: "S-3 allocated REQ-11 and REQ-12 to sa-11 as developer verification, and the plan added APR-001 and APR-002 to verify them. On 2026-12-03 the program had no list of the protocols and standards on the access point, identity broker, EMIS and CSSP interfaces checked against the DoD IT Standards Registry, and no Section 508 conformance check or assistive technology test of the five role workflows. Neither requirement can be shown met; no particular nonconformance was found either (ASM-023). Evidence: the test and evaluation plan, the DT-2 report, the developer's interview."
+    status: open
+    severity: low
+    recommendation: "Add a standards registry review of each interface and a Section 508 conformance check with assistive technology to the next DT event before the authorization decision, and record both results against REQ-11 and REQ-12."
+    affected_statements: ["SA-11b."]
+    state_difference: "Expected: both requirements verified by developer testing. Actual: neither tested."
+    potential_compromise: [availability]
+    sources: [INT-172.A2, ASM-023, ART-REQ]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-177.A2]
+      rationale: "REQ-11 and REQ-12 need a standards registry review and a Section 508 check in the next DT event, which existing resources cannot run within the window. It goes to the POA&M."

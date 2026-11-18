@@ -1,0 +1,83 @@
+# artifacts/data/ssp-records.yaml (S-4; S-6 adds approvals, M-4 cryptography.vulnerabilities;
+# schema ssp-records). Written whole (INV-8). ART-SSP ## Plan records says why.
+space_nss: false
+e_authentication:
+  performed: false
+funding:
+  - purpose: implementation
+    phases: [PH-PD]
+    status: programmed
+    fiscal_years: "FY26-FY27"
+    amount: "About $1.1M within the ERST development contract (fictional)"
+  - purpose: assessment
+    phases: [PH-PD, PH-OS]
+    status: programmed
+    fiscal_years: "FY27 for this authorization; annual reassessment from FY28 in sustainment"
+    amount: "$180K (fictional)"
+  - purpose: sustainment
+    phases: [PH-PD, PH-OS]
+    status: programmed
+    fiscal_years: "FY27-FY31"
+    amount: "$420K a year: CSSP subscription, cloud security services, annual reassessment (fictional)"
+  - purpose: configuration-management
+    phases: [PH-PD, PH-OS]
+    status: programmed
+    fiscal_years: "FY26-FY31"
+    amount: "$150K a year (fictional)"
+  - purpose: vulnerability-management
+    phases: [PH-PD, PH-OS]
+    status: programmed
+    fiscal_years: "FY26-FY31"
+    amount: "$120K a year (fictional)"
+cryptography:
+  fips_validated_compartment: false
+  fips_validated_unclassified: true
+  nsa_approved: false
+  key_management: "Program-owned keys in the cloud key service (CMP-KMS), FIPS 140 validated: one key per data store (database, object storage, snapshots, logs), rotated yearly, replicated to the second region for recovery, destroyed after a 30-day wait; the key inventory (key ID, store, owner, rotation date) is in the CI-DATA template; TLS certificates for the edge come from the DoD PKI and are tracked by the ISSO."
+  key_management_process: "The provider's FIPS 140-validated key service generates and holds the keys; key policies are code in CI-DATA; only the pipeline role and the key administrators named by the ISSM can use or change them; every key use is logged to CMP-LOGS."
+  uses:
+    - id: CRY-01
+      function: "Data in transit: TLS at the edge and re-encryption inside the virtual network, mutual TLS for the EMIS extract"
+      algorithm: "TLS 1.2 or 1.3 with DoD-approved cipher suites (AES-GCM, ECDHE)"
+      policy_basis: "CNSSP 15"
+      acquisition_basis: "CNSSP 15"
+    - id: CRY-02
+      function: "Data at rest: database, object storage, snapshots and logs"
+      algorithm: "AES-256 in the provider's FIPS 140-validated key service"
+      policy_basis: "CNSSP 15"
+      acquisition_basis: "CNSSP 15"
+    - id: CRY-03
+      function: "Image and provenance signing in the software factory pipeline, verified at cluster admission"
+      algorithm: "ECDSA P-256 with SHA-256"
+      policy_basis: "CNSSP 15"
+      acquisition_basis: "CNSSP 15"
+  vulnerabilities: []
+telework:
+  non_gfe_remote_access: false
+plan_structure:
+  consolidation: consolidated
+  common_elements: "The system description, boundary, inventory, roles, allocation and open items exist once (ART-SD, ART-BND, ART-INV, allocation.yaml, ART-SSP open items); the privacy plan and the C-SCRM plan point to them."
+  detail: "One statement per control with its components, parameters, inheritance and evidence in the family files; the plan records hold the values a reviewer checks; the Markdown gives the reasoning."
+  format: "ART-SSP Markdown with the family files under artifacts/ssp/controls, the plan records (ssp-records.yaml, scrm-plan.yaml, plan-reviews.yaml) and the OSCAL SSP generated from them; the privacy plan and the C-SCRM plan are sections and records of ART-SSP."
+approvals:
+  - full_name: "Simulated AODR, Aviation Business Systems (fictional)"
+    system_role: PER-AODR
+    title: "Authorizing Official Designated Representative for the AO"
+    signature: "Signed (simulated) on the plan approval page kept by the AO's office"
+    date: "2026-11-18"
+    concurrence: approve-with-changes
+  - full_name: "Simulated Component privacy officer (fictional)"
+    system_role: PER-PRIV
+    title: "Component Privacy Officer, acting for the senior agency official for privacy"
+    signature: "Signed (simulated) on the privacy plan review record"
+    date: "2026-11-18"
+    concurrence: concur
+privacy_plan:
+  requirements: "The Privacy Act and DoDI 5400.11 duties for the maintainer PII: collection only under the existing Component SORN and only its five data elements; notice through the SORN and the sign-in banner; use limited to the SORN purposes; the PIA (draft 0.9, approval before production data); retention and disposal per the records schedule with the monthly purge; de-identified exports (salted pseudonyms in release 1.6); breach response through the Component privacy office; and the controls the Privacy Overlay adds (pt-2, pt-3, ra-8, si-12, at-2 and the privacy parts of ir-6, sc-28 and cm-2)."
+  assessment_methods: "The SCA examines the SORN, the PIA and the data map, tests the ingest field filter and the purge job, and tests re-identification of a sample export. Metrics: PII elements outside the SORN found in the database (target zero), purge runs completed on time, exports re-identifiable in the sample (target zero after release 1.6), and breach reports made within one hour."
+  sources: [INT-127.A1, INT-106.A1, INT-109.A1, product/privacy.md#authority, product/privacy.md#pia]
+  approvals:
+    - by: PER-PRIV
+      date: "2026-11-18"
+      sources: [INT-133.A1]
+sources: [INT-123.A3, INT-123.A5, INT-126.A1, INT-127.A1, INT-112.A1, INT-128.A1, INT-133.A1, INT-134.A1, product/architecture.md#network, product/conops.md#users]

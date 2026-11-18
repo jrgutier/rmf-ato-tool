@@ -154,6 +154,22 @@ def _example(ctx: Context) -> tuple[bool, list[Finding], str]:
     return _valid_minimal(fixture=EXAMPLE_RUN)(ctx)
 
 
+def _fork_runs(ctx: Context) -> tuple[bool, list[Finding], str]:
+    """The fork's own runs (F-17-1): `rmf check --final`, OSCAL included, on every
+    `runs/*/run.yaml`, so a fork is not green while its package fails."""
+    assert ctx.profile is not None
+    if ctx.profile.name != "fork":
+        return True, [], f"fork runs skipped ({ctx.profile.name} profile)"
+    runs = sorted(p.parent.relative_to(ctx.root).as_posix()
+                  for p in (ctx.root / "runs").glob("*/run.yaml"))
+    if not runs:
+        return True, [], "no run under runs/"
+    found: list[Finding] = []
+    for run in runs:
+        found += _valid_minimal(fixture=run)(ctx)[1]
+    return _findings_step(found)
+
+
 def _golden_oscal(ctx: Context) -> tuple[bool, list[Finding], str]:
     from rmf_tool.oscal import validate as oscal_validate
 
@@ -229,6 +245,7 @@ STEPS: tuple[Step, ...] = (
          _golden_oscal),
     # p7: the example fork's synthetic run, every run rule (OSCAL and staleness included).
     Step(f"rmf check --final {EXAMPLE_RUN}", "p7", RUN_RULES, _example),
+    Step("rmf check --final runs/* (fork profile)", "p7", RUN_RULES, _fork_runs),
     # p8: documented counts equal computed values.
     Step("documented counts", "p8", (doc_counts.RULE,),
          lambda ctx: _findings_step(doc_counts.check(ctx.root))),

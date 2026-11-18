@@ -1,0 +1,71 @@
+# artifacts/sar/results/au.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. Tests ran in the pre-production account; the CSSP is observed, not re-assessed (EXT-004).
+family: au
+determinations:
+  - control_id: au-2
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the runbook event list with its per-event rationale, the CSSP onboarding ticket of 2026-04-22 that set the use cases and the 2026-06-15 review; triggered the eight auditable event types the SSP lists (request and WAF hit, sign-in, role change, export, admin action, failed authorization, cluster API call, database login) and traced each to CMP-LOGS and the CSSP within five minutes, re-performing the DT-2 export audit case; interviewed the ISSO. STG-001 (database connection logging verbosity) is assessed under cm-6, where I-2 mapped it; the database login events the SSP lists were recorded."
+    statements:
+      - {id: "AU-02a.", result: satisfied}
+      - {id: "AU-02b.", result: satisfied}
+      - {id: "AU-02c.[01]", result: satisfied}
+      - {id: "AU-02c.[02]", result: satisfied}
+      - {id: "AU-02d.", result: satisfied}
+      - {id: "AU-02e.", result: satisfied}
+    reused: []
+    sources: [INT-156.A1, product/architecture.md#logging, product/test-results.md#dt-2]
+  - control_id: au-6
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined 13 weekly review reports (2026-08-17 to 2026-11-09), the daily reports of the raised-threat week in 2026-09, the pager history and three CSSP tickets with their dispositions; tested that a break-glass sign-in and an export volume spike page the on-call engineer and open a CSSP ticket; interviewed the ISSO and the CSSP liaison. The CSSP's 24x7 correlation was observed through its ingestion dashboard, not re-assessed (EXT-004)."
+    statements:
+      - {id: "AU-06a.", result: satisfied}
+      - {id: "AU-06b.", result: satisfied}
+      - {id: "AU-06c.", result: satisfied}
+    reused: []
+    sources: [INT-156.A2, INT-157.A1, product/architecture.md#logging]
+  - control_id: au-9
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the log store's 90-day write-once lock, its read policy (ISSO and auditor roles only, no delete) and the policy-change alert history; tested a delete and a policy change with an engineer's role (both refused, the attempt alerted the ISSO and the ISSM); interviewed the ISSO."
+    statements:
+      - {id: "AU-09a.", result: satisfied}
+      - {id: "AU-09b.", result: satisfied}
+    reused: []
+    sources: [INT-156.A3, product/architecture.md#logging]
+  - control_id: au-11
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the retention settings of the three log stores and queried each for its oldest record: each holds 90 days, against the one-year retention the tailored control sets. The CSSP's one-year copy is kept under the CSSP's own schedule, retrievable only by ticket and changeable without the program's agreement, so it does not meet the program's retention duty. Interviewed the ISSO and the CSSP liaison. The SSP records the control as partial, with an archive tier in release 1.6."
+    finding_refs: [FND-002]
+    statements:
+      - {id: "AU-11", result: other-than-satisfied}
+    reused: []
+    sources: [INT-156.A3, INT-157.A1, product/conops.md#limitations]
+findings:
+  - id: FND-002
+    control_id: au-11
+    title: "Audit records are retained 90 days, not the one year the tailored control requires"
+    description: "AU-11 as tailored requires audit records retained for one year to support after-the-fact investigations and Component retention requirements. The three log stores hold 90 days; the oldest record each returned on query was 90 days old. The CSSP keeps a one-year copy for its own analysis, retrievable by ticket and under a schedule the program does not control. Evidence: log store retention settings and lifecycle rules, the retrieval test, the ISSO and CSSP interviews, the known limitation (conops item 6)."
+    status: open
+    severity: low
+    recommendation: "Add the archive tier (release 1.6) holding one year of records under the program's control; until then record in the CSSP agreement that the CSSP keeps EFRAS records one year and returns them on request within a set time."
+    affected_statements: ["AU-11"]
+    state_difference: "Expected: one year of audit records under the program's control. Actual: 90 days in the program's stores; days 91 to 365 only in the CSSP's copy."
+    potential_compromise: [confidentiality, integrity, privacy]
+    sources: [INT-156.A3, INT-157.A1, product/conops.md#limitations]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-177.A2]
+      rationale: "VUL-06 of the risk assessment; the archive tier ships in release 1.6, not with existing resources. The CSSP's one-year copy lowers the risk, but the program's own retention duty stays unmet, so it goes to the POA&M."

@@ -1,0 +1,103 @@
+# artifacts/sar/results/cp.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. The restore re-performance ran in pre-production on 2026-12-02 (PRC-010).
+family: cp
+determinations:
+  - control_id: cp-2
+    result: other-than-satisfied
+    methods: [examine, interview]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the whole of the contingency plan, version 1.0 draft (ART-CP), against the control: it covers the essential function, the 24-hour objectives, restoration order and metrics, roles with the on-call roster, continued reporting from EMIS during an outage, restoration from the templates, coordination with incident handling through the CSSP ticket path, and repository protection. It has not been reviewed or approved by the PM, has not been distributed to the key personnel or to EMIS and the CSSP, has had no annual review, and no change to it has been communicated. Interviewed the ISSE. The SSP records cp-2 as partial; the S-6 approval asks the PM to approve it by 2026-12-15."
+    finding_refs: [FND-010]
+    statements:
+      - {id: "CP-02a.01", result: satisfied}
+      - {id: "CP-02a.02[01]", result: satisfied}
+      - {id: "CP-02a.02[02]", result: satisfied}
+      - {id: "CP-02a.02[03]", result: satisfied}
+      - {id: "CP-02a.03[01]", result: satisfied}
+      - {id: "CP-02a.03[02]", result: satisfied}
+      - {id: "CP-02a.03[03]", result: satisfied}
+      - {id: "CP-02a.04", result: satisfied}
+      - {id: "CP-02a.05", result: satisfied}
+      - {id: "CP-02a.06", result: satisfied}
+      - {id: "CP-02a.07[01]", result: other-than-satisfied}
+      - {id: "CP-02a.07[02]", result: other-than-satisfied}
+      - {id: "CP-02b.[01]", result: other-than-satisfied}
+      - {id: "CP-02b.[02]", result: other-than-satisfied}
+      - {id: "CP-02c.", result: satisfied}
+      - {id: "CP-02d.", result: other-than-satisfied}
+      - {id: "CP-02e.[01]", result: satisfied}
+      - {id: "CP-02e.[02]", result: satisfied}
+      - {id: "CP-02f.[01]", result: other-than-satisfied}
+      - {id: "CP-02f.[02]", result: other-than-satisfied}
+      - {id: "CP-02g.[01]", result: satisfied}
+      - {id: "CP-02g.[02]", result: not-applicable, reason: "No contingency training and no actual contingency activity has taken place, so there is no lesson from them to incorporate; the missing exercise is assessed under cp-4."}
+      - {id: "CP-02h.[01]", result: satisfied}
+      - {id: "CP-02h.[02]", result: satisfied}
+    reused: []
+    sources: [INT-162.A1, ART-CP, product/conops.md#limitations]
+  - control_id: cp-4
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the plan and every test record: the only test is the DT-2 database point-in-time restore (3 h 10 min). Re-performed that restore on 2026-12-02 in pre-production: it finished well inside the 24-hour objective and the ISSE reviewed the result; no corrective action was needed. No regional failover of the cluster and no tabletop exercise has been held (planned 2027-02), so the plan's effectiveness and the readiness to execute it are not tested as the tailored control sets (annual tabletop, restore and failover tests). Interviewed the ISSE."
+    finding_refs: [FND-011]
+    statements:
+      - {id: "CP-04a.[01]", result: other-than-satisfied}
+      - {id: "CP-04a.[02]", result: other-than-satisfied}
+      - {id: "CP-04a.[03]", result: other-than-satisfied}
+      - {id: "CP-04b.", result: satisfied}
+      - {id: "CP-04c.", result: satisfied}
+    reused: []
+    sources: [INT-162.A2, product/test-results.md#dt-2, product/conops.md#limitations]
+  - control_id: cp-9
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined point-in-time recovery and daily snapshots on CMP-DB encrypted with program-owned keys, versioning and deletion protection on the CMP-OBJ buckets, and version control for templates, manifests and documents; the restore re-performed under cp-4 shows the backups usable. The provider's snapshot and durability part was confirmed against its package and October deliverable (EXT-001), not re-tested. Interviewed the ISSE and the provider's liaison."
+    statements:
+      - {id: "CP-09a.", result: satisfied}
+      - {id: "CP-09b.", result: satisfied}
+      - {id: "CP-09c.", result: satisfied}
+      - {id: "CP-09d.[01]", result: satisfied}
+      - {id: "CP-09d.[02]", result: satisfied}
+      - {id: "CP-09d.[03]", result: satisfied}
+    reused: []
+    sources: [INT-162.A2, INT-163.A1, product/architecture.md#components]
+findings:
+  - id: FND-010
+    control_id: cp-2
+    title: "The contingency plan is a draft: not reviewed or approved by the PM, not distributed, not under review"
+    description: "CP-2 as tailored requires the contingency plan to be reviewed and approved by the PM, distributed to the on-call engineers, the ISSO, the ISSM, EMIS and the CSSP, reviewed annually and its changes communicated to them. The version 1.0 draft covers the content the control requires, but has no review or approval, has gone to nobody outside the program repository, and no review or change communication has happened. Evidence: ART-CP, the repository, the ISSE interview; the S-6 approval sets a PM approval date of 2026-12-15."
+    status: open
+    severity: low
+    recommendation: "Have the PM review and approve the plan by 2026-12-15, distribute it to the named personnel and to EMIS and the CSSP, and record the annual review date."
+    affected_statements: ["CP-02a.07[01]", "CP-02a.07[02]", "CP-02b.[01]", "CP-02b.[02]", "CP-02d.", "CP-02f.[01]", "CP-02f.[02]"]
+    state_difference: "Expected: an approved plan in the hands of those who execute it. Actual: a complete draft known only inside the program repository."
+    potential_compromise: [availability]
+    sources: [INT-162.A1, ART-CP]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: low
+      risk_basis: [ART-RA, INT-177.A1, INT-177.A2]
+      rationale: "The PM approves the plan on 2026-12-15, after the reassessment window; until it is approved and distributed the weakness is open, so it goes to the POA&M with that date."
+  - id: FND-011
+    control_id: cp-4
+    title: "Regional failover has never been tested and no tabletop exercise has been held"
+    description: "CP-4 as tailored requires the contingency plan to be tested annually with a tabletop exercise, a database restore test and a regional failover test. Only the database restore has been tested (DT-2, re-performed by the assessor on 2026-12-02, within objective). The regional failover of the cluster, on which recovery from a regional outage depends, and the tabletop exercise have never been held; both are planned for 2027-02, after the planned deployment of 2027-02-01. Evidence: test records, the restore re-performance, the ISSE interview, conops limitation 4."
+    status: open
+    severity: moderate
+    recommendation: "Hold the tabletop and the regional failover test before production use if the schedule allows, otherwise as early in 2027-02 as possible, review the results and record corrective actions in the plan and the POA&M."
+    affected_statements: ["CP-04a.[01]", "CP-04a.[02]", "CP-04a.[03]"]
+    state_difference: "Expected: tabletop, restore and failover tests completed. Actual: restore only; failover and tabletop untested, so recovery from a regional outage is unproven."
+    potential_compromise: [availability]
+    sources: [INT-162.A2, product/test-results.md#dt-2, product/conops.md#limitations]
+    triage:
+      action: poam
+      decided_by: PER-PM
+      significance: moderate
+      risk_basis: [ART-RA, INT-177.A2]
+      rationale: "VUL-05 of the risk assessment, with the single-region condition PC-01; the tabletop and failover test are planned for 2027-02 and need the operations team, so it goes to the POA&M."

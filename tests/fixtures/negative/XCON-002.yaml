@@ -1,0 +1,17 @@
+rule: XCON-002
+bases:
+- minimal
+description: an open STIG finding is mapped to au-2, which the SSP records as implemented without naming it
+mutations:
+- op: set_field
+  file: artifacts/data/stig-summary.yaml
+  path: findings.0.control_id
+  value: au-2
+expect:
+  errors: []
+  also:
+  - XCON-001
+  warnings:
+  - XCON-002
+  messages:
+  - STG-001 is open on au-2, which the SSP records as implemented without naming STG-001

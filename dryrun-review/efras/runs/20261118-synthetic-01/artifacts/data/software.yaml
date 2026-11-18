@@ -1,0 +1,69 @@
+# artifacts/data/software.yaml (S-4, with ART-CMP; schema software). Written whole (INV-8).
+covered_software: true
+pipeline:
+  produced: true
+  automated: true
+  location: "factory:Example Software Factory"
+  authorization: "The Example Software Factory holds its own ATO (2025-10-01, fictional); EFRAS is a tenant under SVA-004."
+  monitoring: "The factory monitors its pipeline under its ATO; EFRAS gate results and deployment approvals are logged and reviewed by the ISSO."
+  protection: "Pipeline access is CAC-federated and role-limited; production deployment needs the ISSO's manual approval after every gate passes."
+  build:
+    trusted_sources: "Source lives in the factory repository; dependencies come only from the factory's vetted repository, hash-pinned; base images are the factory's hardened images."
+    tamper_protection: "Every merge is reviewed by a second engineer; the pipeline signs every image and its provenance; the cluster admits only signed images."
+    observability: "Each build's logs, gate results and provenance are kept with the release in the factory."
+  provenance:
+    format: "SLSA provenance attestations"
+    attestations: "Signed build provenance per image, plus ERST's secure software development attestation per release"
+    signed: true
+  supply_chain_links: "Developer workstation, factory repository, pull request review, factory build and gates, signing, factory artifact repository, ISSO approval, pipeline deployment, cluster admission check."
+  production_deployment: manual-decision
+  practices: "Pull request review, static, dependency, image and dynamic scans, policy checks and SBOM generation on every build (the factory's secure development practices)."
+  development_tools: "Factory-provided IDE plugins, scanners and build tools; the analytics sandbox for model work; none of them reaches production data."
+ai_development:
+  used: false
+  tools: []
+  accountability: "No AI tool is used to write or test EFRAS code; ERST developers are accountable for all code."
+  human_review: "Not applicable while no AI tool is used; any future use needs program approval and human review of every AI change to security-relevant code."
+  review_and_test: "All code is reviewed and tested through the same gates."
+  data_protection: "Developers are told not to put non-public EFRAS information into any generative AI service."
+  training: "The program's annual developer briefing covers the rules for AI use in development."
+evidence:
+  sbom:
+    standard: "CycloneDX"
+    custom_generated: true
+    cots_captured: true
+    third_party_included: true
+    transitive_included: true
+    maintained: "Generated per image at each build, stored with the release and rescanned daily."
+    gaps: "Managed cloud services (database engine, Kubernetes control plane) are recorded from the provider's published component lists, not from a generated SBOM."
+  assurance: [static-analysis, dynamic-analysis, secure-code-review]
+  automation: "Gate results, SBOMs and provenance are produced by the pipeline at every build without manual steps."
+  protections_and_risks: "Applied: signed images, admission control, pinned dependencies, scans. Residual: two high vulnerabilities in CMP-REPORT's image library until release 1.5.2 (2026-12-10)."
+  ai_record: []
+  formats: "CycloneDX SBOM, SLSA provenance, SARIF scan results"
+  marking: "Evidence is marked CUI and kept in the factory and the program repository; it holds no PII."
+  sharing: "Evidence is shared with the SCA and the AO's office through the factory and eMASS for assessment and reciprocity."
+  assessment_input: "A-3 reads the gate results, SBOMs and provenance of the release under assessment."
+test_and_evaluation:
+  approach: "Integrated developmental and security test: the factory gates on every build, a developmental test event per release cycle, and an independent government penetration test per major release."
+  pipeline_integration: "Static, dependency, image and dynamic scans run in the pipeline; failures stop the release."
+  operational_data: "Drift scans, CSSP alerts and the penetration test findings feed the next release's tests."
+  sharing: "Test results go to the ISSM, the SCA and the test lead; findings become issues and, after assessment, POA&M items."
+  contract_performance: "ERST's contract deliverables include the gate results and attestation of each release."
+  cyber_risk_assessments: "The system risk assessment (ART-RA) is updated with each major release and test event."
+  mission_capability: "Release tests check the readiness views and forecasts against reference data."
+  fielding_evidence: "Release tests, gate results and the ISSO's approval support each deployment decision."
+  standards: "The DoD DevSecOps reference design and the factory's ATO conditions."
+  cyber_dte:
+    - {event: "DT-2 developmental test event", date: "2026-10-17", independent: false}
+    - {event: "Penetration test by the Component government red team", date: "2026-10-31", independent: true}
+program:
+  governance: "The PM governs releases every three weeks through the board; major releases also go to the board and the AO when significant."
+  decision_authority: "Deployment decisions are delegated to the ISSO, verified by the pipeline's automated gate results."
+  workforce: "ERST roles map to the DoD Cyber Workforce Framework software developer and DevSecOps work roles; gaps are closed through the factory's training."
+  training: "The factory's DevSecOps training for new ERST staff."
+  career_paths: "Set by the ERST contractor; the program has no government software career path of its own."
+  performance: "Release deliverables and gate pass rates are reviewed monthly by the PM."
+  records: "Source, builds and evidence are kept in the factory for the life of the system plus one year."
+  exceptions: "None requested"
+sources: [INT-128.A1, INT-128.A2, INT-111.A1, INT-116.A1, product/architecture.md#configuration, product/test-results.md#pipeline-1-5, product/test-results.md#pentest]

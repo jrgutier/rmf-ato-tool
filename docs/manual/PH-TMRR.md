@@ -44,8 +44,8 @@ Reduce technology, engineering, integration and life-cycle cost risk and mature 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
 | <a id="ms-cddv"></a>**CDD validation** Capability Development Document validation | event | — | During TMRR the requirements validation authority validates the CDD, or the equivalent requirements document that replaced it once JCIDS was disestablished, before the Development RFP release decision point (ACQLC-002). | — |
-| <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](../../MANUAL.md#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [P-17](#task-p-17) |
-| <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) |
+| <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](../../MANUAL.md#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [Prepare 17: Requirements Allocation (P-17)](#task-p-17) |
+| <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6) |
 
 Sources:
 
@@ -57,9 +57,9 @@ Sources:
 
 | Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
 |---|---|---|---|
-| <a id="rv-srr"></a>**SRR** System Requirements Review | Confirm that the system requirements are complete, testable and traceable to the capability need (DoDI 5000.88 requires an SRR or an SFR). | Security and privacy requirements defined (P-15) and traceable; categorization approved (C-3) so that the control baseline can be selected. The system risk assessment (P-14) explains the requirements, and the system's place in the enterprise architecture (P-16) is known. | [P-14](PH-MSA.md#task-p-14), [P-15](PH-MSA.md#task-p-15), [P-16](#task-p-16), [C-3](PH-MSA.md#task-c-3) |
-| <a id="rv-sfr"></a>**SFR** System Functional Review | Confirm that the functional baseline satisfies the system requirements (DoDI 5000.88 requires an SRR or an SFR). | Requirements allocated to the system and its environment (P-17); control baseline selected and tailored (S-1, S-2), with overlays applied and every tailoring decision justified. | [P-17](#task-p-17), [S-1](#task-s-1), [S-2](#task-s-2) |
-| <a id="rv-pdr"></a>**PDR** Preliminary Design Review | Confirm that the preliminary design and allocated baseline satisfy the functional baseline; conducted before Milestone B. | Controls allocated to system elements (S-3); planned control implementations documented in the security plan (S-4) and the continuous monitoring strategy drafted (S-5), so the security plan can be approved (S-6) before Milestone B. | [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5) |
+| <a id="rv-srr"></a>**SRR** System Requirements Review | Confirm that the system requirements are complete, testable and traceable to the capability need (DoDI 5000.88 requires an SRR or an SFR). | Security and privacy requirements defined (P-15) and traceable; categorization approved (C-3) so that the control baseline can be selected. The system risk assessment (P-14) explains the requirements, and the system's place in the enterprise architecture (P-16) is known. | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14), [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Categorize 3: Security Categorization Review and Approval (C-3)](PH-MSA.md#task-c-3) |
+| <a id="rv-sfr"></a>**SFR** System Functional Review | Confirm that the functional baseline satisfies the system requirements (DoDI 5000.88 requires an SRR or an SFR). | Requirements allocated to the system and its environment (P-17); control baseline selected and tailored (S-1, S-2), with overlays applied and every tailoring decision justified. | [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2) |
+| <a id="rv-pdr"></a>**PDR** Preliminary Design Review | Confirm that the preliminary design and allocated baseline satisfy the functional baseline; conducted before Milestone B. | Controls allocated to system elements (S-3); planned control implementations documented in the security plan (S-4) and the continuous monitoring strategy drafted (S-5), so the security plan can be approved (S-6) before Milestone B. | [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) |
 
 Sources:
 
@@ -73,18 +73,18 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [P-16](#task-p-16) Enterprise Architecture | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-BND](../../MANUAL.md#art-bnd) | [SRR](#rv-srr) |
-| [P-17](#task-p-17) Requirements Allocation | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-REQ](../../MANUAL.md#art-req) | [Dev RFP RD](#ms-drfprd), [SFR](#rv-sfr) |
-| [S-1](#task-s-1) Control Selection | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-BASELINE](../../MANUAL.md#art-baseline) | — | [SFR](#rv-sfr) |
-| [S-2](#task-s-2) Control Tailoring | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-BASELINE](../../MANUAL.md#art-baseline) | [SFR](#rv-sfr) |
-| [S-3](#task-s-3) Control Allocation | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-BASELINE](../../MANUAL.md#art-baseline) | [PDR](#rv-pdr) |
-| [S-4](#task-s-4) Documentation of Planned Control Implementations | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-SSP](../../MANUAL.md#art-ssp), [ART-CMP](../../MANUAL.md#art-cmp), [ART-CP](../../MANUAL.md#art-cp), [ART-IRP](../../MANUAL.md#art-irp), [ART-SVCA](../../MANUAL.md#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
-| [S-5](#task-s-5) Continuous Monitoring Strategy—System | Select | [PM/SO](../../MANUAL.md#per-pm) | [ART-CONMON](../../MANUAL.md#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
-| [S-6](#task-s-6) Plan Review and Approval | Select | [AO](../../MANUAL.md#per-ao) | — | [ART-SSP](../../MANUAL.md#art-ssp) | [MS B](#ms-b) |
+| [Prepare 16: Enterprise Architecture (P-16)](#task-p-16) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | [SRR](#rv-srr) |
+| [Prepare 17: Requirements Allocation (P-17)](#task-p-17) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | [Dev RFP RD](#ms-drfprd), [SFR](#rv-sfr) |
+| [Select 1: Control Selection (S-1)](#task-s-1) | Select | [PM/SO](../../MANUAL.md#per-pm) | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | — | [SFR](#rv-sfr) |
+| [Select 2: Control Tailoring (S-2)](#task-s-2) | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | [SFR](#rv-sfr) |
+| [Select 3: Control Allocation (S-3)](#task-s-3) | Select | [PM/SO](../../MANUAL.md#per-pm) | — | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | [PDR](#rv-pdr) |
+| [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | Select | [PM/SO](../../MANUAL.md#per-pm) | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp), [Contingency plan (ART-CP)](../../MANUAL.md#art-cp), [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp), [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
+| [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | Select | [PM/SO](../../MANUAL.md#per-pm) | [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
+| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | Select | [AO](../../MANUAL.md#per-ao) | — | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | [MS B](#ms-b) |
 
-Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#task-p-14), [P-15](PH-MSA.md#task-p-15), [P-18](PH-MSA.md#task-p-18), [C-1](PH-MSA.md#task-c-1), [C-2](PH-MSA.md#task-c-2), [C-3](PH-MSA.md#task-c-3).
+Also active in this phase (described in their primary phase): [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14), [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15), [Prepare 18: System Registration (P-18)](PH-MSA.md#task-p-18), [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1), [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](PH-MSA.md#task-c-3).
 
-## <a id="task-p-16"></a>P-16 · Enterprise Architecture
+## <a id="task-p-16"></a>Prepare 16: Enterprise Architecture (P-16)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [TMRR](#ph-tmrr) (continues in [MSA](PH-MSA.md#ph-msa)) · required · at least 1 stakeholder interview*
 
@@ -103,19 +103,19 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [EXT-NSA-ASSESSMENT](../../MANUAL.md#ext-nsa-assessment) | NSA assessment of a National Security System | outside input (organization) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](PH-MSA.md#task-p-11) (core artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [NSA assessment of a National Security System (EXT-NSA-ASSESSMENT)](../../MANUAL.md#ext-nsa-assessment) | NSA assessment of a National Security System | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 
 **Entry criteria**
 
@@ -144,9 +144,9 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 **Playbook:** [playbooks/P/P-16.md](../../playbooks/P/P-16.md)
 
-**Cross-references:** depends on [P-15](PH-MSA.md#task-p-15); required by [P-17](#task-p-17).
+**Cross-references:** depends on [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15); required by [Prepare 17: Requirements Allocation (P-17)](#task-p-17).
 
-## <a id="task-p-17"></a>P-17 · Requirements Allocation
+## <a id="task-p-17"></a>Prepare 17: Requirements Allocation (P-17)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -165,17 +165,17 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | updates | supporting |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | updates | supporting |
 
 **Entry criteria**
 
@@ -208,9 +208,9 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 **Playbook:** [playbooks/P/P-17.md](../../playbooks/P/P-17.md)
 
-**Cross-references:** depends on [P-5](PH-MSA.md#task-p-5), [P-16](#task-p-16); required by [S-3](#task-s-3).
+**Cross-references:** depends on [Prepare 5: Common Control Identification (P-5)](PH-MSA.md#task-p-5), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16); required by [Select 3: Control Allocation (S-3)](#task-s-3).
 
-## <a id="task-s-1"></a>S-1 · Control Selection
+## <a id="task-s-1"></a>Select 1: Control Selection (S-1)
 
 *[Select](../../MANUAL.md#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -229,22 +229,22 @@ Also active in this phase (described in their primary phase): [P-14](PH-MSA.md#t
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [EXT-BASELINES](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
-| [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](PH-MSA.md#task-p-8) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Control baselines (EXT-BASELINES)](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [SP 800-53 Rev. 5 control catalog (EXT-CATALOG)](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | produces | supporting |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | produces | supporting |
 
 Writes to `facts.yaml`: `baseline_id`.
 
@@ -275,9 +275,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-1.md](../../playbooks/S/S-1.md)
 
-**Cross-references:** depends on [C-3](PH-MSA.md#task-c-3), [P-5](PH-MSA.md#task-p-5); required by [S-2](#task-s-2).
+**Cross-references:** depends on [Categorize 3: Security Categorization Review and Approval (C-3)](PH-MSA.md#task-c-3), [Prepare 5: Common Control Identification (P-5)](PH-MSA.md#task-p-5); required by [Select 2: Control Tailoring (S-2)](#task-s-2).
 
-## <a id="task-s-2"></a>S-2 · Control Tailoring
+## <a id="task-s-2"></a>Select 2: Control Tailoring (S-2)
 
 *[Select](../../MANUAL.md#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -296,20 +296,20 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
-| [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](PH-MSA.md#task-p-8) (supporting artifact) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
 
 **Entry criteria**
 
@@ -347,9 +347,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-2.md](../../playbooks/S/S-2.md)
 
-**Cross-references:** depends on [S-1](#task-s-1); required by [S-3](#task-s-3).
+**Cross-references:** depends on [Select 1: Control Selection (S-1)](#task-s-1); required by [Select 3: Control Allocation (S-3)](#task-s-3).
 
-## <a id="task-s-3"></a>S-3 · Control Allocation
+## <a id="task-s-3"></a>Select 3: Control Allocation (S-3)
 
 *[Select](../../MANUAL.md#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -368,22 +368,22 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](PH-MSA.md#task-p-11) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2) (core artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1) (core artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
 
 **Entry criteria**
 
@@ -410,9 +410,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-3.md](../../playbooks/S/S-3.md)
 
-**Cross-references:** depends on [S-2](#task-s-2), [P-17](#task-p-17); required by [S-4](#task-s-4).
+**Cross-references:** depends on [Select 2: Control Tailoring (S-2)](#task-s-2), [Prepare 17: Requirements Allocation (P-17)](#task-p-17); required by [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4).
 
-## <a id="task-s-4"></a>S-4 · Documentation of Planned Control Implementations
+## <a id="task-s-4"></a>Select 4: Documentation of Planned Control Implementations (S-4)
 
 *[Select](../../MANUAL.md#step-s) step · system level · primary phase [TMRR](#ph-tmrr) (continues in [EMD](PH-EMD.md#ph-emd)) · required · at least 1 stakeholder interview*
 
@@ -431,27 +431,27 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](PH-MSA.md#task-p-11) (core artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
-| [EXT-CATALOG](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1) (core artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](PH-MSA.md#task-p-11) (core artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](PH-MSA.md#task-p-8) (supporting artifact) |
+| [SP 800-53 Rev. 5 control catalog (EXT-CATALOG)](../../MANUAL.md#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | produces | core |
-| [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | produces | core |
-| [ART-CP](../../MANUAL.md#art-cp) | Contingency plan | produces | core |
-| [ART-IRP](../../MANUAL.md#art-irp) | Incident response plan | produces | core |
-| [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | produces | supporting |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | produces | core |
+| [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp) | Configuration management plan | produces | core |
+| [Contingency plan (ART-CP)](../../MANUAL.md#art-cp) | Contingency plan | produces | core |
+| [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | Incident response plan | produces | core |
+| [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca) | Cybersecurity service agreements | produces | supporting |
 
 **Entry criteria**
 
@@ -488,9 +488,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-4.md](../../playbooks/S/S-4.md)
 
-**Cross-references:** depends on [S-3](#task-s-3); required by [S-5](#task-s-5), [S-6](#task-s-6).
+**Cross-references:** depends on [Select 3: Control Allocation (S-3)](#task-s-3); required by [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6).
 
-## <a id="task-s-5"></a>S-5 · Continuous Monitoring Strategy—System
+## <a id="task-s-5"></a>Select 5: Continuous Monitoring Strategy—System (S-5)
 
 *[Select](../../MANUAL.md#step-s) step · system level · primary phase [TMRR](#ph-tmrr) (continues in [EMD](PH-EMD.md#ph-emd)) · required · at least 1 stakeholder interview*
 
@@ -509,17 +509,17 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | produces | core |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | produces | core |
 
 **Entry criteria**
 
@@ -560,9 +560,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-5.md](../../playbooks/S/S-5.md)
 
-**Cross-references:** depends on [S-4](#task-s-4), [P-7](PH-MSA.md#task-p-7); required by [S-6](#task-s-6), [M-2](PH-OS.md#task-m-2).
+**Cross-references:** depends on [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](PH-MSA.md#task-p-7); required by [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 2: Ongoing Assessments (M-2)](PH-OS.md#task-m-2).
 
-## <a id="task-s-6"></a>S-6 · Plan Review and Approval
+## <a id="task-s-6"></a>Select 6: Plan Review and Approval (S-6)
 
 *[Select](../../MANUAL.md#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -582,16 +582,16 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -618,4 +618,4 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-6.md](../../playbooks/S/S-6.md)
 
-**Cross-references:** depends on [S-4](#task-s-4), [S-5](#task-s-5); required by [I-1](PH-EMD.md#task-i-1), [A-1](PH-EMD.md#task-a-1).
+**Cross-references:** depends on [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5); required by [Implement 1: Control Implementation (I-1)](PH-EMD.md#task-i-1), [Assess 1: Assessor Selection (A-1)](PH-EMD.md#task-a-1).

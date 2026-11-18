@@ -1,0 +1,18 @@
+rule: SCRM-002
+bases:
+- minimal
+description: no mission-critical function is recorded and nothing says why
+mutations:
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: criticality.functions
+  value: []
+- op: set_field
+  file: artifacts/data/scrm.yaml
+  path: suppliers.2.functions
+  value: []
+expect:
+  errors:
+  - SCRM-002
+  messages:
+  - criticality.functions is empty but criticality.none_rationale does not say why the system has no mission-critical function

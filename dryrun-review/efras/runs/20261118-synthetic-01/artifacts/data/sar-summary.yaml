@@ -1,0 +1,59 @@
+# artifacts/data/sar-summary.yaml (A-3; schema sar-summary). Written whole (INV-8). Assessor:
+# PER-SCA, simulated. Names are role titles: the run names no real or invented person.
+assessment_type: authorization
+environment:
+  description: "The EFRAS pre-production account in the Example GovCloud IL4 region, built by the pipeline from the production templates, running release 1.5.1 with synthetic data and test accounts for the five roles; the production account holds no release yet, so every examination of settings, test and scan ran here."
+  site_location: "Example GovCloud IL4 region (program-owned pre-production account), reached over NIPRNet through the Example Enterprise Cloud Access Point; interviews and document examination at the ARSPO program office and by video with the CSSP and the providers"
+  security: "The provider's IL4 data center physical and environmental protection (inherited, LA-01); the access point's NIPRNet boundary protection; CAC sign-in through the identity broker; the ARSPO controlled office space for the privileged access workstations"
+  supporting_equipment: ["Component enterprise SCAP STIG and vulnerability scanner with authenticated scan accounts issued for the window", "red team attack workstations on NIPRNet behind the access point", "synthetic EMIS extracts (valid, tampered and with non-SORN fields) and a synthetic maintainer population for the privacy tests", "a test notebook in CMP-SANDBOX for the egress checks"]
+  external_interfaces: ["Example Enterprise Cloud Access Point (NIPRNet ingress)", "enterprise identity broker (SAML, CAC)", "EMIS nightly extract endpoint (pre-production test feed, synthetic)", "supply status service API (test endpoint)", "CSSP log collector", "software factory registry"]
+  personnel:
+    - {name: "SCA team lead (role title)", organization: "Component independent assessment activity, business systems SCA team", role: "Lead assessor; examinations, interviews, the 2026-11-23 scan"}
+    - {name: "Cloud and container assessor (role title)", organization: "Component independent assessment activity, business systems SCA team", role: "Configuration, scan and DT-2 re-performance; BM-04 review"}
+    - {name: "Privacy-trained assessor (role title)", organization: "Component independent assessment activity, business systems SCA team", role: "Privacy tests under the privacy office's methodology"}
+    - {name: "Red team testers (two, role title)", organization: "Component red team (fictional), independent of ARSPO", role: "Penetration test 2026-11-30 to 2026-12-04"}
+    - {name: "EFRAS ISSO (role title)", organization: "ARSPO", role: "Records, test windows, log views"}
+    - {name: "EFRAS ISSM (role title)", organization: "ARSPO", role: "Point of contact; plan set and records"}
+    - {name: "ERST security engineer (role title)", organization: "ERST (fictional development contractor)", role: "Architecture, configuration and keys"}
+    - {name: "ERST developer lead (role title)", organization: "ERST (fictional development contractor)", role: "Pipeline records, DT-2 support, container checklist review"}
+    - {name: "CSSP liaison (role title)", organization: "Example Cybersecurity Service Provider", role: "Monitoring evidence; defended during the penetration test"}
+    - {name: "Component privacy officer (role title)", organization: "Component privacy office", role: "SORN and PIA evidence; privacy test observer"}
+assumptions:
+  - "Pre-production is built from the production templates, so its configuration stands for the system to be authorized (RR-001 applicability), although the architecture places pre-production outside the authorization boundary."
+  - "The leaver-timing test shows no notification time for any sampled leaver; no disable delay in days is asserted (ASM-020)."
+  - "The ASD STIG checklist review produced no rule result, because no documented container configuration exists (ASM-021)."
+  - "The second penetration test produced no result the run can ground; the PT-3 retest is not demonstrated (ASM-022)."
+  - "REQ-11 and REQ-12 are not demonstrated; no specific nonconformance is asserted (ASM-023)."
+  - "Release 1.5.2 is treated as not deployed before the out-brief; its fixes are not verified (ASM-024)."
+limitations:
+  - "All testing ran in pre-production with synthetic data; production holds no release and no real maintainer PII yet."
+  - "Inherited controls (pe-3, mp-6) and the providers' parts of hybrid controls were confirmed against the providers' packages, not re-tested (EXT-001 to EXT-007)."
+  - "The CSSP's operations were not re-assessed; its detection during the penetration test is not relied on."
+  - "Release 1.5.2, which carries the fixes for STG-001, STG-002 and the two efras-report highs, did not land in the assessed environment before the out-brief."
+  - "Controls whose implementation is itself a later RMF task (ca-2 report delivery, ca-5 POA&M, ca-7 monitoring) were judged at A-3 as found."
+issues:
+  - "The assessment's events (2026-11-19 to 2026-12-11) are dated after the run's clock (2026-11-18); interviews carry the scheduled event dates."
+sca:
+  name: "SCA team lead (role title)"
+  organization: "Component independent assessment activity, business systems SCA team"
+  role: "Security control assessor (delegated by the Component CISO for business systems)"
+  email: "sca-business-systems@example.mil"
+  phone: "000-000-0000"
+sites:
+  - {site: "EFRAS pre-production account, Example GovCloud IL4 region", dates: ["2026-11-23", "2026-11-24", "2026-11-30", "2026-12-01", "2026-12-02", "2026-12-03", "2026-12-04", "2026-12-07"]}
+  - {site: "ARSPO program office (document examination and interviews)", dates: ["2026-11-19", "2026-11-20", "2026-12-11"]}
+penetration_test:
+  date: "2026-11-30"
+  activities_log: "The red team's activity log for 2026-11-30 to 2026-12-04 and its report of the first test (2026-10-27 to 2026-10-31, RR-002), held by the SCA team; the second week's log records the test as held, with no new exploitation the run can ground (ASM-022)."
+  exploited:
+    - {vulnerability: "PT-1: the report service did not repeat the API's scoping check (first test)", attack: "An officer changed an air wing identifier in an export request to obtain another air wing's report; fixed in 1.5.1 and retested pass on 2026-11-10."}
+    - {vulnerability: "PT-2: the unsalted DoD ID hash in de-identified exports (first test; design unchanged)", attack: "An export obtained with an analyst account was joined with a list of 50 DoD ID numbers to re-identify maintainers; re-performed by the privacy assessor on 2026-12-07."}
+    - {vulnerability: "PT-3: the sandbox NAT allow-list wildcard (first test)", attack: "A notebook in the sandbox downloaded packages from a public mirror through the NAT gateway; the wildcard was removed on 2026-11-03 and the retest is not demonstrated."}
+  likelihood: "Moderate for PT-2: an authorized analyst with a list of ID numbers needs no special skill or tooling; low for PT-3: it needs sandbox access and gives only outbound reach; PT-1 is closed."
+  controls_validated: [ac-3, sc-7, pt-3]
+  remediation:
+    - "PT-1: keep the scoping check in the report service and the regression case in the DT suite (closed)."
+    - "PT-2: salted, rotated pseudonyms in release 1.6 (2027-01-15), then retest re-identification (FND-018)."
+    - "PT-3: retest sandbox egress against public destinations and add an automated egress probe (FND-023)."
+  findings: [FND-018, FND-023]
+sources: [INT-147.A1, INT-169.A2, INT-171.A2, ASM-020, ASM-021, ASM-022, ASM-023, ASM-024, product/test-results.md#pentest, product/architecture.md#boundary, ART-SAP]

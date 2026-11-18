@@ -53,6 +53,15 @@ def get(facts: dict[str, Any], dotted: str) -> Any:
     return node
 
 
+def nss(facts: dict[str, Any], fallback: Any = None) -> bool | None:
+    """The run's NSS status: the `nss` fact once C-1 sets it, else the fallback record value
+    (P-16's nss-assessments.yaml) until then."""
+    node = get(facts, "nss")
+    if isinstance(node, dict) and isinstance(node.get("value"), bool):
+        return node["value"]
+    return fallback if isinstance(fallback, bool) else None
+
+
 def set_by(facts: dict[str, Any], dotted: str) -> str | None:
     node = get(facts, dotted)
     return node.get("set_by_task") if isinstance(node, dict) else None

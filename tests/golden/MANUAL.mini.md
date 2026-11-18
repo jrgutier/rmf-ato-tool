@@ -52,7 +52,9 @@ Conventions:
 
 - IDs are stable and never reused: `PH-` phases, `MS-` milestones and decision points, `RV-`
   technical reviews, `AD-` authorization decisions, `PER-` personas, `ART-` artifacts, `EXT-`
-  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`).
+  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`). Tasks are shown by step
+  and number with their name, and the ID in brackets: "Prepare 1: Risk Management Roles (P-1)"
+  is SP 800-37 Rev. 2 Prepare task 1.
 - A citation reads `REFERENCE, section "heading"` or `REFERENCE, p. N, "quoted words"`. The page is
   the PDF page. To read the passage, run `uv run rmf refs show REFERENCE --section "heading"` or
   `uv run rmf refs show REFERENCE --page N --anchor "quoted words"`.
@@ -71,8 +73,8 @@ Conventions:
 
 | # | Phase | Starts at | Ends at | Milestones and decision points | Technical reviews | RMF tasks (primary phase) | Also active | Authorization decisions |
 |---|---|---|---|---|---|---|---|---|
-| 1 | [MSA](#ph-msa) Materiel Solution Analysis | — | [MS A](#ms-a) | [MS A](#ms-a) | — | [P-11](#task-p-11), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | — | — |
-| 2 | [EMD](#ph-emd) Engineering and Manufacturing Development | — | [MS C](#ms-c) | [MS C](#ms-c) | [PDR](#rv-pdr) | [R-4](#task-r-4) | — | [ATO](#ad-ato), [DATO](#ad-dato) |
+| 1 | [MSA](#ph-msa) Materiel Solution Analysis | — | [MS A](#ms-a) | [MS A](#ms-a) | — | [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | — | — |
+| 2 | [EMD](#ph-emd) Engineering and Manufacturing Development | — | [MS C](#ms-c) | [MS C](#ms-c) | [PDR](#rv-pdr) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | — | [ATO](#ad-ato), [DATO](#ad-dato) |
 
 The flowchart shows the phases in order, joined by the milestones that open and close them. Dotted
 lines lead to events inside a phase and to the tasks where the Authorizing Official makes an
@@ -93,9 +95,9 @@ flowchart LR
 
 | Step | Purpose | Tasks | Primary phases |
 |---|---|---|---|
-| <a id="step-p"></a>P Prepare | Set the context for risk management. | [P-11](#task-p-11) | [MSA](#ph-msa) |
-| <a id="step-c"></a>C Categorize | Describe and categorize the system. | [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | [MSA](#ph-msa) |
-| <a id="step-r"></a>R Authorize | Decide whether the risk is acceptable. | [R-4](#task-r-4) | [EMD](#ph-emd) |
+| <a id="step-p"></a>Prepare (P) | Set the context for risk management. | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | [MSA](#ph-msa) |
+| <a id="step-c"></a>Categorize (C) | Describe and categorize the system. | [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | [MSA](#ph-msa) |
+| <a id="step-r"></a>Authorize (R) | Decide whether the risk is acceptable. | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd) |
 
 ## <a id="raci"></a>3. Who does what (RACI matrix)
 
@@ -103,25 +105,25 @@ flowchart LR
 **C** Consulted · **I** Informed. `A/R` means the accountable persona also does the work. Column
 headings link to the persona catalog; each persona's card describes the role in full.
 
-### P Prepare
+### Prepare (P)
 
 | Task | [AO](#per-ao) | [PM/SO](#per-pm) | [ISSM](#per-issm) |
 |---|:-:|:-:|:-:|
-| [P-11](#task-p-11) Authorization Boundary | A | R | R |
+| [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | A | R | R |
 
-### C Categorize
+### Categorize (C)
 
 | Task | [AO](#per-ao) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [IO](#per-io) |
 |---|:-:|:-:|:-:|:-:|
-| [C-1](#task-c-1) System Description | I | R/A | R | C |
-| [C-2](#task-c-2) Security Categorization | I | A | R | R |
-| [C-3](#task-c-3) Security Categorization Review and Approval | A | I | R | C |
+| [Categorize 1: System Description (C-1)](#task-c-1) | I | R/A | R | C |
+| [Categorize 2: Security Categorization (C-2)](#task-c-2) | I | A | R | R |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | A | I | R | C |
 
-### R Authorize
+### Authorize (R)
 
 | Task | [AO](#per-ao) | [PM/SO](#per-pm) | [ISSM](#per-issm) |
 |---|:-:|:-:|:-:|
-| [R-4](#task-r-4) Authorization Decision | R/A | I | I |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | R/A | I | I |
 
 ## <a id="phases"></a>4. Phases and tasks
 
@@ -153,7 +155,7 @@ Choose the materiel solution and start the RMF.
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-a"></a>**MS A** Milestone A | milestone | — | Approve entry into technology maturation. | [P-11](#task-p-11), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) |
+| <a id="ms-a"></a>**MS A** Milestone A | milestone | — | Approve entry into technology maturation. | [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
 
 #### MSA task summary
 
@@ -161,12 +163,12 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [P-11](#task-p-11) Authorization Boundary | Prepare | [AO](#per-ao) | [ART-BND](#art-bnd) | — | [MS A](#ms-a) |
-| [C-1](#task-c-1) System Description | Categorize | [PM/SO](#per-pm) | [ART-SD](#art-sd) | [ART-BND](#art-bnd) | [MS A](#ms-a) |
-| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](#per-pm) | [ART-CAT](#art-cat) | — | [MS A](#ms-a) |
-| [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](#per-ao) | — | [ART-CAT](#art-cat) | [MS A](#ms-a) |
+| [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | Prepare | [AO](#per-ao) | [Authorization boundary (ART-BND)](#art-bnd) | — | [MS A](#ms-a) |
+| [Categorize 1: System Description (C-1)](#task-c-1) | Categorize | [PM/SO](#per-pm) | [System description (ART-SD)](#art-sd) | [Authorization boundary (ART-BND)](#art-bnd) | [MS A](#ms-a) |
+| [Categorize 2: Security Categorization (C-2)](#task-c-2) | Categorize | [PM/SO](#per-pm) | [Security categorization (ART-CAT)](#art-cat) | — | [MS A](#ms-a) |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | Categorize | [AO](#per-ao) | — | [Security categorization (ART-CAT)](#art-cat) | [MS A](#ms-a) |
 
-#### <a id="task-p-11"></a>P-11 · Authorization Boundary
+#### <a id="task-p-11"></a>Prepare 11: Authorization Boundary (P-11)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -183,13 +185,13 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BND](#art-bnd) | Authorization boundary | produces | core |
+| [Authorization boundary (ART-BND)](#art-bnd) | Authorization boundary | produces | core |
 
 Writes to `facts.yaml`: `boundary_id`.
 
@@ -211,9 +213,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-11.md](playbooks/P/P-11.md)
 
-**Cross-references:** depends on nothing; required by [C-1](#task-c-1).
+**Cross-references:** depends on nothing; required by [Categorize 1: System Description (C-1)](#task-c-1).
 
-#### <a id="task-c-1"></a>C-1 · System Description
+#### <a id="task-c-1"></a>Categorize 1: System Description (C-1)
 
 *[Categorize](#step-c) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -232,15 +234,15 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BND](#art-bnd) | Authorization boundary | [P-11](#task-p-11) (core artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Authorization boundary (ART-BND)](#art-bnd) | Authorization boundary | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SD](#art-sd) | System description | produces | core |
-| [ART-BND](#art-bnd) | Authorization boundary | updates | core |
+| [System description (ART-SD)](#art-sd) | System description | produces | core |
+| [Authorization boundary (ART-BND)](#art-bnd) | Authorization boundary | updates | core |
 
 Writes to `facts.yaml`: `system_id`, `system_name`.
 
@@ -262,9 +264,9 @@ Writes to `facts.yaml`: `system_id`, `system_name`.
 
 **Playbook:** [playbooks/C/C-1.md](playbooks/C/C-1.md)
 
-**Cross-references:** depends on [P-11](#task-p-11); required by [C-2](#task-c-2).
+**Cross-references:** depends on [Prepare 11: Authorization Boundary (P-11)](#task-p-11); required by [Categorize 2: Security Categorization (C-2)](#task-c-2).
 
-#### <a id="task-c-2"></a>C-2 · Security Categorization
+#### <a id="task-c-2"></a>Categorize 2: Security Categorization (C-2)
 
 *[Categorize](#step-c) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -282,13 +284,13 @@ Writes to `facts.yaml`: `system_id`, `system_name`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SD](#art-sd) | System description | [C-1](#task-c-1) (core artifact) |
+| [System description (ART-SD)](#art-sd) | System description | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | produces | core |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | produces | core |
 
 Writes to `facts.yaml`: `categorization`.
 
@@ -311,9 +313,9 @@ Writes to `facts.yaml`: `categorization`.
 
 **Playbook:** [playbooks/C/C-2.md](playbooks/C/C-2.md)
 
-**Cross-references:** depends on [C-1](#task-c-1); required by [C-3](#task-c-3); receives feedback from [R-4](#task-r-4).
+**Cross-references:** depends on [Categorize 1: System Description (C-1)](#task-c-1); required by [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3); receives feedback from [Authorize 4: Authorization Decision (R-4)](#task-r-4).
 
-#### <a id="task-c-3"></a>C-3 · Security Categorization Review and Approval
+#### <a id="task-c-3"></a>Categorize 3: Security Categorization Review and Approval (C-3)
 
 *[Categorize](#step-c) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -332,13 +334,13 @@ Writes to `facts.yaml`: `categorization`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | updates | core |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | updates | core |
 
 Writes to `facts.yaml`: `categorization.approved`.
 
@@ -360,7 +362,7 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [R-4](#task-r-4).
+**Cross-references:** depends on [Categorize 2: Security Categorization (C-2)](#task-c-2); required by [Authorize 4: Authorization Decision (R-4)](#task-r-4).
 
 ### <a id="ph-emd"></a>Phase 2: EMD · Engineering and Manufacturing Development
 
@@ -390,7 +392,7 @@ Build, test and authorize the system.
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-c"></a>**MS C** Milestone C | milestone | — | Approve entry into production and deployment. | [R-4](#task-r-4) |
+| <a id="ms-c"></a>**MS C** Milestone C | milestone | — | Approve entry into production and deployment. | [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
 
 #### EMD technical reviews
 
@@ -408,9 +410,9 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](#per-ao) | [ART-AODM](#art-aodm) | — | [MS C](#ms-c), [ATO](#ad-ato), [DATO](#ad-dato) |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](#per-ao) | [AO decision memo (ART-AODM)](#art-aodm) | — | [MS C](#ms-c), [ATO](#ad-ato), [DATO](#ad-dato) |
 
-#### <a id="task-r-4"></a>R-4 · Authorization Decision
+#### <a id="task-r-4"></a>Authorize 4: Authorization Decision (R-4)
 
 *[Authorize](#step-r) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -428,13 +430,13 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AODM](#art-aodm) | AO decision memo | produces | core |
+| [AO decision memo (ART-AODM)](#art-aodm) | AO decision memo | produces | core |
 
 **Entry criteria**
 
@@ -457,7 +459,7 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 **Playbook:** [playbooks/R/R-4.md](playbooks/R/R-4.md)
 
-**Cross-references:** depends on [C-3](#task-c-3); required by no later task; feeds back to [C-2](#task-c-2).
+**Cross-references:** depends on [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3); required by no later task; feeds back to [Categorize 2: Security Categorization (C-2)](#task-c-2).
 
 ## <a id="decisions"></a>5. Authorization decisions
 
@@ -466,8 +468,8 @@ records it (see the artifact catalog).
 
 | Decision | Decided by | Decided in | Phases | Termination date required | Conditions required |
 |---|---|---|---|---|---|
-| [ATO](#ad-ato) Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd) | yes | no |
-| [DATO](#ad-dato) Denial of Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd) | no | no |
+| [ATO](#ad-ato) Authorization to Operate | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd) | yes | no |
+| [DATO](#ad-dato) Denial of Authorization to Operate | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd) | no | no |
 
 ### <a id="ad-ato"></a>ATO: Authorization to Operate
 
@@ -508,12 +510,12 @@ listed data files; OSCAL documents are built from that data.
 
 | Artifact | Package | Produced by | Updated by | Used by |
 |---|---|---|---|---|
-| [ART-BND](#art-bnd) Authorization boundary | core | [P-11](#task-p-11) | [C-1](#task-c-1) | [C-1](#task-c-1) |
-| [ART-SD](#art-sd) System description | core | [C-1](#task-c-1) | — | [C-2](#task-c-2) |
-| [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [R-4](#task-r-4) |
-| [ART-AODM](#art-aodm) AO decision memo | core | [R-4](#task-r-4) | — | — |
+| [Authorization boundary (ART-BND)](#art-bnd) | core | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | [Categorize 1: System Description (C-1)](#task-c-1) | [Categorize 1: System Description (C-1)](#task-c-1) |
+| [System description (ART-SD)](#art-sd) | core | [Categorize 1: System Description (C-1)](#task-c-1) | — | [Categorize 2: Security Categorization (C-2)](#task-c-2) |
+| [Security categorization (ART-CAT)](#art-cat) | core | [Categorize 2: Security Categorization (C-2)](#task-c-2) | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
+| [AO decision memo (ART-AODM)](#art-aodm) | core | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | — | — |
 
-### <a id="art-bnd"></a>ART-BND: Authorization boundary
+### <a id="art-bnd"></a>Authorization boundary (ART-BND)
 
 The boundary and its components.
 
@@ -523,15 +525,15 @@ The boundary and its components.
 | Template | [templates/artifacts/ART-BND.md](templates/artifacts/ART-BND.md) |
 | Data files | `artifacts/data/boundary.yaml` (schema `boundary`) |
 | OSCAL | `ssp#system-implementation.components` |
-| Produced by | [P-11](#task-p-11) |
-| Updated by | [C-1](#task-c-1) |
-| Used by | [C-1](#task-c-1) |
+| Produced by | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) |
+| Updated by | [Categorize 1: System Description (C-1)](#task-c-1) |
+| Used by | [Categorize 1: System Description (C-1)](#task-c-1) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section 2.5
 
-### <a id="art-sd"></a>ART-SD: System description
+### <a id="art-sd"></a>System description (ART-SD)
 
 The documented characteristics of the system.
 
@@ -541,15 +543,15 @@ The documented characteristics of the system.
 | Template | [templates/artifacts/ART-SD.md](templates/artifacts/ART-SD.md) |
 | Data files | — |
 | OSCAL | — |
-| Produced by | [C-1](#task-c-1) |
+| Produced by | [Categorize 1: System Description (C-1)](#task-c-1) |
 | Updated by | — |
-| Used by | [C-2](#task-c-2) |
+| Used by | [Categorize 2: Security Categorization (C-2)](#task-c-2) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK C-1"
 
-### <a id="art-cat"></a>ART-CAT: Security categorization
+### <a id="art-cat"></a>Security categorization (ART-CAT)
 
 The CNSSI 1253 categorization and its approval.
 
@@ -559,15 +561,15 @@ The CNSSI 1253 categorization and its approval.
 | Template | [templates/artifacts/ART-CAT.md](templates/artifacts/ART-CAT.md) |
 | Data files | `facts.yaml#categorization` (schema `facts`) |
 | OSCAL | — |
-| Produced by | [C-2](#task-c-2) |
-| Updated by | [C-3](#task-c-3) |
-| Used by | [C-3](#task-c-3), [R-4](#task-r-4) |
+| Produced by | [Categorize 2: Security Categorization (C-2)](#task-c-2) |
+| Updated by | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
+| Used by | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
 
 Citations:
 
 - [CNSSI1253](#ref-cnssi1253), section 3.1
 
-### <a id="art-aodm"></a>ART-AODM: AO decision memo
+### <a id="art-aodm"></a>AO decision memo (ART-AODM)
 
 The authorization decision.
 
@@ -577,7 +579,7 @@ The authorization decision.
 | Template | [templates/artifacts/ART-AODM.md](templates/artifacts/ART-AODM.md) |
 | Data files | `artifacts/data/decision.yaml` (schema `decision`) |
 | OSCAL | — |
-| Produced by | [R-4](#task-r-4) |
+| Produced by | [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
 | Updated by | — |
 | Used by | — |
 
@@ -592,7 +594,7 @@ content and operational data.
 
 | Input | Kind | What it is | Used by |
 |---|---|---|---|
-| <a id="ext-product"></a>**EXT-PRODUCT** Product material | product | Design documentation supplied in product/. | [P-11](#task-p-11), [C-1](#task-c-1) |
+| <a id="ext-product"></a>**Product material** (EXT-PRODUCT) | product | Design documentation supplied in product/. | [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1) |
 
 ## <a id="personas"></a>8. Persona catalog
 
@@ -615,10 +617,10 @@ Accepts the risk of operating the system.
 - Card: [personas/PER-AO.md](personas/PER-AO.md)
 - Category: rmf; appointed by: DoD Component head
 - SP 800-37 Rev. 2 roles: Authorizing Official
-- Responsible for: [R-4](#task-r-4)
-- Accountable for: [P-11](#task-p-11), [C-3](#task-c-3), [R-4](#task-r-4)
+- Responsible for: [Authorize 4: Authorization Decision (R-4)](#task-r-4)
+- Accountable for: [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4)
 - Consulted on: none
-- Informed of: [C-1](#task-c-1), [C-2](#task-c-2)
+- Informed of: [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2)
 - Makes the authorization decisions: [ATO](#ad-ato), [DATO](#ad-dato)
 
 Citations:
@@ -632,10 +634,10 @@ Accountable for the system and its RMF execution.
 - Card: [personas/PER-PM.md](personas/PER-PM.md)
 - Category: acquisition; appointed by: DoD Component Acquisition Executive
 - SP 800-37 Rev. 2 roles: System Owner
-- Responsible for: [P-11](#task-p-11), [C-1](#task-c-1)
-- Accountable for: [C-1](#task-c-1), [C-2](#task-c-2)
+- Responsible for: [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1)
+- Accountable for: [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2)
 - Consulted on: none
-- Informed of: [C-3](#task-c-3), [R-4](#task-r-4)
+- Informed of: [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4)
 
 Citations:
 
@@ -648,10 +650,10 @@ Maintains the authorization package.
 - Card: [personas/PER-ISSM.md](personas/PER-ISSM.md)
 - Category: rmf; appointed by: PM or SO
 - SP 800-37 Rev. 2 roles: System Security Officer
-- Responsible for: [P-11](#task-p-11), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3)
+- Responsible for: [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3)
 - Accountable for: none
 - Consulted on: none
-- Informed of: [R-4](#task-r-4)
+- Informed of: [Authorize 4: Authorization Decision (R-4)](#task-r-4)
 
 Citations:
 
@@ -664,9 +666,9 @@ Sets the impact levels of the information it owns.
 - Card: [personas/PER-IO.md](personas/PER-IO.md)
 - Category: organization; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Information Owner or Steward
-- Responsible for: [C-2](#task-c-2)
+- Responsible for: [Categorize 2: Security Categorization (C-2)](#task-c-2)
 - Accountable for: none
-- Consulted on: [C-1](#task-c-1), [C-3](#task-c-3)
+- Consulted on: [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3)
 - Informed of: none
 
 Citations:

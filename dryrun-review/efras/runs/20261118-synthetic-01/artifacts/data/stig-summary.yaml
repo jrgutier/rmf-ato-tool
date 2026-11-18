@@ -1,0 +1,79 @@
+# artifacts/data/stig-summary.yaml (I-1; schema stig-summary). Written whole (INV-8). ART-STIG says why.
+benchmarks:
+  - id: BM-01
+    title: "Kubernetes STIG"
+    version: "release current on 2026-10-22 (number not in the product material, ASM-018)"
+    kind: stig
+    applies_to: [INV-009, INV-008]
+    scan_date: "2026-10-22"
+  - id: BM-02
+    title: "PostgreSQL STIG"
+    version: "release current on 2026-10-22 (number not in the product material, ASM-018)"
+    kind: stig
+    applies_to: [INV-010]
+    scan_date: "2026-10-22"
+  - id: BM-03
+    title: "Example Software Factory hardened base image standard"
+    version: "2026.09"
+    kind: vendor-guide
+    applies_to: [INV-007]
+  - id: BM-04
+    title: "Application Security and Development STIG"
+    version: "release current at the A-3 review (not yet reviewed, ASM-019)"
+    kind: stig
+    applies_to: [INV-002, INV-003, INV-004, INV-005, INV-006]
+not_applicable:
+  - inventory_item: INV-015
+    rationale: "Open-source library inside efras-report (INV-006); a library has no STIG or SRG of its own. It is covered by BM-04 through its container and by the pipeline dependency scan, which found its two high vulnerabilities (INT-135.A3)."
+  - inventory_item: INV-016
+    rationale: "Open-source web framework runtime inside efras-api (INV-003); a library has no STIG or SRG of its own. It is covered by BM-04 through its container and by the pipeline dependency scan (INT-135.A3)."
+findings:
+  - id: STG-001
+    benchmark: BM-02
+    rule_id: SV-900201
+    category: CAT II
+    inventory_item: INV-010
+    title: "Connection logging verbosity is below the STIG value (program-fixable; fix in release 1.5.2, 2026-12-10)"
+    status: open
+    control_id: cm-6
+  - id: STG-002
+    benchmark: BM-02
+    rule_id: SV-900202
+    category: CAT II
+    inventory_item: INV-010
+    title: "Password complexity of the local break-glass database role falls short of the STIG rule (program-fixable; fix in release 1.5.2, 2026-12-10)"
+    status: open
+    control_id: ia-5
+  - id: STG-003
+    benchmark: BM-02
+    rule_id: SV-900203
+    category: CAT II
+    inventory_item: INV-010
+    title: "Engine setting not configurable on the managed service; provider responsibility under the IL4 provisional authorization (LA-01), inherited"
+    status: not-applicable
+    control_id: cm-6
+  - id: STG-004
+    benchmark: BM-02
+    rule_id: SV-900204
+    category: CAT II
+    inventory_item: INV-010
+    title: "Engine setting not configurable on the managed service; provider responsibility under the IL4 provisional authorization (LA-01), inherited"
+    status: not-applicable
+    control_id: cm-6
+  - id: STG-005
+    benchmark: BM-02
+    rule_id: SV-900205
+    category: CAT II
+    inventory_item: INV-010
+    title: "Engine setting not configurable on the managed service; provider responsibility under the IL4 provisional authorization (LA-01), inherited"
+    status: not-applicable
+    control_id: cm-6
+  - id: STG-006
+    benchmark: BM-02
+    rule_id: SV-900206
+    category: CAT II
+    inventory_item: INV-010
+    title: "Engine setting not configurable on the managed service; provider responsibility under the IL4 provisional authorization (LA-01), inherited"
+    status: not-applicable
+    control_id: cm-6
+sources: [product/test-results.md#stig-scan, product/test-results.md#pipeline-1-5, product/architecture.md#configuration, INT-135.A1, INT-135.A2, INT-135.A3, INT-136.A1, INT-136.A2, INT-137.A1, ASM-018, ASM-019]

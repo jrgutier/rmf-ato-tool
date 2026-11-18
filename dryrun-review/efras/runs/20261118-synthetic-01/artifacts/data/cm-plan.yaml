@@ -1,0 +1,104 @@
+# artifacts/data/cm-plan.yaml (S-4; schema cm-plan). Written whole (INV-8). ART-CMP says why.
+# M-1 (2027-02-01): the PM approved this plan on 2026-12-15 (INT-202.A3); the schema has no approval
+# field, so ART-CMP records it. Changes since the decision are in artifacts/data/changes.yaml.
+configuration_items:
+  - id: CI-EDGE
+    label: "Edge: managed load balancer and WAF settings"
+    version: "1.5.0"
+    kind: component
+    inventory_items: [INV-001]
+    rebuild: "The pipeline redeploys the edge template and WAF rule set at tag 1.5.0"
+    baseline: "Edge and WAF templates and WAF rule set at release tag 1.5.0"
+  - id: CI-APP
+    label: "Application containers and their open-source libraries"
+    version: "1.5.0"
+    kind: component-group
+    inventory_items: [INV-002, INV-003, INV-004, INV-005, INV-006, INV-015, INV-016]
+    rebuild: "The software factory pipeline rebuilds and signs each image from the tagged source; the release manifest pins image digests"
+    baseline: "Release manifest of signed image digests at tag 1.5.0, with each image's SBOM"
+  - id: CI-PLATFORM
+    label: "Cluster platform: managed Kubernetes, worker node image and container base image"
+    version: "1.5.0"
+    kind: component-group
+    inventory_items: [INV-007, INV-008, INV-009]
+    rebuild: "The pipeline recreates node groups from the cluster template on the provider's hardened node image; base images come from the software factory"
+    baseline: "Cluster template at tag 1.5.0 on node image 2026.10 and base image 2026.09, Kubernetes STIG (BM-01) with the provider-managed control plane checks recorded as not applicable to the program's configuration in the STIG summary"
+  - id: CI-DATA
+    label: "Data tier: managed PostgreSQL, object storage, keys and secrets"
+    version: "1.5.0"
+    kind: component-group
+    inventory_items: [INV-010, INV-011, INV-012]
+    rebuild: "The pipeline recreates the database, buckets and key policies from the data template; data comes back from snapshots and versioned objects"
+    baseline: "Data template at tag 1.5.0 with the PostgreSQL STIG (BM-02) settings the managed service exposes; the engine settings it does not expose are the provider's (STG-003 to STG-006), and STG-001 and STG-002 are fixed in release 1.5.2"
+  - id: CI-LOGS
+    label: "Log pipeline and log store"
+    version: "1.5.0"
+    kind: component
+    inventory_items: [INV-013]
+    rebuild: "The pipeline redeploys the log routing template, including the forwarding to the CSSP"
+    baseline: "Logging template at tag 1.5.0: sources, 90-day store and CSSP forwarding"
+  - id: CI-SANDBOX
+    label: "Analytics sandbox notebook service"
+    version: "1.5.0"
+    kind: component
+    inventory_items: [INV-014]
+    rebuild: "The pipeline redeploys the sandbox template; notebooks are kept in version control"
+    baseline: "Sandbox template at tag 1.5.0, read access to the training extract only"
+  - id: CI-SECCM
+    label: "SecCM tools and testing processes"
+    version: "1.5.0"
+    kind: seccm-tools
+    inventory_items: []
+    rebuild: "The drift scan job, scan profiles, gate policies and the false-positive allow-lists are code in the program repository, redeployed by the pipeline"
+    baseline: "Drift scan configuration, pipeline gate policies, STIG scan profiles and allow-lists at tag 1.5.0"
+change_control:
+  architecture_consistency: "The ISSE reviews every change that alters a template, a data flow or an interconnection against the Component enterprise architecture and the EFRAS architecture description before the board decides; the result is part of the security impact analysis."
+  ccb_submission: "A change brings to the board its pull request, the security and privacy impact note, the test plan, the pipeline gate results, the deployment schedule and the rollback steps; a major release adds the release test results."
+  elevation: "A change the security impact analysis rates significant (a new interconnection, a new data type, a boundary or identity-path change, or a change to the safeguards in the PIA or SORN) goes from the board through the ISSM to the AO; changes that touch the software factory or the cloud region are coordinated with their boards."
+  rollback: "Every deployment can be rolled back by redeploying the previous release manifest and templates through the pipeline; database changes ship with a reverse migration, and a point-in-time restore is the last resort."
+  retroactive: "An emergency change, deployed within 48 hours under the same gates, is analyzed, tested and approved retroactively at the next board meeting; help desk requests become issues in the tracker, and SDLC work follows the same pull request and gate path."
+  preapproved: "Preapproved: the monthly node image roll, routine dependency updates that pass every gate and provider-announced managed service patches; each is still reviewed, tested by the gates, signed off by the ISSO and listed in the next minutes."
+  testing: "Every configuration change is deployed first to the pre-production account built from the same templates and passes the gates and the release tests there before the production deployment."
+  approved_products: "The approved products list is the release manifest plus the software factory's approved base images and repository; the pipeline refuses an image or dependency from outside it, and a new managed service needs board approval and an inventory entry."
+procedures:
+  inventory_upkeep: "The ISSE and the ISSO review the inventory monthly and at every release against the account and cluster listings; the pipeline flags an image or managed service not in the inventory, and each CI baseline is the template and manifest at the release tag."
+  monitoring_and_media: "The hourly drift scan compares the account with the templates and reports differences to the ISSO; the SCAP STIG scan runs monthly and at each release. The media library is the program repository and the factory artifact repository: templates, signed images, SBOMs and manifests by release tag."
+  patch_management: "Patches enter as ordinary changes: base image and dependency updates through the factory pipeline every three weeks, emergency patches within 48 hours, node images monthly; the provider patches managed services in announced windows, and the board tracks each against the remediation times the ra-5 and si-2 statements set."
+  program: "The PM owns SecCM; the ISSE runs the baselines and impact analyses; the ISSO signs off deployments and watches drift; ERST engineers implement; the board decides. It is funded in the configuration management line, uses the pipeline, the drift scan and the SCAP scanner, and keeps its records for the life of the system plus one year."
+records:
+  content: "The issue tracker and repository keep each change request, its impact analysis, test results, board decision and deployment record, the board minutes, the approved baselines by tag and the scan results; the ISSO keeps the drift reports, the ISSE the STIG summary."
+  disposal: "Records are readable only by the program team and the AO's office, every access and edit is logged in the repository audit log, and records are deleted under the Component records schedule after the life of the system plus one year."
+interconnected_baselines: "Changes to the extract interfaces (IC-1, IC-2) or the identity federation (IC-3) are coordinated with the EMIS program, the supply status service and the identity broker before the board decides, and the TLS and cipher settings are agreed with them."
+ccb_charter:
+  purpose: "The EFRAS configuration control board controls changes to the EFRAS baseline; it defers to the software factory's and the cloud region's boards for their platforms and sends significant changes to the AO."
+  operating_procedures: "Monthly, chaired by the PM, with the ISSM, the ISSE, the ERST technical lead and the user representative as members and the ISSO attending as deployment sign-off authority; emergency meetings within one working day at the call of the chair or the ISSM; quorum is the chair or the ISSM, the ISSE and the ERST technical lead; the privacy office and the CSSP attend as guests when a change touches PII or monitoring."
+  decision_process: "Consensus; failing it the chair decides; the ISSM may hold any change that raises security risk until the AO's office has reviewed it."
+tools:
+  - name: "Component enterprise SCAP STIG scanner"
+    purpose: "STIG and SRG compliance of the worker nodes and the database, monthly and at each release"
+    scap: validated
+    false_positives: "Provider-managed settings the scan marks inherited are recorded in the STIG summary as not applicable to the program's configuration, naming the cloud provider (LA-01); a deviation the program keeps is an exception only the AO or the AODR approves"
+  - name: "Hourly drift scan"
+    purpose: "Detects any difference between the deployed account and the templates"
+    scap: none-available
+    false_positives: "A reviewed allow-list of provider-managed tags and autoscaling changes, kept by the ISSE in the repository"
+  - name: "Software factory image and dependency scanners"
+    purpose: "Known vulnerabilities in images and dependencies at each build and daily against the SBOMs"
+    scap: none-available
+    false_positives: "Marked in the factory with a justification the ISSO approves"
+bypasses:
+  - id: BYP-01
+    mechanism: "CAC sign-in through the enterprise identity broker for the cloud console, bypassed by the two sealed break-glass accounts that use FIDO2 keys while the broker is down"
+    procedure: "Two people unseal the key; the on-call engineer and the ISSO are paged on use; every action is logged in CMP-LOGS and alerted to the CSSP; the key is resealed and the use reviewed the next working day; the deviation from CAC goes to the AO with the package"
+    coordinated_with: [PER-ISSO]
+    approval:
+      by: PER-ISSM
+      form: written
+      date: "2026-11-18"
+    sources: [INT-123.A2, INT-097.A1, product/conops.md#limitations]
+manual_monitoring:
+  - inventory_item: INV-014
+    process: "The managed notebook service exposes no scan interface; the ISSO reviews its settings by hand monthly against the sandbox template"
+  - inventory_item: INV-001
+    process: "The drift scan covers the load balancer settings; the WAF rule set is reviewed by hand at each release by the ISSE"
+sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan, ART-STIG, INT-138.A1]

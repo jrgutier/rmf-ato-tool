@@ -42,7 +42,7 @@ Produce and field the system; operational test and evaluation confirms security 
 |---|---|---|---|---|
 | <a id="ms-frp"></a>**FRP/FD** Full-Rate Production or Full Deployment Decision | decision point | [MDA](../../MANUAL.md#per-mda) | Approve full-rate production or full deployment after operational test and evaluation, including its cybersecurity results. The operational cybersecurity assessments (CVPA and adversarial assessment) and any new validated threat environment inform the decision. | — |
 | <a id="ms-field"></a>**First fielding** First fielding | event | — | The first system or systems are fielded, under a current authorization. The O&S phase begins here, which may precede IOC; production and deployment continue alongside (ACQLC-003). | — |
-| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | Initial operational capability is declared once units are fielded (MS-FIELD, which may precede it) and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [R-4](PH-EMD.md#task-r-4), [M-1](PH-OS.md#task-m-1) |
+| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | Initial operational capability is declared once units are fielded (MS-FIELD, which may precede it) and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [Authorize 4: Authorization Decision (R-4)](PH-EMD.md#task-r-4), [Monitor 1: System and Environment Changes (M-1)](PH-OS.md#task-m-1) |
 
 Sources:
 
@@ -54,7 +54,7 @@ Sources:
 
 | Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
 |---|---|---|---|
-| <a id="rv-pca"></a>**PCA** Physical Configuration Audit | Confirm that the production configuration matches the documented product baseline. | Fielded configuration matches the authorized baseline in the security plan and the inventory; deviations go through change control (M-1) with a security impact analysis. | [M-1](PH-OS.md#task-m-1) |
+| <a id="rv-pca"></a>**PCA** Physical Configuration Audit | Confirm that the production configuration matches the documented product baseline. | Fielded configuration matches the authorized baseline in the security plan and the inventory; deviations go through change control (M-1) with a security impact analysis. | [Monitor 1: System and Environment Changes (M-1)](PH-OS.md#task-m-1) |
 
 Sources:
 
@@ -64,4 +64,4 @@ Sources:
 
 No task has this as its primary phase.
 
-Also active in this phase (described in their primary phase): [R-1](PH-EMD.md#task-r-1), [R-2](PH-EMD.md#task-r-2), [R-3](PH-EMD.md#task-r-3), [R-4](PH-EMD.md#task-r-4), [R-5](PH-EMD.md#task-r-5), [M-1](PH-OS.md#task-m-1), [M-2](PH-OS.md#task-m-2), [M-3](PH-OS.md#task-m-3), [M-4](PH-OS.md#task-m-4), [M-5](PH-OS.md#task-m-5), [M-6](PH-OS.md#task-m-6).
+Also active in this phase (described in their primary phase): [Authorize 1: Authorization Package (R-1)](PH-EMD.md#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](PH-EMD.md#task-r-2), [Authorize 3: Risk Response (R-3)](PH-EMD.md#task-r-3), [Authorize 4: Authorization Decision (R-4)](PH-EMD.md#task-r-4), [Authorize 5: Authorization Reporting (R-5)](PH-EMD.md#task-r-5), [Monitor 1: System and Environment Changes (M-1)](PH-OS.md#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](PH-OS.md#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](PH-OS.md#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](PH-OS.md#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](PH-OS.md#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](PH-OS.md#task-m-6).

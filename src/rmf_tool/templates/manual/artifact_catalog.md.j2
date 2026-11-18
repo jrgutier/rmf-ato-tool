@@ -9,11 +9,11 @@ listed data files; OSCAL documents are built from that data.
 | Artifact | Package | Produced by | Updated by | Used by |
 |---|---|---|---|---|
 {% for a in m.artifacts %}
-| {{ L(a.id) }} {{ a.name | cell }} | {{ a.package }} | {{ L(a.producer) }} | {{ L.many(a.updated_by) }} | {{ L.many(a.used_by) }} |
+| {{ L(a.id) }} | {{ a.package }} | {{ L(a.producer) }} | {{ L.many(a.updated_by) }} | {{ L.many(a.used_by) }} |
 {% endfor %}
 
 {% for a in m.artifacts %}
-### <a id="{{ anchor('artifacts', a.id) }}"></a>{{ a.id }}: {{ a.name }}
+### <a id="{{ anchor('artifacts', a.id) }}"></a>{{ a.name }} ({{ a.id }})
 
 {{ a.description | text }}
 
@@ -42,5 +42,5 @@ content and operational data.
 | Input | Kind | What it is | Used by |
 |---|---|---|---|
 {% for x in m.externals %}
-| <a id="{{ anchor('external_inputs', x.id) }}"></a>**{{ x.id }}** {{ x.name | cell }} | {{ x.kind }} | {{ x.description | cell }} | {{ L.many(x.used_by) }} |
+| <a id="{{ anchor('external_inputs', x.id) }}"></a>**{{ x.name | cell }}** ({{ x.id }}) | {{ x.kind }} | {{ x.description | cell }} | {{ L.many(x.used_by) }} |
 {% endfor %}

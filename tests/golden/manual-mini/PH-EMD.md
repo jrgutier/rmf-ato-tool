@@ -34,7 +34,7 @@ Build, test and authorize the system.
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-c"></a>**MS C** Milestone C | milestone | — | Approve entry into production and deployment. | [R-4](#task-r-4) |
+| <a id="ms-c"></a>**MS C** Milestone C | milestone | — | Approve entry into production and deployment. | [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
 
 ## EMD technical reviews
 
@@ -52,9 +52,9 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AODM](../../MANUAL.md#art-aodm) | — | [MS C](#ms-c), [ATO](../../MANUAL.md#ad-ato), [DATO](../../MANUAL.md#ad-dato) |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](../../MANUAL.md#per-ao) | [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | — | [MS C](#ms-c), [ATO](../../MANUAL.md#ad-ato), [DATO](../../MANUAL.md#ad-dato) |
 
-## <a id="task-r-4"></a>R-4 · Authorization Decision
+## <a id="task-r-4"></a>Authorize 4: Authorization Decision (R-4)
 
 *[Authorize](../../MANUAL.md#step-r) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -72,13 +72,13 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](PH-MSA.md#task-c-2) (core artifact) |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | produces | core |
+| [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | AO decision memo | produces | core |
 
 **Entry criteria**
 
@@ -101,4 +101,4 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 **Playbook:** [playbooks/R/R-4.md](../../playbooks/R/R-4.md)
 
-**Cross-references:** depends on [C-3](PH-MSA.md#task-c-3); required by no later task; feeds back to [C-2](PH-MSA.md#task-c-2).
+**Cross-references:** depends on [Categorize 3: Security Categorization Review and Approval (C-3)](PH-MSA.md#task-c-3); required by no later task; feeds back to [Categorize 2: Security Categorization (C-2)](PH-MSA.md#task-c-2).

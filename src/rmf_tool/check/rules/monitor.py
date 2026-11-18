@@ -13,11 +13,12 @@ import datetime as dt
 from collections.abc import Callable
 from typing import Any
 
+from rmf_tool.check import providers
 from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.content import POAM_FILE, SAR_DIR, family_records
 from rmf_tool.run import authorization as ledger
-from rmf_tool.run import scope
+from rmf_tool.run import clock, scope
 
 CHANGES_FILE = "artifacts/data/changes.yaml"
 REPORTS_FILE = "artifacts/data/posture-reports.yaml"
@@ -85,7 +86,7 @@ def _day(value: Any) -> dt.date | None:
 
 
 def _as_of(ctx: Context) -> dt.date | None:
-    return _day(str(ctx.run.config.get("as_of"))[:10])
+    return clock.today(ctx.run.config)
 
 
 def _collector(rule: str, path: str, task: str) -> tuple[list[RunFinding], Err]:
@@ -250,8 +251,10 @@ def inheritance(ctx: Context) -> list[RunFinding]:
     out, err = _collector("MLEV-001", LEVERAGED_FILE, "C-1")
     effect_of, today = ledger.effects(ctx.run), _as_of(ctx)
     allocation = ctx.data(ALLOCATION_FILE)  # S-3 writes it after C-1
-    providers = {a.get("provider") for a in _items(allocation, "allocations")
-                 if a.get("type") == "common"}
+    # a provider of hybrid controls supplies the common part of them (F-05-1)
+    pk = providers.keyer(ctx)
+    offering = {pk(a.get("provider")) for a in _items(allocation, "allocations")
+                if a.get("type") in ("common", "hybrid")}
     for r in _items(data, "leveraged_authorizations"):
         lid, arrangement = r.get("id"), r.get("arrangement")
         if ENTERPRISE in r:
@@ -260,9 +263,12 @@ def inheritance(ctx: Context) -> list[RunFinding]:
             err(f"{lid}: the record names no arrangement of the inheritance: "
                 f"{', '.join(ARRANGEMENTS)}")
         if arrangement == "common-control-provider" and allocation is not None \
-                and r.get("provider") not in providers:
-            err(f"{lid}: {r.get('provider')} provides no common control in allocation.yaml, so "
-                "it is no approved common control provider")
+                and pk(r.get("provider")) not in offering:
+            # S-3 wrote allocation.yaml after C-1, so the mismatch is charged to S-3
+            out.append(make("MLEV-001", f"{lid}: {providers.shown(ctx)(r.get('provider'))} "
+                            "provides no common or "
+                            "hybrid control in allocation.yaml, so it is no approved common "
+                            "control provider", ALLOCATION_FILE, None, {"S-3"}))
         if arrangement != "organizational-system":
             continue
         decision = r.get("decision")
@@ -394,7 +400,11 @@ def _dodin(ctx: Context, reports: list[Record], designation: str, err: Err) -> N
 
 
 def _awareness(ctx: Context, err: Err) -> None:
-    areas = _strings(_block(_block(ctx.data(CONMON_FILE), "reporting"), "dodin"), "awareness")
+    dodin = _block(_block(ctx.data(CONMON_FILE), "reporting"), "dodin")
+    areas = _strings(dodin, "awareness")
+    # an area a leveraged provider covers counts when that provider is on record (F-16-2)
+    leveraged = {r.get("id") for r in _items(ctx.data(LEVERAGED_FILE), "leveraged_authorizations")}
+    areas |= {area for area, la in _block(dodin, "provided_by").items() if la in leveraged}
     if missing := sorted(AWARENESS - areas):
         err(f"ISCM gives no ongoing awareness of {', '.join(missing)} to support DODIN operations")
     if EMPLOYEE_USE not in areas:

@@ -1,0 +1,63 @@
+program:
+  acat: none
+  mda: component
+  origin: new-start
+  critical_technology: {associated: false, areas: []}
+  decision_points:
+    - {id: DP-SWP-PATHWAY, date: "2025-09-15"}
+    - {id: DP-SWP-EXECUTION, date: "2026-03-02"}
+inputs:
+  tapps: []
+  horizontal_protection: []
+  threat_assessments:
+    - {id: TA-001, from: intelligence, covers: [system], date: "2026-07-15"}
+  sep: {id: "EFRAS systems engineering approach (section of the acquisition strategy v1.1)", date: "2026-02-16"}
+  itras: []
+ppp:
+  id: "EFRAS-PPP"
+  version: "1.1"
+  date: "2026-02-16"
+  prepared_by: PER-PM
+  approval: {authority: CAE-designee, date: "2026-02-20"}
+  submissions:
+    - {decision_point: DP-SWP-PATHWAY, date: "2025-09-01"}
+    - {decision_point: DP-SWP-EXECUTION, date: "2026-02-16"}
+  cybersecurity_strategy: appendix
+  sse_activities: [cyber-resilient-engineering, software-assurance, scrm]
+  critical_items:
+    - id: CI-001
+      kind: critical-function
+      name: "Readiness data processing (ingest, store and serve readiness and maintainer data)"
+      mission_criteria: ["Integrity and confidentiality of aggregated fleet readiness information (criticality level III, not mission critical)"]
+  threats:
+    - {item: CI-001, threat: "Nation-state exfiltration or manipulation of readiness data", vulnerability: "Exploitable application or dependency flaw; compromised build pipeline"}
+  countermeasures:
+    - {id: CM-001, item: CI-001, measure: "Software factory security gates, signed images verified at admission and SBOMs", mitigates: [TR-002]}
+    - {id: CM-002, item: CI-001, measure: "Boundary hardening: ECAP-only ingress, three-tier segmentation, egress allow-list", mitigates: [TR-001]}
+  risk_sources: [design-vulnerability, supply-chain-exploit-insertion, battlefield-loss]
+  exportability: {foreign_involvement: none, planning: "No foreign sales, co-development or foreign national access planned; no exportability features needed."}
+  anti_tamper: {outside_us_control: false, required: false, guidance: []}
+  tailoring: {pathway: PW-SWP, factors: [complexity, risk, urgency]}
+  informed_by: []
+  updates:
+    - {after: contract-award, ref: CA-001, date: "2025-12-01"}
+significant_events: []
+contract_awards:
+  - {id: CA-001, date: "2025-11-03"}
+technical_risks:
+  - id: TR-001
+    security: true
+    description: "Exfiltration of aggregated readiness data and maintainer records through the application tier (ra.yaml TE-01)."
+    drawn_from: [TA-001]
+    reviews: [RV-SRR]
+    impact: {cost: low, schedule: low}
+    status: mitigating
+  - id: TR-002
+    security: true
+    description: "Vulnerable third-party dependency or compromised base image reaches production (ra.yaml TE-03)."
+    drawn_from: [TA-001]
+    reviews: [RV-SRR]
+    impact: {cost: low, schedule: moderate}
+    status: mitigating
+design_assessment: {requirements_allocated: true, assessed: "2026-02-16", vulnerabilities: []}
+sources: [INT-037.A3, INT-037.A4, ASM-010]
