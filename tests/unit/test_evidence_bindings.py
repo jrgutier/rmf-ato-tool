@@ -65,8 +65,49 @@ def test_false_and_zero_are_values_but_an_empty_count_is_absence():
 
 def test_only_the_task_list_of_run_yaml_is_scaffolding():
     run = {"op": "set_field", "file": "run.yaml"}
-    assert evidence._scaffolding({**run, "path": "include_after_stop"})
-    assert evidence._scaffolding({**run, "path": "scope.tasks"})
-    assert not evidence._scaffolding({**run, "path": "clock"})
-    assert not evidence._scaffolding({**run, "path": "entry"})
-    assert evidence._scaffolding({"op": "append_text", "file": "artifacts/data/x.yaml"})
+    assert evidence._in_scope({**run, "path": "include_after_stop"})
+    assert evidence._in_scope({**run, "path": "scope.tasks"})
+    assert not evidence._in_scope({**run, "path": "clock"})
+    assert not evidence._in_scope({**run, "path": "entry"})
+
+
+ROW = {"op": "append_text", "file": "artifacts/data/authorizations.yaml", "text": "- id: A\n"}
+
+
+def test_an_appended_row_is_scaffolding_only_beside_a_change_to_another_file():
+    elsewhere = {"op": "delete_field", "file": "artifacts/data/o.yaml", "path": "x"}
+    same_file = {"op": "delete_field", "file": ROW["file"], "path": "[0].review"}
+    assert evidence._changes([ROW, elsewhere]) == [elsewhere]
+    assert evidence._changes([ROW, same_file]) == [ROW, same_file]
+    assert evidence._changes([ROW]) == [ROW]
+
+
+def test_an_appended_row_carrying_the_wrong_value_is_no_deletion():
+    """The row with a bad decision and a deleted field of the same ledger: the deletion alone
+    does not make the fixture presence; the clause decides."""
+    spec = {"mutations": [ROW, {"op": "delete_field", "file": ROW["file"], "path": "[0].x"}]}
+    clause = 'if r.get("decision") not in TYPES:\n    err(r, "is not one of the types")'
+    assert evidence.rule_claim(spec, clause, "is not one of the types") == "constraint"
+
+
+def test_a_comment_line_in_yaml_is_no_heading():
+    spec = {"mutations": [{"op": "replace_text", "file": "artifacts/data/o.yaml",
+                           "old": "# the owner\nowner: PER-AO", "new": "owner: PER-X"}]}
+    clause = 'if r.get("owner") != "PER-AO":\n    err(r, "x is bad")'
+    assert evidence.rule_claim(spec, clause, "x is bad") == "constraint"
+
+
+def test_a_heading_kept_with_other_spacing_is_not_erased():
+    spec = {"mutations": [{"op": "replace_text", "file": "artifacts/ART-X.md",
+                           "old": "## Privacy program \nowner: PER-AO",
+                           "new": "  ## Privacy program\nowner: PER-X"}]}
+    clause = 'if r.get("owner") != "PER-AO":\n    err(r, "x is bad")'
+    assert evidence.rule_claim(spec, clause, "x is bad") == "constraint"
+
+
+def test_a_fixture_that_only_deletes_in_one_base_is_presence():
+    spec = {"bases": ["minimal", "example"], "mutations": [
+        {"only": ["minimal"], "op": "delete_field", "file": "o.yaml", "path": "x"},
+        {"only": ["example"], "op": "set_field", "file": "o.yaml", "path": "x", "value": 1}]}
+    clause = 'if r.get("x") != 2:\n    err(r, "x is bad")'
+    assert evidence.rule_claim(spec, clause, "x is bad") == "presence"

@@ -500,13 +500,29 @@ def _b_findings(reg, index, item):
     return [m for m in rules.freeze_debt_problems(probe, entry, 1) if "group B" in m]
 
 
-def test_freeze_debt_b_rests_on_an_item_at_the_presence_cap(reg, index, monkeypatch):
-    """The judge's presence cap is the B seam: an item strong but for its presence claim."""
-    monkeypatch.setattr(evidence, "judge", lambda probe, item, entry: evidence.Verdict(
-        evidence.WEAK, f"{item['target']}{evidence.PRESENCE_CAP}"))
+PRESENCE_FIXTURE = "tests/fixtures/negative/APPT-001.presence.yaml"
 
-    assert _b_findings(reg, index, {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS,
-                                    "claim": "presence"}) == []
+
+def test_freeze_debt_b_rests_on_an_item_at_the_presence_cap(reg, index, monkeypatch):
+    """The judge's presence cap is the B seam: an item strong but for its presence claim. The
+    real judge reaches the cap: a fixture that only deletes the appointment makes the item
+    presence, and the judge caps it rather than calling it weak for another reason."""
+    real = evidence.fixture_spec
+    spec = {"rule": "APPT-001", "expect": {"errors": ["APPT-001"],
+                                           "messages": [CLAUSES["APPT-001"]]},
+            "mutations": [{"op": "delete_field", "file": "artifacts/data/org-context.yaml",
+                           "path": "roles"}]}
+    monkeypatch.setattr(evidence, "fixture_spec",
+                        lambda repo, f: spec if f == PRESENCE_FIXTURE else real(repo, f))
+    item = {"kind": "rule", "target": "APPT-001", "asserts": APPOINTS, "claim": "presence",
+            "fixture": PRESENCE_FIXTURE}
+    entry = _tier_1_partial(reg, item)
+    _complete(reg)
+    probe = _probe(REPO_ROOT, _framework(), (APPOINTING,))
+
+    verdict = evidence.judge(probe, entry["evidence"][0], entry)
+    assert (verdict.strength, verdict.capped) == (evidence.WEAK, True)
+    assert _b_findings(reg, index, item) == []
 
 
 def test_an_optional_schema_path_is_no_group_b_item(reg, index):
