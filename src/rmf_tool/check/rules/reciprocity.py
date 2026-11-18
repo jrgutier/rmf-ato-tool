@@ -29,7 +29,7 @@ from rmf_tool.check.context import Context
 from rmf_tool.check.findings import RunFinding, make
 from rmf_tool.check.rules.authorization import business_days_between
 from rmf_tool.run import authorization as ledger
-from rmf_tool.run import scope
+from rmf_tool.run import clock, scope
 
 FILE = "artifacts/data/reciprocity.yaml"
 LEVERAGED_FILE = "artifacts/data/leveraged-authorizations.yaml"
@@ -326,7 +326,7 @@ def coordination(ctx: Context) -> list[RunFinding]:
     terminations = sorted({d for s in ledger.in_force(records, effect_of).values()
                            if effect_of.get(s.record.get("decision")) == "authorize"
                            and (d := s.expires) is not None})
-    as_of = _day(str(ctx.run.config.get("as_of"))[:10])
+    as_of = clock.today(ctx.run.config)
     disposal = ctx.data(DISPOSAL_FILE) if scope.produced_or_seeded(ctx.run, "ART-DISP") else None
     for org in _items(data, "receiving_organizations"):
         rid = org.get("id")

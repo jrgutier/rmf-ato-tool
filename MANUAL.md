@@ -55,7 +55,9 @@ Conventions:
 
 - IDs are stable and never reused: `PH-` phases, `MS-` milestones and decision points, `RV-`
   technical reviews, `AD-` authorization decisions, `PER-` personas, `ART-` artifacts, `EXT-`
-  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`).
+  outside inputs, and the SP 800-37 Rev. 2 task IDs (`P-1` to `M-7`). Tasks are shown by step
+  and number with their name, and the ID in brackets: "Prepare 1: Risk Management Roles (P-1)"
+  is SP 800-37 Rev. 2 Prepare task 1.
 - A citation reads `REFERENCE, section "heading"` or `REFERENCE, p. N, "quoted words"`. The page is
   the PDF page. To read the passage, run `uv run rmf refs show REFERENCE --section "heading"` or
   `uv run rmf refs show REFERENCE --page N --anchor "quoted words"`.
@@ -74,11 +76,11 @@ Conventions:
 
 | # | Phase | Starts at | Ends at | Milestones and decision points | Technical reviews | RMF tasks (primary phase) | Also active | Authorization decisions |
 |---|---|---|---|---|---|---|---|---|
-| 1 | [MSA](#ph-msa) Materiel Solution Analysis | [MDD](#ms-mdd) | [MS A](#ms-a) | [MDD](#ms-mdd), [MS A](#ms-a) | — | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | [P-16](#task-p-16) | — |
-| 2 | [TMRR](#ph-tmrr) Technology Maturation and Risk Reduction | [MS A](#ms-a) | [MS B](#ms-b) | [CDD validation](#ms-cddv), [Dev RFP RD](#ms-drfprd), [MS B](#ms-b) | [SRR](#rv-srr), [SFR](#rv-sfr), [PDR](#rv-pdr) | [P-16](#task-p-16), [P-17](#task-p-17), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) | [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | — |
-| 3 | [EMD](#ph-emd) Engineering and Manufacturing Development | [MS B](#ms-b) | [MS C](#ms-c) | [MS C](#ms-c) | [CDR](#rv-cdr), [TRR](#rv-trr), [SVR/FCA](#rv-svr), [PRR](#rv-prr) | [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) | [S-4](#task-s-4), [S-5](#task-s-5) | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
-| 4 | [P&D](#ph-pd) Production and Deployment | [MS C](#ms-c) | [FRP/FD](#ms-frp) | [FRP/FD](#ms-frp), [First fielding](#ms-field), [IOC](#ms-ioc) | [PCA](#rv-pca) | — | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
-| 5 | [O&S](#ph-os) Operations and Support | [First fielding](#ms-field) | — | [FOC](#ms-foc) | — | [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) | [P-3](#task-p-3) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
+| 1 | [MSA](#ph-msa) Materiel Solution Analysis | [MDD](#ms-mdd) | [MS A](#ms-a) | [MDD](#ms-mdd), [MS A](#ms-a) | — | [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16) | — |
+| 2 | [TMRR](#ph-tmrr) Technology Maturation and Risk Reduction | [MS A](#ms-a) | [MS B](#ms-b) | [CDD validation](#ms-cddv), [Dev RFP RD](#ms-drfprd), [MS B](#ms-b) | [SRR](#rv-srr), [SFR](#rv-sfr), [PDR](#rv-pdr) | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6) | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | — |
+| 3 | [EMD](#ph-emd) Engineering and Manufacturing Development | [MS B](#ms-b) | [MS C](#ms-c) | [MS C](#ms-c) | [CDR](#rv-cdr), [TRR](#rv-trr), [SVR/FCA](#rv-svr), [PRR](#rv-prr) | [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
+| 4 | [P&D](#ph-pd) Production and Deployment | [MS C](#ms-c) | [FRP/FD](#ms-frp) | [FRP/FD](#ms-frp), [First fielding](#ms-field), [IOC](#ms-ioc) | [PCA](#rv-pca) | — | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
+| 5 | [O&S](#ph-os) Operations and Support | [First fielding](#ms-field) | — | [FOC](#ms-foc) | — | [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) | [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3) | [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc) |
 
 The flowchart shows the phases in order, joined by the milestones that open and close them. Dotted
 lines lead to events inside a phase and to the tasks where the Authorizing Official makes an
@@ -125,13 +127,13 @@ flowchart LR
 
 | Step | Purpose | Tasks | Primary phases |
 |---|---|---|---|
-| <a id="step-p"></a>P Prepare | Set the organizational and system context and priorities for security and privacy risk management before the system is categorized. Organization-level tasks (P-1 to P-7) precede the program; system-level tasks (P-8 to P-18) run in MSA and early TMRR, most of them before Milestone A and the SRR, with requirements allocation (P-17) finished by the SFR. | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [P-18](#task-p-18) | [MSA](#ph-msa), [TMRR](#ph-tmrr) |
-| <a id="step-c"></a>C Categorize | Describe the system and categorize it in accordance with CNSSI 1253 from the impact of a loss of confidentiality, integrity and availability. The AO-approved categorization is due by Milestone A. | [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) | [MSA](#ph-msa) |
-| <a id="step-s"></a>S Select | Select and tailor the initial control set, allocate controls, and document the planned implementations and the monitoring strategy in plans the AO approves. Select runs in TMRR and is complete by the PDR and Milestone B. | [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) | [TMRR](#ph-tmrr) |
-| <a id="step-i"></a>I Implement | Implement the controls in the plans and record how they are employed in the system and its operating environment. Implement runs through EMD, designed in by the CDR and updated to the as-built state before test readiness. | [I-1](#task-i-1), [I-2](#task-i-2) | [EMD](#ph-emd) |
-| <a id="step-a"></a>A Assess | Assess whether controls are implemented correctly, operating as intended and producing the desired outcome, using developmental and operational test events where possible. The assessment plan is approved before the TRR so DT&E events can supply assessment evidence. | [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6) | [EMD](#ph-emd) |
-| <a id="step-r"></a>R Authorize | Decide whether the risk to operations, assets, individuals, other organizations and the Nation is acceptable and cyberspace operational commanders' requirements are met. The decision precedes Milestone C and fielding; an AD-IATT covers earlier testing on live networks. | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) | [EMD](#ph-emd) |
-| <a id="step-m"></a>M Monitor | Monitor the system and its controls on an ongoing basis, track changes, respond to risk and report the security and privacy posture. Monitor starts with fielding and runs through O&S to disposal. | [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) | [O&S](#ph-os) |
+| <a id="step-p"></a>Prepare (P) | Set the organizational and system context and priorities for security and privacy risk management before the system is categorized. Organization-level tasks (P-1 to P-7) precede the program; system-level tasks (P-8 to P-18) run in MSA and early TMRR, most of them before Milestone A and the SRR, with requirements allocation (P-17) finished by the SFR. | [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Prepare 18: System Registration (P-18)](#task-p-18) | [MSA](#ph-msa), [TMRR](#ph-tmrr) |
+| <a id="step-c"></a>Categorize (C) | Describe the system and categorize it in accordance with CNSSI 1253 from the impact of a loss of confidentiality, integrity and availability. The AO-approved categorization is due by Milestone A. | [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | [MSA](#ph-msa) |
+| <a id="step-s"></a>Select (S) | Select and tailor the initial control set, allocate controls, and document the planned implementations and the monitoring strategy in plans the AO approves. Select runs in TMRR and is complete by the PDR and Milestone B. | [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6) | [TMRR](#ph-tmrr) |
+| <a id="step-i"></a>Implement (I) | Implement the controls in the plans and record how they are employed in the system and its operating environment. Implement runs through EMD, designed in by the CDR and updated to the as-built state before test readiness. | [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2) | [EMD](#ph-emd) |
+| <a id="step-a"></a>Assess (A) | Assess whether controls are implemented correctly, operating as intended and producing the desired outcome, using developmental and operational test events where possible. The assessment plan is approved before the TRR so DT&E events can supply assessment evidence. | [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | [EMD](#ph-emd) |
+| <a id="step-r"></a>Authorize (R) | Decide whether the risk to operations, assets, individuals, other organizations and the Nation is acceptable and cyberspace operational commanders' requirements are met. The decision precedes Milestone C and fielding; an AD-IATT covers earlier testing on live networks. | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | [EMD](#ph-emd) |
+| <a id="step-m"></a>Monitor (M) | Monitor the system and its controls on an ongoing basis, track changes, respond to risk and report the security and privacy posture. Monitor starts with fielding and runs through O&S to disposal. | [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) | [O&S](#ph-os) |
 
 ## <a id="raci"></a>3. Who does what (RACI matrix)
 
@@ -139,87 +141,87 @@ flowchart LR
 **C** Consulted · **I** Informed. `A/R` means the accountable persona also does the work. Column
 headings link to the persona catalog; each persona's card describes the role in full.
 
-### P Prepare
+### Prepare (P)
 
 | Task | [AO](#per-ao) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) | [PAO](#per-pao) | [JCA CPM](#per-jcacpm) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [P-1](#task-p-1) Risk Management Roles | C | R/A | C | C |  | I |  |  |  |  |  |  |  |  | R |  |  |  | C | C |
-| [P-2](#task-p-2) Risk Management Strategy | I | R/A | C | R |  |  |  |  |  |  |  |  |  |  | C |  |  |  | C | C |
-| [P-3](#task-p-3) Risk Assessment—Organization | C | C | R | R/A |  |  |  |  |  |  |  |  |  |  | R |  | C |  | C | C |
-| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles | C | C | C | R/A |  |  |  |  |  |  |  |  |  |  | C |  | R |  | C | C |
-| [P-5](#task-p-5) Common Control Identification | C | C | R/A | C |  | C |  |  |  |  |  |  | C |  | R |  | C |  | C | C |
-| [P-6](#task-p-6) Impact-Level Prioritization | C | C | C | R/A |  | C |  |  |  |  |  |  |  |  | C |  | C |  | C | C |
-| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | C | C | C | R/A |  | C |  |  |  |  |  |  |  | I | C |  | C |  | C | C |
-| [P-8](#task-p-8) Mission or Business Focus | C | C | C |  |  | A | I |  |  |  | C | C |  |  | C |  | R |  |  |  |
-| [P-9](#task-p-9) System Stakeholders | C | C | C |  |  | R/A | I |  |  |  |  | C |  |  | C | C | R |  |  |  |
-| [P-10](#task-p-10) Asset Identification | C |  | C |  |  | R/A | R |  |  |  |  | C |  |  | C |  | C | C |  |  |
-| [P-11](#task-p-11) Authorization Boundary | A | C | C |  |  | R | R |  | C | C |  |  |  |  | C |  | C |  |  |  |
-| [P-12](#task-p-12) Information Types |  |  |  |  |  | R/A | C | C |  |  |  | R |  |  | R |  | C |  |  |  |
-| [P-13](#task-p-13) Information Life Cycle |  | C |  |  |  | R/A |  |  | C | C |  | R |  |  | R |  | C |  |  |  |
-| [P-14](#task-p-14) Risk Assessment—System | C |  |  | C | C | R/A | R | R |  |  |  | C |  |  | R |  | C |  |  |  |
-| [P-15](#task-p-15) Requirements Definition | C |  | C |  |  | R/A | C | C | C | C | C | R |  |  | R | C | R |  |  |  |
-| [P-16](#task-p-16) Enterprise Architecture | C | C | C |  |  | A |  |  | R | R |  | C |  |  | R |  | R |  |  |  |
-| [P-17](#task-p-17) Requirements Allocation | C | C | C |  |  | A | R | R | R |  |  |  | C |  | R |  | C |  |  |  |
-| [P-18](#task-p-18) System Registration |  | I | I |  |  | R/A | R | C |  |  |  |  |  |  |  |  | C |  |  |  |
+| [Prepare 1: Risk Management Roles (P-1)](#task-p-1) | C | R/A | C | C |  | I |  |  |  |  |  |  |  |  | R |  |  |  | C | C |
+| [Prepare 2: Risk Management Strategy (P-2)](#task-p-2) | I | R/A | C | R |  |  |  |  |  |  |  |  |  |  | C |  |  |  | C | C |
+| [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3) | C | C | R | R/A |  |  |  |  |  |  |  |  |  |  | R |  | C |  | C | C |
+| [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4) | C | C | C | R/A |  |  |  |  |  |  |  |  |  |  | C |  | R |  | C | C |
+| [Prepare 5: Common Control Identification (P-5)](#task-p-5) | C | C | R/A | C |  | C |  |  |  |  |  |  | C |  | R |  | C |  | C | C |
+| [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6) | C | C | C | R/A |  | C |  |  |  |  |  |  |  |  | C |  | C |  | C | C |
+| [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) | C | C | C | R/A |  | C |  |  |  |  |  |  |  | I | C |  | C |  | C | C |
+| [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) | C | C | C |  |  | A | I |  |  |  | C | C |  |  | C |  | R |  |  |  |
+| [Prepare 9: System Stakeholders (P-9)](#task-p-9) | C | C | C |  |  | R/A | I |  |  |  |  | C |  |  | C | C | R |  |  |  |
+| [Prepare 10: Asset Identification (P-10)](#task-p-10) | C |  | C |  |  | R/A | R |  |  |  |  | C |  |  | C |  | C | C |  |  |
+| [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | A | C | C |  |  | R | R |  | C | C |  |  |  |  | C |  | C |  |  |  |
+| [Prepare 12: Information Types (P-12)](#task-p-12) |  |  |  |  |  | R/A | C | C |  |  |  | R |  |  | R |  | C |  |  |  |
+| [Prepare 13: Information Life Cycle (P-13)](#task-p-13) |  | C |  |  |  | R/A |  |  | C | C |  | R |  |  | R |  | C |  |  |  |
+| [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) | C |  |  | C | C | R/A | R | R |  |  |  | C |  |  | R |  | C |  |  |  |
+| [Prepare 15: Requirements Definition (P-15)](#task-p-15) | C |  | C |  |  | R/A | C | C | C | C | C | R |  |  | R | C | R |  |  |  |
+| [Prepare 16: Enterprise Architecture (P-16)](#task-p-16) | C | C | C |  |  | A |  |  | R | R |  | C |  |  | R |  | R |  |  |  |
+| [Prepare 17: Requirements Allocation (P-17)](#task-p-17) | C | C | C |  |  | A | R | R | R |  |  |  | C |  | R |  | C |  |  |  |
+| [Prepare 18: System Registration (P-18)](#task-p-18) |  | I | I |  |  | R/A | R | C |  |  |  |  |  |  |  |  | C |  |  |  |
 
-### C Categorize
+### Categorize (C)
 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [UR](#per-ur) | [IO](#per-io) | [Privacy](#per-priv) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [C-1](#task-c-1) System Description | C |  |  |  |  | R/A | R | C |  | C |  | C | C |
-| [C-2](#task-c-2) Security Categorization | I |  | C | C | C | A | R | C | C |  | C | R | C |
-| [C-3](#task-c-3) Security Categorization Review and Approval | A | R | C | C | C | I | I |  |  |  |  |  | R |
+| [Categorize 1: System Description (C-1)](#task-c-1) | C |  |  |  |  | R/A | R | C |  | C |  | C | C |
+| [Categorize 2: Security Categorization (C-2)](#task-c-2) | I |  | C | C | C | A | R | C | C |  | C | R | C |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | A | R | C | C | C | I | I |  |  |  |  |  | R |
 
-### S Select
+### Select (S)
 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Sponsor](#per-sponsor) | [Developer](#per-dev) | [CCB](#per-ccb) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [S-1](#task-s-1) Control Selection | C |  |  |  |  | R/A | R | C | C | C | R |  | C |  |  |  |  |
-| [S-2](#task-s-2) Control Tailoring | C |  |  |  |  | R/A | R | C | C | C | R |  | C |  |  |  |  |
-| [S-3](#task-s-3) Control Allocation | C |  | C | C |  | A | R | R | R |  | C |  | R |  | C |  |  |
-| [S-4](#task-s-4) Documentation of Planned Control Implementations | C |  |  |  |  | A | R | C | R | C | R | C | C |  |  | C | C |
-| [S-5](#task-s-5) Continuous Monitoring Strategy—System | C |  | C | C | C | R/A | R | C | C | C | R | C | C |  |  |  |  |
-| [S-6](#task-s-6) Plan Review and Approval | A | R | C | C | C | I | I |  |  |  |  |  | R | C |  |  |  |
+| [Select 1: Control Selection (S-1)](#task-s-1) | C |  |  |  |  | R/A | R | C | C | C | R |  | C |  |  |  |  |
+| [Select 2: Control Tailoring (S-2)](#task-s-2) | C |  |  |  |  | R/A | R | C | C | C | R |  | C |  |  |  |  |
+| [Select 3: Control Allocation (S-3)](#task-s-3) | C |  | C | C |  | A | R | R | R |  | C |  | R |  | C |  |  |
+| [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | C |  |  |  |  | A | R | C | R | C | R | C | C |  |  | C | C |
+| [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | C |  | C | C | C | R/A | R | C | C | C | R | C | C |  |  |  |  |
+| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | A | R | C | C | C | I | I |  |  |  |  |  | R | C |  |  |  |
 
-### I Implement
+### Implement (I)
 
 | Task | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [LSE](#per-lse) | [IO](#per-io) | [CCP](#per-ccp) | [Privacy](#per-priv) | [Developer](#per-dev) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [I-1](#task-i-1) Control Implementation | R/A | C | C | R | C | C | R | C | R |
-| [I-2](#task-i-2) Update Control Implementation Information | A | R | C | C | C | C | R | C | R |
+| [Implement 1: Control Implementation (I-1)](#task-i-1) | R/A | C | C | R | C | C | R | C | R |
+| [Implement 2: Update Control Implementation Information (I-2)](#task-i-2) | A | R | C | C | C | C | R | C | R |
 
-### A Assess
+### Assess (A)
 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [Privacy](#per-priv) | [MDA](#per-mda) | [CDT](#per-cdt) | [OTA](#per-ota) | [Developer](#per-dev) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [A-1](#task-a-1) Assessor Selection | A | R | C | C |  | I | I |  |  |  |  |  | C |  |  |  |  |
-| [A-2](#task-a-2) Assessment Plan | A | R |  | C |  | R | C | C | C |  | C | C | C |  | C | C |  |
-| [A-3](#task-a-3) Control Assessments | I | C |  | I |  | R/A | C | C | C |  | C | C | C |  | C | C | C |
-| [A-4](#task-a-4) Assessment Reports | I | I |  | C |  | R/A | C | C | C |  |  | C | C |  |  |  |  |
-| [A-5](#task-a-5) Remediation Actions |  | C |  | C | C | R | R/A | C | C | C | C | R | C |  |  |  | R |
-| [A-6](#task-a-6) Plan of Action and Milestones | I |  |  | C |  | C | R/A | R | C |  | C | R | C | C |  |  |  |
+| [Assess 1: Assessor Selection (A-1)](#task-a-1) | A | R | C | C |  | I | I |  |  |  |  |  | C |  |  |  |  |
+| [Assess 2: Assessment Plan (A-2)](#task-a-2) | A | R |  | C |  | R | C | C | C |  | C | C | C |  | C | C |  |
+| [Assess 3: Control Assessments (A-3)](#task-a-3) | I | C |  | I |  | R/A | C | C | C |  | C | C | C |  | C | C | C |
+| [Assess 4: Assessment Reports (A-4)](#task-a-4) | I | I |  | C |  | R/A | C | C | C |  |  | C | C |  |  |  |  |
+| [Assess 5: Remediation Actions (A-5)](#task-a-5) |  | C |  | C | C | R | R/A | C | C | C | C | R | C |  |  |  | R |
+| [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | I |  |  | C |  | C | R/A | R | C |  | C | R | C | C |  |  |  |
 
-### R Authorize
+### Authorize (R)
 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [UR](#per-ur) | [IO](#per-io) | [CCP](#per-ccp) | [Privacy](#per-priv) | [MDA](#per-mda) | [Operational commanders](#per-opcdr) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [R-1](#task-r-1) Authorization Package | I | I |  | C |  | C | R/A | R | C |  |  |  | R | R |  |  |
-| [R-2](#task-r-2) Risk Analysis and Determination | A | R |  | C | C | C | I | C |  |  |  |  |  | C |  |  |
-| [R-3](#task-r-3) Risk Response | A | R |  | C | C |  | R | C | C | C |  | C | C | C |  |  |
-| [R-4](#task-r-4) Authorization Decision | R/A | C | C | C | C |  | I | I |  |  | I |  |  | C | I |  |
-| [R-5](#task-r-5) Authorization Reporting | A | R | I | C |  |  | C | C | C |  |  | C | C | C | I | I |
+| [Authorize 1: Authorization Package (R-1)](#task-r-1) | I | I |  | C |  | C | R/A | R | C |  |  |  | R | R |  |  |
+| [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | A | R |  | C | C | C | I | C |  |  |  |  |  | C |  |  |
+| [Authorize 3: Risk Response (R-3)](#task-r-3) | A | R |  | C | C |  | R | C | C | C |  | C | C | C |  |  |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | R/A | C | C | C | C |  | I | I |  |  | I |  |  | C | I |  |
+| [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | A | R | I | C |  |  | C | C | C |  |  | C | C | C | I | I |
 
-### M Monitor
+### Monitor (M)
 
 | Task | [AO](#per-ao) | [AODR](#per-aodr) | [Component CIO](#per-cio) | [Component CISO](#per-ciso) | [RE](#per-re) | [SCA](#per-sca) | [PM/SO](#per-pm) | [ISSM](#per-issm) | [ISSO](#per-isso) | [ISSE](#per-isse) | [IO](#per-io) | [CCP](#per-ccp) | [CSSP](#per-cssp) | [Privacy](#per-priv) | [CCB](#per-ccb) | [DoD CISO](#per-dodciso) |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [M-1](#task-m-1) System and Environment Changes | I | C |  | R | C |  | R/A | C | R |  | C | R |  | R | C |  |
-| [M-2](#task-m-2) Ongoing Assessments | I | C |  | C |  | R/A | C | C | C |  | C | C | C | C |  |  |
-| [M-3](#task-m-3) Ongoing Risk Response | A | C |  |  | C |  | R | R | C | C | C | R | C | C |  |  |
-| [M-4](#task-m-4) Authorization Package Updates | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |  |
-| [M-5](#task-m-5) Security and Privacy Reporting | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |  |
-| [M-6](#task-m-6) Ongoing Authorization | R/A | C | C | C | C |  | C | I |  |  |  |  |  | C |  | C |
-| [M-7](#task-m-7) System Disposal | I | C |  | C | C |  | R/A | R | C |  | C |  |  | C |  |  |
+| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | I | C |  | R | C |  | R/A | C | R |  | C | R |  | R | C |  |
+| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | I | C |  | C |  | R/A | C | C | C |  | C | C | C | C |  |  |
+| [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) | A | C |  |  | C |  | R | R | C | C | C | R | C | C |  |  |
+| [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | I |  |  | C |  |  | R/A | R | C |  | C | R |  | C |  |  |
+| [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) | I |  | I | R | C |  | R/A | R | C |  |  | R | C | R |  |  |
+| [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | R/A | C | C | C | C |  | C | I |  |  |  |  |  | C |  | C |
+| [Monitor 7: System Disposal (M-7)](#task-m-7) | I | C |  | C | C |  | R/A | R | C |  | C |  |  | C |  |  |
 
 ## <a id="phases"></a>4. Phases and tasks
 
@@ -261,8 +263,8 @@ Analyze materiel solutions to the validated capability need and select a preferr
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-mdd"></a>**MDD** Materiel Development Decision | decision point | [MDA](#per-mda) | Enter the acquisition process on a validated capability need; the point at which RMF activities should begin (system inception). The organization-level Prepare tasks (P-1 to P-7) should already be in place so that system-level Prepare starts with the program; a program that starts the RMF late must still complete it. | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
-| <a id="ms-a"></a>**MS A** Milestone A | milestone | [MDA](#per-mda) | Approve entry into technology maturation; the approved security categorization informs the program's cybersecurity strategy. Milestone A also approves the acquisition strategy, including program protection, and considers the test strategy, so the system-level Prepare outputs (system risk assessment, security and privacy requirements) and the Categorize step should be complete. | [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) |
+| <a id="ms-mdd"></a>**MDD** Materiel Development Decision | decision point | [MDA](#per-mda) | Enter the acquisition process on a validated capability need; the point at which RMF activities should begin (system inception). The organization-level Prepare tasks (P-1 to P-7) should already be in place so that system-level Prepare starts with the program; a program that starts the RMF late must still complete it. | [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) |
+| <a id="ms-a"></a>**MS A** Milestone A | milestone | [MDA](#per-mda) | Approve entry into technology maturation; the approved security categorization informs the program's cybersecurity strategy. Milestone A also approves the acquisition strategy, including program protection, and considers the test strategy, so the system-level Prepare outputs (system risk assessment, security and privacy requirements) and the Categorize step should be complete. | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
 
 Sources:
 
@@ -275,29 +277,29 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [P-1](#task-p-1) Risk Management Roles | Prepare | [Component CIO](#per-cio) | [ART-ORG-CONTEXT](#art-org-context) | — | [MDD](#ms-mdd) |
-| [P-2](#task-p-2) Risk Management Strategy | Prepare | [Component CIO](#per-cio) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-3](#task-p-3) Risk Assessment—Organization | Prepare | [RE](#per-re) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles *(optional)* | Prepare | [RE](#per-re) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-5](#task-p-5) Common Control Identification | Prepare | [Component CISO](#per-ciso) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-6](#task-p-6) Impact-Level Prioritization *(optional)* | Prepare | [RE](#per-re) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | Prepare | [RE](#per-re) | — | [ART-ORG-CONTEXT](#art-org-context) | [MDD](#ms-mdd) |
-| [P-8](#task-p-8) Mission or Business Focus | Prepare | [PM/SO](#per-pm) | [ART-BIA](#art-bia) | — | [MS A](#ms-a) |
-| [P-9](#task-p-9) System Stakeholders | Prepare | [PM/SO](#per-pm) | [ART-STAKE](#art-stake) | — | [MS A](#ms-a) |
-| [P-10](#task-p-10) Asset Identification | Prepare | [PM/SO](#per-pm) | [ART-INV](#art-inv) | — | [MS A](#ms-a) |
-| [P-11](#task-p-11) Authorization Boundary | Prepare | [AO](#per-ao) | [ART-BND](#art-bnd) | — | [MS A](#ms-a) |
-| [P-12](#task-p-12) Information Types | Prepare | [PM/SO](#per-pm) | [ART-INFOTYPES](#art-infotypes) | — | [MS A](#ms-a) |
-| [P-13](#task-p-13) Information Life Cycle | Prepare | [PM/SO](#per-pm) | — | [ART-INFOTYPES](#art-infotypes) | [MS A](#ms-a) |
-| [P-14](#task-p-14) Risk Assessment—System | Prepare | [PM/SO](#per-pm) | [ART-RA](#art-ra), [ART-PIA](#art-pia) | — | [MS A](#ms-a), [SRR](#rv-srr) |
-| [P-15](#task-p-15) Requirements Definition | Prepare | [PM/SO](#per-pm) | [ART-REQ](#art-req) | — | [MS A](#ms-a), [SRR](#rv-srr) |
-| [P-18](#task-p-18) System Registration | Prepare | [PM/SO](#per-pm) | [ART-REG](#art-reg) | — | [MS A](#ms-a) |
-| [C-1](#task-c-1) System Description | Categorize | [PM/SO](#per-pm) | [ART-SD](#art-sd) | [ART-BND](#art-bnd), [ART-REG](#art-reg) | [MS A](#ms-a) |
-| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](#per-pm) | [ART-CAT](#art-cat) | [ART-BIA](#art-bia) | [MS A](#ms-a) |
-| [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](#per-ao) | — | [ART-CAT](#art-cat), [ART-REG](#art-reg) | [MS A](#ms-a), [SRR](#rv-srr) |
+| [Prepare 1: Risk Management Roles (P-1)](#task-p-1) | Prepare | [Component CIO](#per-cio) | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | — | [MDD](#ms-mdd) |
+| [Prepare 2: Risk Management Strategy (P-2)](#task-p-2) | Prepare | [Component CIO](#per-cio) | — | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3) | Prepare | [RE](#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4) *(optional)* | Prepare | [RE](#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 5: Common Control Identification (P-5)](#task-p-5) | Prepare | [Component CISO](#per-ciso) | — | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6) *(optional)* | Prepare | [RE](#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) | Prepare | [RE](#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) | Prepare | [PM/SO](#per-pm) | [Business impact and criticality analysis (ART-BIA)](#art-bia) | — | [MS A](#ms-a) |
+| [Prepare 9: System Stakeholders (P-9)](#task-p-9) | Prepare | [PM/SO](#per-pm) | [Stakeholder register (ART-STAKE)](#art-stake) | — | [MS A](#ms-a) |
+| [Prepare 10: Asset Identification (P-10)](#task-p-10) | Prepare | [PM/SO](#per-pm) | [Hardware and software inventory (ART-INV)](#art-inv) | — | [MS A](#ms-a) |
+| [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | Prepare | [AO](#per-ao) | [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | — | [MS A](#ms-a) |
+| [Prepare 12: Information Types (P-12)](#task-p-12) | Prepare | [PM/SO](#per-pm) | [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | — | [MS A](#ms-a) |
+| [Prepare 13: Information Life Cycle (P-13)](#task-p-13) | Prepare | [PM/SO](#per-pm) | — | [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | [MS A](#ms-a) |
+| [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) | Prepare | [PM/SO](#per-pm) | [System risk assessment (ART-RA)](#art-ra), [Privacy impact assessment (ART-PIA)](#art-pia) | — | [MS A](#ms-a), [SRR](#rv-srr) |
+| [Prepare 15: Requirements Definition (P-15)](#task-p-15) | Prepare | [PM/SO](#per-pm) | [Security and privacy requirements and allocation (ART-REQ)](#art-req) | — | [MS A](#ms-a), [SRR](#rv-srr) |
+| [Prepare 18: System Registration (P-18)](#task-p-18) | Prepare | [PM/SO](#per-pm) | [System registration (ART-REG)](#art-reg) | — | [MS A](#ms-a) |
+| [Categorize 1: System Description (C-1)](#task-c-1) | Categorize | [PM/SO](#per-pm) | [System description, users and leveraged authorizations (ART-SD)](#art-sd) | [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd), [System registration (ART-REG)](#art-reg) | [MS A](#ms-a) |
+| [Categorize 2: Security Categorization (C-2)](#task-c-2) | Categorize | [PM/SO](#per-pm) | [Security categorization (ART-CAT)](#art-cat) | [Business impact and criticality analysis (ART-BIA)](#art-bia) | [MS A](#ms-a) |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | Categorize | [AO](#per-ao) | — | [Security categorization (ART-CAT)](#art-cat), [System registration (ART-REG)](#art-reg) | [MS A](#ms-a), [SRR](#rv-srr) |
 
-Also active in this phase (described in their primary phase): [P-16](#task-p-16).
+Also active in this phase (described in their primary phase): [Prepare 16: Enterprise Architecture (P-16)](#task-p-16).
 
-#### <a id="task-p-1"></a>P-1 · Risk Management Roles
+#### <a id="task-p-1"></a>Prepare 1: Risk Management Roles (P-1)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -316,13 +318,13 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | produces | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | produces | supporting |
 
 **Entry criteria**
 
@@ -352,9 +354,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-1](playbooks/P/P-org-context.md#task-p-1)
 
-**Cross-references:** depends on nothing; required by [P-2](#task-p-2).
+**Cross-references:** depends on nothing; required by [Prepare 2: Risk Management Strategy (P-2)](#task-p-2).
 
-#### <a id="task-p-2"></a>P-2 · Risk Management Strategy
+#### <a id="task-p-2"></a>Prepare 2: Risk Management Strategy (P-2)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -373,14 +375,14 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -411,9 +413,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-2](playbooks/P/P-org-context.md#task-p-2)
 
-**Cross-references:** depends on [P-1](#task-p-1); required by [P-3](#task-p-3), [P-7](#task-p-7), [P-8](#task-p-8).
+**Cross-references:** depends on [Prepare 1: Risk Management Roles (P-1)](#task-p-1); required by [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8).
 
-#### <a id="task-p-3"></a>P-3 · Risk Assessment—Organization
+#### <a id="task-p-3"></a>Prepare 3: Risk Assessment—Organization (P-3)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) (continues in [O&S](#ph-os)) · required · at least 1 stakeholder interview*
 
@@ -431,15 +433,15 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -467,9 +469,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-3](playbooks/P/P-org-context.md#task-p-3)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14); receives feedback from [P-14](#task-p-14).
+**Cross-references:** depends on [Prepare 2: Risk Management Strategy (P-2)](#task-p-2); required by [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14); receives feedback from [Prepare 14: Risk Assessment—System (P-14)](#task-p-14).
 
-#### <a id="task-p-4"></a>P-4 · Organizationally-Tailored Control Baselines and CSF Profiles
+#### <a id="task-p-4"></a>Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) · optional · at least 1 stakeholder interview*
 
@@ -487,17 +489,17 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-BASELINES](#ext-baselines) | Control baselines | outside input (reference) |
-| [EXT-CNSSI1253-OVERLAYS](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Control baselines (EXT-BASELINES)](#ext-baselines) | Control baselines | outside input (reference) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -525,9 +527,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-4](playbooks/P/P-org-context.md#task-p-4)
 
-**Cross-references:** depends on [P-3](#task-p-3); required by no later task.
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by no later task.
 
-#### <a id="task-p-5"></a>P-5 · Common Control Identification
+#### <a id="task-p-5"></a>Prepare 5: Common Control Identification (P-5)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -545,14 +547,14 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -576,9 +578,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-5](playbooks/P/P-org-context.md#task-p-5)
 
-**Cross-references:** depends on [P-3](#task-p-3); required by [P-17](#task-p-17), [S-1](#task-s-1).
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 1: Control Selection (S-1)](#task-s-1).
 
-#### <a id="task-p-6"></a>P-6 · Impact-Level Prioritization
+#### <a id="task-p-6"></a>Prepare 6: Impact-Level Prioritization (P-6)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) · optional · at least 1 stakeholder interview*
 
@@ -596,14 +598,14 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -628,9 +630,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-6](playbooks/P/P-org-context.md#task-p-6)
 
-**Cross-references:** depends on [P-3](#task-p-3); required by no later task.
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by no later task.
 
-#### <a id="task-p-7"></a>P-7 · Continuous Monitoring Strategy—Organization
+#### <a id="task-p-7"></a>Prepare 7: Continuous Monitoring Strategy—Organization (P-7)
 
 *[Prepare](#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -649,14 +651,14 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -682,9 +684,9 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-7](playbooks/P/P-org-context.md#task-p-7)
 
-**Cross-references:** depends on [P-2](#task-p-2), [P-3](#task-p-3); required by [S-5](#task-s-5); receives feedback from [M-5](#task-m-5).
+**Cross-references:** depends on [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5); receives feedback from [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5).
 
-#### <a id="task-p-8"></a>P-8 · Mission or Business Focus
+#### <a id="task-p-8"></a>Prepare 8: Mission or Business Focus (P-8)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -704,16 +706,16 @@ Also active in this phase (described in their primary phase): [P-16](#task-p-16)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-CAPDOC](#ext-capdoc) | Capability requirements documents | outside input (product) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Capability requirements documents (EXT-CAPDOC)](#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | produces | supporting |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | produces | supporting |
 
 Writes to `facts.yaml`: `missions`.
 
@@ -743,9 +745,9 @@ Writes to `facts.yaml`: `missions`.
 
 **Playbook:** [playbooks/P/P-8.md](playbooks/P/P-8.md)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-9](#task-p-9).
+**Cross-references:** depends on [Prepare 2: Risk Management Strategy (P-2)](#task-p-2); required by [Prepare 9: System Stakeholders (P-9)](#task-p-9).
 
-#### <a id="task-p-9"></a>P-9 · System Stakeholders
+#### <a id="task-p-9"></a>Prepare 9: System Stakeholders (P-9)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -765,16 +767,16 @@ Writes to `facts.yaml`: `missions`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [EXT-CAPDOC](#ext-capdoc) | Capability requirements documents | outside input (product) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Capability requirements documents (EXT-CAPDOC)](#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-STAKE](#art-stake) | Stakeholder register | produces | supporting |
+| [Stakeholder register (ART-STAKE)](#art-stake) | Stakeholder register | produces | supporting |
 
 **Entry criteria**
 
@@ -801,9 +803,9 @@ Writes to `facts.yaml`: `missions`.
 
 **Playbook:** [playbooks/P/P-9.md](playbooks/P/P-9.md)
 
-**Cross-references:** depends on [P-8](#task-p-8); required by [P-10](#task-p-10).
+**Cross-references:** depends on [Prepare 8: Mission or Business Focus (P-8)](#task-p-8); required by [Prepare 10: Asset Identification (P-10)](#task-p-10).
 
-#### <a id="task-p-10"></a>P-10 · Asset Identification
+#### <a id="task-p-10"></a>Prepare 10: Asset Identification (P-10)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -822,16 +824,16 @@ Writes to `facts.yaml`: `missions`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Stakeholder register (ART-STAKE)](#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-INV](#art-inv) | Hardware and software inventory | produces | core |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | produces | core |
 
 **Entry criteria**
 
@@ -856,9 +858,9 @@ Writes to `facts.yaml`: `missions`.
 
 **Playbook:** [playbooks/P/P-10.md](playbooks/P/P-10.md)
 
-**Cross-references:** depends on [P-9](#task-p-9); required by [P-11](#task-p-11), [P-12](#task-p-12).
+**Cross-references:** depends on [Prepare 9: System Stakeholders (P-9)](#task-p-9); required by [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12).
 
-#### <a id="task-p-11"></a>P-11 · Authorization Boundary
+#### <a id="task-p-11"></a>Prepare 11: Authorization Boundary (P-11)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -877,16 +879,16 @@ Writes to `facts.yaml`: `missions`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Stakeholder register (ART-STAKE)](#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | produces | core |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | produces | core |
 
 Writes to `facts.yaml`: `boundary_id`.
 
@@ -914,9 +916,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-11.md](playbooks/P/P-11.md)
 
-**Cross-references:** depends on [P-10](#task-p-10); required by [P-13](#task-p-13), [P-18](#task-p-18); receives feedback from [M-1](#task-m-1).
+**Cross-references:** depends on [Prepare 10: Asset Identification (P-10)](#task-p-10); required by [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 18: System Registration (P-18)](#task-p-18); receives feedback from [Monitor 1: System and Environment Changes (M-1)](#task-m-1).
 
-#### <a id="task-p-12"></a>P-12 · Information Types
+#### <a id="task-p-12"></a>Prepare 12: Information Types (P-12)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -935,15 +937,15 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [EXT-CAPDOC](#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Capability requirements documents (EXT-CAPDOC)](#ext-capdoc) | Capability requirements documents | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | produces | supporting |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | produces | supporting |
 
 **Entry criteria**
 
@@ -971,9 +973,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-12.md](playbooks/P/P-12.md)
 
-**Cross-references:** depends on [P-10](#task-p-10); required by [P-13](#task-p-13), [C-2](#task-c-2).
+**Cross-references:** depends on [Prepare 10: Asset Identification (P-10)](#task-p-10); required by [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Categorize 2: Security Categorization (C-2)](#task-c-2).
 
-#### <a id="task-p-13"></a>P-13 · Information Life Cycle
+#### <a id="task-p-13"></a>Prepare 13: Information Life Cycle (P-13)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -992,18 +994,18 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Stakeholder register (ART-STAKE)](#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | updates | supporting |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | updates | supporting |
 
 **Entry criteria**
 
@@ -1026,9 +1028,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-13.md](playbooks/P/P-13.md)
 
-**Cross-references:** depends on [P-11](#task-p-11), [P-12](#task-p-12); required by [P-14](#task-p-14).
+**Cross-references:** depends on [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12); required by [Prepare 14: Risk Assessment—System (P-14)](#task-p-14).
 
-#### <a id="task-p-14"></a>P-14 · Risk Assessment—System
+#### <a id="task-p-14"></a>Prepare 14: Risk Assessment—System (P-14)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1047,26 +1049,26 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
-| [EXT-PPP](#ext-ppp) | Program protection plan | outside input (product) |
-| [EXT-CSS](#ext-css) | Cybersecurity strategy | outside input (product) |
-| [EXT-STPP](#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
-| [EXT-ITRA](#ext-itra) | Independent technical risk assessments | outside input (organization) |
-| [EXT-SEP](#ext-sep) | Systems engineering plan | outside input (product) |
-| [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
+| [Program protection plan (EXT-PPP)](#ext-ppp) | Program protection plan | outside input (product) |
+| [Cybersecurity strategy (EXT-CSS)](#ext-css) | Cybersecurity strategy | outside input (product) |
+| [Technology and S&T protection guidance (EXT-STPP)](#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
+| [Independent technical risk assessments (EXT-ITRA)](#ext-itra) | Independent technical risk assessments | outside input (organization) |
+| [Systems engineering plan (EXT-SEP)](#ext-sep) | Systems engineering plan | outside input (product) |
+| [Stakeholder register (ART-STAKE)](#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-RA](#art-ra) | System risk assessment | produces | supporting |
-| [ART-PIA](#art-pia) | Privacy impact assessment | produces | supporting |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | produces | supporting |
+| [Privacy impact assessment (ART-PIA)](#art-pia) | Privacy impact assessment | produces | supporting |
 
 **Entry criteria**
 
@@ -1106,9 +1108,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-3](#task-c-3).
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 13: Information Life Cycle (P-13)](#task-p-13); required by [Prepare 15: Requirements Definition (P-15)](#task-p-15); feeds back to [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); receives feedback from [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3).
 
-#### <a id="task-p-15"></a>P-15 · Requirements Definition
+#### <a id="task-p-15"></a>Prepare 15: Requirements Definition (P-15)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1127,24 +1129,24 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-STAKE](#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [EXT-CAPDOC](#ext-capdoc) | Capability requirements documents | outside input (product) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PPP](#ext-ppp) | Program protection plan | outside input (product) |
-| [EXT-STPP](#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [Stakeholder register (ART-STAKE)](#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Capability requirements documents (EXT-CAPDOC)](#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Program protection plan (EXT-PPP)](#ext-ppp) | Program protection plan | outside input (product) |
+| [Technology and S&T protection guidance (EXT-STPP)](#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | produces | supporting |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | produces | supporting |
 
 **Entry criteria**
 
@@ -1180,9 +1182,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-15.md](playbooks/P/P-15.md)
 
-**Cross-references:** depends on [P-14](#task-p-14); required by [P-16](#task-p-16), [C-1](#task-c-1).
+**Cross-references:** depends on [Prepare 14: Risk Assessment—System (P-14)](#task-p-14); required by [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Categorize 1: System Description (C-1)](#task-c-1).
 
-#### <a id="task-p-18"></a>P-18 · System Registration
+#### <a id="task-p-18"></a>Prepare 18: System Registration (P-18)
 
 *[Prepare](#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1201,16 +1203,16 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [EXT-REGISTRY](#ext-registry) | Component system registry | outside input (organization) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Component system registry (EXT-REGISTRY)](#ext-registry) | Component system registry | outside input (organization) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-REG](#art-reg) | System registration | produces | supporting |
+| [System registration (ART-REG)](#art-reg) | System registration | produces | supporting |
 
 **Entry criteria**
 
@@ -1239,9 +1241,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-18.md](playbooks/P/P-18.md)
 
-**Cross-references:** depends on [P-11](#task-p-11); required by [C-1](#task-c-1).
+**Cross-references:** depends on [Prepare 11: Authorization Boundary (P-11)](#task-p-11); required by [Categorize 1: System Description (C-1)](#task-c-1).
 
-#### <a id="task-c-1"></a>C-1 · System Description
+#### <a id="task-c-1"></a>Categorize 1: System Description (C-1)
 
 *[Categorize](#step-c) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1260,19 +1262,19 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | produces | core |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
-| [ART-REG](#art-reg) | System registration | updates | supporting |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | produces | core |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
+| [System registration (ART-REG)](#art-reg) | System registration | updates | supporting |
 
 Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
@@ -1302,9 +1304,9 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 
 **Playbook:** [playbooks/C/C-1.md](playbooks/C/C-1.md)
 
-**Cross-references:** depends on [P-15](#task-p-15), [P-18](#task-p-18); required by [C-2](#task-c-2); receives feedback from [M-1](#task-m-1).
+**Cross-references:** depends on [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18); required by [Categorize 2: Security Categorization (C-2)](#task-c-2); receives feedback from [Monitor 1: System and Environment Changes (M-1)](#task-m-1).
 
-#### <a id="task-c-2"></a>C-2 · Security Categorization
+#### <a id="task-c-2"></a>Categorize 2: Security Categorization (C-2)
 
 *[Categorize](#step-c) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1324,22 +1326,22 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-INFOTYPES](#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-CNSSI1253-OVERLAYS](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | produces | core |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | updates | supporting |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | produces | core |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 Writes to `facts.yaml`: `categorization`.
 
@@ -1375,9 +1377,9 @@ Writes to `facts.yaml`: `categorization`.
 
 **Playbook:** [playbooks/C/C-2.md](playbooks/C/C-2.md)
 
-**Cross-references:** depends on [C-1](#task-c-1), [P-12](#task-p-12); required by [C-3](#task-c-3).
+**Cross-references:** depends on [Categorize 1: System Description (C-1)](#task-c-1), [Prepare 12: Information Types (P-12)](#task-p-12); required by [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3).
 
-#### <a id="task-c-3"></a>C-3 · Security Categorization Review and Approval
+#### <a id="task-c-3"></a>Categorize 3: Security Categorization Review and Approval (C-3)
 
 *[Categorize](#step-c) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1397,15 +1399,15 @@ Writes to `facts.yaml`: `categorization`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | updates | core |
-| [ART-REG](#art-reg) | System registration | updates | supporting |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | updates | core |
+| [System registration (ART-REG)](#art-reg) | System registration | updates | supporting |
 
 Writes to `facts.yaml`: `categorization.approved`.
 
@@ -1435,7 +1437,7 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](#task-s-1); feeds back to [P-14](#task-p-14).
+**Cross-references:** depends on [Categorize 2: Security Categorization (C-2)](#task-c-2); required by [Select 1: Control Selection (S-1)](#task-s-1); feeds back to [Prepare 14: Risk Assessment—System (P-14)](#task-p-14).
 
 ### <a id="ph-tmrr"></a>Phase 2: TMRR · Technology Maturation and Risk Reduction
 
@@ -1475,8 +1477,8 @@ Reduce technology, engineering, integration and life-cycle cost risk and mature 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
 | <a id="ms-cddv"></a>**CDD validation** Capability Development Document validation | event | — | During TMRR the requirements validation authority validates the CDD, or the equivalent requirements document that replaced it once JCIDS was disestablished, before the Development RFP release decision point (ACQLC-002). | — |
-| <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [P-17](#task-p-17) |
-| <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6) |
+| <a id="ms-drfprd"></a>**Dev RFP RD** Development RFP Release Decision Point | decision point | [MDA](#per-mda) | Release the development request for proposal; allocated security requirements and contract cybersecurity requirements must be in the solicitation. The decision confirms that program security has been accommodated, so the requirements allocation (P-17) and the selected and tailored baseline (S-1, S-2) should shape the solicitation. | [Prepare 17: Requirements Allocation (P-17)](#task-p-17) |
+| <a id="ms-b"></a>**MS B** Milestone B | milestone | [MDA](#per-mda) | Approve entry into engineering and manufacturing development (program initiation for most programs); the security plan should be approved by this point. The review requires a demonstration that security risk, among the other risk sources, has been adequately mitigated, which the approved security plan and continuous monitoring strategy (S-6) support. | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6) |
 
 Sources:
 
@@ -1488,9 +1490,9 @@ Sources:
 
 | Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
 |---|---|---|---|
-| <a id="rv-srr"></a>**SRR** System Requirements Review | Confirm that the system requirements are complete, testable and traceable to the capability need (DoDI 5000.88 requires an SRR or an SFR). | Security and privacy requirements defined (P-15) and traceable; categorization approved (C-3) so that the control baseline can be selected. The system risk assessment (P-14) explains the requirements, and the system's place in the enterprise architecture (P-16) is known. | [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [C-3](#task-c-3) |
-| <a id="rv-sfr"></a>**SFR** System Functional Review | Confirm that the functional baseline satisfies the system requirements (DoDI 5000.88 requires an SRR or an SFR). | Requirements allocated to the system and its environment (P-17); control baseline selected and tailored (S-1, S-2), with overlays applied and every tailoring decision justified. | [P-17](#task-p-17), [S-1](#task-s-1), [S-2](#task-s-2) |
-| <a id="rv-pdr"></a>**PDR** Preliminary Design Review | Confirm that the preliminary design and allocated baseline satisfy the functional baseline; conducted before Milestone B. | Controls allocated to system elements (S-3); planned control implementations documented in the security plan (S-4) and the continuous monitoring strategy drafted (S-5), so the security plan can be approved (S-6) before Milestone B. | [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5) |
+| <a id="rv-srr"></a>**SRR** System Requirements Review | Confirm that the system requirements are complete, testable and traceable to the capability need (DoDI 5000.88 requires an SRR or an SFR). | Security and privacy requirements defined (P-15) and traceable; categorization approved (C-3) so that the control baseline can be selected. The system risk assessment (P-14) explains the requirements, and the system's place in the enterprise architecture (P-16) is known. | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
+| <a id="rv-sfr"></a>**SFR** System Functional Review | Confirm that the functional baseline satisfies the system requirements (DoDI 5000.88 requires an SRR or an SFR). | Requirements allocated to the system and its environment (P-17); control baseline selected and tailored (S-1, S-2), with overlays applied and every tailoring decision justified. | [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2) |
+| <a id="rv-pdr"></a>**PDR** Preliminary Design Review | Confirm that the preliminary design and allocated baseline satisfy the functional baseline; conducted before Milestone B. | Controls allocated to system elements (S-3); planned control implementations documented in the security plan (S-4) and the continuous monitoring strategy drafted (S-5), so the security plan can be approved (S-6) before Milestone B. | [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) |
 
 Sources:
 
@@ -1504,18 +1506,18 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [P-16](#task-p-16) Enterprise Architecture | Prepare | [PM/SO](#per-pm) | — | [ART-BND](#art-bnd) | [SRR](#rv-srr) |
-| [P-17](#task-p-17) Requirements Allocation | Prepare | [PM/SO](#per-pm) | — | [ART-REQ](#art-req) | [Dev RFP RD](#ms-drfprd), [SFR](#rv-sfr) |
-| [S-1](#task-s-1) Control Selection | Select | [PM/SO](#per-pm) | [ART-BASELINE](#art-baseline) | — | [SFR](#rv-sfr) |
-| [S-2](#task-s-2) Control Tailoring | Select | [PM/SO](#per-pm) | — | [ART-BASELINE](#art-baseline) | [SFR](#rv-sfr) |
-| [S-3](#task-s-3) Control Allocation | Select | [PM/SO](#per-pm) | — | [ART-BASELINE](#art-baseline) | [PDR](#rv-pdr) |
-| [S-4](#task-s-4) Documentation of Planned Control Implementations | Select | [PM/SO](#per-pm) | [ART-SSP](#art-ssp), [ART-CMP](#art-cmp), [ART-CP](#art-cp), [ART-IRP](#art-irp), [ART-SVCA](#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
-| [S-5](#task-s-5) Continuous Monitoring Strategy—System | Select | [PM/SO](#per-pm) | [ART-CONMON](#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
-| [S-6](#task-s-6) Plan Review and Approval | Select | [AO](#per-ao) | — | [ART-SSP](#art-ssp) | [MS B](#ms-b) |
+| [Prepare 16: Enterprise Architecture (P-16)](#task-p-16) | Prepare | [PM/SO](#per-pm) | — | [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | [SRR](#rv-srr) |
+| [Prepare 17: Requirements Allocation (P-17)](#task-p-17) | Prepare | [PM/SO](#per-pm) | — | [Security and privacy requirements and allocation (ART-REQ)](#art-req) | [Dev RFP RD](#ms-drfprd), [SFR](#rv-sfr) |
+| [Select 1: Control Selection (S-1)](#task-s-1) | Select | [PM/SO](#per-pm) | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | — | [SFR](#rv-sfr) |
+| [Select 2: Control Tailoring (S-2)](#task-s-2) | Select | [PM/SO](#per-pm) | — | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | [SFR](#rv-sfr) |
+| [Select 3: Control Allocation (S-3)](#task-s-3) | Select | [PM/SO](#per-pm) | — | [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | [PDR](#rv-pdr) |
+| [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | Select | [PM/SO](#per-pm) | [System Security Plan (ART-SSP)](#art-ssp), [Configuration management plan (ART-CMP)](#art-cmp), [Contingency plan (ART-CP)](#art-cp), [Incident response plan (ART-IRP)](#art-irp), [Cybersecurity service agreements (ART-SVCA)](#art-svca) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
+| [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | Select | [PM/SO](#per-pm) | [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | — | [MS B](#ms-b), [PDR](#rv-pdr) |
+| [Select 6: Plan Review and Approval (S-6)](#task-s-6) | Select | [AO](#per-ao) | — | [System Security Plan (ART-SSP)](#art-ssp) | [MS B](#ms-b) |
 
-Also active in this phase (described in their primary phase): [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3).
+Also active in this phase (described in their primary phase): [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3).
 
-#### <a id="task-p-16"></a>P-16 · Enterprise Architecture
+#### <a id="task-p-16"></a>Prepare 16: Enterprise Architecture (P-16)
 
 *[Prepare](#step-p) step · system level · primary phase [TMRR](#ph-tmrr) (continues in [MSA](#ph-msa)) · required · at least 1 stakeholder interview*
 
@@ -1534,19 +1536,19 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [EXT-NSA-ASSESSMENT](#ext-nsa-assessment) | NSA assessment of a National Security System | outside input (organization) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [NSA assessment of a National Security System (EXT-NSA-ASSESSMENT)](#ext-nsa-assessment) | NSA assessment of a National Security System | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
 
 **Entry criteria**
 
@@ -1575,9 +1577,9 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 **Playbook:** [playbooks/P/P-16.md](playbooks/P/P-16.md)
 
-**Cross-references:** depends on [P-15](#task-p-15); required by [P-17](#task-p-17).
+**Cross-references:** depends on [Prepare 15: Requirements Definition (P-15)](#task-p-15); required by [Prepare 17: Requirements Allocation (P-17)](#task-p-17).
 
-#### <a id="task-p-17"></a>P-17 · Requirements Allocation
+#### <a id="task-p-17"></a>Prepare 17: Requirements Allocation (P-17)
 
 *[Prepare](#step-p) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -1596,17 +1598,17 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | updates | supporting |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | updates | supporting |
 
 **Entry criteria**
 
@@ -1639,9 +1641,9 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 **Playbook:** [playbooks/P/P-17.md](playbooks/P/P-17.md)
 
-**Cross-references:** depends on [P-5](#task-p-5), [P-16](#task-p-16); required by [S-3](#task-s-3).
+**Cross-references:** depends on [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16); required by [Select 3: Control Allocation (S-3)](#task-s-3).
 
-#### <a id="task-s-1"></a>S-1 · Control Selection
+#### <a id="task-s-1"></a>Select 1: Control Selection (S-1)
 
 *[Select](#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -1660,22 +1662,22 @@ Also active in this phase (described in their primary phase): [P-14](#task-p-14)
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-BASELINES](#ext-baselines) | Control baselines | outside input (reference) |
-| [EXT-CNSSI1253-OVERLAYS](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [EXT-CATALOG](#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Control baselines (EXT-BASELINES)](#ext-baselines) | Control baselines | outside input (reference) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [SP 800-53 Rev. 5 control catalog (EXT-CATALOG)](#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | produces | supporting |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | produces | supporting |
 
 Writes to `facts.yaml`: `baseline_id`.
 
@@ -1706,9 +1708,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-1.md](playbooks/S/S-1.md)
 
-**Cross-references:** depends on [C-3](#task-c-3), [P-5](#task-p-5); required by [S-2](#task-s-2).
+**Cross-references:** depends on [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Prepare 5: Common Control Identification (P-5)](#task-p-5); required by [Select 2: Control Tailoring (S-2)](#task-s-2).
 
-#### <a id="task-s-2"></a>S-2 · Control Tailoring
+#### <a id="task-s-2"></a>Select 2: Control Tailoring (S-2)
 
 *[Select](#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -1727,20 +1729,20 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [EXT-CNSSI1253-OVERLAYS](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
 
 **Entry criteria**
 
@@ -1778,9 +1780,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-2.md](playbooks/S/S-2.md)
 
-**Cross-references:** depends on [S-1](#task-s-1); required by [S-3](#task-s-3).
+**Cross-references:** depends on [Select 1: Control Selection (S-1)](#task-s-1); required by [Select 3: Control Allocation (S-3)](#task-s-3).
 
-#### <a id="task-s-3"></a>S-3 · Control Allocation
+#### <a id="task-s-3"></a>Select 3: Control Allocation (S-3)
 
 *[Select](#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -1799,22 +1801,22 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | updates | supporting |
 
 **Entry criteria**
 
@@ -1841,9 +1843,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-3.md](playbooks/S/S-3.md)
 
-**Cross-references:** depends on [S-2](#task-s-2), [P-17](#task-p-17); required by [S-4](#task-s-4).
+**Cross-references:** depends on [Select 2: Control Tailoring (S-2)](#task-s-2), [Prepare 17: Requirements Allocation (P-17)](#task-p-17); required by [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4).
 
-#### <a id="task-s-4"></a>S-4 · Documentation of Planned Control Implementations
+#### <a id="task-s-4"></a>Select 4: Documentation of Planned Control Implementations (S-4)
 
 *[Select](#step-s) step · system level · primary phase [TMRR](#ph-tmrr) (continues in [EMD](#ph-emd)) · required · at least 1 stakeholder interview*
 
@@ -1862,27 +1864,27 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
-| [ART-BND](#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [EXT-CATALOG](#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
-| [ART-CAT](#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [SP 800-53 Rev. 5 control catalog (EXT-CATALOG)](#ext-catalog) | SP 800-53 Rev. 5 control catalog | outside input (reference) |
+| [Security categorization (ART-CAT)](#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | produces | core |
-| [ART-CMP](#art-cmp) | Configuration management plan | produces | core |
-| [ART-CP](#art-cp) | Contingency plan | produces | core |
-| [ART-IRP](#art-irp) | Incident response plan | produces | core |
-| [ART-SVCA](#art-svca) | Cybersecurity service agreements | produces | supporting |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | produces | core |
+| [Configuration management plan (ART-CMP)](#art-cmp) | Configuration management plan | produces | core |
+| [Contingency plan (ART-CP)](#art-cp) | Contingency plan | produces | core |
+| [Incident response plan (ART-IRP)](#art-irp) | Incident response plan | produces | core |
+| [Cybersecurity service agreements (ART-SVCA)](#art-svca) | Cybersecurity service agreements | produces | supporting |
 
 **Entry criteria**
 
@@ -1919,9 +1921,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-4.md](playbooks/S/S-4.md)
 
-**Cross-references:** depends on [S-3](#task-s-3); required by [S-5](#task-s-5), [S-6](#task-s-6).
+**Cross-references:** depends on [Select 3: Control Allocation (S-3)](#task-s-3); required by [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6).
 
-#### <a id="task-s-5"></a>S-5 · Continuous Monitoring Strategy—System
+#### <a id="task-s-5"></a>Select 5: Continuous Monitoring Strategy—System (S-5)
 
 *[Select](#step-s) step · system level · primary phase [TMRR](#ph-tmrr) (continues in [EMD](#ph-emd)) · required · at least 1 stakeholder interview*
 
@@ -1940,17 +1942,17 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | produces | core |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | produces | core |
 
 **Entry criteria**
 
@@ -1991,9 +1993,9 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-5.md](playbooks/S/S-5.md)
 
-**Cross-references:** depends on [S-4](#task-s-4), [P-7](#task-p-7); required by [S-6](#task-s-6), [M-2](#task-m-2).
+**Cross-references:** depends on [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7); required by [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2).
 
-#### <a id="task-s-6"></a>S-6 · Plan Review and Approval
+#### <a id="task-s-6"></a>Select 6: Plan Review and Approval (S-6)
 
 *[Select](#step-s) step · system level · primary phase [TMRR](#ph-tmrr) · required · at least 1 stakeholder interview*
 
@@ -2013,16 +2015,16 @@ Writes to `facts.yaml`: `baseline_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | updates | core |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -2049,7 +2051,7 @@ Writes to `facts.yaml`: `baseline_id`.
 
 **Playbook:** [playbooks/S/S-6.md](playbooks/S/S-6.md)
 
-**Cross-references:** depends on [S-4](#task-s-4), [S-5](#task-s-5); required by [I-1](#task-i-1), [A-1](#task-a-1).
+**Cross-references:** depends on [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5); required by [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 1: Assessor Selection (A-1)](#task-a-1).
 
 ### <a id="ph-emd"></a>Phase 3: EMD · Engineering and Manufacturing Development
 
@@ -2089,7 +2091,7 @@ Develop, build and test the system; implement the controls, assess them through 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-c"></a>**MS C** Milestone C | milestone | [MDA](#per-mda) | Approve entry into production and deployment; fielded systems need a valid authorization before they begin operations. The authorization decision (R-4) should be issued by this point, informed by developmental cybersecurity test results and a threat assessment no older than 12 months. | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) |
+| <a id="ms-c"></a>**MS C** Milestone C | milestone | [MDA](#per-mda) | Approve entry into production and deployment; fielded systems need a valid authorization before they begin operations. The authorization decision (R-4) should be issued by this point, informed by developmental cybersecurity test results and a threat assessment no older than 12 months. | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 
 Sources:
 
@@ -2099,10 +2101,10 @@ Sources:
 
 | Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
 |---|---|---|---|
-| <a id="rv-cdr"></a>**CDR** Critical Design Review | Confirm that the detailed design is complete and ready for fabrication, coding and integration. | Control implementation designed into the product baseline (I-1); security plan reflects the as-designed implementation, and the STIG/SRG configurations for each component are chosen. | [I-1](#task-i-1) |
-| <a id="rv-trr"></a>**TRR** Test Readiness Review | Confirm readiness for each developmental test event identified in the TEMP. | Controls implemented and the as-implemented plan updated (I-2); assessor selected and the assessment plan approved (A-1, A-2), with the test events that support the assessment identified; an AD-IATT is in place before testing on live networks or with live data. | [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2) |
-| <a id="rv-svr"></a>**SVR/FCA** System Verification Review / Functional Configuration Audit | Confirm that the system as built meets the functional baseline, using test results. | Control assessments complete (A-3), assessment report delivered (A-4) and initial remediation done (A-5). Results from cooperative vulnerability identification and adversarial developmental testing are in the assessment report. | [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5) |
-| <a id="rv-prr"></a>**PRR** Production Readiness Review | Confirm that the design is ready for production and the production processes are mature. | POA&M established (A-6) and the authorization package assembled (R-1) so that the authorization decision supports Milestone C; the threat assessment the PM reviews before the ATO is no more than 12 months old. | [A-6](#task-a-6), [R-1](#task-r-1) |
+| <a id="rv-cdr"></a>**CDR** Critical Design Review | Confirm that the detailed design is complete and ready for fabrication, coding and integration. | Control implementation designed into the product baseline (I-1); security plan reflects the as-designed implementation, and the STIG/SRG configurations for each component are chosen. | [Implement 1: Control Implementation (I-1)](#task-i-1) |
+| <a id="rv-trr"></a>**TRR** Test Readiness Review | Confirm readiness for each developmental test event identified in the TEMP. | Controls implemented and the as-implemented plan updated (I-2); assessor selected and the assessment plan approved (A-1, A-2), with the test events that support the assessment identified; an AD-IATT is in place before testing on live networks or with live data. | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
+| <a id="rv-svr"></a>**SVR/FCA** System Verification Review / Functional Configuration Audit | Confirm that the system as built meets the functional baseline, using test results. | Control assessments complete (A-3), assessment report delivered (A-4) and initial remediation done (A-5). Results from cooperative vulnerability identification and adversarial developmental testing are in the assessment report. | [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5) |
+| <a id="rv-prr"></a>**PRR** Production Readiness Review | Confirm that the design is ready for production and the production processes are mature. | POA&M established (A-6) and the authorization package assembled (R-1) so that the authorization decision supports Milestone C; the threat assessment the PM reviews before the ATO is no more than 12 months old. | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1) |
 
 Sources:
 
@@ -2117,23 +2119,23 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [I-1](#task-i-1) Control Implementation | Implement | [PM/SO](#per-pm) | [ART-STIG](#art-stig) | — | [CDR](#rv-cdr) |
-| [I-2](#task-i-2) Update Control Implementation Information | Implement | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SD](#art-sd), [ART-INV](#art-inv), [ART-CMP](#art-cmp), [ART-CP](#art-cp), [ART-IRP](#art-irp) | [TRR](#rv-trr) |
-| [A-1](#task-a-1) Assessor Selection | Assess | [AO](#per-ao) | — | — | [TRR](#rv-trr) |
-| [A-2](#task-a-2) Assessment Plan | Assess | [AO](#per-ao) | [ART-SAP](#art-sap), [ART-AUTHREC](#art-authrec) | — | [TRR](#rv-trr), [IATT](#ad-iatt) |
-| [A-3](#task-a-3) Control Assessments | Assess | [SCA](#per-sca) | [ART-SAR](#art-sar) | [ART-STIG](#art-stig) | [SVR/FCA](#rv-svr), [IATT](#ad-iatt) |
-| [A-4](#task-a-4) Assessment Reports | Assess | [SCA](#per-sca) | — | [ART-SAR](#art-sar) | [SVR/FCA](#rv-svr) |
-| [A-5](#task-a-5) Remediation Actions | Assess | [PM/SO](#per-pm) | — | [ART-SAR](#art-sar), [ART-SSP](#art-ssp) | [SVR/FCA](#rv-svr) |
-| [A-6](#task-a-6) Plan of Action and Milestones | Assess | [PM/SO](#per-pm) | [ART-POAM](#art-poam) | — | [PRR](#rv-prr) |
-| [R-1](#task-r-1) Authorization Package | Authorize | [PM/SO](#per-pm) | [ART-PKG](#art-pkg), [ART-DIAS](#art-dias) | — | [MS C](#ms-c), [PRR](#rv-prr) |
-| [R-2](#task-r-2) Risk Analysis and Determination | Authorize | [AO](#per-ao) | [ART-RAR](#art-rar) | [ART-RA](#art-ra) | [MS C](#ms-c) |
-| [R-3](#task-r-3) Risk Response | Authorize | [AO](#per-ao) | — | [ART-POAM](#art-poam), [ART-RAR](#art-rar) | [MS C](#ms-c) |
-| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](#per-ao) | [ART-AODM](#art-aodm) | [ART-AUTHREC](#art-authrec) | [MS C](#ms-c), [IOC](#ms-ioc), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
-| [R-5](#task-r-5) Authorization Reporting | Authorize | [AO](#per-ao) | [ART-AUTHRPT](#art-authrpt) | [ART-REG](#art-reg) | [MS C](#ms-c) |
+| [Implement 1: Control Implementation (I-1)](#task-i-1) | Implement | [PM/SO](#per-pm) | [STIG/SRG summary (ART-STIG)](#art-stig) | — | [CDR](#rv-cdr) |
+| [Implement 2: Update Control Implementation Information (I-2)](#task-i-2) | Implement | [PM/SO](#per-pm) | — | [System Security Plan (ART-SSP)](#art-ssp), [System description, users and leveraged authorizations (ART-SD)](#art-sd), [Hardware and software inventory (ART-INV)](#art-inv), [Configuration management plan (ART-CMP)](#art-cmp), [Contingency plan (ART-CP)](#art-cp), [Incident response plan (ART-IRP)](#art-irp) | [TRR](#rv-trr) |
+| [Assess 1: Assessor Selection (A-1)](#task-a-1) | Assess | [AO](#per-ao) | — | — | [TRR](#rv-trr) |
+| [Assess 2: Assessment Plan (A-2)](#task-a-2) | Assess | [AO](#per-ao) | [Security assessment plan (ART-SAP)](#art-sap), [Authorization ledger (ART-AUTHREC)](#art-authrec) | — | [TRR](#rv-trr), [IATT](#ad-iatt) |
+| [Assess 3: Control Assessments (A-3)](#task-a-3) | Assess | [SCA](#per-sca) | [Security assessment report (ART-SAR)](#art-sar) | [STIG/SRG summary (ART-STIG)](#art-stig) | [SVR/FCA](#rv-svr), [IATT](#ad-iatt) |
+| [Assess 4: Assessment Reports (A-4)](#task-a-4) | Assess | [SCA](#per-sca) | — | [Security assessment report (ART-SAR)](#art-sar) | [SVR/FCA](#rv-svr) |
+| [Assess 5: Remediation Actions (A-5)](#task-a-5) | Assess | [PM/SO](#per-pm) | — | [Security assessment report (ART-SAR)](#art-sar), [System Security Plan (ART-SSP)](#art-ssp) | [SVR/FCA](#rv-svr) |
+| [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | Assess | [PM/SO](#per-pm) | [Plan of action and milestones (ART-POAM)](#art-poam) | — | [PRR](#rv-prr) |
+| [Authorize 1: Authorization Package (R-1)](#task-r-1) | Authorize | [PM/SO](#per-pm) | [Authorization package manifest (ART-PKG)](#art-pkg), [Digital Identity Acceptance Statement (ART-DIAS)](#art-dias) | — | [MS C](#ms-c), [PRR](#rv-prr) |
+| [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | Authorize | [AO](#per-ao) | [Risk assessment report (ART-RAR)](#art-rar) | [System risk assessment (ART-RA)](#art-ra) | [MS C](#ms-c) |
+| [Authorize 3: Risk Response (R-3)](#task-r-3) | Authorize | [AO](#per-ao) | — | [Plan of action and milestones (ART-POAM)](#art-poam), [Risk assessment report (ART-RAR)](#art-rar) | [MS C](#ms-c) |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](#per-ao) | [AO decision memo (ART-AODM)](#art-aodm) | [Authorization ledger (ART-AUTHREC)](#art-authrec) | [MS C](#ms-c), [IOC](#ms-ioc), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca) |
+| [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | Authorize | [AO](#per-ao) | [Authorization report (ART-AUTHRPT)](#art-authrpt) | [System registration (ART-REG)](#art-reg) | [MS C](#ms-c) |
 
-Also active in this phase (described in their primary phase): [S-4](#task-s-4), [S-5](#task-s-5).
+Also active in this phase (described in their primary phase): [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5).
 
-#### <a id="task-i-1"></a>I-1 · Control Implementation
+#### <a id="task-i-1"></a>Implement 1: Control Implementation (I-1)
 
 *[Implement](#step-i) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2152,21 +2154,21 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [EXT-STIG](#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [DISA STIGs and SRGs, and other secure configuration guidance (EXT-STIG)](#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-STIG](#art-stig) | STIG/SRG summary | produces | supporting |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | STIG/SRG summary | produces | supporting |
 
 **Entry criteria**
 
@@ -2194,9 +2196,9 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 **Playbook:** [playbooks/I/I-1.md](playbooks/I/I-1.md)
 
-**Cross-references:** depends on [S-6](#task-s-6); required by [I-2](#task-i-2).
+**Cross-references:** depends on [Select 6: Plan Review and Approval (S-6)](#task-s-6); required by [Implement 2: Update Control Implementation Information (I-2)](#task-i-2).
 
-#### <a id="task-i-2"></a>I-2 · Update Control Implementation Information
+#### <a id="task-i-2"></a>Implement 2: Update Control Implementation Information (I-2)
 
 *[Implement](#step-i) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2215,20 +2217,20 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-STIG](#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | STIG/SRG summary | [Implement 1: Control Implementation (I-1)](#task-i-1) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | updates | core |
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | updates | core |
-| [ART-INV](#art-inv) | Hardware and software inventory | updates | core |
-| [ART-CMP](#art-cmp) | Configuration management plan | updates | core |
-| [ART-CP](#art-cp) | Contingency plan | updates | core |
-| [ART-IRP](#art-irp) | Incident response plan | updates | core |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | updates | core |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | updates | core |
+| [Configuration management plan (ART-CMP)](#art-cmp) | Configuration management plan | updates | core |
+| [Contingency plan (ART-CP)](#art-cp) | Contingency plan | updates | core |
+| [Incident response plan (ART-IRP)](#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -2256,9 +2258,9 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 **Playbook:** [playbooks/I/I-2.md](playbooks/I/I-2.md)
 
-**Cross-references:** depends on [I-1](#task-i-1); required by [A-2](#task-a-2); receives feedback from [A-5](#task-a-5).
+**Cross-references:** depends on [Implement 1: Control Implementation (I-1)](#task-i-1); required by [Assess 2: Assessment Plan (A-2)](#task-a-2); receives feedback from [Assess 5: Remediation Actions (A-5)](#task-a-5).
 
-#### <a id="task-a-1"></a>A-1 · Assessor Selection
+#### <a id="task-a-1"></a>Assess 1: Assessor Selection (A-1)
 
 *[Assess](#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2278,10 +2280,10 @@ Also active in this phase (described in their primary phase): [S-4](#task-s-4), 
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -2295,8 +2297,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - An assessor or assessment team is selected, with the appropriate level of independence (DoDI 8510.01 Table 5 outcome).
 - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
-- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ATEAM-001, ASMT-007).
-- sap.yaml assessor_independence.consulted names the CIO, the senior agency official for privacy and the senior agency information security officer the AO consults on assessor independence, and the Office of the Inspector General where the organization has one (INDEP-001).
+- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; A-2 records both in sap.yaml (ATEAM-001, ASMT-007), so `--task A-1` cannot judge them, and the A-1 interviews must hold them for A-2 to cite.
+- sap.yaml assessor_independence.consulted names the CIO, the senior agency official for privacy and the senior agency information security officer the AO consults on assessor independence, and the Office of the Inspector General where the organization has one (INDEP-001, judged once A-2 writes sap.yaml).
 
 **Alignment**
 
@@ -2312,9 +2314,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-1.md](playbooks/A/A-1.md)
 
-**Cross-references:** depends on [S-6](#task-s-6); required by [A-2](#task-a-2).
+**Cross-references:** depends on [Select 6: Plan Review and Approval (S-6)](#task-s-6); required by [Assess 2: Assessment Plan (A-2)](#task-a-2).
 
-#### <a id="task-a-2"></a>A-2 · Assessment Plan
+#### <a id="task-a-2"></a>Assess 2: Assessment Plan (A-2)
 
 *[Assess](#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2333,22 +2335,22 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-BASELINE](#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](#task-s-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ASSESSMENT-PROCEDURES](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
-| [ART-REQ](#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-TEST-STRATEGY](#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](#task-s-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [SP 800-53A assessment procedures (EXT-ASSESSMENT-PROCEDURES)](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Test and evaluation master plan or test strategy (EXT-TEST-STRATEGY)](#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAP](#art-sap) | Security assessment plan | produces | core |
-| [ART-AUTHREC](#art-authrec) | Authorization ledger | produces | core |
+| [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | produces | core |
+| [Authorization ledger (ART-AUTHREC)](#art-authrec) | Authorization ledger | produces | core |
 
 **Entry criteria**
 
@@ -2385,9 +2387,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-2.md](playbooks/A/A-2.md)
 
-**Cross-references:** depends on [A-1](#task-a-1), [I-2](#task-i-2); required by [A-3](#task-a-3).
+**Cross-references:** depends on [Assess 1: Assessor Selection (A-1)](#task-a-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2); required by [Assess 3: Control Assessments (A-3)](#task-a-3).
 
-#### <a id="task-a-3"></a>A-3 · Control Assessments
+#### <a id="task-a-3"></a>Assess 3: Control Assessments (A-3)
 
 *[Assess](#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2407,19 +2409,19 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAP](#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-STIG](#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
-| [EXT-TEST-RESULTS](#ext-test-results) | Developmental and operational test results | outside input (operational) |
-| [EXT-ASSESSMENT-PROCEDURES](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
-| [EXT-SOFTWARE-EVIDENCE](#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
+| [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | STIG/SRG summary | [Implement 1: Control Implementation (I-1)](#task-i-1) (supporting artifact) |
+| [Developmental and operational test results (EXT-TEST-RESULTS)](#ext-test-results) | Developmental and operational test results | outside input (operational) |
+| [SP 800-53A assessment procedures (EXT-ASSESSMENT-PROCEDURES)](#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [Machine-readable software evidence (EXT-SOFTWARE-EVIDENCE)](#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | produces | core |
-| [ART-STIG](#art-stig) | STIG/SRG summary | updates | supporting |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | produces | core |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | STIG/SRG summary | updates | supporting |
 
 **Entry criteria**
 
@@ -2450,9 +2452,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-3.md](playbooks/A/A-3.md)
 
-**Cross-references:** depends on [A-2](#task-a-2); required by [A-4](#task-a-4).
+**Cross-references:** depends on [Assess 2: Assessment Plan (A-2)](#task-a-2); required by [Assess 4: Assessment Reports (A-4)](#task-a-4).
 
-#### <a id="task-a-4"></a>A-4 · Assessment Reports
+#### <a id="task-a-4"></a>Assess 4: Assessment Reports (A-4)
 
 *[Assess](#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2472,13 +2474,13 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | updates | core |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | updates | core |
 
 **Entry criteria**
 
@@ -2506,9 +2508,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-4.md](playbooks/A/A-4.md)
 
-**Cross-references:** depends on [A-3](#task-a-3); required by [A-5](#task-a-5).
+**Cross-references:** depends on [Assess 3: Control Assessments (A-3)](#task-a-3); required by [Assess 5: Remediation Actions (A-5)](#task-a-5).
 
-#### <a id="task-a-5"></a>A-5 · Remediation Actions
+#### <a id="task-a-5"></a>Assess 5: Remediation Actions (A-5)
 
 *[Assess](#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2527,18 +2529,18 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-SAP](#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | updates | core |
-| [ART-SSP](#art-ssp) | System Security Plan | updates | core |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | updates | core |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -2564,9 +2566,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-5.md](playbooks/A/A-5.md)
 
-**Cross-references:** depends on [A-4](#task-a-4); required by [A-6](#task-a-6); feeds back to [I-2](#task-i-2); receives feedback from [M-3](#task-m-3).
+**Cross-references:** depends on [Assess 4: Assessment Reports (A-4)](#task-a-4); required by [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6); feeds back to [Implement 2: Update Control Implementation Information (I-2)](#task-i-2); receives feedback from [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3).
 
-#### <a id="task-a-6"></a>A-6 · Plan of Action and Milestones
+#### <a id="task-a-6"></a>Assess 6: Plan of Action and Milestones (A-6)
 
 *[Assess](#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -2586,17 +2588,17 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-STIG](#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | STIG/SRG summary | [Implement 1: Control Implementation (I-1)](#task-i-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-POAM](#art-poam) | Plan of action and milestones | produces | core |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | produces | core |
 
 **Entry criteria**
 
@@ -2623,9 +2625,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-6.md](playbooks/A/A-6.md)
 
-**Cross-references:** depends on [A-5](#task-a-5); required by [R-1](#task-r-1).
+**Cross-references:** depends on [Assess 5: Remediation Actions (A-5)](#task-a-5); required by [Authorize 1: Authorization Package (R-1)](#task-r-1).
 
-#### <a id="task-r-1"></a>R-1 · Authorization Package
+#### <a id="task-r-1"></a>Authorize 1: Authorization Package (R-1)
 
 *[Authorize](#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](#ph-pd)) · required · at least 0 stakeholder interviews*
 
@@ -2645,19 +2647,19 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-SAP](#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [EXT-PPP](#ext-ppp) | Program protection plan | outside input (product) |
-| [ART-PIA](#art-pia) | Privacy impact assessment | [P-14](#task-p-14) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [Program protection plan (EXT-PPP)](#ext-ppp) | Program protection plan | outside input (product) |
+| [Privacy impact assessment (ART-PIA)](#art-pia) | Privacy impact assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-PKG](#art-pkg) | Authorization package manifest | produces | supporting |
-| [ART-DIAS](#art-dias) | Digital Identity Acceptance Statement | produces | core |
+| [Authorization package manifest (ART-PKG)](#art-pkg) | Authorization package manifest | produces | supporting |
+| [Digital Identity Acceptance Statement (ART-DIAS)](#art-dias) | Digital Identity Acceptance Statement | produces | core |
 
 **Entry criteria**
 
@@ -2691,9 +2693,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-1.md](playbooks/R/R-1.md)
 
-**Cross-references:** depends on [A-6](#task-a-6); required by [R-2](#task-r-2).
+**Cross-references:** depends on [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6); required by [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2).
 
-#### <a id="task-r-2"></a>R-2 · Risk Analysis and Determination
+#### <a id="task-r-2"></a>Authorize 2: Risk Analysis and Determination (R-2)
 
 *[Authorize](#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -2713,17 +2715,17 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-PKG](#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
+| [Authorization package manifest (ART-PKG)](#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-RAR](#art-rar) | Risk assessment report | produces | core |
-| [ART-RA](#art-ra) | System risk assessment | updates | supporting |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | produces | core |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | updates | supporting |
 
 **Entry criteria**
 
@@ -2752,9 +2754,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-2.md](playbooks/R/R-2.md)
 
-**Cross-references:** depends on [R-1](#task-r-1); required by [R-3](#task-r-3); receives feedback from [M-6](#task-m-6).
+**Cross-references:** depends on [Authorize 1: Authorization Package (R-1)](#task-r-1); required by [Authorize 3: Risk Response (R-3)](#task-r-3); receives feedback from [Monitor 6: Ongoing Authorization (M-6)](#task-m-6).
 
-#### <a id="task-r-3"></a>R-3 · Risk Response
+#### <a id="task-r-3"></a>Authorize 3: Risk Response (R-3)
 
 *[Authorize](#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -2773,19 +2775,19 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-PKG](#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ADM](#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Authorization package manifest (ART-PKG)](#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Acquisition decisions and determinations (EXT-ADM)](#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-POAM](#art-poam) | Plan of action and milestones | updates | core |
-| [ART-RAR](#art-rar) | Risk assessment report | updates | core |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | updates | core |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | updates | core |
 
 **Entry criteria**
 
@@ -2815,9 +2817,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-3.md](playbooks/R/R-3.md)
 
-**Cross-references:** depends on [R-2](#task-r-2); required by [R-4](#task-r-4).
+**Cross-references:** depends on [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2); required by [Authorize 4: Authorization Decision (R-4)](#task-r-4).
 
-#### <a id="task-r-4"></a>R-4 · Authorization Decision
+#### <a id="task-r-4"></a>Authorize 4: Authorization Decision (R-4)
 
 *[Authorize](#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -2837,17 +2839,17 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
-| [ART-PKG](#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [EXT-ADM](#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) (core artifact) |
+| [Authorization package manifest (ART-PKG)](#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Acquisition decisions and determinations (EXT-ADM)](#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AODM](#art-aodm) | AO decision memo | produces | core |
-| [ART-AUTHREC](#art-authrec) | Authorization ledger | updates | core |
+| [AO decision memo (ART-AODM)](#art-aodm) | AO decision memo | produces | core |
+| [Authorization ledger (ART-AUTHREC)](#art-authrec) | Authorization ledger | updates | core |
 
 **Entry criteria**
 
@@ -2884,9 +2886,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-4.md](playbooks/R/R-4.md)
 
-**Cross-references:** depends on [R-3](#task-r-3); required by [R-5](#task-r-5), [M-1](#task-m-1).
+**Cross-references:** depends on [Authorize 3: Risk Response (R-3)](#task-r-3); required by [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1).
 
-#### <a id="task-r-5"></a>R-5 · Authorization Reporting
+#### <a id="task-r-5"></a>Authorize 5: Authorization Reporting (R-5)
 
 *[Authorize](#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -2906,16 +2908,16 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-AODM](#art-aodm) | AO decision memo | [R-4](#task-r-4) (core artifact) |
-| [ART-AUTHREC](#art-authrec) | Authorization ledger | [A-2](#task-a-2) (core artifact) |
-| [ART-PKG](#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
+| [AO decision memo (ART-AODM)](#art-aodm) | AO decision memo | [Authorize 4: Authorization Decision (R-4)](#task-r-4) (core artifact) |
+| [Authorization ledger (ART-AUTHREC)](#art-authrec) | Authorization ledger | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [Authorization package manifest (ART-PKG)](#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AUTHRPT](#art-authrpt) | Authorization report | produces | supporting |
-| [ART-REG](#art-reg) | System registration | updates | supporting |
+| [Authorization report (ART-AUTHRPT)](#art-authrpt) | Authorization report | produces | supporting |
+| [System registration (ART-REG)](#art-reg) | System registration | updates | supporting |
 
 **Entry criteria**
 
@@ -2941,7 +2943,7 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-5.md](playbooks/R/R-5.md)
 
-**Cross-references:** depends on [R-4](#task-r-4); required by no later task.
+**Cross-references:** depends on [Authorize 4: Authorization Decision (R-4)](#task-r-4); required by no later task.
 
 ### <a id="ph-pd"></a>Phase 4: P&D · Production and Deployment
 
@@ -2979,7 +2981,7 @@ Produce and field the system; operational test and evaluation confirms security 
 |---|---|---|---|---|
 | <a id="ms-frp"></a>**FRP/FD** Full-Rate Production or Full Deployment Decision | decision point | [MDA](#per-mda) | Approve full-rate production or full deployment after operational test and evaluation, including its cybersecurity results. The operational cybersecurity assessments (CVPA and adversarial assessment) and any new validated threat environment inform the decision. | — |
 | <a id="ms-field"></a>**First fielding** First fielding | event | — | The first system or systems are fielded, under a current authorization. The O&S phase begins here, which may precede IOC; production and deployment continue alongside (ACQLC-003). | — |
-| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | Initial operational capability is declared once units are fielded (MS-FIELD, which may precede it) and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [R-4](#task-r-4), [M-1](#task-m-1) |
+| <a id="ms-ioc"></a>**IOC** Initial Operational Capability | event | — | Initial operational capability is declared once units are fielded (MS-FIELD, which may precede it) and operated by the user; operation requires a current ATO. Mission-critical cybersecurity vulnerabilities found in testing should be eliminated before fielding, and continuous monitoring starts for the fielded configuration. | [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 
 Sources:
 
@@ -2991,7 +2993,7 @@ Sources:
 
 | Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
 |---|---|---|---|
-| <a id="rv-pca"></a>**PCA** Physical Configuration Audit | Confirm that the production configuration matches the documented product baseline. | Fielded configuration matches the authorized baseline in the security plan and the inventory; deviations go through change control (M-1) with a security impact analysis. | [M-1](#task-m-1) |
+| <a id="rv-pca"></a>**PCA** Physical Configuration Audit | Confirm that the production configuration matches the documented product baseline. | Fielded configuration matches the authorized baseline in the security plan and the inventory; deviations go through change control (M-1) with a security impact analysis. | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 
 Sources:
 
@@ -3001,7 +3003,7 @@ Sources:
 
 No task has this as its primary phase.
 
-Also active in this phase (described in their primary phase): [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6).
+Also active in this phase (described in their primary phase): [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6).
 
 ### <a id="ph-os"></a>Phase 5: O&S · Operations and Support
 
@@ -3037,7 +3039,7 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-foc"></a>**FOC** Full Operational Capability | event | — | The system is fully fielded and sustained; security posture is maintained through continuous monitoring and ongoing authorization. Without ongoing authorization, IT and PIT systems update their ATO at least every three years, depending on risk. | [M-6](#task-m-6) |
+| <a id="ms-foc"></a>**FOC** Full Operational Capability | event | — | The system is fully fielded and sustained; security posture is maintained through continuous monitoring and ongoing authorization. Without ongoing authorization, IT and PIT systems update their ATO at least every three years, depending on risk. | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
 
 Sources:
 
@@ -3049,17 +3051,17 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](#per-pm) | [ART-CHG](#art-chg) | [ART-INV](#art-inv), [ART-CMP](#art-cmp), [ART-POAM](#art-poam), [ART-SAR](#art-sar), [ART-SSP](#art-ssp), [ART-CP](#art-cp), [ART-BIA](#art-bia) | [IOC](#ms-ioc), [PCA](#rv-pca) |
-| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](#per-sca) | — | [ART-SAR](#art-sar), [ART-CONMON](#art-conmon), [ART-SVCA](#art-svca), [ART-SAP](#art-sap) | — |
-| [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](#per-ao) | — | [ART-RA](#art-ra), [ART-POAM](#art-poam), [ART-RAR](#art-rar), [ART-SAR](#art-sar) | — |
-| [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](#per-pm) | — | [ART-SSP](#art-ssp), [ART-SAR](#art-sar), [ART-POAM](#art-poam), [ART-RA](#art-ra), [ART-IRP](#art-irp) | — |
-| [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](#per-pm) | [ART-SECRPT](#art-secrpt) | — | — |
-| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](#per-ao) | — | [ART-AODM](#art-aodm), [ART-AUTHREC](#art-authrec), [ART-RAR](#art-rar) | [FOC](#ms-foc), [cATO](#ad-cato), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc), [DATO](#ad-dato), [DATU](#ad-datu), [DCCA](#ad-dcca) |
-| [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](#per-pm) | [ART-DISP](#art-disp) | [ART-INV](#art-inv), [ART-SSP](#art-ssp) | — |
+| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | Monitor | [PM/SO](#per-pm) | [Change log and security impact analyses (ART-CHG)](#art-chg) | [Hardware and software inventory (ART-INV)](#art-inv), [Configuration management plan (ART-CMP)](#art-cmp), [Plan of action and milestones (ART-POAM)](#art-poam), [Security assessment report (ART-SAR)](#art-sar), [System Security Plan (ART-SSP)](#art-ssp), [Contingency plan (ART-CP)](#art-cp), [Business impact and criticality analysis (ART-BIA)](#art-bia) | [IOC](#ms-ioc), [PCA](#rv-pca) |
+| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | Monitor | [SCA](#per-sca) | — | [Security assessment report (ART-SAR)](#art-sar), [Continuous monitoring strategy (ART-CONMON)](#art-conmon), [Cybersecurity service agreements (ART-SVCA)](#art-svca), [Security assessment plan (ART-SAP)](#art-sap) | — |
+| [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) | Monitor | [AO](#per-ao) | — | [System risk assessment (ART-RA)](#art-ra), [Plan of action and milestones (ART-POAM)](#art-poam), [Risk assessment report (ART-RAR)](#art-rar), [Security assessment report (ART-SAR)](#art-sar) | — |
+| [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | Monitor | [PM/SO](#per-pm) | — | [System Security Plan (ART-SSP)](#art-ssp), [Security assessment report (ART-SAR)](#art-sar), [Plan of action and milestones (ART-POAM)](#art-poam), [System risk assessment (ART-RA)](#art-ra), [Incident response plan (ART-IRP)](#art-irp) | — |
+| [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) | Monitor | [PM/SO](#per-pm) | [Security and privacy posture report (ART-SECRPT)](#art-secrpt) | — | — |
+| [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | Monitor | [AO](#per-ao) | — | [AO decision memo (ART-AODM)](#art-aodm), [Authorization ledger (ART-AUTHREC)](#art-authrec), [Risk assessment report (ART-RAR)](#art-rar) | [FOC](#ms-foc), [cATO](#ad-cato), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc), [DATO](#ad-dato), [DATU](#ad-datu), [DCCA](#ad-dcca) |
+| [Monitor 7: System Disposal (M-7)](#task-m-7) | Monitor | [PM/SO](#per-pm) | [Disposal plan (ART-DISP)](#art-disp) | [Hardware and software inventory (ART-INV)](#art-inv), [System Security Plan (ART-SSP)](#art-ssp) | — |
 
-Also active in this phase (described in their primary phase): [P-3](#task-p-3).
+Also active in this phase (described in their primary phase): [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3).
 
-#### <a id="task-m-1"></a>M-1 · System and Environment Changes
+#### <a id="task-m-1"></a>Monitor 1: System and Environment Changes (M-1)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3079,33 +3081,33 @@ Also active in this phase (described in their primary phase): [P-3](#task-p-3).
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
-| [ART-CMP](#art-cmp) | Configuration management plan | [S-4](#task-s-4) (core artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
-| [EXT-CHANGE-REQUESTS](#ext-change-requests) | Configuration change requests | outside input (operational) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [EXT-MONITORING](#ext-monitoring) | Continuous monitoring data | outside input (operational) |
-| [EXT-ORG-POLICY](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](#ext-product) | Product material | outside input (product) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) (core artifact) |
+| [Configuration management plan (ART-CMP)](#art-cmp) | Configuration management plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) (core artifact) |
+| [Configuration change requests (EXT-CHANGE-REQUESTS)](#ext-change-requests) | Configuration change requests | outside input (operational) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [Continuous monitoring data (EXT-MONITORING)](#ext-monitoring) | Continuous monitoring data | outside input (operational) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CHG](#art-chg) | Change log and security impact analyses | produces | supporting |
-| [ART-INV](#art-inv) | Hardware and software inventory | updates | core |
-| [ART-CMP](#art-cmp) | Configuration management plan | updates | core |
-| [ART-POAM](#art-poam) | Plan of action and milestones | updates | core |
-| [ART-SAR](#art-sar) | Security assessment report | updates | core |
-| [ART-SSP](#art-ssp) | System Security Plan | updates | core |
-| [ART-CP](#art-cp) | Contingency plan | updates | core |
-| [ART-BIA](#art-bia) | Business impact and criticality analysis | updates | supporting |
+| [Change log and security impact analyses (ART-CHG)](#art-chg) | Change log and security impact analyses | produces | supporting |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | updates | core |
+| [Configuration management plan (ART-CMP)](#art-cmp) | Configuration management plan | updates | core |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | updates | core |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | updates | core |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
+| [Contingency plan (ART-CP)](#art-cp) | Contingency plan | updates | core |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 **Entry criteria**
 
@@ -3144,9 +3146,9 @@ Also active in this phase (described in their primary phase): [P-3](#task-p-3).
 
 **Playbook:** [playbooks/M/M-1.md](playbooks/M/M-1.md)
 
-**Cross-references:** depends on [R-4](#task-r-4); required by [M-2](#task-m-2); feeds back to [P-11](#task-p-11), [C-1](#task-c-1).
+**Cross-references:** depends on [Authorize 4: Authorization Decision (R-4)](#task-r-4); required by [Monitor 2: Ongoing Assessments (M-2)](#task-m-2); feeds back to [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1).
 
-#### <a id="task-m-2"></a>M-2 · Ongoing Assessments
+#### <a id="task-m-2"></a>Monitor 2: Ongoing Assessments (M-2)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3166,25 +3168,25 @@ Also active in this phase (described in their primary phase): [P-3](#task-p-3).
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-SAP](#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-SVCA](#art-svca) | Cybersecurity service agreements | [S-4](#task-s-4) (supporting artifact) |
-| [EXT-MONITORING](#ext-monitoring) | Continuous monitoring data | outside input (operational) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-TEST-RESULTS](#ext-test-results) | Developmental and operational test results | outside input (operational) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) (core artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Cybersecurity service agreements (ART-SVCA)](#art-svca) | Cybersecurity service agreements | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (supporting artifact) |
+| [Continuous monitoring data (EXT-MONITORING)](#ext-monitoring) | Continuous monitoring data | outside input (operational) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Developmental and operational test results (EXT-TEST-RESULTS)](#ext-test-results) | Developmental and operational test results | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | updates | core |
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | updates | core |
-| [ART-SVCA](#art-svca) | Cybersecurity service agreements | updates | supporting |
-| [ART-SAP](#art-sap) | Security assessment plan | updates | core |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | updates | core |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | updates | core |
+| [Cybersecurity service agreements (ART-SVCA)](#art-svca) | Cybersecurity service agreements | updates | supporting |
+| [Security assessment plan (ART-SAP)](#art-sap) | Security assessment plan | updates | core |
 
 **Entry criteria**
 
@@ -3212,9 +3214,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-2.md](playbooks/M/M-2.md)
 
-**Cross-references:** depends on [M-1](#task-m-1), [S-5](#task-s-5); required by [M-3](#task-m-3).
+**Cross-references:** depends on [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5); required by [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3).
 
-#### <a id="task-m-3"></a>M-3 · Ongoing Risk Response
+#### <a id="task-m-3"></a>Monitor 3: Ongoing Risk Response (M-3)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3233,26 +3235,26 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-RAR](#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
-| [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-INSPECTIONS](#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
-| [EXT-THREAT](#ext-threat) | Threat information | outside input (operational) |
-| [EXT-DIRECTIVES](#ext-directives) | Directed actions | outside input (operational) |
-| [EXT-VDP](#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) (core artifact) |
+| [Change log and security impact analyses (ART-CHG)](#art-chg) | Change log and security impact analyses | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Readiness inspection and outside evaluation findings (EXT-INSPECTIONS)](#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
+| [Threat information (EXT-THREAT)](#ext-threat) | Threat information | outside input (operational) |
+| [Directed actions (EXT-DIRECTIVES)](#ext-directives) | Directed actions | outside input (operational) |
+| [Vulnerability disclosure reports (EXT-VDP)](#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-RA](#art-ra) | System risk assessment | updates | supporting |
-| [ART-POAM](#art-poam) | Plan of action and milestones | updates | core |
-| [ART-RAR](#art-rar) | Risk assessment report | updates | core |
-| [ART-SAR](#art-sar) | Security assessment report | updates | core |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | updates | supporting |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | updates | core |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | updates | core |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | updates | core |
 
 **Entry criteria**
 
@@ -3293,9 +3295,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-3.md](playbooks/M/M-3.md)
 
-**Cross-references:** depends on [M-2](#task-m-2); required by [M-4](#task-m-4); feeds back to [A-5](#task-a-5).
+**Cross-references:** depends on [Monitor 2: Ongoing Assessments (M-2)](#task-m-2); required by [Monitor 4: Authorization Package Updates (M-4)](#task-m-4); feeds back to [Assess 5: Remediation Actions (A-5)](#task-a-5).
 
-#### <a id="task-m-4"></a>M-4 · Authorization Package Updates
+#### <a id="task-m-4"></a>Monitor 4: Authorization Package Updates (M-4)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3315,23 +3317,23 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Change log and security impact analyses (ART-CHG)](#art-chg) | Change log and security impact analyses | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) (supporting artifact) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | updates | core |
-| [ART-SAR](#art-sar) | Security assessment report | updates | core |
-| [ART-POAM](#art-poam) | Plan of action and milestones | updates | core |
-| [ART-RA](#art-ra) | System risk assessment | updates | supporting |
-| [ART-IRP](#art-irp) | Incident response plan | updates | core |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | updates | core |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | updates | core |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | updates | supporting |
+| [Incident response plan (ART-IRP)](#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -3361,9 +3363,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-4.md](playbooks/M/M-4.md)
 
-**Cross-references:** depends on [M-3](#task-m-3); required by [M-5](#task-m-5).
+**Cross-references:** depends on [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3); required by [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5).
 
-#### <a id="task-m-5"></a>M-5 · Security and Privacy Reporting
+#### <a id="task-m-5"></a>Monitor 5: Security and Privacy Reporting (M-5)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3383,20 +3385,20 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-CONMON](#art-conmon) | Continuous monitoring strategy | [S-5](#task-s-5) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-CHG](#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
-| [ART-SD](#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Change log and security impact analyses (ART-CHG)](#art-chg) | Change log and security impact analyses | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) (supporting artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SECRPT](#art-secrpt) | Security and privacy posture report | produces | supporting |
+| [Security and privacy posture report (ART-SECRPT)](#art-secrpt) | Security and privacy posture report | produces | supporting |
 
 **Entry criteria**
 
@@ -3433,9 +3435,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-5.md](playbooks/M/M-5.md)
 
-**Cross-references:** depends on [M-4](#task-m-4); required by [M-6](#task-m-6); feeds back to [P-7](#task-p-7).
+**Cross-references:** depends on [Monitor 4: Authorization Package Updates (M-4)](#task-m-4); required by [Monitor 6: Ongoing Authorization (M-6)](#task-m-6); feeds back to [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7).
 
-#### <a id="task-m-6"></a>M-6 · Ongoing Authorization
+#### <a id="task-m-6"></a>Monitor 6: Ongoing Authorization (M-6)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -3455,20 +3457,20 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SECRPT](#art-secrpt) | Security and privacy posture report | [M-5](#task-m-5) (supporting artifact) |
-| [ART-POAM](#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [EXT-ISCM-ASSESSMENT](#ext-iscm-assessment) | ISCM program assessment report | outside input (organization) |
+| [Security and privacy posture report (ART-SECRPT)](#art-secrpt) | Security and privacy posture report | [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) (supporting artifact) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [ISCM program assessment report (EXT-ISCM-ASSESSMENT)](#ext-iscm-assessment) | ISCM program assessment report | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AODM](#art-aodm) | AO decision memo | updates | core |
-| [ART-AUTHREC](#art-authrec) | Authorization ledger | updates | core |
-| [ART-RAR](#art-rar) | Risk assessment report | updates | core |
+| [AO decision memo (ART-AODM)](#art-aodm) | AO decision memo | updates | core |
+| [Authorization ledger (ART-AUTHREC)](#art-authrec) | Authorization ledger | updates | core |
+| [Risk assessment report (ART-RAR)](#art-rar) | Risk assessment report | updates | core |
 
 Writes to `facts.yaml`: `acquisition`.
 
@@ -3515,9 +3517,9 @@ Writes to `facts.yaml`: `acquisition`.
 
 **Playbook:** [playbooks/M/M-6.md](playbooks/M/M-6.md)
 
-**Cross-references:** depends on [M-5](#task-m-5); required by [M-7](#task-m-7); feeds back to [R-2](#task-r-2).
+**Cross-references:** depends on [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5); required by [Monitor 7: System Disposal (M-7)](#task-m-7); feeds back to [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2).
 
-#### <a id="task-m-7"></a>M-7 · System Disposal
+#### <a id="task-m-7"></a>Monitor 7: System Disposal (M-7)
 
 *[Monitor](#step-m) step · system level · primary phase [O&S](#ph-os) · required · at least 1 stakeholder interview*
 
@@ -3537,18 +3539,18 @@ Writes to `facts.yaml`: `acquisition`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](#art-ssp) | System Security Plan | [S-4](#task-s-4) (core artifact) |
-| [ART-INV](#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-RA](#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) (core artifact) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-DISP](#art-disp) | Disposal plan | produces | supporting |
-| [ART-INV](#art-inv) | Hardware and software inventory | updates | core |
-| [ART-SSP](#art-ssp) | System Security Plan | updates | core |
+| [Disposal plan (ART-DISP)](#art-disp) | Disposal plan | produces | supporting |
+| [Hardware and software inventory (ART-INV)](#art-inv) | Hardware and software inventory | updates | core |
+| [System Security Plan (ART-SSP)](#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -3574,7 +3576,7 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-7.md](playbooks/M/M-7.md)
 
-**Cross-references:** depends on [M-6](#task-m-6); required by no later task.
+**Cross-references:** depends on [Monitor 6: Ongoing Authorization (M-6)](#task-m-6); required by no later task.
 
 ## <a id="decisions"></a>5. Authorization decisions
 
@@ -3583,24 +3585,24 @@ records it (see the artifact catalog).
 
 | Decision | Decided by | Decided in | Phases | Termination date required | Conditions required |
 |---|---|---|---|---|---|
-| [IATT](#ad-iatt) Interim Authorization to Test | [AO](#per-ao) | [A-2](#task-a-2) | [EMD](#ph-emd) | yes | no |
-| [ATO](#ad-ato) Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | no |
-| [ATO w/ conditions](#ad-atoc) Authorization to Operate with Conditions | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | yes |
-| [DATO](#ad-dato) Denial of Authorization to Operate | [AO](#per-ao) | [R-4](#task-r-4), [M-6](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [cATO](#ad-cato) Continuous Authorization to Operate | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [ATU](#ad-atu) Authorization to Use | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [DATU](#ad-datu) Denial of Authorization to Use | [AO](#per-ao) | [R-4](#task-r-4), [M-6](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [CCA](#ad-cca) Common Control Authorization | [AO](#per-ao) | [R-4](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | no |
-| [DCCA](#ad-dcca) Denial of Common Control Authorization | [AO](#per-ao) | [R-4](#task-r-4), [M-6](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [Continue](#ad-cont) Continued Authorization | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [cATO revoked](#ad-rcato) Revocation of Continuous Authorization | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
-| [Rescinded](#ad-resc) Rescission of Authorization | [AO](#per-ao) | [M-6](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [IATT](#ad-iatt) Interim Authorization to Test | [AO](#per-ao) | [Assess 2: Assessment Plan (A-2)](#task-a-2) | [EMD](#ph-emd) | yes | no |
+| [ATO](#ad-ato) Authorization to Operate | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | no |
+| [ATO w/ conditions](#ad-atoc) Authorization to Operate with Conditions | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | yes |
+| [DATO](#ad-dato) Denial of Authorization to Operate | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [cATO](#ad-cato) Continuous Authorization to Operate | [AO](#per-ao) | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [ATU](#ad-atu) Authorization to Use | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [DATU](#ad-datu) Denial of Authorization to Use | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [CCA](#ad-cca) Common Control Authorization | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | yes | no |
+| [DCCA](#ad-dcca) Denial of Common Control Authorization | [AO](#per-ao) | [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [EMD](#ph-emd), [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [Continue](#ad-cont) Continued Authorization | [AO](#per-ao) | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [cATO revoked](#ad-rcato) Revocation of Continuous Authorization | [AO](#per-ao) | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
+| [Rescinded](#ad-resc) Rescission of Authorization | [AO](#per-ao) | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [P&D](#ph-pd), [O&S](#ph-os) | no | no |
 
 ### <a id="ad-iatt"></a>IATT: Interim Authorization to Test
 
 A time-limited authorization to test the system in an operational environment or with live data before all controls are in place, limited to the time needed to complete the testing objectives and usually with operating restrictions (for example a minimum number of users, restricted hours, increased audit logging and monitoring, or only the functions that need live testing). In this framework it must be in place before the developmental and operational test events that run on live networks or with live data (A-3 entry), and it does not authorize operational use.
 
-Tasks whose results feed this decision: [A-3](#task-a-3).
+Tasks whose results feed this decision: [Assess 3: Control Assessments (A-3)](#task-a-3).
 
 Citations:
 
@@ -3834,40 +3836,40 @@ listed data files; OSCAL documents are built from that data.
 
 | Artifact | Package | Produced by | Updated by | Used by |
 |---|---|---|---|---|
-| [ART-ORG-CONTEXT](#art-org-context) Organizational risk context | supporting | [P-1](#task-p-1) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [A-1](#task-a-1), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
-| [ART-STAKE](#art-stake) Stakeholder register | supporting | [P-9](#task-p-9) | — | [P-10](#task-p-10), [P-11](#task-p-11), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15) |
-| [ART-BIA](#art-bia) Business impact and criticality analysis | supporting | [P-8](#task-p-8) | [C-2](#task-c-2), [M-1](#task-m-1) | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
-| [ART-INV](#art-inv) Hardware and software inventory | core | [P-10](#task-p-10) | [I-2](#task-i-2), [M-1](#task-m-1), [M-7](#task-m-7) | [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [I-1](#task-i-1), [M-1](#task-m-1), [M-7](#task-m-7) |
-| [ART-BND](#art-bnd) Authorization boundary, network architecture and data flows | core | [P-11](#task-p-11) | [P-16](#task-p-16), [C-1](#task-c-1) | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-3](#task-s-3), [S-4](#task-s-4) |
-| [ART-INFOTYPES](#art-infotypes) Information types and information life cycle | supporting | [P-12](#task-p-12) | [P-13](#task-p-13) | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-1](#task-c-1), [C-2](#task-c-2) |
-| [ART-RA](#art-ra) System risk assessment | supporting | [P-14](#task-p-14) | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) | [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
-| [ART-PIA](#art-pia) Privacy impact assessment | supporting | [P-14](#task-p-14) | — | [R-1](#task-r-1) |
-| [ART-REQ](#art-req) Security and privacy requirements and allocation | supporting | [P-15](#task-p-15) | [P-17](#task-p-17) | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [I-1](#task-i-1), [A-2](#task-a-2) |
-| [ART-REG](#art-reg) System registration | supporting | [P-18](#task-p-18) | [C-1](#task-c-1), [C-3](#task-c-3), [R-5](#task-r-5) | — |
-| [ART-SD](#art-sd) System description, users and leveraged authorizations | core | [C-1](#task-c-1) | [I-2](#task-i-2) | [C-2](#task-c-2), [S-3](#task-s-3), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
-| [ART-CAT](#art-cat) Security categorization | core | [C-2](#task-c-2) | [C-3](#task-c-3) | [C-3](#task-c-3), [S-1](#task-s-1), [S-3](#task-s-3), [S-4](#task-s-4) |
-| [ART-BASELINE](#art-baseline) Tailored control baseline, tailoring and allocation | supporting | [S-1](#task-s-1) | [S-2](#task-s-2), [S-3](#task-s-3) | [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [A-2](#task-a-2) |
-| [ART-SSP](#art-ssp) System Security Plan | core | [S-4](#task-s-4) | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-1](#task-m-1), [M-4](#task-m-4), [M-7](#task-m-7) | [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
-| [ART-CONMON](#art-conmon) Continuous monitoring strategy | core | [S-5](#task-s-5) | [M-2](#task-m-2) | [S-6](#task-s-6), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5) |
-| [ART-CMP](#art-cmp) Configuration management plan | core | [S-4](#task-s-4) | [I-2](#task-i-2), [M-1](#task-m-1) | [M-1](#task-m-1) |
-| [ART-CP](#art-cp) Contingency plan | core | [S-4](#task-s-4) | [I-2](#task-i-2), [M-1](#task-m-1) | — |
-| [ART-IRP](#art-irp) Incident response plan | core | [S-4](#task-s-4) | [I-2](#task-i-2), [M-4](#task-m-4) | — |
-| [ART-SVCA](#art-svca) Cybersecurity service agreements | supporting | [S-4](#task-s-4) | [M-2](#task-m-2) | [M-2](#task-m-2) |
-| [ART-STIG](#art-stig) STIG/SRG summary | supporting | [I-1](#task-i-1) | [A-3](#task-a-3) | [I-2](#task-i-2), [A-3](#task-a-3), [A-6](#task-a-6) |
-| [ART-SAP](#art-sap) Security assessment plan | core | [A-2](#task-a-2) | [M-2](#task-m-2) | [A-3](#task-a-3), [A-5](#task-a-5), [R-1](#task-r-1), [M-2](#task-m-2) |
-| [ART-SAR](#art-sar) Security assessment report | core | [A-3](#task-a-3) | [A-4](#task-a-4), [A-5](#task-a-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4) | [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
-| [ART-POAM](#art-poam) Plan of action and milestones | core | [A-6](#task-a-6) | [R-3](#task-r-3), [M-1](#task-m-1), [M-3](#task-m-3), [M-4](#task-m-4) | [R-1](#task-r-1), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) |
-| [ART-RAR](#art-rar) Risk assessment report | core | [R-2](#task-r-2) | [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) | [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3) |
-| [ART-PKG](#art-pkg) Authorization package manifest | supporting | [R-1](#task-r-1) | — | [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) |
-| [ART-DIAS](#art-dias) Digital Identity Acceptance Statement | core | [R-1](#task-r-1) | — | — |
-| [ART-AODM](#art-aodm) AO decision memo | core | [R-4](#task-r-4) | [M-6](#task-m-6) | [R-5](#task-r-5) |
-| [ART-AUTHREC](#art-authrec) Authorization ledger | core | [A-2](#task-a-2) | [R-4](#task-r-4), [M-6](#task-m-6) | [R-5](#task-r-5) |
-| [ART-AUTHRPT](#art-authrpt) Authorization report | supporting | [R-5](#task-r-5) | — | — |
-| [ART-CHG](#art-chg) Change log and security impact analyses | supporting | [M-1](#task-m-1) | — | [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
-| [ART-SECRPT](#art-secrpt) Security and privacy posture report | supporting | [M-5](#task-m-5) | — | [M-6](#task-m-6) |
-| [ART-DISP](#art-disp) Disposal plan | supporting | [M-7](#task-m-7) | — | — |
+| [Organizational risk context (ART-ORG-CONTEXT)](#art-org-context) | supporting | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) | [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) | [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
+| [Stakeholder register (ART-STAKE)](#art-stake) | supporting | [Prepare 9: System Stakeholders (P-9)](#task-p-9) | — | [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15) |
+| [Business impact and criticality analysis (ART-BIA)](#art-bia) | supporting | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) | [Categorize 2: Security Categorization (C-2)](#task-c-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1) |
+| [Hardware and software inventory (ART-INV)](#art-inv) | core | [Prepare 10: Asset Identification (P-10)](#task-p-10) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 7: System Disposal (M-7)](#task-m-7) | [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 1: System Description (C-1)](#task-c-1), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 7: System Disposal (M-7)](#task-m-7) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](#art-bnd) | core | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Categorize 1: System Description (C-1)](#task-c-1) | [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| [Information types and information life cycle (ART-INFOTYPES)](#art-infotypes) | supporting | [Prepare 12: Information Types (P-12)](#task-p-12) | [Prepare 13: Information Life Cycle (P-13)](#task-p-13) | [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2) |
+| [System risk assessment (ART-RA)](#art-ra) | supporting | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
+| [Privacy impact assessment (ART-PIA)](#art-pia) | supporting | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) | — | [Authorize 1: Authorization Package (R-1)](#task-r-1) |
+| [Security and privacy requirements and allocation (ART-REQ)](#art-req) | supporting | [Prepare 15: Requirements Definition (P-15)](#task-p-15) | [Prepare 17: Requirements Allocation (P-17)](#task-p-17) | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
+| [System registration (ART-REG)](#art-reg) | supporting | [Prepare 18: System Registration (P-18)](#task-p-18) | [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | — |
+| [System description, users and leveraged authorizations (ART-SD)](#art-sd) | core | [Categorize 1: System Description (C-1)](#task-c-1) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2) | [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
+| [Security categorization (ART-CAT)](#art-cat) | core | [Categorize 2: Security Categorization (C-2)](#task-c-2) | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 1: Control Selection (S-1)](#task-s-1), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](#art-baseline) | supporting | [Select 1: Control Selection (S-1)](#task-s-1) | [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3) | [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
+| [System Security Plan (ART-SSP)](#art-ssp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 7: System Disposal (M-7)](#task-m-7) | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
+| [Continuous monitoring strategy (ART-CONMON)](#art-conmon) | core | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
+| [Configuration management plan (ART-CMP)](#art-cmp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
+| [Contingency plan (ART-CP)](#art-cp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | — |
+| [Incident response plan (ART-IRP)](#art-irp) | core | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | — |
+| [Cybersecurity service agreements (ART-SVCA)](#art-svca) | supporting | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| [STIG/SRG summary (ART-STIG)](#art-stig) | supporting | [Implement 1: Control Implementation (I-1)](#task-i-1) | [Assess 3: Control Assessments (A-3)](#task-a-3) | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
+| [Security assessment plan (ART-SAP)](#art-sap) | core | [Assess 2: Assessment Plan (A-2)](#task-a-2) | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| [Security assessment report (ART-SAR)](#art-sar) | core | [Assess 3: Control Assessments (A-3)](#task-a-3) | [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
+| [Plan of action and milestones (ART-POAM)](#art-poam) | core | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| [Risk assessment report (ART-RAR)](#art-rar) | core | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
+| [Authorization package manifest (ART-PKG)](#art-pkg) | supporting | [Authorize 1: Authorization Package (R-1)](#task-r-1) | — | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
+| [Digital Identity Acceptance Statement (ART-DIAS)](#art-dias) | core | [Authorize 1: Authorization Package (R-1)](#task-r-1) | — | — |
+| [AO decision memo (ART-AODM)](#art-aodm) | core | [Authorize 4: Authorization Decision (R-4)](#task-r-4) | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
+| [Authorization ledger (ART-AUTHREC)](#art-authrec) | core | [Assess 2: Assessment Plan (A-2)](#task-a-2) | [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
+| [Authorization report (ART-AUTHRPT)](#art-authrpt) | supporting | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | — | — |
+| [Change log and security impact analyses (ART-CHG)](#art-chg) | supporting | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | — | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
+| [Security and privacy posture report (ART-SECRPT)](#art-secrpt) | supporting | [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) | — | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| [Disposal plan (ART-DISP)](#art-disp) | supporting | [Monitor 7: System Disposal (M-7)](#task-m-7) | — | — |
 
-### <a id="art-org-context"></a>ART-ORG-CONTEXT: Organizational risk context
+### <a id="art-org-context"></a>Organizational risk context (ART-ORG-CONTEXT)
 
 RMF role assignments, risk management strategy and risk tolerance, organization-level risk assessment, tailored baselines, common controls available for inheritance and the organizational continuous monitoring strategy.
 
@@ -3877,16 +3879,16 @@ RMF role assignments, risk management strategy and risk tolerance, organization-
 | Template | [templates/artifacts/ART-ORG-CONTEXT.md](templates/artifacts/ART-ORG-CONTEXT.md) |
 | Data files | `artifacts/data/org-context.yaml` (schema `org-context`)<br>`artifacts/data/scrm-org.yaml` (schema `scrm-org`) |
 | OSCAL | — |
-| Produced by | [P-1](#task-p-1) |
-| Updated by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
-| Used by | [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [A-1](#task-a-1), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| Produced by | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) |
+| Updated by | [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) |
+| Used by | [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TABLE 1: PREPARE TASKS AND OUTCOMES—ORGANIZATION LEVEL"
 - [DODI8510.01](#ref-dodi8510-01), p. 13, "Organization Prepare Step Tasks"
 
-### <a id="art-stake"></a>ART-STAKE: Stakeholder register
+### <a id="art-stake"></a>Stakeholder register (ART-STAKE)
 
 Stakeholders with an interest in the system and the personas who represent them in interviews.
 
@@ -3896,15 +3898,15 @@ Stakeholders with an interest in the system and the personas who represent them 
 | Template | [templates/artifacts/ART-STAKE.md](templates/artifacts/ART-STAKE.md) |
 | Data files | — |
 | OSCAL | — |
-| Produced by | [P-9](#task-p-9) |
+| Produced by | [Prepare 9: System Stakeholders (P-9)](#task-p-9) |
 | Updated by | — |
-| Used by | [P-10](#task-p-10), [P-11](#task-p-11), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15) |
+| Used by | [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-9"
 
-### <a id="art-bia"></a>ART-BIA: Business impact and criticality analysis
+### <a id="art-bia"></a>Business impact and criticality analysis (ART-BIA)
 
 Whether mission critical functions are present within the system and which, the mission and business processes it supports with the impact of their disruption, the users' recovery time requirements and interdependencies, the external stakeholders that depend on them, and the reevaluations by the mission and data owners that a conflict with the categorization triggers. Made at P-8 so the tasks that read a business impact or criticality analysis have one before S-4, where the contingency plan BIA refines it.
 
@@ -3914,9 +3916,9 @@ Whether mission critical functions are present within the system and which, the 
 | Template | [templates/artifacts/ART-BIA.md](templates/artifacts/ART-BIA.md) |
 | Data files | `artifacts/data/bia.yaml` (schema `bia`) |
 | OSCAL | — |
-| Produced by | [P-8](#task-p-8) |
-| Updated by | [C-2](#task-c-2), [M-1](#task-m-1) |
-| Used by | [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [I-1](#task-i-1) |
+| Produced by | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) |
+| Updated by | [Categorize 2: Security Categorization (C-2)](#task-c-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
+| Used by | [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1) |
 
 Citations:
 
@@ -3924,7 +3926,7 @@ Citations:
 - [SP800-34R1](#ref-sp800-34r1), p. 27, "Developing contingency planning policy and performing system BIA(s) are accomplished early in the SDLC"
 - [CNSSI1254](#ref-cnssi1254), p. 15, "Identify if there are mission critical functions present within the system"
 
-### <a id="art-inv"></a>ART-INV: Hardware and software inventory
+### <a id="art-inv"></a>Hardware and software inventory (ART-INV)
 
 The assets to be protected, as hardware and software inventory items mapped to boundary components.
 
@@ -3934,16 +3936,16 @@ The assets to be protected, as hardware and software inventory items mapped to b
 | Template | [templates/artifacts/ART-INV.md](templates/artifacts/ART-INV.md) |
 | Data files | `artifacts/data/inventory.yaml` (schema `inventory`) |
 | OSCAL | `ssp#system-implementation.inventory-items` |
-| Produced by | [P-10](#task-p-10) |
-| Updated by | [I-2](#task-i-2), [M-1](#task-m-1), [M-7](#task-m-7) |
-| Used by | [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [I-1](#task-i-1), [M-1](#task-m-1), [M-7](#task-m-7) |
+| Produced by | [Prepare 10: Asset Identification (P-10)](#task-p-10) |
+| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 7: System Disposal (M-7)](#task-m-7) |
+| Used by | [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 1: System Description (C-1)](#task-c-1), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 7: System Disposal (M-7)](#task-m-7) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-10"
 - [SP800-128](#ref-sp800-128), section 2.3.4
 
-### <a id="art-bnd"></a>ART-BND: Authorization boundary, network architecture and data flows
+### <a id="art-bnd"></a>Authorization boundary, network architecture and data flows (ART-BND)
 
 The authorization boundary, network architecture and data flows, and the components inside and at the edge of the boundary.
 
@@ -3953,16 +3955,16 @@ The authorization boundary, network architecture and data flows, and the compone
 | Template | [templates/artifacts/ART-BND.md](templates/artifacts/ART-BND.md) |
 | Data files | `artifacts/data/boundary.yaml` (schema `boundary`)<br>`artifacts/data/nss-assessments.yaml` (schema `nss-assessments`) |
 | OSCAL | `ssp#system-characteristics.authorization-boundary`<br>`ssp#system-characteristics.network-architecture`<br>`ssp#system-characteristics.data-flow`<br>`ssp#system-implementation.components` |
-| Produced by | [P-11](#task-p-11) |
-| Updated by | [P-16](#task-p-16), [C-1](#task-c-1) |
-| Used by | [P-13](#task-p-13), [P-14](#task-p-14), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-3](#task-s-3), [S-4](#task-s-4) |
+| Produced by | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) |
+| Updated by | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Categorize 1: System Description (C-1)](#task-c-1) |
+| Used by | [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section 2.5
 - [SP800-37R2](#ref-sp800-37r2), section "APPENDIX G"
 
-### <a id="art-infotypes"></a>ART-INFOTYPES: Information types and information life cycle
+### <a id="art-infotypes"></a>Information types and information life cycle (ART-INFOTYPES)
 
 Information types processed, stored and transmitted, their provisional impact levels and life-cycle stages.
 
@@ -3972,16 +3974,16 @@ Information types processed, stored and transmitted, their provisional impact le
 | Template | [templates/artifacts/ART-INFOTYPES.md](templates/artifacts/ART-INFOTYPES.md) |
 | Data files | `artifacts/data/infotypes.yaml` (schema `infotypes`) |
 | OSCAL | `ssp#system-characteristics.system-information` |
-| Produced by | [P-12](#task-p-12) |
-| Updated by | [P-13](#task-p-13) |
-| Used by | [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [C-1](#task-c-1), [C-2](#task-c-2) |
+| Produced by | [Prepare 12: Information Types (P-12)](#task-p-12) |
+| Updated by | [Prepare 13: Information Life Cycle (P-13)](#task-p-13) |
+| Used by | [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2) |
 
 Citations:
 
 - [SP800-60V1R1](#ref-sp800-60v1r1), section 4.1
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-13"
 
-### <a id="art-ra"></a>ART-RA: System risk assessment
+### <a id="art-ra"></a>System risk assessment (ART-RA)
 
 System-level security and privacy risk assessment, updated as the system and threat change.
 
@@ -3991,16 +3993,16 @@ System-level security and privacy risk assessment, updated as the system and thr
 | Template | [templates/artifacts/ART-RA.md](templates/artifacts/ART-RA.md) |
 | Data files | `artifacts/data/ra.yaml` (schema `ra`)<br>`artifacts/data/protection.yaml` (schema `protection`)<br>`artifacts/data/st-protection.yaml` (schema `st-protection`)<br>`artifacts/data/cybersecurity-strategy.yaml` (schema `cybersecurity-strategy`)<br>`artifacts/data/scrm.yaml` (schema `scrm`) |
 | OSCAL | — |
-| Produced by | [P-14](#task-p-14) |
-| Updated by | [R-2](#task-r-2), [M-3](#task-m-3), [M-4](#task-m-4) |
-| Used by | [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [A-2](#task-a-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| Produced by | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) |
+| Updated by | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
+| Used by | [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
 
 Citations:
 
 - [SP800-30R1](#ref-sp800-30r1), section 3.2
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-14"
 
-### <a id="art-pia"></a>ART-PIA: Privacy impact assessment
+### <a id="art-pia"></a>Privacy impact assessment (ART-PIA)
 
 The DD Form 2930 (or 2930A) PIA of a system processing PII, its coordination, reviews and final approval, its submission to the DoD CIO and the publication of section 1; or, for a system needing no PIA, the determination that says why.
 
@@ -4010,9 +4012,9 @@ The DD Form 2930 (or 2930A) PIA of a system processing PII, its coordination, re
 | Template | [templates/artifacts/ART-PIA.md](templates/artifacts/ART-PIA.md) |
 | Data files | `artifacts/data/pia.yaml` (schema `pia`) |
 | OSCAL | — |
-| Produced by | [P-14](#task-p-14) |
+| Produced by | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) |
 | Updated by | — |
-| Used by | [R-1](#task-r-1) |
+| Used by | [Authorize 1: Authorization Package (R-1)](#task-r-1) |
 
 Citations:
 
@@ -4021,7 +4023,7 @@ Citations:
 - [DODI5400.16](#ref-dodi5400-16), p. 9, "Completion of the PIA requires coordination by the program manager or designee"
 - [DODI5400.16](#ref-dodi5400-16), p. 9, "SUBMISSION. DoD Components submit an electronic copy of each approved PIA to"
 
-### <a id="art-req"></a>ART-REQ: Security and privacy requirements and allocation
+### <a id="art-req"></a>Security and privacy requirements and allocation (ART-REQ)
 
 Security and privacy requirements for the system and its environment, from the stakeholders' protection needs and the DoD design policy statements, with verification methods, measures and their allocation to system elements.
 
@@ -4031,16 +4033,16 @@ Security and privacy requirements for the system and its environment, from the s
 | Template | [templates/artifacts/ART-REQ.md](templates/artifacts/ART-REQ.md) |
 | Data files | `artifacts/data/requirements.yaml` (schema `requirements`)<br>`artifacts/data/protection-requirements.yaml` (schema `protection-requirements`)<br>`artifacts/data/scrm-acquisition.yaml` (schema `scrm-acquisition`) |
 | OSCAL | — |
-| Produced by | [P-15](#task-p-15) |
-| Updated by | [P-17](#task-p-17) |
-| Used by | [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [I-1](#task-i-1), [A-2](#task-a-2) |
+| Produced by | [Prepare 15: Requirements Definition (P-15)](#task-p-15) |
+| Updated by | [Prepare 17: Requirements Allocation (P-17)](#task-p-17) |
+| Used by | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-15"
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-17"
 
-### <a id="art-reg"></a>ART-REG: System registration
+### <a id="art-reg"></a>System registration (ART-REG)
 
 Record of the system's registration in the DoD Component registry, and of its ports, protocols and services in the DoD PPSM Registry.
 
@@ -4050,8 +4052,8 @@ Record of the system's registration in the DoD Component registry, and of its po
 | Template | [templates/artifacts/ART-REG.md](templates/artifacts/ART-REG.md) |
 | Data files | `artifacts/data/registration.yaml` (schema `registration`) |
 | OSCAL | — |
-| Produced by | [P-18](#task-p-18) |
-| Updated by | [C-1](#task-c-1), [C-3](#task-c-3), [R-5](#task-r-5) |
+| Produced by | [Prepare 18: System Registration (P-18)](#task-p-18) |
+| Updated by | [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 | Used by | — |
 
 Citations:
@@ -4059,7 +4061,7 @@ Citations:
 - [SP800-37R2](#ref-sp800-37r2), section "TASK P-18"
 - [DODI8510.01](#ref-dodi8510-01), p. 29, "Register the system in the DoD Component registry"
 
-### <a id="art-sd"></a>ART-SD: System description, users and leveraged authorizations
+### <a id="art-sd"></a>System description, users and leveraged authorizations (ART-SD)
 
 The documented characteristics of the system, its users and privileges, the authorizations it leverages, and its reciprocity records: the Receiving organizations it is deployed into, the systems it receives, and the agreements between them.
 
@@ -4069,16 +4071,16 @@ The documented characteristics of the system, its users and privileges, the auth
 | Template | [templates/artifacts/ART-SD.md](templates/artifacts/ART-SD.md) |
 | Data files | `artifacts/data/users.yaml` (schema `users`)<br>`artifacts/data/leveraged-authorizations.yaml` (schema `leveraged-authorizations`)<br>`artifacts/data/system-description.yaml` (schema `system-description`)<br>`artifacts/data/reciprocity.yaml` (schema `reciprocity`) |
 | OSCAL | `ssp#system-characteristics.description`<br>`ssp#system-implementation.users`<br>`ssp#system-implementation.leveraged-authorizations` |
-| Produced by | [C-1](#task-c-1) |
-| Updated by | [I-2](#task-i-2) |
-| Used by | [C-2](#task-c-2), [S-3](#task-s-3), [S-4](#task-s-4), [M-1](#task-m-1), [M-5](#task-m-5) |
+| Produced by | [Categorize 1: System Description (C-1)](#task-c-1) |
+| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2) |
+| Used by | [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK C-1"
 - [SP800-18R2](#ref-sp800-18r2), section 3.2
 
-### <a id="art-cat"></a>ART-CAT: Security categorization
+### <a id="art-cat"></a>Security categorization (ART-CAT)
 
 CNSSI 1253 categorization (one impact value each for confidentiality, integrity and availability) with its basis and approval; the values live in facts.yaml.
 
@@ -4088,9 +4090,9 @@ CNSSI 1253 categorization (one impact value each for confidentiality, integrity 
 | Template | [templates/artifacts/ART-CAT.md](templates/artifacts/ART-CAT.md) |
 | Data files | `facts.yaml#categorization` (schema `facts`) |
 | OSCAL | `ssp#system-characteristics.security-sensitivity-level`<br>`ssp#system-characteristics.security-impact-level` |
-| Produced by | [C-2](#task-c-2) |
-| Updated by | [C-3](#task-c-3) |
-| Used by | [C-3](#task-c-3), [S-1](#task-s-1), [S-3](#task-s-3), [S-4](#task-s-4) |
+| Produced by | [Categorize 2: Security Categorization (C-2)](#task-c-2) |
+| Updated by | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
+| Used by | [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 1: Control Selection (S-1)](#task-s-1), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
 
 Citations:
 
@@ -4098,7 +4100,7 @@ Citations:
 - [SP800-37R2](#ref-sp800-37r2), section "TASK C-2"
 - [CNSSI1253](#ref-cnssi1253), section 3.1.2
 
-### <a id="art-baseline"></a>ART-BASELINE: Tailored control baseline, tailoring and allocation
+### <a id="art-baseline"></a>Tailored control baseline, tailoring and allocation (ART-BASELINE)
 
 The selected baseline (generated), the tailoring actions and the allocation of controls to system elements.
 
@@ -4108,16 +4110,16 @@ The selected baseline (generated), the tailoring actions and the allocation of c
 | Template | [templates/artifacts/ART-BASELINE.md](templates/artifacts/ART-BASELINE.md) |
 | Data files | `baseline.json` (schema `baseline`)<br>`artifacts/data/tailoring.yaml` (schema `tailoring`)<br>`artifacts/data/allocation.yaml` (schema `allocation`)<br>`artifacts/data/capabilities.yaml` (schema `capabilities`) |
 | OSCAL | `profile#imports` |
-| Produced by | [S-1](#task-s-1) |
-| Updated by | [S-2](#task-s-2), [S-3](#task-s-3) |
-| Used by | [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [A-2](#task-a-2) |
+| Produced by | [Select 1: Control Selection (S-1)](#task-s-1) |
+| Updated by | [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3) |
+| Used by | [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
 
 Citations:
 
 - [SP800-53B](#ref-sp800-53b), section 2.4
 - [SP800-37R2](#ref-sp800-37r2), section "TASK S-3"
 
-### <a id="art-ssp"></a>ART-SSP: System Security Plan
+### <a id="art-ssp"></a>System Security Plan (ART-SSP)
 
 The security plan with a statement for every control in the tailored baseline.
 
@@ -4127,16 +4129,16 @@ The security plan with a statement for every control in the tailored baseline.
 | Template | [templates/artifacts/ART-SSP.md](templates/artifacts/ART-SSP.md) |
 | Data files | `artifacts/ssp/controls/<fam>.yaml` (schema `ssp-controls`)<br>`artifacts/data/ssp-records.yaml` (schema `ssp-records`)<br>`artifacts/data/plan-reviews.yaml` (schema `plan-reviews`)<br>`artifacts/data/scrm-plan.yaml` (schema `scrm-plan`) |
 | OSCAL | `ssp#control-implementation.implemented-requirements` |
-| Produced by | [S-4](#task-s-4) |
-| Updated by | [S-6](#task-s-6), [I-2](#task-i-2), [A-5](#task-a-5), [M-1](#task-m-1), [M-4](#task-m-4), [M-7](#task-m-7) |
-| Used by | [S-5](#task-s-5), [S-6](#task-s-6), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7) |
+| Produced by | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| Updated by | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 7: System Disposal (M-7)](#task-m-7) |
+| Used by | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7) |
 
 Citations:
 
 - [SP800-18R2](#ref-sp800-18r2), section 2.1
 - [SP800-37R2](#ref-sp800-37r2), section "TASK S-4"
 
-### <a id="art-conmon"></a>ART-CONMON: Continuous monitoring strategy
+### <a id="art-conmon"></a>Continuous monitoring strategy (ART-CONMON)
 
 The system-level strategy for monitoring control effectiveness, including the time-driven trigger for ongoing authorization.
 
@@ -4146,16 +4148,16 @@ The system-level strategy for monitoring control effectiveness, including the ti
 | Template | [templates/artifacts/ART-CONMON.md](templates/artifacts/ART-CONMON.md) |
 | Data files | `artifacts/data/conmon.yaml` (schema `conmon`) |
 | OSCAL | — |
-| Produced by | [S-5](#task-s-5) |
-| Updated by | [M-2](#task-m-2) |
-| Used by | [S-6](#task-s-6), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5) |
+| Produced by | [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5) |
+| Updated by | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| Used by | [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 
 Citations:
 
 - [SP800-137](#ref-sp800-137), section 3.1.2
 - [SP800-37R2](#ref-sp800-37r2), section "TASK S-5"
 
-### <a id="art-cmp"></a>ART-CMP: Configuration management plan
+### <a id="art-cmp"></a>Configuration management plan (ART-CMP)
 
 Security-focused configuration management plan, configuration items and change control process.
 
@@ -4165,15 +4167,15 @@ Security-focused configuration management plan, configuration items and change c
 | Template | [templates/artifacts/ART-CMP.md](templates/artifacts/ART-CMP.md) |
 | Data files | `artifacts/data/cm-plan.yaml` (schema `cm-plan`)<br>`artifacts/data/software.yaml` (schema `software`) |
 | OSCAL | — |
-| Produced by | [S-4](#task-s-4) |
-| Updated by | [I-2](#task-i-2), [M-1](#task-m-1) |
-| Used by | [M-1](#task-m-1) |
+| Produced by | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
+| Used by | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 
 Citations:
 
 - [SP800-128](#ref-sp800-128), section 2.3.2
 
-### <a id="art-cp"></a>ART-CP: Contingency plan
+### <a id="art-cp"></a>Contingency plan (ART-CP)
 
 Information system contingency plan with the business impact analysis, recovery strategy and test plan.
 
@@ -4183,15 +4185,15 @@ Information system contingency plan with the business impact analysis, recovery 
 | Template | [templates/artifacts/ART-CP.md](templates/artifacts/ART-CP.md) |
 | Data files | `artifacts/data/contingency.yaml` (schema `contingency`) |
 | OSCAL | — |
-| Produced by | [S-4](#task-s-4) |
-| Updated by | [I-2](#task-i-2), [M-1](#task-m-1) |
+| Produced by | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 | Used by | — |
 
 Citations:
 
 - [SP800-34R1](#ref-sp800-34r1), section "Chapter 4. Information System Contingency Plan Development"
 
-### <a id="art-irp"></a>ART-IRP: Incident response plan
+### <a id="art-irp"></a>Incident response plan (ART-IRP)
 
 Incident response roles, procedures and reporting, aligned with the cybersecurity service provider.
 
@@ -4201,15 +4203,15 @@ Incident response roles, procedures and reporting, aligned with the cybersecurit
 | Template | [templates/artifacts/ART-IRP.md](templates/artifacts/ART-IRP.md) |
 | Data files | `artifacts/data/incident-response.yaml` (schema `incident-response`) |
 | OSCAL | — |
-| Produced by | [S-4](#task-s-4) |
-| Updated by | [I-2](#task-i-2), [M-4](#task-m-4) |
+| Produced by | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| Updated by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
 | Used by | — |
 
 Citations:
 
 - [SP800-61R3](#ref-sp800-61r3), section 2.3
 
-### <a id="art-svca"></a>ART-SVCA: Cybersecurity service agreements
+### <a id="art-svca"></a>Cybersecurity service agreements (ART-SVCA)
 
 One record per provider, the agreement behind it, the services it covers, the controls mapped to them, the subscriber's check of it, and the measured effectiveness of each service; for a CSO-hosted system, the offerings, their authorizations and the DTM 24-001 cybersecurity activities performed for them (cloud.yaml).
 
@@ -4219,9 +4221,9 @@ One record per provider, the agreement behind it, the services it covers, the co
 | Template | [templates/artifacts/ART-SVCA.md](templates/artifacts/ART-SVCA.md) |
 | Data files | `artifacts/data/service-agreements.yaml` (schema `service-agreements`)<br>`artifacts/data/cloud.yaml` (schema `cloud`) |
 | OSCAL | — |
-| Produced by | [S-4](#task-s-4) |
-| Updated by | [M-2](#task-m-2) |
-| Used by | [M-2](#task-m-2) |
+| Produced by | [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| Updated by | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| Used by | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
 
 Citations:
 
@@ -4229,7 +4231,7 @@ Citations:
 - [DODI8530.01](#ref-dodi8530-01), p. 36, "Will monitor the effectiveness of cybersecurity services"
 - [DTM-24-001](#ref-dtm-24-001), p. 10, "A cybersecurity activity tracking checklist, generated by the mission owner and PM"
 
-### <a id="art-stig"></a>ART-STIG: STIG/SRG summary
+### <a id="art-stig"></a>STIG/SRG summary (ART-STIG)
 
 STIG and SRG applicability per inventory item, scan results and open findings by category.
 
@@ -4239,15 +4241,15 @@ STIG and SRG applicability per inventory item, scan results and open findings by
 | Template | [templates/artifacts/ART-STIG.md](templates/artifacts/ART-STIG.md) |
 | Data files | `artifacts/data/stig-summary.yaml` (schema `stig-summary`) |
 | OSCAL | `assessment-results#results.observations` |
-| Produced by | [I-1](#task-i-1) |
-| Updated by | [A-3](#task-a-3) |
-| Used by | [I-2](#task-i-2), [A-3](#task-a-3), [A-6](#task-a-6) |
+| Produced by | [Implement 1: Control Implementation (I-1)](#task-i-1) |
+| Updated by | [Assess 3: Control Assessments (A-3)](#task-a-3) |
+| Used by | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
 
 Citations:
 
 - [DODI8510.01](#ref-dodi8510-01), p. 6, "security requirements guides, and security technical implementation guides"
 
-### <a id="art-sap"></a>ART-SAP: Security assessment plan
+### <a id="art-sap"></a>Security assessment plan (ART-SAP)
 
 Assessment scope, procedures, team, schedule, test events and rules of engagement, approved by the AO.
 
@@ -4257,16 +4259,16 @@ Assessment scope, procedures, team, schedule, test events and rules of engagemen
 | Template | [templates/artifacts/ART-SAP.md](templates/artifacts/ART-SAP.md) |
 | Data files | `artifacts/data/sap.yaml` (schema `sap`)<br>`artifacts/data/test-strategy.yaml` (schema `test-strategy`) |
 | OSCAL | `assessment-plan#reviewed-controls` |
-| Produced by | [A-2](#task-a-2) |
-| Updated by | [M-2](#task-m-2) |
-| Used by | [A-3](#task-a-3), [A-5](#task-a-5), [R-1](#task-r-1), [M-2](#task-m-2) |
+| Produced by | [Assess 2: Assessment Plan (A-2)](#task-a-2) |
+| Updated by | [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| Used by | [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
 
 Citations:
 
 - [SP800-53AR5](#ref-sp800-53ar5), section 3.2
 - [SP800-37R2](#ref-sp800-37r2), section "TASK A-2"
 
-### <a id="art-sar"></a>ART-SAR: Security assessment report
+### <a id="art-sar"></a>Security assessment report (ART-SAR)
 
 Assessment determinations per control, findings and recommendations, including test-event results.
 
@@ -4276,16 +4278,16 @@ Assessment determinations per control, findings and recommendations, including t
 | Template | [templates/artifacts/ART-SAR.md](templates/artifacts/ART-SAR.md) |
 | Data files | `artifacts/sar/results/<fam>.yaml` (schema `sar-results`)<br>`artifacts/data/sar-report.yaml` (schema `sar-report`)<br>`artifacts/data/sar-summary.yaml` (schema `sar-summary`) |
 | OSCAL | `assessment-results#results.findings`<br>`assessment-results#results.observations` |
-| Produced by | [A-3](#task-a-3) |
-| Updated by | [A-4](#task-a-4), [A-5](#task-a-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4) |
-| Used by | [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
+| Produced by | [Assess 3: Control Assessments (A-3)](#task-a-3) |
+| Updated by | [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
+| Used by | [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 
 Citations:
 
 - [SP800-53AR5](#ref-sp800-53ar5), section "APPENDIX E"
 - [SP800-37R2](#ref-sp800-37r2), section "TASK A-4"
 
-### <a id="art-poam"></a>ART-POAM: Plan of action and milestones
+### <a id="art-poam"></a>Plan of action and milestones (ART-POAM)
 
 Remediation plan for weaknesses from the assessment and STIG findings, with milestones and resources.
 
@@ -4295,16 +4297,16 @@ Remediation plan for weaknesses from the assessment and STIG findings, with mile
 | Template | [templates/artifacts/ART-POAM.md](templates/artifacts/ART-POAM.md) |
 | Data files | `artifacts/poam/items.yaml` (schema `poam-items`) |
 | OSCAL | `poam#poam-items` |
-| Produced by | [A-6](#task-a-6) |
-| Updated by | [R-3](#task-r-3), [M-1](#task-m-1), [M-3](#task-m-3), [M-4](#task-m-4) |
-| Used by | [R-1](#task-r-1), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-6](#task-m-6) |
+| Produced by | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) |
+| Updated by | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) |
+| Used by | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK A-6"
 - [DODI8510.01](#ref-dodi8510-01), p. 9, "Develop and maintain a plan of action and milestones"
 
-### <a id="art-rar"></a>ART-RAR: Risk assessment report
+### <a id="art-rar"></a>Risk assessment report (ART-RAR)
 
 Risks derived from the findings and POA&M, their likelihood, impact and level, and the recommended responses.
 
@@ -4314,16 +4316,16 @@ Risks derived from the findings and POA&M, their likelihood, impact and level, a
 | Template | [templates/artifacts/ART-RAR.md](templates/artifacts/ART-RAR.md) |
 | Data files | `artifacts/data/rar.yaml` (schema `rar`) |
 | OSCAL | `assessment-results#results.risks` |
-| Produced by | [R-2](#task-r-2) |
-| Updated by | [R-3](#task-r-3), [M-3](#task-m-3), [M-6](#task-m-6) |
-| Used by | [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3) |
+| Produced by | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) |
+| Updated by | [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| Used by | [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
 
 Citations:
 
 - [SP800-30R1](#ref-sp800-30r1), section "APPENDIX K"
 - [SP800-37R2](#ref-sp800-37r2), section "TASK R-2"
 
-### <a id="art-pkg"></a>ART-PKG: Authorization package manifest
+### <a id="art-pkg"></a>Authorization package manifest (ART-PKG)
 
 Generated manifest of the authorization package contents (security plan, assessment report, POA&Ms and supporting artifacts).
 
@@ -4333,16 +4335,16 @@ Generated manifest of the authorization package contents (security plan, assessm
 | Template | none (generated by `rmf`) |
 | Data files | `package/manifest.yaml`<br>`artifacts/data/package-summary.yaml` (schema `package-summary`) |
 | OSCAL | — |
-| Produced by | [R-1](#task-r-1) |
+| Produced by | [Authorize 1: Authorization Package (R-1)](#task-r-1) |
 | Updated by | — |
-| Used by | [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) |
+| Used by | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 
 Citations:
 
 - [DODI8510.01](#ref-dodi8510-01), p. 19, "The security authorization documentation package is made up of"
 - [SP800-37R2](#ref-sp800-37r2), section "TASK R-1"
 
-### <a id="art-dias"></a>ART-DIAS: Digital Identity Acceptance Statement
+### <a id="art-dias"></a>Digital Identity Acceptance Statement (ART-DIAS)
 
 The assurance levels for identity proofing, authentication and federation chosen with the ia family at S-4, the processes and technologies meeting them and any compensating controls.
 
@@ -4352,7 +4354,7 @@ The assurance levels for identity proofing, authentication and federation chosen
 | Template | [templates/artifacts/ART-DIAS.md](templates/artifacts/ART-DIAS.md) |
 | Data files | `artifacts/data/dias.yaml` (schema `dias`) |
 | OSCAL | — |
-| Produced by | [R-1](#task-r-1) |
+| Produced by | [Authorize 1: Authorization Package (R-1)](#task-r-1) |
 | Updated by | — |
 | Used by | — |
 
@@ -4361,7 +4363,7 @@ Citations:
 - [SP800-18R2](#ref-sp800-18r2), p. 39, "The DIAS is not required to be included in the system plan"
 - [SP800-18R2](#ref-sp800-18r2), p. 24, "Digital Identity Acceptance Statement (optional)"
 
-### <a id="art-aodm"></a>ART-AODM: AO decision memo
+### <a id="art-aodm"></a>AO decision memo (ART-AODM)
 
 The authorization decision, its terms and conditions and the authorization termination date, signed by the AO.
 
@@ -4371,16 +4373,16 @@ The authorization decision, its terms and conditions and the authorization termi
 | Template | [templates/artifacts/ART-AODM.md](templates/artifacts/ART-AODM.md) |
 | Data files | `artifacts/data/cato.yaml` (schema `cato`) |
 | OSCAL | — |
-| Produced by | [R-4](#task-r-4) |
-| Updated by | [M-6](#task-m-6) |
-| Used by | [R-5](#task-r-5) |
+| Produced by | [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
+| Updated by | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| Used by | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK R-4"
 - [DODI8510.01](#ref-dodi8510-01), p. 19, "The authorization decision document"
 
-### <a id="art-authrec"></a>ART-AUTHREC: Authorization ledger
+### <a id="art-authrec"></a>Authorization ledger (ART-AUTHREC)
 
 Every authorization decision of the run as one record each, so a cATO, a continuation or a rescission never overwrites the ATO beneath it. The memo in ART-AODM states the decision; this holds what rules can test.
 
@@ -4390,9 +4392,9 @@ Every authorization decision of the run as one record each, so a cATO, a continu
 | Template | [templates/artifacts/ART-AUTHREC.md](templates/artifacts/ART-AUTHREC.md) |
 | Data files | `artifacts/data/authorizations.yaml` (schema `authorizations`) |
 | OSCAL | — |
-| Produced by | [A-2](#task-a-2) |
-| Updated by | [R-4](#task-r-4), [M-6](#task-m-6) |
-| Used by | [R-5](#task-r-5) |
+| Produced by | [Assess 2: Assessment Plan (A-2)](#task-a-2) |
+| Updated by | [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| Used by | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 
 Citations:
 
@@ -4400,7 +4402,7 @@ Citations:
 - [SP800-37R2](#ref-sp800-37r2), section "TASK M-6"
 - [DODCIO-CATO](#ref-dodcio-cato), p. 3, "The cATO determination does not affect the underlying system ATO"
 
-### <a id="art-authrpt"></a>ART-AUTHRPT: Authorization report
+### <a id="art-authrpt"></a>Authorization report (ART-AUTHRPT)
 
 Report of the authorization decision and significant deficiencies to organizational officials, and the registry annotation.
 
@@ -4410,7 +4412,7 @@ Report of the authorization decision and significant deficiencies to organizatio
 | Template | [templates/artifacts/ART-AUTHRPT.md](templates/artifacts/ART-AUTHRPT.md) |
 | Data files | `artifacts/data/authorization-report.yaml` (schema `authorization-report`) |
 | OSCAL | — |
-| Produced by | [R-5](#task-r-5) |
+| Produced by | [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 | Updated by | — |
 | Used by | — |
 
@@ -4419,7 +4421,7 @@ Citations:
 - [SP800-37R2](#ref-sp800-37r2), section "TASK R-5"
 - [SP800-37R2](#ref-sp800-37r2), p. 166, "Upon receipt of the authorization decision and authorization package, the system owner"
 
-### <a id="art-chg"></a>ART-CHG: Change log and security impact analyses
+### <a id="art-chg"></a>Change log and security impact analyses (ART-CHG)
 
 Changes to the system and its environment, with their security impact analyses and dispositions.
 
@@ -4429,16 +4431,16 @@ Changes to the system and its environment, with their security impact analyses a
 | Template | [templates/artifacts/ART-CHG.md](templates/artifacts/ART-CHG.md) |
 | Data files | `artifacts/data/changes.yaml` (schema `changes`) |
 | OSCAL | — |
-| Produced by | [M-1](#task-m-1) |
+| Produced by | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
 | Updated by | — |
-| Used by | [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5) |
+| Used by | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK M-1"
 - [SP800-128](#ref-sp800-128), section 3.3.3
 
-### <a id="art-secrpt"></a>ART-SECRPT: Security and privacy posture report
+### <a id="art-secrpt"></a>Security and privacy posture report (ART-SECRPT)
 
 Periodic report of the system's security and privacy posture to the AO, senior leaders and DoD bodies, with the organization tier's review.
 
@@ -4448,16 +4450,16 @@ Periodic report of the system's security and privacy posture to the AO, senior l
 | Template | [templates/artifacts/ART-SECRPT.md](templates/artifacts/ART-SECRPT.md) |
 | Data files | `artifacts/data/posture-reports.yaml` (schema `posture-reports`) |
 | OSCAL | — |
-| Produced by | [M-5](#task-m-5) |
+| Produced by | [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) |
 | Updated by | — |
-| Used by | [M-6](#task-m-6) |
+| Used by | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
 
 Citations:
 
 - [SP800-37R2](#ref-sp800-37r2), section "TASK M-5"
 - [SP800-137](#ref-sp800-137), section 3.4.3
 
-### <a id="art-disp"></a>ART-DISP: Disposal plan
+### <a id="art-disp"></a>Disposal plan (ART-DISP)
 
 System disposal strategy and the actions taken when the system is removed from operation.
 
@@ -4467,7 +4469,7 @@ System disposal strategy and the actions taken when the system is removed from o
 | Template | [templates/artifacts/ART-DISP.md](templates/artifacts/ART-DISP.md) |
 | Data files | `artifacts/data/disposal.yaml` (schema `disposal`) |
 | OSCAL | — |
-| Produced by | [M-7](#task-m-7) |
+| Produced by | [Monitor 7: System Disposal (M-7)](#task-m-7) |
 | Updated by | — |
 | Used by | — |
 
@@ -4482,32 +4484,32 @@ content and operational data.
 
 | Input | Kind | What it is | Used by |
 |---|---|---|---|
-| <a id="ext-product"></a>**EXT-PRODUCT** Product material | product | System design and requirements documentation, concept of operations, architecture, data flows, interfaces and hardware/software lists supplied in product/ (proposed values in product/profile.yaml). | [P-4](#task-p-4), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-18](#task-p-18), [C-1](#task-c-1), [S-3](#task-s-3), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [M-1](#task-m-1) |
-| <a id="ext-capdoc"></a>**EXT-CAPDOC** Capability requirements documents | product | The document that states and validates the capability need for the pathway: on major capability acquisition the CDD or the equivalent requirements document (JCIDS documents validated before JCIDS was disestablished on August 20, 2025, the requirements document that replaced them after; ACQLC-004); a validated JUON, JEON or DoD Component UON, a critical warfighter issue statement approved by the Warfighter SIG, or a SecDef or DepSecDef RAA determination document on urgent capability acquisition; the capability needs statement and user agreement on the software pathway; business requirements on defense business systems; and the services requirement validated by the SRRB for an acquisition of services. P-15 records in protection-requirements.yaml whether it holds the SCRM, export control, anti-tamper, counterintelligence and security support, and threat content the CJCS puts in JCIDS capability requirements (PPROT-004), and the information requirements of the milestone or decision point it supports. | [P-8](#task-p-8), [P-9](#task-p-9), [P-12](#task-p-12), [P-15](#task-p-15) |
-| <a id="ext-org-policy"></a>**EXT-ORG-POLICY** Organizational policy and Prepare-step guidance | organization | DoD and Component security and privacy policies and procedures, organizational charts, and the Component Prepare-step guidance published on the RMF Knowledge Service. | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-11](#task-p-11), [P-15](#task-p-15), [P-17](#task-p-17), [P-18](#task-p-18), [C-2](#task-c-2), [C-3](#task-c-3), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [A-1](#task-a-1), [A-2](#task-a-2), [M-1](#task-m-1) |
-| <a id="ext-threat"></a>**EXT-THREAT** Threat information | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions: Intelligence Community products such as DIA cyber threat assessments and the Defense Intelligence Threat Library cyber threat modules, the USD(I&S) cyber threat assessment capability, threat intelligence on third party providers and environments, and the USCYBERCOM and NSA/CSS cyber operational risk tolerances. ART-RA records which product, its date and the credentialed professionals consulted. | [P-3](#task-p-3), [P-14](#task-p-14), [P-15](#task-p-15), [S-5](#task-s-5), [R-2](#task-r-2), [M-1](#task-m-1), [M-3](#task-m-3) |
-| <a id="ext-registry"></a>**EXT-REGISTRY** Component system registry | organization | The DoD Component registry in which programs register their systems. | [P-18](#task-p-18) |
-| <a id="ext-baselines"></a>**EXT-BASELINES** Control baselines | reference | CNSSI 1253 security control baselines for national security systems and the SP 800-53B baselines (OSCAL profiles in references/oscal/profiles). | [P-4](#task-p-4), [S-1](#task-s-1) |
-| <a id="ext-cnssi1253-overlays"></a>**EXT-CNSSI1253-OVERLAYS** CNSSI 1253 overlays | reference | Published overlays (CNSSI 1253 Appendix E/F attachments, for example the Privacy and Space Platform overlays) that tailor baselines for specific environments, information types or technologies. | [P-4](#task-p-4), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2) |
-| <a id="ext-catalog"></a>**EXT-CATALOG** SP 800-53 Rev. 5 control catalog | reference | The OSCAL 800-53r5 catalog (references/oscal/catalog), the source of control text, parameters and assessment objectives. | [S-1](#task-s-1), [S-4](#task-s-4) |
-| <a id="ext-assessment-procedures"></a>**EXT-ASSESSMENT-PROCEDURES** SP 800-53A assessment procedures | reference | SP 800-53A Rev. 5 assessment objects, methods and objectives, with the DoD-specific assessment procedures on the RMF Knowledge Service. | [A-2](#task-a-2), [A-3](#task-a-3) |
-| <a id="ext-stig"></a>**EXT-STIG** DISA STIGs and SRGs, and other secure configuration guidance | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory, and where none applies NSA/CSS security implementation and mitigation guidance, DoD security configuration guides, NIST checklists and mitigation guidelines, or vendor hardening guidance. An exception is documented and approved by the responsible AO (SCFG-001). | [I-1](#task-i-1) |
-| <a id="ext-test-results"></a>**EXT-TEST-RESULTS** Developmental and operational test results | operational | Results of developer, engineering, developmental (DT&E) and operational (OT&E) test events, including cybersecurity test events, reused as assessment evidence: cooperative vulnerability identification, cybersecurity DT&E, the cooperative vulnerability and penetration assessment (CVPA), the adversarial assessment (AA), the cyber economic vulnerability analysis, the evaluation of defensive cyberspace operations, and independent threat-representative penetration and exploitation testing. Each event in test-strategy.yaml records who conducted it, the configuration of the test asset, the test conditions and whether they were operationally representative (TSTRAT-003). | [A-3](#task-a-3), [M-2](#task-m-2) |
-| <a id="ext-software-evidence"></a>**EXT-SOFTWARE-EVIDENCE** Machine-readable software evidence | operational | SBOMs, build provenance and attestations, security scan and other assurance results, and the record of AI models used, produced by the software factory or pipeline and read as input to control assessment and authorization (artifacts/data/software.yaml evidence). | [A-3](#task-a-3) |
-| <a id="ext-monitoring"></a>**EXT-MONITORING** Continuous monitoring data | operational | Output of automated and manual monitoring (vulnerability scans, configuration compliance, event and incident data) collected under the monitoring strategy. | [M-1](#task-m-1), [M-2](#task-m-2) |
-| <a id="ext-change-requests"></a>**EXT-CHANGE-REQUESTS** Configuration change requests | operational | Proposed changes to the system and its environment, submitted to configuration control. | [M-1](#task-m-1) |
-| <a id="ext-inspections"></a>**EXT-INSPECTIONS** Readiness inspection and outside evaluation findings | operational | Findings on the system from readiness inspections, joint compliance inspections, penetration assessments, audits and evaluations by the DoD Component or outside bodies such as CDRUSSTRATCOM, DISA, DIRNSA or DIA. | [M-3](#task-m-3) |
-| <a id="ext-directives"></a>**EXT-DIRECTIVES** Directed actions | operational | Orders and directives a system receives through its aligned NOSC, its CSSP or its DoD Component headquarters: operation, fragmentary, tasking and execute orders, IAVM vulnerability management alerts and bulletins, and CPCON changes, issued under the directive authority of CDRUSSTRATCOM through CDRUSCYBERCOM and JFHQ-DODIN or by the DoD Component. M-3 records each in directed_actions of poam/items.yaml. | [M-3](#task-m-3) |
-| <a id="ext-vdp"></a>**EXT-VDP** Vulnerability disclosure reports | operational | Reports from the DoD Vulnerability Disclosure Program that DC3 delivers to the system owner through JFHQ-DODIN, with actions USCYBERCOM directs within VRMN. M-3 records each in vdp_reports of poam/items.yaml. | [M-3](#task-m-3) |
-| <a id="ext-iscm-assessment"></a>**EXT-ISCM-ASSESSMENT** ISCM program assessment report | organization | The final report of an SP 800-137A assessment of the organization's ISCM program, which may bear on the decision to continue operation under ongoing authorization. | [M-6](#task-m-6) |
-| <a id="ext-adm"></a>**EXT-ADM** Acquisition decisions and determinations | organization | Acquisition decision memoranda and the decision authority's determinations at each milestone or decision point of the pathway (framework/milestones.yaml for major capability acquisition, `decision_points` in framework/pathways.yaml for the others), including the urgent capability MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment, which R-3 reads. | [R-3](#task-r-3), [R-4](#task-r-4) |
-| <a id="ext-ppp"></a>**EXT-PPP** Program protection plan | product | The program protection plan prepared by the lead systems engineer and approved by the USD(R&E) where the DAE is the milestone decision authority, or by the Component acquisition executive or a designee for ACAT IB to III, urgent, middle tier and software programs, with the cybersecurity strategy as an appendix. P-14 records in protection.yaml its approval, its critical items, their threats, vulnerabilities and countermeasures, exportability, anti-tamper, its updates and its transition (PPROT-001, PPROT-002); P-15 and P-17 carry its countermeasures into requirements and solicitations (PPROT-004). | [P-14](#task-p-14), [P-15](#task-p-15), [R-1](#task-r-1) |
-| <a id="ext-css"></a>**EXT-CSS** Cybersecurity strategy | product | The program's cybersecurity strategy (CSS): plans for, and implementation status of, its cybersecurity activities across the life cycle, an appendix to the PPP where the program has one and a stand-alone document otherwise. DoDI 5000.82 Table 2 sets who approves it by ACAT or BCAT; on the software pathway the DA approves the acquisition strategy that holds it. P-14 records it with its approvals and reviews in cybersecurity-strategy.yaml (CSSTRAT-001 to CSSTRAT-003). | [P-14](#task-p-14) |
-| <a id="ext-stpp"></a>**EXT-STPP** Technology and S&T protection guidance | organization | Technology area protection plans (TAPPs) for each S&T modernization priority area, DoD horizontal protection guidance, and the S&T protection plan of a technology that transitions from S&T into the program. P-14 records the ones it read in protection.yaml and the S&T protection plan in st-protection.yaml (PPROT-003); P-15 names them in protection-requirements.yaml. | [P-14](#task-p-14), [P-15](#task-p-15) |
-| <a id="ext-itra"></a>**EXT-ITRA** Independent technical risk assessments | organization | Independent technical risk assessments of the system design and interfaces for adversarial risk, program protection and cyber vulnerabilities, with who conducted and approved them; their results inform the technical risks P-14 records (PPROT-005). | [P-14](#task-p-14) |
-| <a id="ext-sep"></a>**EXT-SEP** Systems engineering plan | product | The systems engineering plan, where the lead systems engineer documents the program's major technical risks, issues, opportunities and mitigations; P-14 carries the security ones into the technical risks of protection.yaml (PPROT-005). | [P-14](#task-p-14) |
-| <a id="ext-nsa-assessment"></a>**EXT-NSA-ASSESSMENT** NSA assessment of a National Security System | organization | The assessment of the cybersecurity requirements and information system security architecture of a National Security System, made by NSA with the cognizant AO before program initiation and each acquisition milestone, and for a space NSS the coordination of its architecture with the AO and NSA. P-16 records them in nss-assessments.yaml (PPROT-006). | [P-16](#task-p-16) |
-| <a id="ext-test-strategy"></a>**EXT-TEST-STRATEGY** Test and evaluation master plan or test strategy | product | The TEMP, or the test strategy or abbreviated test plan the pathway calls for, with its approvals: the DOT&E for OT&E and LFT&E of a program on T&E oversight, the USD(R&E) for the DT&E plan of an ACAT ID program, DoD Component approval otherwise. A-2 records in test-strategy.yaml its events, schedule, cybersecurity test objectives and approvals (TSTRAT-001, TSTRAT-002). | [A-2](#task-a-2) |
+| <a id="ext-product"></a>**Product material** (EXT-PRODUCT) | product | System design and requirements documentation, concept of operations, architecture, data flows, interfaces and hardware/software lists supplied in product/ (proposed values in product/profile.yaml). | [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Select 3: Control Allocation (S-3)](#task-s-3), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
+| <a id="ext-capdoc"></a>**Capability requirements documents** (EXT-CAPDOC) | product | The document that states and validates the capability need for the pathway: on major capability acquisition the CDD or the equivalent requirements document (JCIDS documents validated before JCIDS was disestablished on August 20, 2025, the requirements document that replaced them after; ACQLC-004); a validated JUON, JEON or DoD Component UON, a critical warfighter issue statement approved by the Warfighter SIG, or a SecDef or DepSecDef RAA determination document on urgent capability acquisition; the capability needs statement and user agreement on the software pathway; business requirements on defense business systems; and the services requirement validated by the SRRB for an acquisition of services. P-15 records in protection-requirements.yaml whether it holds the SCRM, export control, anti-tamper, counterintelligence and security support, and threat content the CJCS puts in JCIDS capability requirements (PPROT-004), and the information requirements of the milestone or decision point it supports. | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 15: Requirements Definition (P-15)](#task-p-15) |
+| <a id="ext-org-policy"></a>**Organizational policy and Prepare-step guidance** (EXT-ORG-POLICY) | organization | DoD and Component security and privacy policies and procedures, organizational charts, and the Component Prepare-step guidance published on the RMF Knowledge Service. | [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
+| <a id="ext-threat"></a>**Threat information** (EXT-THREAT) | operational | Current cyber threat information and threat and risk reports (for example from NSA/CSS and USCYBERCOM) used in risk assessments and authorization decisions: Intelligence Community products such as DIA cyber threat assessments and the Defense Intelligence Threat Library cyber threat modules, the USD(I&S) cyber threat assessment capability, threat intelligence on third party providers and environments, and the USCYBERCOM and NSA/CSS cyber operational risk tolerances. ART-RA records which product, its date and the credentialed professionals consulted. | [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
+| <a id="ext-registry"></a>**Component system registry** (EXT-REGISTRY) | organization | The DoD Component registry in which programs register their systems. | [Prepare 18: System Registration (P-18)](#task-p-18) |
+| <a id="ext-baselines"></a>**Control baselines** (EXT-BASELINES) | reference | CNSSI 1253 security control baselines for national security systems and the SP 800-53B baselines (OSCAL profiles in references/oscal/profiles). | [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Select 1: Control Selection (S-1)](#task-s-1) |
+| <a id="ext-cnssi1253-overlays"></a>**CNSSI 1253 overlays** (EXT-CNSSI1253-OVERLAYS) | reference | Published overlays (CNSSI 1253 Appendix E/F attachments, for example the Privacy and Space Platform overlays) that tailor baselines for specific environments, information types or technologies. | [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2) |
+| <a id="ext-catalog"></a>**SP 800-53 Rev. 5 control catalog** (EXT-CATALOG) | reference | The OSCAL 800-53r5 catalog (references/oscal/catalog), the source of control text, parameters and assessment objectives. | [Select 1: Control Selection (S-1)](#task-s-1), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4) |
+| <a id="ext-assessment-procedures"></a>**SP 800-53A assessment procedures** (EXT-ASSESSMENT-PROCEDURES) | reference | SP 800-53A Rev. 5 assessment objects, methods and objectives, with the DoD-specific assessment procedures on the RMF Knowledge Service. | [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3) |
+| <a id="ext-stig"></a>**DISA STIGs and SRGs, and other secure configuration guidance** (EXT-STIG) | reference | Security technical implementation guides and security requirements guides that define secure configurations for products in the inventory, and where none applies NSA/CSS security implementation and mitigation guidance, DoD security configuration guides, NIST checklists and mitigation guidelines, or vendor hardening guidance. An exception is documented and approved by the responsible AO (SCFG-001). | [Implement 1: Control Implementation (I-1)](#task-i-1) |
+| <a id="ext-test-results"></a>**Developmental and operational test results** (EXT-TEST-RESULTS) | operational | Results of developer, engineering, developmental (DT&E) and operational (OT&E) test events, including cybersecurity test events, reused as assessment evidence: cooperative vulnerability identification, cybersecurity DT&E, the cooperative vulnerability and penetration assessment (CVPA), the adversarial assessment (AA), the cyber economic vulnerability analysis, the evaluation of defensive cyberspace operations, and independent threat-representative penetration and exploitation testing. Each event in test-strategy.yaml records who conducted it, the configuration of the test asset, the test conditions and whether they were operationally representative (TSTRAT-003). | [Assess 3: Control Assessments (A-3)](#task-a-3), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| <a id="ext-software-evidence"></a>**Machine-readable software evidence** (EXT-SOFTWARE-EVIDENCE) | operational | SBOMs, build provenance and attestations, security scan and other assurance results, and the record of AI models used, produced by the software factory or pipeline and read as input to control assessment and authorization (artifacts/data/software.yaml evidence). | [Assess 3: Control Assessments (A-3)](#task-a-3) |
+| <a id="ext-monitoring"></a>**Continuous monitoring data** (EXT-MONITORING) | operational | Output of automated and manual monitoring (vulnerability scans, configuration compliance, event and incident data) collected under the monitoring strategy. | [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) |
+| <a id="ext-change-requests"></a>**Configuration change requests** (EXT-CHANGE-REQUESTS) | operational | Proposed changes to the system and its environment, submitted to configuration control. | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) |
+| <a id="ext-inspections"></a>**Readiness inspection and outside evaluation findings** (EXT-INSPECTIONS) | operational | Findings on the system from readiness inspections, joint compliance inspections, penetration assessments, audits and evaluations by the DoD Component or outside bodies such as CDRUSSTRATCOM, DISA, DIRNSA or DIA. | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
+| <a id="ext-directives"></a>**Directed actions** (EXT-DIRECTIVES) | operational | Orders and directives a system receives through its aligned NOSC, its CSSP or its DoD Component headquarters: operation, fragmentary, tasking and execute orders, IAVM vulnerability management alerts and bulletins, and CPCON changes, issued under the directive authority of CDRUSSTRATCOM through CDRUSCYBERCOM and JFHQ-DODIN or by the DoD Component. M-3 records each in directed_actions of poam/items.yaml. | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
+| <a id="ext-vdp"></a>**Vulnerability disclosure reports** (EXT-VDP) | operational | Reports from the DoD Vulnerability Disclosure Program that DC3 delivers to the system owner through JFHQ-DODIN, with actions USCYBERCOM directs within VRMN. M-3 records each in vdp_reports of poam/items.yaml. | [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) |
+| <a id="ext-iscm-assessment"></a>**ISCM program assessment report** (EXT-ISCM-ASSESSMENT) | organization | The final report of an SP 800-137A assessment of the organization's ISCM program, which may bear on the decision to continue operation under ongoing authorization. | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
+| <a id="ext-adm"></a>**Acquisition decisions and determinations** (EXT-ADM) | organization | Acquisition decision memoranda and the decision authority's determinations at each milestone or decision point of the pathway (framework/milestones.yaml for major capability acquisition, `decision_points` in framework/pathways.yaml for the others), including the urgent capability MDA's determination of which deficiencies must be resolved and which risks can be accepted before production or deployment, which R-3 reads. | [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4) |
+| <a id="ext-ppp"></a>**Program protection plan** (EXT-PPP) | product | The program protection plan prepared by the lead systems engineer and approved by the USD(R&E) where the DAE is the milestone decision authority, or by the Component acquisition executive or a designee for ACAT IB to III, urgent, middle tier and software programs, with the cybersecurity strategy as an appendix. P-14 records in protection.yaml its approval, its critical items, their threats, vulnerabilities and countermeasures, exportability, anti-tamper, its updates and its transition (PPROT-001, PPROT-002); P-15 and P-17 carry its countermeasures into requirements and solicitations (PPROT-004). | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Authorize 1: Authorization Package (R-1)](#task-r-1) |
+| <a id="ext-css"></a>**Cybersecurity strategy** (EXT-CSS) | product | The program's cybersecurity strategy (CSS): plans for, and implementation status of, its cybersecurity activities across the life cycle, an appendix to the PPP where the program has one and a stand-alone document otherwise. DoDI 5000.82 Table 2 sets who approves it by ACAT or BCAT; on the software pathway the DA approves the acquisition strategy that holds it. P-14 records it with its approvals and reviews in cybersecurity-strategy.yaml (CSSTRAT-001 to CSSTRAT-003). | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) |
+| <a id="ext-stpp"></a>**Technology and S&T protection guidance** (EXT-STPP) | organization | Technology area protection plans (TAPPs) for each S&T modernization priority area, DoD horizontal protection guidance, and the S&T protection plan of a technology that transitions from S&T into the program. P-14 records the ones it read in protection.yaml and the S&T protection plan in st-protection.yaml (PPROT-003); P-15 names them in protection-requirements.yaml. | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15) |
+| <a id="ext-itra"></a>**Independent technical risk assessments** (EXT-ITRA) | organization | Independent technical risk assessments of the system design and interfaces for adversarial risk, program protection and cyber vulnerabilities, with who conducted and approved them; their results inform the technical risks P-14 records (PPROT-005). | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) |
+| <a id="ext-sep"></a>**Systems engineering plan** (EXT-SEP) | product | The systems engineering plan, where the lead systems engineer documents the program's major technical risks, issues, opportunities and mitigations; P-14 carries the security ones into the technical risks of protection.yaml (PPROT-005). | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) |
+| <a id="ext-nsa-assessment"></a>**NSA assessment of a National Security System** (EXT-NSA-ASSESSMENT) | organization | The assessment of the cybersecurity requirements and information system security architecture of a National Security System, made by NSA with the cognizant AO before program initiation and each acquisition milestone, and for a space NSS the coordination of its architecture with the AO and NSA. P-16 records them in nss-assessments.yaml (PPROT-006). | [Prepare 16: Enterprise Architecture (P-16)](#task-p-16) |
+| <a id="ext-test-strategy"></a>**Test and evaluation master plan or test strategy** (EXT-TEST-STRATEGY) | product | The TEMP, or the test strategy or abbreviated test plan the pathway calls for, with its approvals: the DOT&E for OT&E and LFT&E of a program on T&E oversight, the USD(R&E) for the DT&E plan of an ACAT ID program, DoD Component approval otherwise. A-2 records in test-strategy.yaml its events, schedule, cybersecurity test objectives and approvals (TSTRAT-001, TSTRAT-002). | [Assess 2: Assessment Plan (A-2)](#task-a-2) |
 
 ## <a id="personas"></a>8. Persona catalog
 
@@ -4553,10 +4555,10 @@ Senior government official who accepts the risk of operating the system; the sol
 - Card: [personas/PER-AO.md](personas/PER-AO.md)
 - Category: rmf; appointed by: DoD Component head; PAO for MA-managed information systems
 - SP 800-37 Rev. 2 roles: Authorizing Official
-- Responsible for: [R-4](#task-r-4), [M-6](#task-m-6)
-- Accountable for: [P-11](#task-p-11), [C-3](#task-c-3), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-3](#task-m-3), [M-6](#task-m-6)
-- Consulted on: [P-1](#task-p-1), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5)
-- Informed of: [P-2](#task-p-2), [C-2](#task-c-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-2](#task-m-2), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
+- Responsible for: [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6)
+- Accountable for: [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6)
+- Consulted on: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 1: System Description (C-1)](#task-c-1), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5)
+- Informed of: [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 7: System Disposal (M-7)](#task-m-7)
 - Makes the authorization decisions: [IATT](#ad-iatt), [ATO](#ad-ato), [ATO w/ conditions](#ad-atoc), [DATO](#ad-dato), [cATO](#ad-cato), [ATU](#ad-atu), [DATU](#ad-datu), [CCA](#ad-cca), [DCCA](#ad-dcca), [Continue](#ad-cont), [cATO revoked](#ad-rcato), [Rescinded](#ad-resc)
 
 Citations:
@@ -4572,10 +4574,10 @@ Formally appointed by the AO to carry out delegated AO tasks (reviews, approvals
 - Card: [personas/PER-AODR.md](personas/PER-AODR.md)
 - Category: rmf; appointed by: AO
 - SP 800-37 Rev. 2 roles: Authorizing Official Designated Representative
-- Responsible for: [C-3](#task-c-3), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [R-2](#task-r-2), [R-3](#task-r-3), [R-5](#task-r-5)
+- Responsible for: [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5)
 - Accountable for: none
-- Consulted on: [A-3](#task-a-3), [A-5](#task-a-5), [R-4](#task-r-4), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-6](#task-m-6), [M-7](#task-m-7)
-- Informed of: [A-4](#task-a-4), [R-1](#task-r-1)
+- Consulted on: [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7)
+- Informed of: [Assess 4: Assessment Reports (A-4)](#task-a-4), [Authorize 1: Authorization Package (R-1)](#task-r-1)
 
 Citations:
 
@@ -4589,10 +4591,10 @@ Administers the RMF in the Component cybersecurity program, communicates organiz
 - Card: [personas/PER-CIO.md](personas/PER-CIO.md)
 - Category: organization; appointed by: DoD Component head
 - SP 800-37 Rev. 2 roles: Head of Agency, Chief Information Officer
-- Responsible for: [P-1](#task-p-1), [P-2](#task-p-2)
-- Accountable for: [P-1](#task-p-1), [P-2](#task-p-2)
-- Consulted on: [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-11](#task-p-11), [P-13](#task-p-13), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [R-4](#task-r-4), [M-6](#task-m-6)
-- Informed of: [P-18](#task-p-18), [R-5](#task-r-5), [M-5](#task-m-5)
+- Responsible for: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2)
+- Accountable for: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2)
+- Consulted on: [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6)
+- Informed of: [Prepare 18: System Registration (P-18)](#task-p-18), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5)
 
 Citations:
 
@@ -4607,10 +4609,10 @@ Directs the Component cybersecurity program; owns the security control assessmen
 - Card: [personas/PER-CISO.md](personas/PER-CISO.md)
 - Category: organization; appointed by: DoD Component CIO (or the Component head where no CIO position exists)
 - SP 800-37 Rev. 2 roles: Senior Agency Information Security Officer
-- Responsible for: [P-3](#task-p-3), [P-5](#task-p-5), [M-1](#task-m-1), [M-5](#task-m-5)
-- Accountable for: [P-5](#task-p-5)
-- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-2](#task-c-2), [C-3](#task-c-3), [S-3](#task-s-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-1](#task-a-1), [A-2](#task-a-2), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-4](#task-m-4), [M-6](#task-m-6), [M-7](#task-m-7)
-- Informed of: [P-18](#task-p-18), [A-3](#task-a-3)
+- Responsible for: [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5)
+- Accountable for: [Prepare 5: Common Control Identification (P-5)](#task-p-5)
+- Consulted on: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7)
+- Informed of: [Prepare 18: System Registration (P-18)](#task-p-18), [Assess 3: Control Assessments (A-3)](#task-a-3)
 
 Citations:
 
@@ -4624,9 +4626,9 @@ The DoD ISRMC supported by the DSAWG (and Component equivalents): sets enterpris
 - Card: [personas/PER-RE.md](personas/PER-RE.md)
 - Category: organization; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Risk Executive (Function), Senior Accountable Official for Risk Management
-- Responsible for: [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7)
-- Accountable for: [P-3](#task-p-3), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7)
-- Consulted on: [P-1](#task-p-1), [P-5](#task-p-5), [P-14](#task-p-14), [C-2](#task-c-2), [C-3](#task-c-3), [S-5](#task-s-5), [S-6](#task-s-6), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [M-1](#task-m-1), [M-3](#task-m-3), [M-5](#task-m-5), [M-6](#task-m-6), [M-7](#task-m-7)
+- Responsible for: [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7)
+- Accountable for: [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7)
+- Consulted on: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7)
 - Informed of: none
 
 Citations:
@@ -4641,10 +4643,10 @@ Independent assessor (or assessment team, including SCA representatives and vali
 - Card: [personas/PER-SCA.md](personas/PER-SCA.md)
 - Category: rmf; appointed by: DoD Component CISO (the Component SCA, who may formally delegate the role)
 - SP 800-37 Rev. 2 roles: Control Assessor
-- Responsible for: [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [M-2](#task-m-2)
-- Accountable for: [A-3](#task-a-3), [A-4](#task-a-4), [M-2](#task-m-2)
-- Consulted on: [P-14](#task-p-14), [A-6](#task-a-6), [R-1](#task-r-1), [R-2](#task-r-2)
-- Informed of: [A-1](#task-a-1)
+- Responsible for: [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2)
+- Accountable for: [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2)
+- Consulted on: [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2)
+- Informed of: [Assess 1: Assessor Selection (A-1)](#task-a-1)
 
 Citations:
 
@@ -4658,10 +4660,10 @@ Accountable for the system and for implementing the RMF in step with the acquisi
 - Card: [personas/PER-PM.md](personas/PER-PM.md)
 - Category: acquisition; appointed by: DoD Component Acquisition Executive (PM); DoD Component head (SO)
 - SP 800-37 Rev. 2 roles: System Owner, Mission or Business Owner
-- Responsible for: [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-5](#task-s-5), [I-1](#task-i-1), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-3](#task-r-3), [M-1](#task-m-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
-- Accountable for: [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
-- Consulted on: [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-6](#task-m-6)
-- Informed of: [P-1](#task-p-1), [C-3](#task-c-3), [S-6](#task-s-6), [A-1](#task-a-1), [R-2](#task-r-2), [R-4](#task-r-4)
+- Responsible for: [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 7: System Disposal (M-7)](#task-m-7)
+- Accountable for: [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 7: System Disposal (M-7)](#task-m-7)
+- Consulted on: [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6)
+- Informed of: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 4: Authorization Decision (R-4)](#task-r-4)
 
 Citations:
 
@@ -4676,10 +4678,10 @@ Leads the system cybersecurity program day to day: maintains the authorization p
 - Card: [personas/PER-ISSM.md](personas/PER-ISSM.md)
 - Category: rmf; appointed by: PM or SO
 - SP 800-37 Rev. 2 roles: System Security Officer
-- Responsible for: [P-10](#task-p-10), [P-11](#task-p-11), [P-14](#task-p-14), [P-17](#task-p-17), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-3](#task-s-3), [S-4](#task-s-4), [S-5](#task-s-5), [I-2](#task-i-2), [A-6](#task-a-6), [R-1](#task-r-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
+- Responsible for: [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 7: System Disposal (M-7)](#task-m-7)
 - Accountable for: none
-- Consulted on: [P-12](#task-p-12), [P-15](#task-p-15), [I-1](#task-i-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [R-2](#task-r-2), [R-3](#task-r-3), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2)
-- Informed of: [P-8](#task-p-8), [P-9](#task-p-9), [C-3](#task-c-3), [S-6](#task-s-6), [R-4](#task-r-4), [M-6](#task-m-6)
+- Consulted on: [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Implement 1: Control Implementation (I-1)](#task-i-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2)
+- Informed of: [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6)
 
 Citations:
 
@@ -4693,9 +4695,9 @@ Maintains the operational security posture of the system under the ISSM's direct
 - Card: [personas/PER-ISSO.md](personas/PER-ISSO.md)
 - Category: rmf; appointed by: PM or SO
 - SP 800-37 Rev. 2 roles: System Security Officer, System Administrator
-- Responsible for: [P-14](#task-p-14), [P-17](#task-p-17), [S-3](#task-s-3), [M-1](#task-m-1)
+- Responsible for: [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 3: Control Allocation (S-3)](#task-s-3), [Monitor 1: System and Environment Changes (M-1)](#task-m-1)
 - Accountable for: none
-- Consulted on: [P-12](#task-p-12), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [R-3](#task-r-3), [R-5](#task-r-5), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5), [M-7](#task-m-7)
+- Consulted on: [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5), [Monitor 7: System Disposal (M-7)](#task-m-7)
 - Informed of: none
 
 Citations:
@@ -4710,9 +4712,9 @@ Systems security engineer integrated into the systems engineering process; desig
 - Card: [personas/PER-ISSE.md](personas/PER-ISSE.md)
 - Category: engineering; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Systems Security Engineer, Security Architect
-- Responsible for: [P-16](#task-p-16), [P-17](#task-p-17), [S-3](#task-s-3), [S-4](#task-s-4), [I-1](#task-i-1)
+- Responsible for: [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Implement 1: Control Implementation (I-1)](#task-i-1)
 - Accountable for: none
-- Consulted on: [P-11](#task-p-11), [P-13](#task-p-13), [P-15](#task-p-15), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-5](#task-s-5), [I-2](#task-i-2), [A-5](#task-a-5), [R-3](#task-r-3), [M-3](#task-m-3)
+- Consulted on: [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Authorize 3: Risk Response (R-3)](#task-r-3), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3)
 - Informed of: none
 
 Citations:
@@ -4727,9 +4729,9 @@ Leads the program's systems engineering and technical reviews; owns the system a
 - Card: [personas/PER-LSE.md](personas/PER-LSE.md)
 - Category: engineering; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Enterprise Architect
-- Responsible for: [P-16](#task-p-16)
+- Responsible for: [Prepare 16: Enterprise Architecture (P-16)](#task-p-16)
 - Accountable for: none
-- Consulted on: [P-11](#task-p-11), [P-13](#task-p-13), [P-15](#task-p-15), [C-1](#task-c-1), [I-1](#task-i-1), [I-2](#task-i-2)
+- Consulted on: [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 1: System Description (C-1)](#task-c-1), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2)
 - Informed of: none
 
 Citations:
@@ -4747,8 +4749,8 @@ Represents the operational and functional requirements of the user community in 
 - SP 800-37 Rev. 2 roles: System User
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [P-8](#task-p-8), [P-15](#task-p-15), [C-2](#task-c-2)
-- Informed of: [R-4](#task-r-4)
+- Consulted on: [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 2: Security Categorization (C-2)](#task-c-2)
+- Informed of: [Authorize 4: Authorization Decision (R-4)](#task-r-4)
 
 Citations:
 
@@ -4762,9 +4764,9 @@ Official with authority over specific information; determines how it is handled 
 - Card: [personas/PER-IO.md](personas/PER-IO.md)
 - Category: organization; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Information Owner or Steward
-- Responsible for: [P-12](#task-p-12), [P-13](#task-p-13), [P-15](#task-p-15), [C-2](#task-c-2)
+- Responsible for: [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Categorize 2: Security Categorization (C-2)](#task-c-2)
 - Accountable for: none
-- Consulted on: [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-14](#task-p-14), [P-16](#task-p-16), [C-1](#task-c-1), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-2](#task-a-2), [A-3](#task-a-3), [A-5](#task-a-5), [A-6](#task-a-6), [R-3](#task-r-3), [R-5](#task-r-5), [M-1](#task-m-1), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-7](#task-m-7)
+- Consulted on: [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Categorize 1: System Description (C-1)](#task-c-1), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 7: System Disposal (M-7)](#task-m-7)
 - Informed of: none
 
 Citations:
@@ -4779,9 +4781,9 @@ Develops, implements, assesses and monitors common controls that systems inherit
 - Card: [personas/PER-CCP.md](personas/PER-CCP.md)
 - Category: rmf; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Common Control Provider
-- Responsible for: [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-5](#task-a-5), [A-6](#task-a-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-3](#task-m-3), [M-4](#task-m-4), [M-5](#task-m-5)
+- Responsible for: [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5)
 - Accountable for: none
-- Consulted on: [P-5](#task-p-5), [P-17](#task-p-17), [S-3](#task-s-3), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [R-3](#task-r-3), [R-5](#task-r-5), [M-2](#task-m-2)
+- Consulted on: [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Select 3: Control Allocation (S-3)](#task-s-3), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2)
 - Informed of: none
 
 Citations:
@@ -4798,8 +4800,8 @@ Provides the cyber defense services (monitoring, incident response, vulnerabilit
 - SP 800-37 Rev. 2 roles: System Administrator
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [S-4](#task-s-4), [S-5](#task-s-5), [M-2](#task-m-2), [M-3](#task-m-3), [M-5](#task-m-5)
-- Informed of: [P-7](#task-p-7)
+- Consulted on: [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5)
+- Informed of: [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7)
 
 Citations:
 
@@ -4813,9 +4815,9 @@ Senior privacy official for the Component and system privacy officer; responsibl
 - Card: [personas/PER-PRIV.md](personas/PER-PRIV.md)
 - Category: organization; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Senior Agency Official for Privacy, System Privacy Officer
-- Responsible for: [P-1](#task-p-1), [P-3](#task-p-3), [P-5](#task-p-5), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-16](#task-p-16), [P-17](#task-p-17), [C-3](#task-c-3), [S-3](#task-s-3), [S-6](#task-s-6), [R-1](#task-r-1), [M-1](#task-m-1), [M-5](#task-m-5)
+- Responsible for: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3), [Select 3: Control Allocation (S-3)](#task-s-3), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Authorize 1: Authorization Package (R-1)](#task-r-1), [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5)
 - Accountable for: none
-- Consulted on: [P-2](#task-p-2), [P-4](#task-p-4), [P-6](#task-p-6), [P-7](#task-p-7), [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [C-1](#task-c-1), [C-2](#task-c-2), [S-1](#task-s-1), [S-2](#task-s-2), [S-4](#task-s-4), [S-5](#task-s-5), [I-1](#task-i-1), [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2), [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5), [A-6](#task-a-6), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5), [M-2](#task-m-2), [M-3](#task-m-3), [M-4](#task-m-4), [M-6](#task-m-6), [M-7](#task-m-7)
+- Consulted on: [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Select 1: Control Selection (S-1)](#task-s-1), [Select 2: Control Tailoring (S-2)](#task-s-2), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](#task-s-5), [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 2: Ongoing Assessments (M-2)](#task-m-2), [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3), [Monitor 4: Authorization Package Updates (M-4)](#task-m-4), [Monitor 6: Ongoing Authorization (M-6)](#task-m-6), [Monitor 7: System Disposal (M-7)](#task-m-7)
 - Informed of: none
 
 Citations:
@@ -4832,8 +4834,8 @@ Approves the program's entry into each acquisition phase at milestones and decis
 - SP 800-37 Rev. 2 roles: Chief Acquisition Officer
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [P-9](#task-p-9), [P-15](#task-p-15), [S-6](#task-s-6), [A-6](#task-a-6)
-- Informed of: [R-4](#task-r-4), [R-5](#task-r-5)
+- Consulted on: [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Select 6: Plan Review and Approval (S-6)](#task-s-6), [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6)
+- Informed of: [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5)
 - Decision authority for: [MDD](#ms-mdd), [MS A](#ms-a), [Dev RFP RD](#ms-drfprd), [MS B](#ms-b), [MS C](#ms-c), [FRP/FD](#ms-frp)
 
 Citations:
@@ -4851,7 +4853,7 @@ Plans and oversees developmental test and evaluation, including cybersecurity DT
 - SP 800-37 Rev. 2 roles: none
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [A-2](#task-a-2), [A-3](#task-a-3)
+- Consulted on: [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3)
 - Informed of: none
 
 Citations:
@@ -4868,7 +4870,7 @@ Plans and conducts independent operational test and evaluation, including cyber 
 - SP 800-37 Rev. 2 roles: none
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [A-2](#task-a-2), [A-3](#task-a-3)
+- Consulted on: [Assess 2: Assessment Plan (A-2)](#task-a-2), [Assess 3: Control Assessments (A-3)](#task-a-3)
 - Informed of: none
 
 Citations:
@@ -4883,9 +4885,9 @@ Owns the capability need and the requirements documents; the mission owner whose
 - Card: [personas/PER-SPONSOR.md](personas/PER-SPONSOR.md)
 - Category: acquisition; appointed by: not specified
 - SP 800-37 Rev. 2 roles: Mission or Business Owner
-- Responsible for: [P-4](#task-p-4), [P-8](#task-p-8), [P-9](#task-p-9), [P-15](#task-p-15), [P-16](#task-p-16)
+- Responsible for: [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 16: Enterprise Architecture (P-16)](#task-p-16)
 - Accountable for: none
-- Consulted on: [P-3](#task-p-3), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-17](#task-p-17), [P-18](#task-p-18), [S-3](#task-s-3)
+- Consulted on: [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 17: Requirements Allocation (P-17)](#task-p-17), [Prepare 18: System Registration (P-18)](#task-p-18), [Select 3: Control Allocation (S-3)](#task-s-3)
 - Informed of: none
 
 Citations:
@@ -4900,9 +4902,9 @@ Contractor or government team that builds and integrates the system, implements 
 - Card: [personas/PER-DEV.md](personas/PER-DEV.md)
 - Category: engineering; appointed by: not specified
 - SP 800-37 Rev. 2 roles: System Administrator
-- Responsible for: [I-1](#task-i-1), [I-2](#task-i-2), [A-5](#task-a-5)
+- Responsible for: [Implement 1: Control Implementation (I-1)](#task-i-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 5: Remediation Actions (A-5)](#task-a-5)
 - Accountable for: none
-- Consulted on: [P-10](#task-p-10), [S-4](#task-s-4), [A-3](#task-a-3)
+- Consulted on: [Prepare 10: Asset Identification (P-10)](#task-p-10), [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Assess 3: Control Assessments (A-3)](#task-a-3)
 - Informed of: none
 
 Citations:
@@ -4919,7 +4921,7 @@ Chairs the board that approves or rejects configuration changes after a security
 - SP 800-37 Rev. 2 roles: none
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [S-4](#task-s-4), [M-1](#task-m-1)
+- Consulted on: [Select 4: Documentation of Planned Control Implementations (S-4)](#task-s-4), [Monitor 1: System and Environment Changes (M-1)](#task-m-1)
 - Informed of: none
 
 Citations:
@@ -4936,7 +4938,7 @@ The senior official appointed for one DoD mission area who represents its intere
 - SP 800-37 Rev. 2 roles: none
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7)
+- Consulted on: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7)
 - Informed of: none
 
 Citations:
@@ -4955,7 +4957,7 @@ The DoD SISO: directs the DoD Cybersecurity Program and the RMF, oversees the RM
 - SP 800-37 Rev. 2 roles: none
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [M-6](#task-m-6)
+- Consulted on: [Monitor 6: Ongoing Authorization (M-6)](#task-m-6)
 - Informed of: none
 
 Citations:
@@ -4974,7 +4976,7 @@ Manages a JCA capability portfolio; under the direction of the DoD ISRMC recomme
 - SP 800-37 Rev. 2 roles: none
 - Responsible for: none
 - Accountable for: none
-- Consulted on: [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7)
+- Consulted on: [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7)
 - Informed of: none
 
 Citations:
@@ -5009,7 +5011,7 @@ The cyberspace and functional operational commanders whose missions the system s
 - Responsible for: none
 - Accountable for: none
 - Consulted on: none
-- Informed of: [R-5](#task-r-5)
+- Informed of: [Authorize 5: Authorization Reporting (R-5)](#task-r-5)
 
 Citations:
 

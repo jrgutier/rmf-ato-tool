@@ -44,7 +44,7 @@ Develop, build and test the system; implement the controls, assess them through 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-c"></a>**MS C** Milestone C | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into production and deployment; fielded systems need a valid authorization before they begin operations. The authorization decision (R-4) should be issued by this point, informed by developmental cybersecurity test results and a threat assessment no older than 12 months. | [R-1](#task-r-1), [R-2](#task-r-2), [R-3](#task-r-3), [R-4](#task-r-4), [R-5](#task-r-5) |
+| <a id="ms-c"></a>**MS C** Milestone C | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into production and deployment; fielded systems need a valid authorization before they begin operations. The authorization decision (R-4) should be issued by this point, informed by developmental cybersecurity test results and a threat assessment no older than 12 months. | [Authorize 1: Authorization Package (R-1)](#task-r-1), [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2), [Authorize 3: Risk Response (R-3)](#task-r-3), [Authorize 4: Authorization Decision (R-4)](#task-r-4), [Authorize 5: Authorization Reporting (R-5)](#task-r-5) |
 
 Sources:
 
@@ -54,10 +54,10 @@ Sources:
 
 | Review | Purpose | RMF evidence the review should see | RMF tasks that feed it |
 |---|---|---|---|
-| <a id="rv-cdr"></a>**CDR** Critical Design Review | Confirm that the detailed design is complete and ready for fabrication, coding and integration. | Control implementation designed into the product baseline (I-1); security plan reflects the as-designed implementation, and the STIG/SRG configurations for each component are chosen. | [I-1](#task-i-1) |
-| <a id="rv-trr"></a>**TRR** Test Readiness Review | Confirm readiness for each developmental test event identified in the TEMP. | Controls implemented and the as-implemented plan updated (I-2); assessor selected and the assessment plan approved (A-1, A-2), with the test events that support the assessment identified; an AD-IATT is in place before testing on live networks or with live data. | [I-2](#task-i-2), [A-1](#task-a-1), [A-2](#task-a-2) |
-| <a id="rv-svr"></a>**SVR/FCA** System Verification Review / Functional Configuration Audit | Confirm that the system as built meets the functional baseline, using test results. | Control assessments complete (A-3), assessment report delivered (A-4) and initial remediation done (A-5). Results from cooperative vulnerability identification and adversarial developmental testing are in the assessment report. | [A-3](#task-a-3), [A-4](#task-a-4), [A-5](#task-a-5) |
-| <a id="rv-prr"></a>**PRR** Production Readiness Review | Confirm that the design is ready for production and the production processes are mature. | POA&M established (A-6) and the authorization package assembled (R-1) so that the authorization decision supports Milestone C; the threat assessment the PM reviews before the ATO is no more than 12 months old. | [A-6](#task-a-6), [R-1](#task-r-1) |
+| <a id="rv-cdr"></a>**CDR** Critical Design Review | Confirm that the detailed design is complete and ready for fabrication, coding and integration. | Control implementation designed into the product baseline (I-1); security plan reflects the as-designed implementation, and the STIG/SRG configurations for each component are chosen. | [Implement 1: Control Implementation (I-1)](#task-i-1) |
+| <a id="rv-trr"></a>**TRR** Test Readiness Review | Confirm readiness for each developmental test event identified in the TEMP. | Controls implemented and the as-implemented plan updated (I-2); assessor selected and the assessment plan approved (A-1, A-2), with the test events that support the assessment identified; an AD-IATT is in place before testing on live networks or with live data. | [Implement 2: Update Control Implementation Information (I-2)](#task-i-2), [Assess 1: Assessor Selection (A-1)](#task-a-1), [Assess 2: Assessment Plan (A-2)](#task-a-2) |
+| <a id="rv-svr"></a>**SVR/FCA** System Verification Review / Functional Configuration Audit | Confirm that the system as built meets the functional baseline, using test results. | Control assessments complete (A-3), assessment report delivered (A-4) and initial remediation done (A-5). Results from cooperative vulnerability identification and adversarial developmental testing are in the assessment report. | [Assess 3: Control Assessments (A-3)](#task-a-3), [Assess 4: Assessment Reports (A-4)](#task-a-4), [Assess 5: Remediation Actions (A-5)](#task-a-5) |
+| <a id="rv-prr"></a>**PRR** Production Readiness Review | Confirm that the design is ready for production and the production processes are mature. | POA&M established (A-6) and the authorization package assembled (R-1) so that the authorization decision supports Milestone C; the threat assessment the PM reviews before the ATO is no more than 12 months old. | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6), [Authorize 1: Authorization Package (R-1)](#task-r-1) |
 
 Sources:
 
@@ -72,23 +72,23 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [I-1](#task-i-1) Control Implementation | Implement | [PM/SO](../../MANUAL.md#per-pm) | [ART-STIG](../../MANUAL.md#art-stig) | — | [CDR](#rv-cdr) |
-| [I-2](#task-i-2) Update Control Implementation Information | Implement | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SD](../../MANUAL.md#art-sd), [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-CP](../../MANUAL.md#art-cp), [ART-IRP](../../MANUAL.md#art-irp) | [TRR](#rv-trr) |
-| [A-1](#task-a-1) Assessor Selection | Assess | [AO](../../MANUAL.md#per-ao) | — | — | [TRR](#rv-trr) |
-| [A-2](#task-a-2) Assessment Plan | Assess | [AO](../../MANUAL.md#per-ao) | [ART-SAP](../../MANUAL.md#art-sap), [ART-AUTHREC](../../MANUAL.md#art-authrec) | — | [TRR](#rv-trr), [IATT](../../MANUAL.md#ad-iatt) |
-| [A-3](#task-a-3) Control Assessments | Assess | [SCA](../../MANUAL.md#per-sca) | [ART-SAR](../../MANUAL.md#art-sar) | [ART-STIG](../../MANUAL.md#art-stig) | [SVR/FCA](#rv-svr), [IATT](../../MANUAL.md#ad-iatt) |
-| [A-4](#task-a-4) Assessment Reports | Assess | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar) | [SVR/FCA](#rv-svr) |
-| [A-5](#task-a-5) Remediation Actions | Assess | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp) | [SVR/FCA](#rv-svr) |
-| [A-6](#task-a-6) Plan of Action and Milestones | Assess | [PM/SO](../../MANUAL.md#per-pm) | [ART-POAM](../../MANUAL.md#art-poam) | — | [PRR](#rv-prr) |
-| [R-1](#task-r-1) Authorization Package | Authorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-PKG](../../MANUAL.md#art-pkg), [ART-DIAS](../../MANUAL.md#art-dias) | — | [MS C](#ms-c), [PRR](#rv-prr) |
-| [R-2](#task-r-2) Risk Analysis and Determination | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-RAR](../../MANUAL.md#art-rar) | [ART-RA](../../MANUAL.md#art-ra) | [MS C](#ms-c) |
-| [R-3](#task-r-3) Risk Response | Authorize | [AO](../../MANUAL.md#per-ao) | — | [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar) | [MS C](#ms-c) |
-| [R-4](#task-r-4) Authorization Decision | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AODM](../../MANUAL.md#art-aodm) | [ART-AUTHREC](../../MANUAL.md#art-authrec) | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
-| [R-5](#task-r-5) Authorization Reporting | Authorize | [AO](../../MANUAL.md#per-ao) | [ART-AUTHRPT](../../MANUAL.md#art-authrpt) | [ART-REG](../../MANUAL.md#art-reg) | [MS C](#ms-c) |
+| [Implement 1: Control Implementation (I-1)](#task-i-1) | Implement | [PM/SO](../../MANUAL.md#per-pm) | [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | — | [CDR](#rv-cdr) |
+| [Implement 2: Update Control Implementation Information (I-2)](#task-i-2) | Implement | [PM/SO](../../MANUAL.md#per-pm) | — | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd), [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv), [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp), [Contingency plan (ART-CP)](../../MANUAL.md#art-cp), [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | [TRR](#rv-trr) |
+| [Assess 1: Assessor Selection (A-1)](#task-a-1) | Assess | [AO](../../MANUAL.md#per-ao) | — | — | [TRR](#rv-trr) |
+| [Assess 2: Assessment Plan (A-2)](#task-a-2) | Assess | [AO](../../MANUAL.md#per-ao) | [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap), [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | — | [TRR](#rv-trr), [IATT](../../MANUAL.md#ad-iatt) |
+| [Assess 3: Control Assessments (A-3)](#task-a-3) | Assess | [SCA](../../MANUAL.md#per-sca) | [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | [SVR/FCA](#rv-svr), [IATT](../../MANUAL.md#ad-iatt) |
+| [Assess 4: Assessment Reports (A-4)](#task-a-4) | Assess | [SCA](../../MANUAL.md#per-sca) | — | [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | [SVR/FCA](#rv-svr) |
+| [Assess 5: Remediation Actions (A-5)](#task-a-5) | Assess | [PM/SO](../../MANUAL.md#per-pm) | — | [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | [SVR/FCA](#rv-svr) |
+| [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) | Assess | [PM/SO](../../MANUAL.md#per-pm) | [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | — | [PRR](#rv-prr) |
+| [Authorize 1: Authorization Package (R-1)](#task-r-1) | Authorize | [PM/SO](../../MANUAL.md#per-pm) | [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg), [Digital Identity Acceptance Statement (ART-DIAS)](../../MANUAL.md#art-dias) | — | [MS C](#ms-c), [PRR](#rv-prr) |
+| [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) | Authorize | [AO](../../MANUAL.md#per-ao) | [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | [MS C](#ms-c) |
+| [Authorize 3: Risk Response (R-3)](#task-r-3) | Authorize | [AO](../../MANUAL.md#per-ao) | — | [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | [MS C](#ms-c) |
+| [Authorize 4: Authorization Decision (R-4)](#task-r-4) | Authorize | [AO](../../MANUAL.md#per-ao) | [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | [MS C](#ms-c), [IOC](PH-PD.md#ms-ioc), [ATO](../../MANUAL.md#ad-ato), [ATO w/ conditions](../../MANUAL.md#ad-atoc), [DATO](../../MANUAL.md#ad-dato), [ATU](../../MANUAL.md#ad-atu), [DATU](../../MANUAL.md#ad-datu), [CCA](../../MANUAL.md#ad-cca), [DCCA](../../MANUAL.md#ad-dcca) |
+| [Authorize 5: Authorization Reporting (R-5)](#task-r-5) | Authorize | [AO](../../MANUAL.md#per-ao) | [Authorization report (ART-AUTHRPT)](../../MANUAL.md#art-authrpt) | [System registration (ART-REG)](../../MANUAL.md#art-reg) | [MS C](#ms-c) |
 
-Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#task-s-4), [S-5](PH-TMRR.md#task-s-5).
+Also active in this phase (described in their primary phase): [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4), [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5).
 
-## <a id="task-i-1"></a>I-1 · Control Implementation
+## <a id="task-i-1"></a>Implement 1: Control Implementation (I-1)
 
 *[Implement](../../MANUAL.md#step-i) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -107,21 +107,21 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](PH-MSA.md#task-p-8) (supporting artifact) |
-| [EXT-STIG](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](PH-MSA.md#task-p-8) (supporting artifact) |
+| [DISA STIGs and SRGs, and other secure configuration guidance (EXT-STIG)](../../MANUAL.md#ext-stig) | DISA STIGs and SRGs, and other secure configuration guidance | outside input (reference) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | produces | supporting |
+| [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | STIG/SRG summary | produces | supporting |
 
 **Entry criteria**
 
@@ -149,9 +149,9 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 
 **Playbook:** [playbooks/I/I-1.md](../../playbooks/I/I-1.md)
 
-**Cross-references:** depends on [S-6](PH-TMRR.md#task-s-6); required by [I-2](#task-i-2).
+**Cross-references:** depends on [Select 6: Plan Review and Approval (S-6)](PH-TMRR.md#task-s-6); required by [Implement 2: Update Control Implementation Information (I-2)](#task-i-2).
 
-## <a id="task-i-2"></a>I-2 · Update Control Implementation Information
+## <a id="task-i-2"></a>Implement 2: Update Control Implementation Information (I-2)
 
 *[Implement](../../MANUAL.md#step-i) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -170,20 +170,20 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | STIG/SRG summary | [Implement 1: Control Implementation (I-1)](#task-i-1) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | updates | core |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
-| [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | updates | core |
-| [ART-CP](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
-| [ART-IRP](../../MANUAL.md#art-irp) | Incident response plan | updates | core |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | updates | core |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
+| [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp) | Configuration management plan | updates | core |
+| [Contingency plan (ART-CP)](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
+| [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -211,9 +211,9 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 
 **Playbook:** [playbooks/I/I-2.md](../../playbooks/I/I-2.md)
 
-**Cross-references:** depends on [I-1](#task-i-1); required by [A-2](#task-a-2); receives feedback from [A-5](#task-a-5).
+**Cross-references:** depends on [Implement 1: Control Implementation (I-1)](#task-i-1); required by [Assess 2: Assessment Plan (A-2)](#task-a-2); receives feedback from [Assess 5: Remediation Actions (A-5)](#task-a-5).
 
-## <a id="task-a-1"></a>A-1 · Assessor Selection
+## <a id="task-a-1"></a>Assess 1: Assessor Selection (A-1)
 
 *[Assess](../../MANUAL.md#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -233,10 +233,10 @@ Also active in this phase (described in their primary phase): [S-4](PH-TMRR.md#t
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
@@ -250,8 +250,8 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 - An assessor or assessment team is selected, with the appropriate level of independence (DoDI 8510.01 Table 5 outcome).
 - The selected SCA and the basis for its independence are recorded (interview and journal DECISION), ready for the SAP team (A-2).
-- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; sap.yaml carries both (ATEAM-001, ASMT-007).
-- sap.yaml assessor_independence.consulted names the CIO, the senior agency official for privacy and the senior agency information security officer the AO consults on assessor independence, and the Office of the Inspector General where the organization has one (INDEP-001).
+- The CISO has verified each assessor's qualification, and the AO has determined the degree of independence required; A-2 records both in sap.yaml (ATEAM-001, ASMT-007), so `--task A-1` cannot judge them, and the A-1 interviews must hold them for A-2 to cite.
+- sap.yaml assessor_independence.consulted names the CIO, the senior agency official for privacy and the senior agency information security officer the AO consults on assessor independence, and the Office of the Inspector General where the organization has one (INDEP-001, judged once A-2 writes sap.yaml).
 
 **Alignment**
 
@@ -267,9 +267,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-1.md](../../playbooks/A/A-1.md)
 
-**Cross-references:** depends on [S-6](PH-TMRR.md#task-s-6); required by [A-2](#task-a-2).
+**Cross-references:** depends on [Select 6: Plan Review and Approval (S-6)](PH-TMRR.md#task-s-6); required by [Assess 2: Assessment Plan (A-2)](#task-a-2).
 
-## <a id="task-a-2"></a>A-2 · Assessment Plan
+## <a id="task-a-2"></a>Assess 2: Assessment Plan (A-2)
 
 *[Assess](../../MANUAL.md#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -288,22 +288,22 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-BASELINE](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [S-1](PH-TMRR.md#task-s-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](PH-MSA.md#task-p-15) (supporting artifact) |
-| [EXT-TEST-STRATEGY](../../MANUAL.md#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Tailored control baseline, tailoring and allocation (ART-BASELINE)](../../MANUAL.md#art-baseline) | Tailored control baseline, tailoring and allocation | [Select 1: Control Selection (S-1)](PH-TMRR.md#task-s-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [SP 800-53A assessment procedures (EXT-ASSESSMENT-PROCEDURES)](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](PH-MSA.md#task-p-15) (supporting artifact) |
+| [Test and evaluation master plan or test strategy (EXT-TEST-STRATEGY)](../../MANUAL.md#ext-test-strategy) | Test and evaluation master plan or test strategy | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | produces | core |
-| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | produces | core |
+| [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | produces | core |
+| [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | Authorization ledger | produces | core |
 
 **Entry criteria**
 
@@ -340,9 +340,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-2.md](../../playbooks/A/A-2.md)
 
-**Cross-references:** depends on [A-1](#task-a-1), [I-2](#task-i-2); required by [A-3](#task-a-3).
+**Cross-references:** depends on [Assess 1: Assessor Selection (A-1)](#task-a-1), [Implement 2: Update Control Implementation Information (I-2)](#task-i-2); required by [Assess 3: Control Assessments (A-3)](#task-a-3).
 
-## <a id="task-a-3"></a>A-3 · Control Assessments
+## <a id="task-a-3"></a>Assess 3: Control Assessments (A-3)
 
 *[Assess](../../MANUAL.md#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -362,19 +362,19 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
-| [EXT-TEST-RESULTS](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
-| [EXT-ASSESSMENT-PROCEDURES](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
-| [EXT-SOFTWARE-EVIDENCE](../../MANUAL.md#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
+| [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | STIG/SRG summary | [Implement 1: Control Implementation (I-1)](#task-i-1) (supporting artifact) |
+| [Developmental and operational test results (EXT-TEST-RESULTS)](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
+| [SP 800-53A assessment procedures (EXT-ASSESSMENT-PROCEDURES)](../../MANUAL.md#ext-assessment-procedures) | SP 800-53A assessment procedures | outside input (reference) |
+| [Machine-readable software evidence (EXT-SOFTWARE-EVIDENCE)](../../MANUAL.md#ext-software-evidence) | Machine-readable software evidence | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | produces | core |
-| [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | updates | supporting |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | produces | core |
+| [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | STIG/SRG summary | updates | supporting |
 
 **Entry criteria**
 
@@ -405,9 +405,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-3.md](../../playbooks/A/A-3.md)
 
-**Cross-references:** depends on [A-2](#task-a-2); required by [A-4](#task-a-4).
+**Cross-references:** depends on [Assess 2: Assessment Plan (A-2)](#task-a-2); required by [Assess 4: Assessment Reports (A-4)](#task-a-4).
 
-## <a id="task-a-4"></a>A-4 · Assessment Reports
+## <a id="task-a-4"></a>Assess 4: Assessment Reports (A-4)
 
 *[Assess](../../MANUAL.md#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -427,13 +427,13 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 
 **Entry criteria**
 
@@ -461,9 +461,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-4.md](../../playbooks/A/A-4.md)
 
-**Cross-references:** depends on [A-3](#task-a-3); required by [A-5](#task-a-5).
+**Cross-references:** depends on [Assess 3: Control Assessments (A-3)](#task-a-3); required by [Assess 5: Remediation Actions (A-5)](#task-a-5).
 
-## <a id="task-a-5"></a>A-5 · Remediation Actions
+## <a id="task-a-5"></a>Assess 5: Remediation Actions (A-5)
 
 *[Assess](../../MANUAL.md#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -482,18 +482,18 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -519,9 +519,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-5.md](../../playbooks/A/A-5.md)
 
-**Cross-references:** depends on [A-4](#task-a-4); required by [A-6](#task-a-6); feeds back to [I-2](#task-i-2); receives feedback from [M-3](PH-OS.md#task-m-3).
+**Cross-references:** depends on [Assess 4: Assessment Reports (A-4)](#task-a-4); required by [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6); feeds back to [Implement 2: Update Control Implementation Information (I-2)](#task-i-2); receives feedback from [Monitor 3: Ongoing Risk Response (M-3)](PH-OS.md#task-m-3).
 
-## <a id="task-a-6"></a>A-6 · Plan of Action and Milestones
+## <a id="task-a-6"></a>Assess 6: Plan of Action and Milestones (A-6)
 
 *[Assess](../../MANUAL.md#step-a) step · system level · primary phase [EMD](#ph-emd) · required · at least 1 stakeholder interview*
 
@@ -541,17 +541,17 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-STIG](../../MANUAL.md#art-stig) | STIG/SRG summary | [I-1](#task-i-1) (supporting artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [STIG/SRG summary (ART-STIG)](../../MANUAL.md#art-stig) | STIG/SRG summary | [Implement 1: Control Implementation (I-1)](#task-i-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | produces | core |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | produces | core |
 
 **Entry criteria**
 
@@ -578,9 +578,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/A/A-6.md](../../playbooks/A/A-6.md)
 
-**Cross-references:** depends on [A-5](#task-a-5); required by [R-1](#task-r-1).
+**Cross-references:** depends on [Assess 5: Remediation Actions (A-5)](#task-a-5); required by [Authorize 1: Authorization Package (R-1)](#task-r-1).
 
-## <a id="task-r-1"></a>R-1 · Authorization Package
+## <a id="task-r-1"></a>Authorize 1: Authorization Package (R-1)
 
 *[Authorize](../../MANUAL.md#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 0 stakeholder interviews*
 
@@ -600,19 +600,19 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](#task-a-3) (core artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](#task-a-2) (core artifact) |
-| [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
-| [ART-PIA](../../MANUAL.md#art-pia) | Privacy impact assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [Program protection plan (EXT-PPP)](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [Privacy impact assessment (ART-PIA)](../../MANUAL.md#art-pia) | Privacy impact assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | produces | supporting |
-| [ART-DIAS](../../MANUAL.md#art-dias) | Digital Identity Acceptance Statement | produces | core |
+| [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg) | Authorization package manifest | produces | supporting |
+| [Digital Identity Acceptance Statement (ART-DIAS)](../../MANUAL.md#art-dias) | Digital Identity Acceptance Statement | produces | core |
 
 **Entry criteria**
 
@@ -646,9 +646,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-1.md](../../playbooks/R/R-1.md)
 
-**Cross-references:** depends on [A-6](#task-a-6); required by [R-2](#task-r-2).
+**Cross-references:** depends on [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6); required by [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2).
 
-## <a id="task-r-2"></a>R-2 · Risk Analysis and Determination
+## <a id="task-r-2"></a>Authorize 2: Risk Analysis and Determination (R-2)
 
 *[Authorize](../../MANUAL.md#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -668,17 +668,17 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | produces | core |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | produces | core |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
 
 **Entry criteria**
 
@@ -707,9 +707,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-2.md](../../playbooks/R/R-2.md)
 
-**Cross-references:** depends on [R-1](#task-r-1); required by [R-3](#task-r-3); receives feedback from [M-6](PH-OS.md#task-m-6).
+**Cross-references:** depends on [Authorize 1: Authorization Package (R-1)](#task-r-1); required by [Authorize 3: Risk Response (R-3)](#task-r-3); receives feedback from [Monitor 6: Ongoing Authorization (M-6)](PH-OS.md#task-m-6).
 
-## <a id="task-r-3"></a>R-3 · Risk Response
+## <a id="task-r-3"></a>Authorize 3: Risk Response (R-3)
 
 *[Authorize](../../MANUAL.md#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -728,19 +728,19 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [EXT-ADM](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Acquisition decisions and determinations (EXT-ADM)](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
 
 **Entry criteria**
 
@@ -770,9 +770,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-3.md](../../playbooks/R/R-3.md)
 
-**Cross-references:** depends on [R-2](#task-r-2); required by [R-4](#task-r-4).
+**Cross-references:** depends on [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2); required by [Authorize 4: Authorization Decision (R-4)](#task-r-4).
 
-## <a id="task-r-4"></a>R-4 · Authorization Decision
+## <a id="task-r-4"></a>Authorize 4: Authorization Decision (R-4)
 
 *[Authorize](../../MANUAL.md#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -792,17 +792,17 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](#task-r-2) (core artifact) |
-| [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](#task-a-6) (core artifact) |
-| [EXT-ADM](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](#task-r-2) (core artifact) |
+| [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](#task-a-6) (core artifact) |
+| [Acquisition decisions and determinations (EXT-ADM)](../../MANUAL.md#ext-adm) | Acquisition decisions and determinations | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | produces | core |
-| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
+| [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | AO decision memo | produces | core |
+| [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
 
 **Entry criteria**
 
@@ -839,9 +839,9 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-4.md](../../playbooks/R/R-4.md)
 
-**Cross-references:** depends on [R-3](#task-r-3); required by [R-5](#task-r-5), [M-1](PH-OS.md#task-m-1).
+**Cross-references:** depends on [Authorize 3: Risk Response (R-3)](#task-r-3); required by [Authorize 5: Authorization Reporting (R-5)](#task-r-5), [Monitor 1: System and Environment Changes (M-1)](PH-OS.md#task-m-1).
 
-## <a id="task-r-5"></a>R-5 · Authorization Reporting
+## <a id="task-r-5"></a>Authorize 5: Authorization Reporting (R-5)
 
 *[Authorize](../../MANUAL.md#step-r) step · system level · primary phase [EMD](#ph-emd) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -861,16 +861,16 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | [R-4](#task-r-4) (core artifact) |
-| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | [A-2](#task-a-2) (core artifact) |
-| [ART-PKG](../../MANUAL.md#art-pkg) | Authorization package manifest | [R-1](#task-r-1) (supporting artifact) |
+| [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | AO decision memo | [Authorize 4: Authorization Decision (R-4)](#task-r-4) (core artifact) |
+| [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | Authorization ledger | [Assess 2: Assessment Plan (A-2)](#task-a-2) (core artifact) |
+| [Authorization package manifest (ART-PKG)](../../MANUAL.md#art-pkg) | Authorization package manifest | [Authorize 1: Authorization Package (R-1)](#task-r-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AUTHRPT](../../MANUAL.md#art-authrpt) | Authorization report | produces | supporting |
-| [ART-REG](../../MANUAL.md#art-reg) | System registration | updates | supporting |
+| [Authorization report (ART-AUTHRPT)](../../MANUAL.md#art-authrpt) | Authorization report | produces | supporting |
+| [System registration (ART-REG)](../../MANUAL.md#art-reg) | System registration | updates | supporting |
 
 **Entry criteria**
 
@@ -896,4 +896,4 @@ No artifact. The task is done when its interviews are recorded and its checks pa
 
 **Playbook:** [playbooks/R/R-5.md](../../playbooks/R/R-5.md)
 
-**Cross-references:** depends on [R-4](#task-r-4); required by no later task.
+**Cross-references:** depends on [Authorize 4: Authorization Decision (R-4)](#task-r-4); required by no later task.

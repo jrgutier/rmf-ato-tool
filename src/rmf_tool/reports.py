@@ -16,7 +16,7 @@ import statistics
 from typing import Any
 
 from rmf_tool import baseline as baseline_mod
-from rmf_tool import build, refs
+from rmf_tool import build, labels, refs
 from rmf_tool.check.context import Context
 from rmf_tool.check.rules.content import SSP_DIR, family_records
 from rmf_tool.findings import Finding, report
@@ -183,11 +183,12 @@ def status_markdown(run: Run, st: Status, m: dict[str, Any]) -> str:
         lines.append("Next: none, every active task is done (`rmf check --final`).")
     else:
         fam = f" (family {st.family})" if st.family else ""
-        lines.append(f"Next: {st.next} {st.tasks[st.next].name}{fam}.")
-    lines += ["", "| Task | Name | State | Done | Missing |", "|---|---|---|---|---|"]
+        lines.append(f"Next: {labels.task_label(st.next, st.tasks[st.next].name, run.repo)}"
+                     f"{fam}.")
+    lines += ["", "| Task | State | Done | Missing |", "|---|---|---|---|"]
     for s in st.tasks.values():
         detail = "; ".join(s.missing) or (s.rationale if s.state != scope.ACTIVE else "") or ""
-        lines.append(f"| {s.id} | {_cell(s.name)} | {s.state} | "
+        lines.append(f"| {_cell(labels.task_label(s.id, s.name, run.repo))} | {s.state} | "
                      f"{'yes' if s.done else 'no'} | {_cell(detail) or '-'} |")
     return "\n".join(lines) + "\n"
 

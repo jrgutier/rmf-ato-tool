@@ -24,6 +24,7 @@ TAILORING = baseline_mod.TAILORING_FILE
 ALLOCATION_FILE = "artifacts/data/allocation.yaml"
 CAPABILITIES_FILE = "artifacts/data/capabilities.yaml"
 REQ_FILE = "artifacts/ART-REQ.md"
+REQS_DATA_FILE = "artifacts/data/requirements.yaml"
 RISK_ASSESSMENT = "ART-RA"
 # Who accepts the risk of a compensating control: the AO or a designee. Only the authorization
 # decision itself is non-delegable (DoDI 8510.01 p. 28); CNSSI 1253 p. 15 says "AO (or designee)".
@@ -639,7 +640,19 @@ def requirement_trace(ctx: Context) -> list[RunFinding]:
             "security and privacy requirements it satisfies")
     for req in sorted(set(traced) - defined):
         err(f"{', '.join(traced[req])} traces to {req}, which is not a requirement of ART-REQ")
+    # a design policy requirement no control carries (Section 508, the IT Standards Registry)
+    # may be met by design or verification instead (F-05-2)
+    outside = {str(r.get("id")): r for r in (ctx.data(REQS_DATA_FILE) or {}).get("requirements")
+               or [] if isinstance(r, dict) and r.get("satisfied_by")}
     for req in sorted(defined - set(traced)):
+        r = outside.get(req)
+        if r is not None and r.get("policy"):
+            continue
+        if r is not None:
+            err(f"the requirement {req} is marked satisfied_by {r.get('satisfied_by')}, but only "
+                "a requirement carrying a design policy statement may be met outside the "
+                "control set")
+            continue
         err(f"the requirement {req} is satisfied by no control; traceability of controls to "
             "the requirements ensures all requirements are addressed")
     return out

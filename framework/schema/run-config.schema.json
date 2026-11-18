@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:rmf-tool:schema:run-config",
   "title": "runs/<run-id>/run.yaml",
-  "description": "Run configuration (plan §7.1, §7.3); validated by RUN-CFG-001. Written by rmf run init; the agent edits only humans, scope, seeded, lifecycle_stop*, include_after_stop and deferred.",
+  "description": "Run configuration (plan \u00a77.1, \u00a77.3); validated by RUN-CFG-001. Written by rmf run init; the agent edits only humans, scope, seeded, lifecycle_stop*, include_after_stop and deferred.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -41,6 +41,11 @@
       "description": "RFC 3339; becomes OSCAL metadata.last-modified.",
       "type": "string",
       "format": "date-time"
+    },
+    "clock": {
+      "description": "Simulated date the run has reached (YYYY-MM-DD), set by `rmf run clock set`; date rules read it instead of as_of. A synthetic run's assessment, decision and monitoring happen after it starts.",
+      "type": "string",
+      "format": "date"
     },
     "framework_version": {
       "type": "string",
@@ -187,7 +192,7 @@
       "minLength": 1
     },
     "deferred": {
-      "description": "Explicit deferrals (plan §7.3 precedence 2).",
+      "description": "Explicit deferrals (plan \u00a77.3 precedence 2).",
       "type": "object",
       "additionalProperties": false,
       "patternProperties": {
@@ -215,7 +220,7 @@
       }
     },
     "control_subset": {
-      "description": "Test scenarios only: restrict the resolved baseline to these controls.",
+      "description": "Test scenarios and rehearsal runs (a dry run, a training run): restrict the resolved baseline to these controls; S-2 tailoring additions still pass. The baseline ID gets -SUBSET-<n>, so every artifact shows the package is partial.",
       "type": "array",
       "items": {
         "$ref": "#/$defs/control_id"

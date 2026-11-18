@@ -306,3 +306,94 @@ def test_type_authorization_used_with_site_specific_controls_needs_no_facility(t
     messages = _auty_002(run_dir)
     assert not any("facility" in m for m in messages), messages
     assert not any("does not say whether" in m for m in messages), messages
+
+
+def test_no_mission_critical_function_is_an_honest_answer(tmp_path):
+    """F-02-1: a system with no mission-critical function records an empty list and says why;
+    the schema accepts it and SCRM-002 then asks for no TSN practice."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def none(d):
+        d["criticality"]["functions"] = []
+        d["criticality"]["none_rationale"] = "The BIA records no mission-critical function."
+        for s in d.get("suppliers") or []:
+            s.pop("functions", None)
+    edit_yaml(run_dir / "artifacts/data/scrm.yaml", none)
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = engine.select(run, engine.evaluate(run), final=True)
+    assert not [f for f in found if f.severity == "E" and
+                (f.rule.startswith("SCRM") or f.rule == "RUN-FM-001")], [
+        (f.rule, f.message) for f in found if f.severity == "E"]
+
+
+def test_low_risk_connection_may_introduce_nothing(tmp_path):
+    """F-02-2: a low-risk connection with no weakness records an empty list and says why."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def none(d):
+        d["external"]["connections"][0]["introduces"] = []
+        d["external"]["connections"][0]["none_rationale"] = "The ISSM names no open weakness."
+    edit_yaml(run_dir / "artifacts/data/ra.yaml", none)
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = engine.select(run, engine.evaluate(run), final=True)
+    assert not [f for f in found if f.severity == "E" and f.rule == "RUN-FM-001"], [
+        f.message for f in found if f.rule == "RUN-FM-001"]
+
+
+def _untrace_req01(run_dir, **fields):
+    def alloc(d):
+        for a in d["allocations"]:
+            if "REQ-01" in (a.get("requirements") or []):
+                a["requirements"] = [r for r in a["requirements"] if r != "REQ-01"]
+    edit_yaml(run_dir / "artifacts/data/allocation.yaml", alloc)
+    edit_yaml(run_dir / "artifacts/data/requirements.yaml",
+              lambda d: d["requirements"][0].update(fields))
+    run = open_run(run_dir, REPO_ROOT)
+    return [f.finding.message for f in engine.evaluate(run).findings if f.rule == "TLR-009"]
+
+
+def test_design_policy_requirement_may_be_met_outside_the_controls(tmp_path):
+    """F-05-2: Section 508 has no control; such a requirement is met by design or test."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    assert not _untrace_req01(run_dir, satisfied_by="verification")
+
+
+def test_only_a_design_policy_requirement_is_met_outside_the_controls(tmp_path):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    found = _untrace_req01(run_dir, satisfied_by="design", policy=[])
+    assert any("only a requirement carrying a design policy statement" in m for m in found)
+
+
+def test_untraced_requirement_still_fails(tmp_path):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    assert any("REQ-01 is satisfied by no control" in m for m in _untrace_req01(run_dir))
+
+
+def test_a_draft_pia_is_recordable_but_not_authorized_on(tmp_path):
+    """F-02-9: a draft PIA records no approval, submission or publication; the schema and
+    PRIV-004 accept it, and PRIV-003 refuses only the authorization decision taken on it."""
+    run_dir = base_copy("pii", tmp_path / "pii")
+
+    def draft(d):
+        d["status"] = "draft"
+        for key in ("approval", "reviews", "submission", "publication"):
+            d.pop(key, None)
+    edit_yaml(run_dir / "artifacts/data/pia.yaml", draft)
+    build.build(open_run(run_dir, REPO_ROOT))
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f for f in engine.select(run, engine.evaluate(run), final=True)
+             if f.severity == "E"]
+    assert {f.rule for f in found} == {"PRIV-003"}, [(f.rule, f.message) for f in found]
+    assert all("the PIA is still draft" in f.message for f in found)
+
+
+def test_gap_closed_note_answers_xcon_001(tmp_path):
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+    edit_yaml(run_dir / "artifacts/ssp/controls/au.yaml",
+              lambda d: d["controls"][0].update(status="partial"))
+    edit_yaml(run_dir / "artifacts/sar/results/au.yaml",
+              lambda d: d["determinations"][0].update(gap_closed="Audit of logons enabled."))
+    run = open_run(run_dir, REPO_ROOT)
+    assert not [f for f in engine.evaluate(run).findings if f.rule == "XCON-001"]

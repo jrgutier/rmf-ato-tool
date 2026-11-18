@@ -17,7 +17,7 @@ from typing import Any
 
 import jinja2
 
-from rmf_tool import refs
+from rmf_tool import labels, refs
 from rmf_tool.findings import Finding
 from rmf_tool.framework import graph
 from rmf_tool.framework.load import display_path, load
@@ -30,7 +30,8 @@ RULE = "FW-MAN-001"
 TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates" / "manual"
 RACI = (("R", "Responsible"), ("A", "Accountable"), ("C", "Consulted"), ("I", "Informed"))
 PERSONA_RACI = ("Responsible for", "Accountable for", "Consulted on", "Informed of")
-# Link label per entity kind; tasks, artifacts, external inputs and references use the ID.
+# Link label per entity kind; tasks read 'Prepare 1: Name (P-1)', artifacts and outside inputs
+# 'Name (ID)', references their ID.
 _LABEL_FIELD = {"phases": "short", "milestones": "short", "reviews": "short",
                 "decisions": "short", "personas": "short", "pathways": "short", "steps": "name"}
 
@@ -164,6 +165,7 @@ def model(fw: Framework, index: Any, source: str) -> dict[str, Any]:
         tid = t["id"]
         aligned = t.get("aligned_with") or {}
         t["step_name"] = step_names.get(t["step"], t["step"])
+        t["label"] = labels.task_label(tid, str(t.get("name", "")), step_names)
         t["other_phases"] = [p for p in t.get("phases") or [] if p != t["primary_phase"]]
         t["raci_rows"] = [(label, _raci(t, k)) for k, label in RACI if _raci(t, k)]
         t["required_by"] = where(lambda x, tid=tid: tid in (x.get("depends_on") or []))
@@ -229,7 +231,13 @@ def model(fw: Framework, index: Any, source: str) -> dict[str, Any]:
                         ("pathways", pathways), ("tasks", tasks), ("refs", references)):
         field = _LABEL_FIELD.get(kind)
         for item in items:
-            kinds[item["id"]] = (kind, str(item[field]) if field else item["id"])
+            if kind == "tasks":
+                label = item["label"]
+            elif kind in ("artifacts", "external_inputs"):
+                label = labels.named(item["id"], str(item.get("name", "")))
+            else:
+                label = str(item[field]) if field else item["id"]
+            kinds[item["id"]] = (kind, label)
 
     return {
         "meta": plain(fw.meta), "source": source, "phases": phases,

@@ -26,7 +26,7 @@ def test_task_done_requires_outputs_touched_and_task_rules_pass(minimal_run):
     (minimal_run / "artifacts/ART-CP.md").unlink()
     st = status_of(minimal_run)
     assert not st.tasks["S-4"].done
-    assert "ART-CP missing (artifacts/ART-CP.md)" in st.tasks["S-4"].missing
+    assert "Contingency plan (ART-CP) missing (artifacts/ART-CP.md)" in st.tasks["S-4"].missing
     assert st.next == "S-4"
 
     (minimal_run / "artifacts/ssp/controls/si.yaml").unlink()

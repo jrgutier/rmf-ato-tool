@@ -225,7 +225,9 @@ def offerings(ctx: Context) -> list[RunFinding]:
         if la is None:
             err(f"{oid}: leverages no authorization in leveraged-authorizations.yaml, so the "
                 "existing authorization and its documentation are not reused")
-        elif la.get("arrangement") != "external-service":
+        elif la.get("arrangement") not in ("external-service", "common-control-provider"):
+            # a cloud offering that also provides common controls keeps the common control
+            # provider arrangement, so MLEV-001 still checks it (F-06-2)
             err(f"{oid}: {la.get('id')} is not an IT service authorized by another "
                 f"organization (arrangement {la.get('arrangement')})")
         elif la.get("decision") != "AD-ATO":

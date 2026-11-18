@@ -29,6 +29,12 @@
 # needs no tests/agent/scenarios file (so AGENT-001 does not track it). The finished run is
 # copied back over DIR in the repo.
 #
+# --fork runs/<id> drives a fork's own run (AGENTS.md fork workflow): like --run-dir, but the
+# run may live under runs/ and the prompt is tests/agent/prompts/<s>.md when it exists, else
+# templates/agent/fork-session.md with {{RUN}} filled in. <scenario> then only names the work
+# and results directories. The loop itself is agent-agnostic: any CLI that takes a prompt
+# and is limited to `uv run rmf` and file tools can replace `claude -p` in session_argv().
+#
 # Environment: AGENT_BUDGET_USD (per session, default 5), AGENT_MAX_SESSIONS (default 12),
 # AGENT_TOTAL_BUDGET_USD (stop starting sessions once the sessions so far cost this much;
 # default unlimited).
@@ -44,11 +50,13 @@ DRY=0
 PROBE=1
 SCENARIO=""
 RUN_DIR=""
+FORK=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY=1 ;;
     --no-probe) PROBE=0 ;;
     --run-dir) [[ $# -ge 2 ]] || usage 2; RUN_DIR=${2%/}; shift ;;
+    --fork) [[ $# -ge 2 ]] || usage 2; RUN_DIR=${2%/}; FORK=1; shift ;;
     -h|--help) usage 0 ;;
     -*) echo "agent-run: unknown option $1" >&2; usage 2 ;;
     *) [[ -z $SCENARIO ]] || usage 2; SCENARIO=$1 ;;
@@ -63,11 +71,16 @@ PROMPT_FILE="tests/agent/prompts/$SCENARIO.md"
 if [[ -n $RUN_DIR ]]; then
   # The finished run is rsync'd back with --delete, so DIR must stay inside the repo, and
   # top-level runs/ is excluded from the work copy.
-  [[ $RUN_DIR != /* && /$RUN_DIR/ != */../* && $RUN_DIR != runs/* ]] \
-    || die "--run-dir must be a repo-relative path outside runs/ without '..': $RUN_DIR"
+  [[ $RUN_DIR != /* && /$RUN_DIR/ != */../* ]] \
+    || die "--run-dir must be a repo-relative path without '..': $RUN_DIR"
+  [[ $FORK == 1 || $RUN_DIR != runs/* ]] \
+    || die "a run under runs/ is a fork's own run: use --fork $RUN_DIR"
   [[ -f $REPO/$RUN_DIR/run.yaml ]] || die "no run at $RUN_DIR (run.yaml missing)"
 else
   [[ -f $REPO/$SCENARIO_FILE ]] || die "no scenario $SCENARIO_FILE"
+fi
+if [[ $FORK == 1 && ! -f $REPO/$PROMPT_FILE ]]; then
+  PROMPT_FILE="templates/agent/fork-session.md"
 fi
 [[ -f $REPO/$PROMPT_FILE ]] || die "no prompt $PROMPT_FILE"
 for tool in claude uv jq rsync shasum; do
@@ -101,6 +114,11 @@ rsync -a --delete --exclude .git/lfs --exclude .venv --exclude .venv-agent \
   --exclude references/pdf --exclude tests/agent/results --exclude /runs \
   --exclude __pycache__ --exclude .pytest_cache --exclude .ruff_cache "$REPO/" "$WORK/"
 mkdir -p "$LOGS"
+if [[ $RUN_DIR == runs/* ]]; then
+  # top-level runs/ is excluded above so no other run is visible; bring in this one only
+  mkdir -p "$WORK/$RUN_DIR"
+  rsync -a "$REPO/$RUN_DIR/" "$WORK/$RUN_DIR/"
+fi
 
 # --- 2. environment --------------------------------------------------------------------
 export UV_PROJECT_ENVIRONMENT="$REPO/.venv-agent"
@@ -151,7 +169,8 @@ check_argv() {
 }
 
 prompt_for() {  # $1: RMF step letter
-  printf '%s Current step: %s. Start with: uv run rmf status' "$(cat "$PROMPT_FILE")" "$1"
+  printf '%s Current step: %s. Start with: uv run rmf status' \
+    "$(sed "s|{{RUN}}|$RUN|g" "$PROMPT_FILE")" "$1"
 }
 
 canary() {  # a heading of the user's global CLAUDE.md that the project files do not contain

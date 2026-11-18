@@ -302,3 +302,60 @@ def rar_courses(ctx: Context) -> list[RunFinding]:
             err(f"{r.get('id')} has no selected_response stating who is responsible and how "
                 "effectiveness is judged")
     return out
+
+
+# --- XCON-001 and XCON-002: the SSP, the STIG results and the SAR agree ---------------------
+
+GAP_STATUSES = ("partial", "planned")
+CLEAN_STATUSES = ("implemented", "inherited")
+
+
+def _ssp_controls(ctx: Context) -> dict[str, dict[str, Any]]:
+    return {str(c.get("control_id")): c for _, c in family_records(ctx, SSP_DIR, "controls")}
+
+
+def ssp_sar_agree(ctx: Context) -> list[RunFinding]:
+    """XCON-001 (F-12-1): a control the SSP records as partial or planned, or with an open STIG
+    finding, is determined satisfied only with a `gap_closed` note saying what closed the gap."""
+    if not scope.produced_or_seeded(ctx.run, "ART-SAR"):
+        return []
+    ssp = _ssp_controls(ctx)
+    stig_open = {str(f.get("control_id")) for f in _items(ctx, STIG_FILE, "findings") or []
+                 if f.get("status") == "open" and f.get("control_id")}
+    out: list[RunFinding] = []
+    for rel, d in family_records(ctx, SAR_DIR, "determinations"):
+        cid = str(d.get("control_id"))
+        if d.get("result") != "satisfied" or str(d.get("gap_closed") or "").strip():
+            continue
+        status = (ssp.get(cid) or {}).get("status")
+        if status in GAP_STATUSES:
+            why = f"the SSP records it as {status}"
+        elif cid in stig_open:
+            why = "stig-summary.yaml has an open finding on it"
+        else:
+            continue
+        out.append(make("XCON-001", f"{cid} is determined satisfied, but {why}; say in "
+                        "gap_closed what closed the gap, or determine it other than satisfied",
+                        rel, None, {"A-3"}))
+    return out
+
+
+def stig_ssp_agree(ctx: Context) -> list[RunFinding]:
+    """XCON-002 (F-10-7): an open STIG finding mapped to a control the SSP calls implemented
+    or inherited is named in that control's statement, so the two records do not contradict
+    each other silently."""
+    findings = _items(ctx, STIG_FILE, "findings")
+    if not findings:
+        return []
+    ssp = _ssp_controls(ctx)
+    out: list[RunFinding] = []
+    for f in findings:
+        cid, fid = str(f.get("control_id") or ""), str(f.get("id"))
+        control = ssp.get(cid)
+        if f.get("status") != "open" or control is None:
+            continue
+        if control.get("status") in CLEAN_STATUSES and fid not in str(control.get("statement")):
+            out.append(make("XCON-002", f"{fid} is open on {cid}, which the SSP records as "
+                            f"{control.get('status')} without naming {fid}", STIG_FILE, None,
+                            {"I-1"}))
+    return out

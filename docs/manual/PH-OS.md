@@ -40,7 +40,7 @@ Sustain the fielded system; monitor controls continuously, manage changes, keep 
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-foc"></a>**FOC** Full Operational Capability | event | — | The system is fully fielded and sustained; security posture is maintained through continuous monitoring and ongoing authorization. Without ongoing authorization, IT and PIT systems update their ATO at least every three years, depending on risk. | [M-6](#task-m-6) |
+| <a id="ms-foc"></a>**FOC** Full Operational Capability | event | — | The system is fully fielded and sustained; security posture is maintained through continuous monitoring and ongoing authorization. Without ongoing authorization, IT and PIT systems update their ATO at least every three years, depending on risk. | [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) |
 
 Sources:
 
@@ -52,17 +52,17 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [M-1](#task-m-1) System and Environment Changes | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-CHG](../../MANUAL.md#art-chg) | [ART-INV](../../MANUAL.md#art-inv), [ART-CMP](../../MANUAL.md#art-cmp), [ART-POAM](../../MANUAL.md#art-poam), [ART-SAR](../../MANUAL.md#art-sar), [ART-SSP](../../MANUAL.md#art-ssp), [ART-CP](../../MANUAL.md#art-cp), [ART-BIA](../../MANUAL.md#art-bia) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
-| [M-2](#task-m-2) Ongoing Assessments | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [ART-SAR](../../MANUAL.md#art-sar), [ART-CONMON](../../MANUAL.md#art-conmon), [ART-SVCA](../../MANUAL.md#art-svca), [ART-SAP](../../MANUAL.md#art-sap) | — |
-| [M-3](#task-m-3) Ongoing Risk Response | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-RA](../../MANUAL.md#art-ra), [ART-POAM](../../MANUAL.md#art-poam), [ART-RAR](../../MANUAL.md#art-rar), [ART-SAR](../../MANUAL.md#art-sar) | — |
-| [M-4](#task-m-4) Authorization Package Updates | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-SSP](../../MANUAL.md#art-ssp), [ART-SAR](../../MANUAL.md#art-sar), [ART-POAM](../../MANUAL.md#art-poam), [ART-RA](../../MANUAL.md#art-ra), [ART-IRP](../../MANUAL.md#art-irp) | — |
-| [M-5](#task-m-5) Security and Privacy Reporting | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-SECRPT](../../MANUAL.md#art-secrpt) | — | — |
-| [M-6](#task-m-6) Ongoing Authorization | Monitor | [AO](../../MANUAL.md#per-ao) | — | [ART-AODM](../../MANUAL.md#art-aodm), [ART-AUTHREC](../../MANUAL.md#art-authrec), [ART-RAR](../../MANUAL.md#art-rar) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
-| [M-7](#task-m-7) System Disposal | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [ART-DISP](../../MANUAL.md#art-disp) | [ART-INV](../../MANUAL.md#art-inv), [ART-SSP](../../MANUAL.md#art-ssp) | — |
+| [Monitor 1: System and Environment Changes (M-1)](#task-m-1) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv), [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Contingency plan (ART-CP)](../../MANUAL.md#art-cp), [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | [IOC](PH-PD.md#ms-ioc), [PCA](PH-PD.md#rv-pca) |
+| [Monitor 2: Ongoing Assessments (M-2)](#task-m-2) | Monitor | [SCA](../../MANUAL.md#per-sca) | — | [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon), [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca), [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | — |
+| [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3) | Monitor | [AO](../../MANUAL.md#per-ao) | — | [System risk assessment (ART-RA)](../../MANUAL.md#art-ra), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | — |
+| [Monitor 4: Authorization Package Updates (M-4)](#task-m-4) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | — | [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp), [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar), [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam), [System risk assessment (ART-RA)](../../MANUAL.md#art-ra), [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | — |
+| [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [Security and privacy posture report (ART-SECRPT)](../../MANUAL.md#art-secrpt) | — | — |
+| [Monitor 6: Ongoing Authorization (M-6)](#task-m-6) | Monitor | [AO](../../MANUAL.md#per-ao) | — | [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm), [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec), [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | [FOC](#ms-foc), [cATO](../../MANUAL.md#ad-cato), [Continue](../../MANUAL.md#ad-cont), [cATO revoked](../../MANUAL.md#ad-rcato), [Rescinded](../../MANUAL.md#ad-resc), [DATO](../../MANUAL.md#ad-dato), [DATU](../../MANUAL.md#ad-datu), [DCCA](../../MANUAL.md#ad-dcca) |
+| [Monitor 7: System Disposal (M-7)](#task-m-7) | Monitor | [PM/SO](../../MANUAL.md#per-pm) | [Disposal plan (ART-DISP)](../../MANUAL.md#art-disp) | [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv), [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | — |
 
-Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#task-p-3).
+Also active in this phase (described in their primary phase): [Prepare 3: Risk Assessment—Organization (P-3)](PH-MSA.md#task-p-3).
 
-## <a id="task-m-1"></a>M-1 · System and Environment Changes
+## <a id="task-m-1"></a>Monitor 1: System and Environment Changes (M-1)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -82,33 +82,33 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
-| [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
-| [EXT-CHANGE-REQUESTS](../../MANUAL.md#ext-change-requests) | Configuration change requests | outside input (operational) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
-| [EXT-MONITORING](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5) (core artifact) |
+| [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp) | Configuration management plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](PH-EMD.md#task-a-6) (core artifact) |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](PH-EMD.md#task-r-2) (core artifact) |
+| [Configuration change requests (EXT-CHANGE-REQUESTS)](../../MANUAL.md#ext-change-requests) | Configuration change requests | outside input (operational) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](PH-EMD.md#task-a-3) (core artifact) |
+| [Continuous monitoring data (EXT-MONITORING)](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | produces | supporting |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
-| [ART-CMP](../../MANUAL.md#art-cmp) | Configuration management plan | updates | core |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
-| [ART-CP](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
+| [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | Change log and security impact analyses | produces | supporting |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
+| [Configuration management plan (ART-CMP)](../../MANUAL.md#art-cmp) | Configuration management plan | updates | core |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [Contingency plan (ART-CP)](../../MANUAL.md#art-cp) | Contingency plan | updates | core |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 **Entry criteria**
 
@@ -147,9 +147,9 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 
 **Playbook:** [playbooks/M/M-1.md](../../playbooks/M/M-1.md)
 
-**Cross-references:** depends on [R-4](PH-EMD.md#task-r-4); required by [M-2](#task-m-2); feeds back to [P-11](PH-MSA.md#task-p-11), [C-1](PH-MSA.md#task-c-1).
+**Cross-references:** depends on [Authorize 4: Authorization Decision (R-4)](PH-EMD.md#task-r-4); required by [Monitor 2: Ongoing Assessments (M-2)](#task-m-2); feeds back to [Prepare 11: Authorization Boundary (P-11)](PH-MSA.md#task-p-11), [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1).
 
-## <a id="task-m-2"></a>M-2 · Ongoing Assessments
+## <a id="task-m-2"></a>Monitor 2: Ongoing Assessments (M-2)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -169,25 +169,25 @@ Also active in this phase (described in their primary phase): [P-3](PH-MSA.md#ta
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | [A-2](PH-EMD.md#task-a-2) (core artifact) |
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
-| [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | [S-4](PH-TMRR.md#task-s-4) (supporting artifact) |
-| [EXT-MONITORING](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [EXT-TEST-RESULTS](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5) (core artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | [Assess 2: Assessment Plan (A-2)](PH-EMD.md#task-a-2) (core artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](PH-EMD.md#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](PH-EMD.md#task-a-6) (core artifact) |
+| [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca) | Cybersecurity service agreements | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (supporting artifact) |
+| [Continuous monitoring data (EXT-MONITORING)](../../MANUAL.md#ext-monitoring) | Continuous monitoring data | outside input (operational) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Developmental and operational test results (EXT-TEST-RESULTS)](../../MANUAL.md#ext-test-results) | Developmental and operational test results | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | updates | core |
-| [ART-SVCA](../../MANUAL.md#art-svca) | Cybersecurity service agreements | updates | supporting |
-| [ART-SAP](../../MANUAL.md#art-sap) | Security assessment plan | updates | core |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | updates | core |
+| [Cybersecurity service agreements (ART-SVCA)](../../MANUAL.md#art-svca) | Cybersecurity service agreements | updates | supporting |
+| [Security assessment plan (ART-SAP)](../../MANUAL.md#art-sap) | Security assessment plan | updates | core |
 
 **Entry criteria**
 
@@ -215,9 +215,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-2.md](../../playbooks/M/M-2.md)
 
-**Cross-references:** depends on [M-1](#task-m-1), [S-5](PH-TMRR.md#task-s-5); required by [M-3](#task-m-3).
+**Cross-references:** depends on [Monitor 1: System and Environment Changes (M-1)](#task-m-1), [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5); required by [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3).
 
-## <a id="task-m-3"></a>M-3 · Ongoing Risk Response
+## <a id="task-m-3"></a>Monitor 3: Ongoing Risk Response (M-3)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -236,26 +236,26 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | [R-2](PH-EMD.md#task-r-2) (core artifact) |
-| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [EXT-INSPECTIONS](../../MANUAL.md#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
-| [EXT-DIRECTIVES](../../MANUAL.md#ext-directives) | Directed actions | outside input (operational) |
-| [EXT-VDP](../../MANUAL.md#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](PH-EMD.md#task-a-3) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](PH-EMD.md#task-a-6) (core artifact) |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | [Authorize 2: Risk Analysis and Determination (R-2)](PH-EMD.md#task-r-2) (core artifact) |
+| [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | Change log and security impact analyses | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Readiness inspection and outside evaluation findings (EXT-INSPECTIONS)](../../MANUAL.md#ext-inspections) | Readiness inspection and outside evaluation findings | outside input (operational) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [Directed actions (EXT-DIRECTIVES)](../../MANUAL.md#ext-directives) | Directed actions | outside input (operational) |
+| [Vulnerability disclosure reports (EXT-VDP)](../../MANUAL.md#ext-vdp) | Vulnerability disclosure reports | outside input (operational) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
 
 **Entry criteria**
 
@@ -296,9 +296,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-3.md](../../playbooks/M/M-3.md)
 
-**Cross-references:** depends on [M-2](#task-m-2); required by [M-4](#task-m-4); feeds back to [A-5](PH-EMD.md#task-a-5).
+**Cross-references:** depends on [Monitor 2: Ongoing Assessments (M-2)](#task-m-2); required by [Monitor 4: Authorization Package Updates (M-4)](#task-m-4); feeds back to [Assess 5: Remediation Actions (A-5)](PH-EMD.md#task-a-5).
 
-## <a id="task-m-4"></a>M-4 · Authorization Package Updates
+## <a id="task-m-4"></a>Monitor 4: Authorization Package Updates (M-4)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -318,23 +318,23 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](PH-EMD.md#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](PH-EMD.md#task-a-6) (core artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | Change log and security impact analyses | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) (supporting artifact) |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
-| [ART-IRP](../../MANUAL.md#art-irp) | Incident response plan | updates | core |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | updates | core |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | updates | core |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | updates | supporting |
+| [Incident response plan (ART-IRP)](../../MANUAL.md#art-irp) | Incident response plan | updates | core |
 
 **Entry criteria**
 
@@ -364,9 +364,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-4.md](../../playbooks/M/M-4.md)
 
-**Cross-references:** depends on [M-3](#task-m-3); required by [M-5](#task-m-5).
+**Cross-references:** depends on [Monitor 3: Ongoing Risk Response (M-3)](#task-m-3); required by [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5).
 
-## <a id="task-m-5"></a>M-5 · Security and Privacy Reporting
+## <a id="task-m-5"></a>Monitor 5: Security and Privacy Reporting (M-5)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -386,20 +386,20 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SAR](../../MANUAL.md#art-sar) | Security assessment report | [A-3](PH-EMD.md#task-a-3) (core artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
-| [ART-CONMON](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [S-5](PH-TMRR.md#task-s-5) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-CHG](../../MANUAL.md#art-chg) | Change log and security impact analyses | [M-1](#task-m-1) (supporting artifact) |
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](PH-MSA.md#task-c-1) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
+| [Security assessment report (ART-SAR)](../../MANUAL.md#art-sar) | Security assessment report | [Assess 3: Control Assessments (A-3)](PH-EMD.md#task-a-3) (core artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](PH-EMD.md#task-a-6) (core artifact) |
+| [Continuous monitoring strategy (ART-CONMON)](../../MANUAL.md#art-conmon) | Continuous monitoring strategy | [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Change log and security impact analyses (ART-CHG)](../../MANUAL.md#art-chg) | Change log and security impact analyses | [Monitor 1: System and Environment Changes (M-1)](#task-m-1) (supporting artifact) |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](PH-MSA.md#task-c-1) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SECRPT](../../MANUAL.md#art-secrpt) | Security and privacy posture report | produces | supporting |
+| [Security and privacy posture report (ART-SECRPT)](../../MANUAL.md#art-secrpt) | Security and privacy posture report | produces | supporting |
 
 **Entry criteria**
 
@@ -436,9 +436,9 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-5.md](../../playbooks/M/M-5.md)
 
-**Cross-references:** depends on [M-4](#task-m-4); required by [M-6](#task-m-6); feeds back to [P-7](PH-MSA.md#task-p-7).
+**Cross-references:** depends on [Monitor 4: Authorization Package Updates (M-4)](#task-m-4); required by [Monitor 6: Ongoing Authorization (M-6)](#task-m-6); feeds back to [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](PH-MSA.md#task-p-7).
 
-## <a id="task-m-6"></a>M-6 · Ongoing Authorization
+## <a id="task-m-6"></a>Monitor 6: Ongoing Authorization (M-6)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) (continues in [P&D](PH-PD.md#ph-pd)) · required · at least 1 stakeholder interview*
 
@@ -458,20 +458,20 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SECRPT](../../MANUAL.md#art-secrpt) | Security and privacy posture report | [M-5](#task-m-5) (supporting artifact) |
-| [ART-POAM](../../MANUAL.md#art-poam) | Plan of action and milestones | [A-6](PH-EMD.md#task-a-6) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [EXT-ISCM-ASSESSMENT](../../MANUAL.md#ext-iscm-assessment) | ISCM program assessment report | outside input (organization) |
+| [Security and privacy posture report (ART-SECRPT)](../../MANUAL.md#art-secrpt) | Security and privacy posture report | [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5) (supporting artifact) |
+| [Plan of action and milestones (ART-POAM)](../../MANUAL.md#art-poam) | Plan of action and milestones | [Assess 6: Plan of Action and Milestones (A-6)](PH-EMD.md#task-a-6) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [ISCM program assessment report (EXT-ISCM-ASSESSMENT)](../../MANUAL.md#ext-iscm-assessment) | ISCM program assessment report | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-AODM](../../MANUAL.md#art-aodm) | AO decision memo | updates | core |
-| [ART-AUTHREC](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
-| [ART-RAR](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
+| [AO decision memo (ART-AODM)](../../MANUAL.md#art-aodm) | AO decision memo | updates | core |
+| [Authorization ledger (ART-AUTHREC)](../../MANUAL.md#art-authrec) | Authorization ledger | updates | core |
+| [Risk assessment report (ART-RAR)](../../MANUAL.md#art-rar) | Risk assessment report | updates | core |
 
 Writes to `facts.yaml`: `acquisition`.
 
@@ -518,9 +518,9 @@ Writes to `facts.yaml`: `acquisition`.
 
 **Playbook:** [playbooks/M/M-6.md](../../playbooks/M/M-6.md)
 
-**Cross-references:** depends on [M-5](#task-m-5); required by [M-7](#task-m-7); feeds back to [R-2](PH-EMD.md#task-r-2).
+**Cross-references:** depends on [Monitor 5: Security and Privacy Reporting (M-5)](#task-m-5); required by [Monitor 7: System Disposal (M-7)](#task-m-7); feeds back to [Authorize 2: Risk Analysis and Determination (R-2)](PH-EMD.md#task-r-2).
 
-## <a id="task-m-7"></a>M-7 · System Disposal
+## <a id="task-m-7"></a>Monitor 7: System Disposal (M-7)
 
 *[Monitor](../../MANUAL.md#step-m) step · system level · primary phase [O&S](#ph-os) · required · at least 1 stakeholder interview*
 
@@ -540,18 +540,18 @@ Writes to `facts.yaml`: `acquisition`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | [S-4](PH-TMRR.md#task-s-4) (core artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](PH-MSA.md#task-p-10) (core artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](PH-MSA.md#task-p-14) (supporting artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](PH-MSA.md#task-p-1) (supporting artifact) |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | [Select 4: Documentation of Planned Control Implementations (S-4)](PH-TMRR.md#task-s-4) (core artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](PH-MSA.md#task-p-10) (core artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](PH-MSA.md#task-p-14) (supporting artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](PH-MSA.md#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-DISP](../../MANUAL.md#art-disp) | Disposal plan | produces | supporting |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
-| [ART-SSP](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
+| [Disposal plan (ART-DISP)](../../MANUAL.md#art-disp) | Disposal plan | produces | supporting |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | updates | core |
+| [System Security Plan (ART-SSP)](../../MANUAL.md#art-ssp) | System Security Plan | updates | core |
 
 **Entry criteria**
 
@@ -577,4 +577,4 @@ Not tied to a specific acquisition event; runs as part of its phase.
 
 **Playbook:** [playbooks/M/M-7.md](../../playbooks/M/M-7.md)
 
-**Cross-references:** depends on [M-6](#task-m-6); required by no later task.
+**Cross-references:** depends on [Monitor 6: Ongoing Authorization (M-6)](#task-m-6); required by no later task.

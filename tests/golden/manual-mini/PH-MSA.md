@@ -34,7 +34,7 @@ Choose the materiel solution and start the RMF.
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-a"></a>**MS A** Milestone A | milestone | — | Approve entry into technology maturation. | [P-11](#task-p-11), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) |
+| <a id="ms-a"></a>**MS A** Milestone A | milestone | — | Approve entry into technology maturation. | [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
 
 ## MSA task summary
 
@@ -42,12 +42,12 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [P-11](#task-p-11) Authorization Boundary | Prepare | [AO](../../MANUAL.md#per-ao) | [ART-BND](../../MANUAL.md#art-bnd) | — | [MS A](#ms-a) |
-| [C-1](#task-c-1) System Description | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-SD](../../MANUAL.md#art-sd) | [ART-BND](../../MANUAL.md#art-bnd) | [MS A](#ms-a) |
-| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-CAT](../../MANUAL.md#art-cat) | — | [MS A](#ms-a) |
-| [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](../../MANUAL.md#per-ao) | — | [ART-CAT](../../MANUAL.md#art-cat) | [MS A](#ms-a) |
+| [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | Prepare | [AO](../../MANUAL.md#per-ao) | [Authorization boundary (ART-BND)](../../MANUAL.md#art-bnd) | — | [MS A](#ms-a) |
+| [Categorize 1: System Description (C-1)](#task-c-1) | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [System description (ART-SD)](../../MANUAL.md#art-sd) | [Authorization boundary (ART-BND)](../../MANUAL.md#art-bnd) | [MS A](#ms-a) |
+| [Categorize 2: Security Categorization (C-2)](#task-c-2) | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | — | [MS A](#ms-a) |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | Categorize | [AO](../../MANUAL.md#per-ao) | — | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | [MS A](#ms-a) |
 
-## <a id="task-p-11"></a>P-11 · Authorization Boundary
+## <a id="task-p-11"></a>Prepare 11: Authorization Boundary (P-11)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -64,13 +64,13 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary | produces | core |
+| [Authorization boundary (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary | produces | core |
 
 Writes to `facts.yaml`: `boundary_id`.
 
@@ -92,9 +92,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-11.md](../../playbooks/P/P-11.md)
 
-**Cross-references:** depends on nothing; required by [C-1](#task-c-1).
+**Cross-references:** depends on nothing; required by [Categorize 1: System Description (C-1)](#task-c-1).
 
-## <a id="task-c-1"></a>C-1 · System Description
+## <a id="task-c-1"></a>Categorize 1: System Description (C-1)
 
 *[Categorize](../../MANUAL.md#step-c) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -113,15 +113,15 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary | [P-11](#task-p-11) (core artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Authorization boundary (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SD](../../MANUAL.md#art-sd) | System description | produces | core |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary | updates | core |
+| [System description (ART-SD)](../../MANUAL.md#art-sd) | System description | produces | core |
+| [Authorization boundary (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary | updates | core |
 
 Writes to `facts.yaml`: `system_id`, `system_name`.
 
@@ -143,9 +143,9 @@ Writes to `facts.yaml`: `system_id`, `system_name`.
 
 **Playbook:** [playbooks/C/C-1.md](../../playbooks/C/C-1.md)
 
-**Cross-references:** depends on [P-11](#task-p-11); required by [C-2](#task-c-2).
+**Cross-references:** depends on [Prepare 11: Authorization Boundary (P-11)](#task-p-11); required by [Categorize 2: Security Categorization (C-2)](#task-c-2).
 
-## <a id="task-c-2"></a>C-2 · Security Categorization
+## <a id="task-c-2"></a>Categorize 2: Security Categorization (C-2)
 
 *[Categorize](../../MANUAL.md#step-c) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -163,13 +163,13 @@ Writes to `facts.yaml`: `system_id`, `system_name`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SD](../../MANUAL.md#art-sd) | System description | [C-1](#task-c-1) (core artifact) |
+| [System description (ART-SD)](../../MANUAL.md#art-sd) | System description | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | produces | core |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | produces | core |
 
 Writes to `facts.yaml`: `categorization`.
 
@@ -192,9 +192,9 @@ Writes to `facts.yaml`: `categorization`.
 
 **Playbook:** [playbooks/C/C-2.md](../../playbooks/C/C-2.md)
 
-**Cross-references:** depends on [C-1](#task-c-1); required by [C-3](#task-c-3); receives feedback from [R-4](PH-EMD.md#task-r-4).
+**Cross-references:** depends on [Categorize 1: System Description (C-1)](#task-c-1); required by [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3); receives feedback from [Authorize 4: Authorization Decision (R-4)](PH-EMD.md#task-r-4).
 
-## <a id="task-c-3"></a>C-3 · Security Categorization Review and Approval
+## <a id="task-c-3"></a>Categorize 3: Security Categorization Review and Approval (C-3)
 
 *[Categorize](../../MANUAL.md#step-c) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -213,13 +213,13 @@ Writes to `facts.yaml`: `categorization`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | updates | core |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | updates | core |
 
 Writes to `facts.yaml`: `categorization.approved`.
 
@@ -241,4 +241,4 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](../../playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [R-4](PH-EMD.md#task-r-4).
+**Cross-references:** depends on [Categorize 2: Security Categorization (C-2)](#task-c-2); required by [Authorize 4: Authorization Decision (R-4)](PH-EMD.md#task-r-4).

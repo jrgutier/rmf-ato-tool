@@ -36,7 +36,9 @@ directory, for example `runs/20261105-synthetic-01`.
      `artifacts/<ART-ID>.md` (the S-4 plan stubs have no template; their playbook gives the
      shape);
    - structured data: start from the matching `templates/data/*.yaml` and replace every
-     example value;
+     example value; `uv run rmf schema show <name>` lists every field (required ones
+     marked `*`) and `uv run rmf schema template <name>` prints a skeleton when no
+     template exists, so you never need to read the schema or rule source;
    - an artifact an earlier task or a seed wrote: Read it, then Write the whole file back
      with your task appended to `touched_by` and your section added; never drop what is
      there;
@@ -60,7 +62,15 @@ directory, for example `runs/20261105-synthetic-01`.
    append a RETRY entry first and record a lesson. Why: JOURNAL-001 needs a CHECKPOINT per
    completed step, and the next session reads the journal to see what happened.
 9. **Loop.** Go back to step 1. End the session after the CHECKPOINT that completes the
-   session unit (step 2), or when `rmf status` reports the run done.
+   session unit (step 2), or when `rmf status` reports the run done. Close each session's
+   journal with a NOTE saying what the next session owes; it is the most useful hand-off.
+
+## Simulated time
+
+A synthetic run covers months in hours. When a task records events after the run's current
+date (the assessment window, the decision, monitoring), first move the clock with
+`uv run rmf run clock set YYYY-MM-DD` and journal a NOTE for what happened in between. Date
+rules read the clock, so do not invent progress to satisfy them.
 
 ## Entering past P-1
 

@@ -1,4 +1,4 @@
-# Rule registry (plan §6.5): 387 rules, 38 repo-scope and 349 run-scope. Authoritative;
+# Rule registry (plan §6.5): 389 rules, 38 repo-scope and 351 run-scope. Authoritative;
 # docs/CHECKS.md is generated from it (Phase 6). `phase` is the phase from which a rule is
 # enforced (plan §5.0); `applies_after` gates non --final run checks (null: always).
 # Validated by registry.schema.json. Never renumber or reuse a rule ID (INV-3).
@@ -7156,3 +7156,23 @@ rules:
       - REQ-DODI8510.01-0233
       - REQ-DODI8510.01-0304
       - REQ-FIPS200-0041
+  - id: XCON-001
+    scope: run
+    severity: E
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: A-3
+    summary: "a control the SSP records as partial or planned, or with an open STIG finding, is determined satisfied without a gap_closed note"
+    fixture: tests/fixtures/negative/XCON-001.yaml
+    hint: "Determine the control other-than-satisfied with a finding, or say in the determination's gap_closed what closed the gap since the SSP was written (and update the SSP status at I-2 or M-4)."
+  - id: XCON-002
+    scope: run
+    severity: W
+    ac: [AC-16]
+    phase: p11
+    since: 0.2.0
+    applies_after: I-1
+    summary: "an open STIG finding is mapped to a control the SSP records as implemented or inherited, and the control's statement does not name it"
+    fixture: tests/fixtures/negative/XCON-002.yaml
+    hint: "Map the STIG finding to the control whose statement covers it, or name the finding (STG-###) in the control's statement and mark the control partial."

@@ -6,54 +6,54 @@ Mode: synthetic. Active tasks done: 43/44; deferred 0, lifecycle 3, out of scope
 
 SSP statements: 50/50. SAR determinations: 50/50.
 
-Next: M-5 Security and Privacy Reporting.
+Next: Monitor 5: Security and Privacy Reporting (M-5).
 
-| Task | Name | State | Done | Missing |
-|---|---|---|---|---|
-| P-1 | Risk Management Roles | active | yes | - |
-| P-2 | Risk Management Strategy | active | yes | - |
-| P-3 | Risk Assessment—Organization | active | yes | - |
-| P-4 | Organizationally-Tailored Control Baselines and CSF Profiles | active | yes | - |
-| P-5 | Common Control Identification | active | yes | - |
-| P-6 | Impact-Level Prioritization | active | yes | - |
-| P-7 | Continuous Monitoring Strategy—Organization | active | yes | - |
-| P-8 | Mission or Business Focus | active | yes | - |
-| P-9 | System Stakeholders | active | yes | - |
-| P-10 | Asset Identification | active | yes | - |
-| P-11 | Authorization Boundary | active | yes | - |
-| P-12 | Information Types | active | yes | - |
-| P-13 | Information Life Cycle | active | yes | - |
-| P-14 | Risk Assessment—System | active | yes | - |
-| P-15 | Requirements Definition | active | yes | - |
-| P-16 | Enterprise Architecture | active | yes | - |
-| P-17 | Requirements Allocation | active | yes | - |
-| P-18 | System Registration | active | yes | - |
-| C-1 | System Description | active | yes | - |
-| C-2 | Security Categorization | active | yes | - |
-| C-3 | Security Categorization Review and Approval | active | yes | - |
-| S-1 | Control Selection | active | yes | - |
-| S-2 | Control Tailoring | active | yes | - |
-| S-3 | Control Allocation | active | yes | - |
-| S-4 | Documentation of Planned Control Implementations | active | yes | - |
-| S-5 | Continuous Monitoring Strategy—System | active | yes | - |
-| S-6 | Plan Review and Approval | active | yes | - |
-| I-1 | Control Implementation | active | yes | - |
-| I-2 | Update Control Implementation Information | active | yes | - |
-| A-1 | Assessor Selection | active | yes | - |
-| A-2 | Assessment Plan | active | yes | - |
-| A-3 | Control Assessments | active | yes | - |
-| A-4 | Assessment Reports | active | yes | - |
-| A-5 | Remediation Actions | active | yes | - |
-| A-6 | Plan of Action and Milestones | active | yes | - |
-| R-1 | Authorization Package | active | yes | - |
-| R-2 | Risk Analysis and Determination | active | yes | - |
-| R-3 | Risk Response | active | yes | - |
-| R-4 | Authorization Decision | active | yes | - |
-| R-5 | Authorization Reporting | active | yes | - |
-| M-1 | System and Environment Changes | active | yes | - |
-| M-2 | Ongoing Assessments | active | yes | - |
-| M-3 | Ongoing Risk Response | active | yes | - |
-| M-4 | Authorization Package Updates | lifecycle | no | Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data. |
-| M-5 | Security and Privacy Reporting | active | no | MRPT-001: 1 error(s) |
-| M-6 | Ongoing Authorization | lifecycle | no | Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data. |
-| M-7 | System Disposal | lifecycle | no | Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data. |
+| Task | State | Done | Missing |
+|---|---|---|---|
+| Prepare 1: Risk Management Roles (P-1) | active | yes | - |
+| Prepare 2: Risk Management Strategy (P-2) | active | yes | - |
+| Prepare 3: Risk Assessment—Organization (P-3) | active | yes | - |
+| Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4) | active | yes | - |
+| Prepare 5: Common Control Identification (P-5) | active | yes | - |
+| Prepare 6: Impact-Level Prioritization (P-6) | active | yes | - |
+| Prepare 7: Continuous Monitoring Strategy—Organization (P-7) | active | yes | - |
+| Prepare 8: Mission or Business Focus (P-8) | active | yes | - |
+| Prepare 9: System Stakeholders (P-9) | active | yes | - |
+| Prepare 10: Asset Identification (P-10) | active | yes | - |
+| Prepare 11: Authorization Boundary (P-11) | active | yes | - |
+| Prepare 12: Information Types (P-12) | active | yes | - |
+| Prepare 13: Information Life Cycle (P-13) | active | yes | - |
+| Prepare 14: Risk Assessment—System (P-14) | active | yes | - |
+| Prepare 15: Requirements Definition (P-15) | active | yes | - |
+| Prepare 16: Enterprise Architecture (P-16) | active | yes | - |
+| Prepare 17: Requirements Allocation (P-17) | active | yes | - |
+| Prepare 18: System Registration (P-18) | active | yes | - |
+| Categorize 1: System Description (C-1) | active | yes | - |
+| Categorize 2: Security Categorization (C-2) | active | yes | - |
+| Categorize 3: Security Categorization Review and Approval (C-3) | active | yes | - |
+| Select 1: Control Selection (S-1) | active | yes | - |
+| Select 2: Control Tailoring (S-2) | active | yes | - |
+| Select 3: Control Allocation (S-3) | active | yes | - |
+| Select 4: Documentation of Planned Control Implementations (S-4) | active | yes | - |
+| Select 5: Continuous Monitoring Strategy—System (S-5) | active | yes | - |
+| Select 6: Plan Review and Approval (S-6) | active | yes | - |
+| Implement 1: Control Implementation (I-1) | active | yes | - |
+| Implement 2: Update Control Implementation Information (I-2) | active | yes | - |
+| Assess 1: Assessor Selection (A-1) | active | yes | - |
+| Assess 2: Assessment Plan (A-2) | active | yes | - |
+| Assess 3: Control Assessments (A-3) | active | yes | - |
+| Assess 4: Assessment Reports (A-4) | active | yes | - |
+| Assess 5: Remediation Actions (A-5) | active | yes | - |
+| Assess 6: Plan of Action and Milestones (A-6) | active | yes | - |
+| Authorize 1: Authorization Package (R-1) | active | yes | - |
+| Authorize 2: Risk Analysis and Determination (R-2) | active | yes | - |
+| Authorize 3: Risk Response (R-3) | active | yes | - |
+| Authorize 4: Authorization Decision (R-4) | active | yes | - |
+| Authorize 5: Authorization Reporting (R-5) | active | yes | - |
+| Monitor 1: System and Environment Changes (M-1) | active | yes | - |
+| Monitor 2: Ongoing Assessments (M-2) | active | yes | - |
+| Monitor 3: Ongoing Risk Response (M-3) | active | yes | - |
+| Monitor 4: Authorization Package Updates (M-4) | lifecycle | no | Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data. |
+| Monitor 5: Security and Privacy Reporting (M-5) | active | no | MRPT-001: 1 error(s) |
+| Monitor 6: Ongoing Authorization (M-6) | lifecycle | no | Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data. |
+| Monitor 7: System Disposal (M-7) | lifecycle | no | Dry run of the fork workflow: MVCR release 1.5 is not yet deployed; stop at the initial authorization and simulate one monitoring cycle on the pilot data. |

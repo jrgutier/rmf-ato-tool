@@ -44,8 +44,8 @@ Analyze materiel solutions to the validated capability need and select a preferr
 
 | Event | Kind | Decision authority | What it decides | RMF tasks that feed it |
 |---|---|---|---|---|
-| <a id="ms-mdd"></a>**MDD** Materiel Development Decision | decision point | [MDA](../../MANUAL.md#per-mda) | Enter the acquisition process on a validated capability need; the point at which RMF activities should begin (system inception). The organization-level Prepare tasks (P-1 to P-7) should already be in place so that system-level Prepare starts with the program; a program that starts the RMF late must still complete it. | [P-1](#task-p-1), [P-2](#task-p-2), [P-3](#task-p-3), [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7) |
-| <a id="ms-a"></a>**MS A** Milestone A | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into technology maturation; the approved security categorization informs the program's cybersecurity strategy. Milestone A also approves the acquisition strategy, including program protection, and considers the test strategy, so the system-level Prepare outputs (system risk assessment, security and privacy requirements) and the Categorize step should be complete. | [P-8](#task-p-8), [P-9](#task-p-9), [P-10](#task-p-10), [P-11](#task-p-11), [P-12](#task-p-12), [P-13](#task-p-13), [P-14](#task-p-14), [P-15](#task-p-15), [P-18](#task-p-18), [C-1](#task-c-1), [C-2](#task-c-2), [C-3](#task-c-3) |
+| <a id="ms-mdd"></a>**MDD** Materiel Development Decision | decision point | [MDA](../../MANUAL.md#per-mda) | Enter the acquisition process on a validated capability need; the point at which RMF activities should begin (system inception). The organization-level Prepare tasks (P-1 to P-7) should already be in place so that system-level Prepare starts with the program; a program that starts the RMF late must still complete it. | [Prepare 1: Risk Management Roles (P-1)](#task-p-1), [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) |
+| <a id="ms-a"></a>**MS A** Milestone A | milestone | [MDA](../../MANUAL.md#per-mda) | Approve entry into technology maturation; the approved security categorization informs the program's cybersecurity strategy. Milestone A also approves the acquisition strategy, including program protection, and considers the test strategy, so the system-level Prepare outputs (system risk assessment, security and privacy requirements) and the Categorize step should be complete. | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8), [Prepare 9: System Stakeholders (P-9)](#task-p-9), [Prepare 10: Asset Identification (P-10)](#task-p-10), [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12), [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14), [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18), [Categorize 1: System Description (C-1)](#task-c-1), [Categorize 2: Security Categorization (C-2)](#task-c-2), [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) |
 
 Sources:
 
@@ -58,29 +58,29 @@ Tasks are listed in the order they can start: every task comes after the tasks i
 
 | Task | Step | Accountable | Produces | Updates | Feeds |
 |---|---|---|---|---|---|
-| [P-1](#task-p-1) Risk Management Roles | Prepare | [Component CIO](../../MANUAL.md#per-cio) | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | — | [MDD](#ms-mdd) |
-| [P-2](#task-p-2) Risk Management Strategy | Prepare | [Component CIO](../../MANUAL.md#per-cio) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-3](#task-p-3) Risk Assessment—Organization | Prepare | [RE](../../MANUAL.md#per-re) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-4](#task-p-4) Organizationally-Tailored Control Baselines and CSF Profiles *(optional)* | Prepare | [RE](../../MANUAL.md#per-re) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-5](#task-p-5) Common Control Identification | Prepare | [Component CISO](../../MANUAL.md#per-ciso) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-6](#task-p-6) Impact-Level Prioritization *(optional)* | Prepare | [RE](../../MANUAL.md#per-re) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-7](#task-p-7) Continuous Monitoring Strategy—Organization | Prepare | [RE](../../MANUAL.md#per-re) | — | [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
-| [P-8](#task-p-8) Mission or Business Focus | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-BIA](../../MANUAL.md#art-bia) | — | [MS A](#ms-a) |
-| [P-9](#task-p-9) System Stakeholders | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-STAKE](../../MANUAL.md#art-stake) | — | [MS A](#ms-a) |
-| [P-10](#task-p-10) Asset Identification | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-INV](../../MANUAL.md#art-inv) | — | [MS A](#ms-a) |
-| [P-11](#task-p-11) Authorization Boundary | Prepare | [AO](../../MANUAL.md#per-ao) | [ART-BND](../../MANUAL.md#art-bnd) | — | [MS A](#ms-a) |
-| [P-12](#task-p-12) Information Types | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | — | [MS A](#ms-a) |
-| [P-13](#task-p-13) Information Life Cycle | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | [MS A](#ms-a) |
-| [P-14](#task-p-14) Risk Assessment—System | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-RA](../../MANUAL.md#art-ra), [ART-PIA](../../MANUAL.md#art-pia) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
-| [P-15](#task-p-15) Requirements Definition | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-REQ](../../MANUAL.md#art-req) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
-| [P-18](#task-p-18) System Registration | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [ART-REG](../../MANUAL.md#art-reg) | — | [MS A](#ms-a) |
-| [C-1](#task-c-1) System Description | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-SD](../../MANUAL.md#art-sd) | [ART-BND](../../MANUAL.md#art-bnd), [ART-REG](../../MANUAL.md#art-reg) | [MS A](#ms-a) |
-| [C-2](#task-c-2) Security Categorization | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [ART-CAT](../../MANUAL.md#art-cat) | [ART-BIA](../../MANUAL.md#art-bia) | [MS A](#ms-a) |
-| [C-3](#task-c-3) Security Categorization Review and Approval | Categorize | [AO](../../MANUAL.md#per-ao) | — | [ART-CAT](../../MANUAL.md#art-cat), [ART-REG](../../MANUAL.md#art-reg) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
+| [Prepare 1: Risk Management Roles (P-1)](#task-p-1) | Prepare | [Component CIO](../../MANUAL.md#per-cio) | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | — | [MDD](#ms-mdd) |
+| [Prepare 2: Risk Management Strategy (P-2)](#task-p-2) | Prepare | [Component CIO](../../MANUAL.md#per-cio) | — | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3) | Prepare | [RE](../../MANUAL.md#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4) *(optional)* | Prepare | [RE](../../MANUAL.md#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 5: Common Control Identification (P-5)](#task-p-5) | Prepare | [Component CISO](../../MANUAL.md#per-ciso) | — | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6) *(optional)* | Prepare | [RE](../../MANUAL.md#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7) | Prepare | [RE](../../MANUAL.md#per-re) | — | [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | [MDD](#ms-mdd) |
+| [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | — | [MS A](#ms-a) |
+| [Prepare 9: System Stakeholders (P-9)](#task-p-9) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | — | [MS A](#ms-a) |
+| [Prepare 10: Asset Identification (P-10)](#task-p-10) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | — | [MS A](#ms-a) |
+| [Prepare 11: Authorization Boundary (P-11)](#task-p-11) | Prepare | [AO](../../MANUAL.md#per-ao) | [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | — | [MS A](#ms-a) |
+| [Prepare 12: Information Types (P-12)](#task-p-12) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | — | [MS A](#ms-a) |
+| [Prepare 13: Information Life Cycle (P-13)](#task-p-13) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | — | [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | [MS A](#ms-a) |
+| [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [System risk assessment (ART-RA)](../../MANUAL.md#art-ra), [Privacy impact assessment (ART-PIA)](../../MANUAL.md#art-pia) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
+| [Prepare 15: Requirements Definition (P-15)](#task-p-15) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | — | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
+| [Prepare 18: System Registration (P-18)](#task-p-18) | Prepare | [PM/SO](../../MANUAL.md#per-pm) | [System registration (ART-REG)](../../MANUAL.md#art-reg) | — | [MS A](#ms-a) |
+| [Categorize 1: System Description (C-1)](#task-c-1) | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd), [System registration (ART-REG)](../../MANUAL.md#art-reg) | [MS A](#ms-a) |
+| [Categorize 2: Security Categorization (C-2)](#task-c-2) | Categorize | [PM/SO](../../MANUAL.md#per-pm) | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | [MS A](#ms-a) |
+| [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3) | Categorize | [AO](../../MANUAL.md#per-ao) | — | [Security categorization (ART-CAT)](../../MANUAL.md#art-cat), [System registration (ART-REG)](../../MANUAL.md#art-reg) | [MS A](#ms-a), [SRR](PH-TMRR.md#rv-srr) |
 
-Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#task-p-16).
+Also active in this phase (described in their primary phase): [Prepare 16: Enterprise Architecture (P-16)](PH-TMRR.md#task-p-16).
 
-## <a id="task-p-1"></a>P-1 · Risk Management Roles
+## <a id="task-p-1"></a>Prepare 1: Risk Management Roles (P-1)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -99,13 +99,13 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | produces | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | produces | supporting |
 
 **Entry criteria**
 
@@ -135,9 +135,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-1](../../playbooks/P/P-org-context.md#task-p-1)
 
-**Cross-references:** depends on nothing; required by [P-2](#task-p-2).
+**Cross-references:** depends on nothing; required by [Prepare 2: Risk Management Strategy (P-2)](#task-p-2).
 
-## <a id="task-p-2"></a>P-2 · Risk Management Strategy
+## <a id="task-p-2"></a>Prepare 2: Risk Management Strategy (P-2)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -156,14 +156,14 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -194,9 +194,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-2](../../playbooks/P/P-org-context.md#task-p-2)
 
-**Cross-references:** depends on [P-1](#task-p-1); required by [P-3](#task-p-3), [P-7](#task-p-7), [P-8](#task-p-8).
+**Cross-references:** depends on [Prepare 1: Risk Management Roles (P-1)](#task-p-1); required by [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 8: Mission or Business Focus (P-8)](#task-p-8).
 
-## <a id="task-p-3"></a>P-3 · Risk Assessment—Organization
+## <a id="task-p-3"></a>Prepare 3: Risk Assessment—Organization (P-3)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) (continues in [O&S](PH-OS.md#ph-os)) · required · at least 1 stakeholder interview*
 
@@ -214,15 +214,15 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -250,9 +250,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-3](../../playbooks/P/P-org-context.md#task-p-3)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-4](#task-p-4), [P-5](#task-p-5), [P-6](#task-p-6), [P-7](#task-p-7), [P-14](#task-p-14); receives feedback from [P-14](#task-p-14).
+**Cross-references:** depends on [Prepare 2: Risk Management Strategy (P-2)](#task-p-2); required by [Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)](#task-p-4), [Prepare 5: Common Control Identification (P-5)](#task-p-5), [Prepare 6: Impact-Level Prioritization (P-6)](#task-p-6), [Prepare 7: Continuous Monitoring Strategy—Organization (P-7)](#task-p-7), [Prepare 14: Risk Assessment—System (P-14)](#task-p-14); receives feedback from [Prepare 14: Risk Assessment—System (P-14)](#task-p-14).
 
-## <a id="task-p-4"></a>P-4 · Organizationally-Tailored Control Baselines and CSF Profiles
+## <a id="task-p-4"></a>Prepare 4: Organizationally-Tailored Control Baselines and CSF Profiles (P-4)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · optional · at least 1 stakeholder interview*
 
@@ -270,17 +270,17 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-BASELINES](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
-| [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Control baselines (EXT-BASELINES)](../../MANUAL.md#ext-baselines) | Control baselines | outside input (reference) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -308,9 +308,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-4](../../playbooks/P/P-org-context.md#task-p-4)
 
-**Cross-references:** depends on [P-3](#task-p-3); required by no later task.
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by no later task.
 
-## <a id="task-p-5"></a>P-5 · Common Control Identification
+## <a id="task-p-5"></a>Prepare 5: Common Control Identification (P-5)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -328,14 +328,14 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -359,9 +359,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-5](../../playbooks/P/P-org-context.md#task-p-5)
 
-**Cross-references:** depends on [P-3](#task-p-3); required by [P-17](PH-TMRR.md#task-p-17), [S-1](PH-TMRR.md#task-s-1).
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by [Prepare 17: Requirements Allocation (P-17)](PH-TMRR.md#task-p-17), [Select 1: Control Selection (S-1)](PH-TMRR.md#task-s-1).
 
-## <a id="task-p-6"></a>P-6 · Impact-Level Prioritization
+## <a id="task-p-6"></a>Prepare 6: Impact-Level Prioritization (P-6)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · optional · at least 1 stakeholder interview*
 
@@ -379,14 +379,14 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -411,9 +411,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-6](../../playbooks/P/P-org-context.md#task-p-6)
 
-**Cross-references:** depends on [P-3](#task-p-3); required by no later task.
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by no later task.
 
-## <a id="task-p-7"></a>P-7 · Continuous Monitoring Strategy—Organization
+## <a id="task-p-7"></a>Prepare 7: Continuous Monitoring Strategy—Organization (P-7)
 
 *[Prepare](../../MANUAL.md#step-p) step · organization level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -432,14 +432,14 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | updates | supporting |
 
 **Entry criteria**
 
@@ -465,9 +465,9 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 **Playbook:** [playbooks/P/P-org-context.md#task-p-7](../../playbooks/P/P-org-context.md#task-p-7)
 
-**Cross-references:** depends on [P-2](#task-p-2), [P-3](#task-p-3); required by [S-5](PH-TMRR.md#task-s-5); receives feedback from [M-5](PH-OS.md#task-m-5).
+**Cross-references:** depends on [Prepare 2: Risk Management Strategy (P-2)](#task-p-2), [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); required by [Select 5: Continuous Monitoring Strategy—System (S-5)](PH-TMRR.md#task-s-5); receives feedback from [Monitor 5: Security and Privacy Reporting (M-5)](PH-OS.md#task-m-5).
 
-## <a id="task-p-8"></a>P-8 · Mission or Business Focus
+## <a id="task-p-8"></a>Prepare 8: Mission or Business Focus (P-8)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -487,16 +487,16 @@ Also active in this phase (described in their primary phase): [P-16](PH-TMRR.md#
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Capability requirements documents (EXT-CAPDOC)](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | produces | supporting |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | produces | supporting |
 
 Writes to `facts.yaml`: `missions`.
 
@@ -526,9 +526,9 @@ Writes to `facts.yaml`: `missions`.
 
 **Playbook:** [playbooks/P/P-8.md](../../playbooks/P/P-8.md)
 
-**Cross-references:** depends on [P-2](#task-p-2); required by [P-9](#task-p-9).
+**Cross-references:** depends on [Prepare 2: Risk Management Strategy (P-2)](#task-p-2); required by [Prepare 9: System Stakeholders (P-9)](#task-p-9).
 
-## <a id="task-p-9"></a>P-9 · System Stakeholders
+## <a id="task-p-9"></a>Prepare 9: System Stakeholders (P-9)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -548,16 +548,16 @@ Writes to `facts.yaml`: `missions`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Capability requirements documents (EXT-CAPDOC)](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | produces | supporting |
+| [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | Stakeholder register | produces | supporting |
 
 **Entry criteria**
 
@@ -584,9 +584,9 @@ Writes to `facts.yaml`: `missions`.
 
 **Playbook:** [playbooks/P/P-9.md](../../playbooks/P/P-9.md)
 
-**Cross-references:** depends on [P-8](#task-p-8); required by [P-10](#task-p-10).
+**Cross-references:** depends on [Prepare 8: Mission or Business Focus (P-8)](#task-p-8); required by [Prepare 10: Asset Identification (P-10)](#task-p-10).
 
-## <a id="task-p-10"></a>P-10 · Asset Identification
+## <a id="task-p-10"></a>Prepare 10: Asset Identification (P-10)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -605,16 +605,16 @@ Writes to `facts.yaml`: `missions`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
+| [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | produces | core |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | produces | core |
 
 **Entry criteria**
 
@@ -639,9 +639,9 @@ Writes to `facts.yaml`: `missions`.
 
 **Playbook:** [playbooks/P/P-10.md](../../playbooks/P/P-10.md)
 
-**Cross-references:** depends on [P-9](#task-p-9); required by [P-11](#task-p-11), [P-12](#task-p-12).
+**Cross-references:** depends on [Prepare 9: System Stakeholders (P-9)](#task-p-9); required by [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12).
 
-## <a id="task-p-11"></a>P-11 · Authorization Boundary
+## <a id="task-p-11"></a>Prepare 11: Authorization Boundary (P-11)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -660,16 +660,16 @@ Writes to `facts.yaml`: `missions`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | produces | core |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | produces | core |
 
 Writes to `facts.yaml`: `boundary_id`.
 
@@ -697,9 +697,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-11.md](../../playbooks/P/P-11.md)
 
-**Cross-references:** depends on [P-10](#task-p-10); required by [P-13](#task-p-13), [P-18](#task-p-18); receives feedback from [M-1](PH-OS.md#task-m-1).
+**Cross-references:** depends on [Prepare 10: Asset Identification (P-10)](#task-p-10); required by [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Prepare 18: System Registration (P-18)](#task-p-18); receives feedback from [Monitor 1: System and Environment Changes (M-1)](PH-OS.md#task-m-1).
 
-## <a id="task-p-12"></a>P-12 · Information Types
+## <a id="task-p-12"></a>Prepare 12: Information Types (P-12)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -718,15 +718,15 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Capability requirements documents (EXT-CAPDOC)](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | produces | supporting |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | produces | supporting |
 
 **Entry criteria**
 
@@ -754,9 +754,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-12.md](../../playbooks/P/P-12.md)
 
-**Cross-references:** depends on [P-10](#task-p-10); required by [P-13](#task-p-13), [C-2](#task-c-2).
+**Cross-references:** depends on [Prepare 10: Asset Identification (P-10)](#task-p-10); required by [Prepare 13: Information Life Cycle (P-13)](#task-p-13), [Categorize 2: Security Categorization (C-2)](#task-c-2).
 
-## <a id="task-p-13"></a>P-13 · Information Life Cycle
+## <a id="task-p-13"></a>Prepare 13: Information Life Cycle (P-13)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) · required · at least 1 stakeholder interview*
 
@@ -775,18 +775,18 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | updates | supporting |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | updates | supporting |
 
 **Entry criteria**
 
@@ -809,9 +809,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-13.md](../../playbooks/P/P-13.md)
 
-**Cross-references:** depends on [P-11](#task-p-11), [P-12](#task-p-12); required by [P-14](#task-p-14).
+**Cross-references:** depends on [Prepare 11: Authorization Boundary (P-11)](#task-p-11), [Prepare 12: Information Types (P-12)](#task-p-12); required by [Prepare 14: Risk Assessment—System (P-14)](#task-p-14).
 
-## <a id="task-p-14"></a>P-14 · Risk Assessment—System
+## <a id="task-p-14"></a>Prepare 14: Risk Assessment—System (P-14)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -830,26 +830,26 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
-| [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
-| [EXT-CSS](../../MANUAL.md#ext-css) | Cybersecurity strategy | outside input (product) |
-| [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
-| [EXT-ITRA](../../MANUAL.md#ext-itra) | Independent technical risk assessments | outside input (organization) |
-| [EXT-SEP](../../MANUAL.md#ext-sep) | Systems engineering plan | outside input (product) |
-| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [Program protection plan (EXT-PPP)](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [Cybersecurity strategy (EXT-CSS)](../../MANUAL.md#ext-css) | Cybersecurity strategy | outside input (product) |
+| [Technology and S&T protection guidance (EXT-STPP)](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
+| [Independent technical risk assessments (EXT-ITRA)](../../MANUAL.md#ext-itra) | Independent technical risk assessments | outside input (organization) |
+| [Systems engineering plan (EXT-SEP)](../../MANUAL.md#ext-sep) | Systems engineering plan | outside input (product) |
+| [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | produces | supporting |
-| [ART-PIA](../../MANUAL.md#art-pia) | Privacy impact assessment | produces | supporting |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | produces | supporting |
+| [Privacy impact assessment (ART-PIA)](../../MANUAL.md#art-pia) | Privacy impact assessment | produces | supporting |
 
 **Entry criteria**
 
@@ -889,9 +889,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-14.md](../../playbooks/P/P-14.md)
 
-**Cross-references:** depends on [P-3](#task-p-3), [P-13](#task-p-13); required by [P-15](#task-p-15); feeds back to [P-3](#task-p-3); receives feedback from [C-3](#task-c-3).
+**Cross-references:** depends on [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3), [Prepare 13: Information Life Cycle (P-13)](#task-p-13); required by [Prepare 15: Requirements Definition (P-15)](#task-p-15); feeds back to [Prepare 3: Risk Assessment—Organization (P-3)](#task-p-3); receives feedback from [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3).
 
-## <a id="task-p-15"></a>P-15 · Requirements Definition
+## <a id="task-p-15"></a>Prepare 15: Requirements Definition (P-15)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -910,24 +910,24 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-STAKE](../../MANUAL.md#art-stake) | Stakeholder register | [P-9](#task-p-9) (supporting artifact) |
-| [EXT-CAPDOC](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PPP](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
-| [EXT-STPP](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [EXT-THREAT](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [Stakeholder register (ART-STAKE)](../../MANUAL.md#art-stake) | Stakeholder register | [Prepare 9: System Stakeholders (P-9)](#task-p-9) (supporting artifact) |
+| [Capability requirements documents (EXT-CAPDOC)](../../MANUAL.md#ext-capdoc) | Capability requirements documents | outside input (product) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Program protection plan (EXT-PPP)](../../MANUAL.md#ext-ppp) | Program protection plan | outside input (product) |
+| [Technology and S&T protection guidance (EXT-STPP)](../../MANUAL.md#ext-stpp) | Technology and S&T protection guidance | outside input (organization) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Threat information (EXT-THREAT)](../../MANUAL.md#ext-threat) | Threat information | outside input (operational) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | produces | supporting |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | produces | supporting |
 
 **Entry criteria**
 
@@ -963,9 +963,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-15.md](../../playbooks/P/P-15.md)
 
-**Cross-references:** depends on [P-14](#task-p-14); required by [P-16](PH-TMRR.md#task-p-16), [C-1](#task-c-1).
+**Cross-references:** depends on [Prepare 14: Risk Assessment—System (P-14)](#task-p-14); required by [Prepare 16: Enterprise Architecture (P-16)](PH-TMRR.md#task-p-16), [Categorize 1: System Description (C-1)](#task-c-1).
 
-## <a id="task-p-18"></a>P-18 · System Registration
+## <a id="task-p-18"></a>Prepare 18: System Registration (P-18)
 
 *[Prepare](../../MANUAL.md#step-p) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -984,16 +984,16 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [EXT-REGISTRY](../../MANUAL.md#ext-registry) | Component system registry | outside input (organization) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Component system registry (EXT-REGISTRY)](../../MANUAL.md#ext-registry) | Component system registry | outside input (organization) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-REG](../../MANUAL.md#art-reg) | System registration | produces | supporting |
+| [System registration (ART-REG)](../../MANUAL.md#art-reg) | System registration | produces | supporting |
 
 **Entry criteria**
 
@@ -1022,9 +1022,9 @@ Writes to `facts.yaml`: `boundary_id`.
 
 **Playbook:** [playbooks/P/P-18.md](../../playbooks/P/P-18.md)
 
-**Cross-references:** depends on [P-11](#task-p-11); required by [C-1](#task-c-1).
+**Cross-references:** depends on [Prepare 11: Authorization Boundary (P-11)](#task-p-11); required by [Categorize 1: System Description (C-1)](#task-c-1).
 
-## <a id="task-c-1"></a>C-1 · System Description
+## <a id="task-c-1"></a>Categorize 1: System Description (C-1)
 
 *[Categorize](../../MANUAL.md#step-c) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1043,19 +1043,19 @@ Writes to `facts.yaml`: `boundary_id`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [ART-INV](../../MANUAL.md#art-inv) | Hardware and software inventory | [P-10](#task-p-10) (core artifact) |
-| [EXT-PRODUCT](../../MANUAL.md#ext-product) | Product material | outside input (product) |
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Hardware and software inventory (ART-INV)](../../MANUAL.md#art-inv) | Hardware and software inventory | [Prepare 10: Asset Identification (P-10)](#task-p-10) (core artifact) |
+| [Product material (EXT-PRODUCT)](../../MANUAL.md#ext-product) | Product material | outside input (product) |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | produces | core |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
-| [ART-REG](../../MANUAL.md#art-reg) | System registration | updates | supporting |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | produces | core |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | updates | core |
+| [System registration (ART-REG)](../../MANUAL.md#art-reg) | System registration | updates | supporting |
 
 Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifecycle_state`, `classification`, `system_type`, `owning_organization`, `system_version`, `operational_environment`, `lifecycle_phase`.
 
@@ -1085,9 +1085,9 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 
 **Playbook:** [playbooks/C/C-1.md](../../playbooks/C/C-1.md)
 
-**Cross-references:** depends on [P-15](#task-p-15), [P-18](#task-p-18); required by [C-2](#task-c-2); receives feedback from [M-1](PH-OS.md#task-m-1).
+**Cross-references:** depends on [Prepare 15: Requirements Definition (P-15)](#task-p-15), [Prepare 18: System Registration (P-18)](#task-p-18); required by [Categorize 2: Security Categorization (C-2)](#task-c-2); receives feedback from [Monitor 1: System and Environment Changes (M-1)](PH-OS.md#task-m-1).
 
-## <a id="task-c-2"></a>C-2 · Security Categorization
+## <a id="task-c-2"></a>Categorize 2: Security Categorization (C-2)
 
 *[Categorize](../../MANUAL.md#step-c) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1107,22 +1107,22 @@ Writes to `facts.yaml`: `system_id`, `system_name`, `acronym`, `aliases`, `lifec
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-SD](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [C-1](#task-c-1) (core artifact) |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [P-8](#task-p-8) (supporting artifact) |
-| [ART-INFOTYPES](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [P-12](#task-p-12) (supporting artifact) |
-| [ART-RA](../../MANUAL.md#art-ra) | System risk assessment | [P-14](#task-p-14) (supporting artifact) |
-| [EXT-CNSSI1253-OVERLAYS](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
-| [ART-BND](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [P-11](#task-p-11) (core artifact) |
-| [ART-ORG-CONTEXT](../../MANUAL.md#art-org-context) | Organizational risk context | [P-1](#task-p-1) (supporting artifact) |
-| [ART-REQ](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [P-15](#task-p-15) (supporting artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [System description, users and leveraged authorizations (ART-SD)](../../MANUAL.md#art-sd) | System description, users and leveraged authorizations | [Categorize 1: System Description (C-1)](#task-c-1) (core artifact) |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | [Prepare 8: Mission or Business Focus (P-8)](#task-p-8) (supporting artifact) |
+| [Information types and information life cycle (ART-INFOTYPES)](../../MANUAL.md#art-infotypes) | Information types and information life cycle | [Prepare 12: Information Types (P-12)](#task-p-12) (supporting artifact) |
+| [System risk assessment (ART-RA)](../../MANUAL.md#art-ra) | System risk assessment | [Prepare 14: Risk Assessment—System (P-14)](#task-p-14) (supporting artifact) |
+| [CNSSI 1253 overlays (EXT-CNSSI1253-OVERLAYS)](../../MANUAL.md#ext-cnssi1253-overlays) | CNSSI 1253 overlays | outside input (reference) |
+| [Authorization boundary, network architecture and data flows (ART-BND)](../../MANUAL.md#art-bnd) | Authorization boundary, network architecture and data flows | [Prepare 11: Authorization Boundary (P-11)](#task-p-11) (core artifact) |
+| [Organizational risk context (ART-ORG-CONTEXT)](../../MANUAL.md#art-org-context) | Organizational risk context | [Prepare 1: Risk Management Roles (P-1)](#task-p-1) (supporting artifact) |
+| [Security and privacy requirements and allocation (ART-REQ)](../../MANUAL.md#art-req) | Security and privacy requirements and allocation | [Prepare 15: Requirements Definition (P-15)](#task-p-15) (supporting artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | produces | core |
-| [ART-BIA](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | produces | core |
+| [Business impact and criticality analysis (ART-BIA)](../../MANUAL.md#art-bia) | Business impact and criticality analysis | updates | supporting |
 
 Writes to `facts.yaml`: `categorization`.
 
@@ -1158,9 +1158,9 @@ Writes to `facts.yaml`: `categorization`.
 
 **Playbook:** [playbooks/C/C-2.md](../../playbooks/C/C-2.md)
 
-**Cross-references:** depends on [C-1](#task-c-1), [P-12](#task-p-12); required by [C-3](#task-c-3).
+**Cross-references:** depends on [Categorize 1: System Description (C-1)](#task-c-1), [Prepare 12: Information Types (P-12)](#task-p-12); required by [Categorize 3: Security Categorization Review and Approval (C-3)](#task-c-3).
 
-## <a id="task-c-3"></a>C-3 · Security Categorization Review and Approval
+## <a id="task-c-3"></a>Categorize 3: Security Categorization Review and Approval (C-3)
 
 *[Categorize](../../MANUAL.md#step-c) step · system level · primary phase [MSA](#ph-msa) (continues in [TMRR](PH-TMRR.md#ph-tmrr)) · required · at least 1 stakeholder interview*
 
@@ -1180,15 +1180,15 @@ Writes to `facts.yaml`: `categorization`.
 
 | Input | What it is | Comes from |
 |---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | [C-2](#task-c-2) (core artifact) |
-| [EXT-ORG-POLICY](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | [Categorize 2: Security Categorization (C-2)](#task-c-2) (core artifact) |
+| [Organizational policy and Prepare-step guidance (EXT-ORG-POLICY)](../../MANUAL.md#ext-org-policy) | Organizational policy and Prepare-step guidance | outside input (organization) |
 
 **Outputs**
 
 | Output | What it is | This task | Package |
 |---|---|---|---|
-| [ART-CAT](../../MANUAL.md#art-cat) | Security categorization | updates | core |
-| [ART-REG](../../MANUAL.md#art-reg) | System registration | updates | supporting |
+| [Security categorization (ART-CAT)](../../MANUAL.md#art-cat) | Security categorization | updates | core |
+| [System registration (ART-REG)](../../MANUAL.md#art-reg) | System registration | updates | supporting |
 
 Writes to `facts.yaml`: `categorization.approved`.
 
@@ -1218,4 +1218,4 @@ Writes to `facts.yaml`: `categorization.approved`.
 
 **Playbook:** [playbooks/C/C-3.md](../../playbooks/C/C-3.md)
 
-**Cross-references:** depends on [C-2](#task-c-2); required by [S-1](PH-TMRR.md#task-s-1); feeds back to [P-14](#task-p-14).
+**Cross-references:** depends on [Categorize 2: Security Categorization (C-2)](#task-c-2); required by [Select 1: Control Selection (S-1)](PH-TMRR.md#task-s-1); feeds back to [Prepare 14: Risk Assessment—System (P-14)](#task-p-14).
