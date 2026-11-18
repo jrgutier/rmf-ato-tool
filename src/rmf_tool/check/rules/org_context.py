@@ -323,9 +323,13 @@ def appointments(ctx: Context) -> list[RunFinding]:
 
 
 def _space_system(ctx: Context) -> bool:
-    """Whether the system is a space system: its categorization names its space segments."""
+    """Whether the system is a space system: its categorization names its space segments, or
+    it is a space NSS the way CRYP-002 reads one (`space_nss`, a space-system issue in the
+    ledger, the Space Platform Overlay), so the two rules never disagree on one system."""
+    from rmf_tool.check.rules import plans
+
     cat = facts_mod.get(ctx.facts, "categorization")
-    return isinstance(cat, dict) and bool(cat.get("space_segments"))
+    return (isinstance(cat, dict) and bool(cat.get("space_segments"))) or plans.space_system(ctx)
 
 
 def _same_holder(one: dict[str, Any], other: dict[str, Any]) -> bool:

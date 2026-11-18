@@ -104,6 +104,11 @@ def _space(ctx: Context, data: dict[str, Any] | None = None) -> bool:
     return declared or forum_says or SPACE_OVERLAY in _overlays(ctx)
 
 
+def space_system(ctx: Context) -> bool:
+    """Whether the run holds a space NSS (RAPT-001 asks it too)."""
+    return _space(ctx)
+
+
 def _day(value: Any) -> dt.date | None:
     return ledger.parse_date(value)
 
