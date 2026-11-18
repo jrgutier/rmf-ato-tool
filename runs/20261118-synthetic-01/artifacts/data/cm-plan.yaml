@@ -20,14 +20,14 @@ configuration_items:
     kind: component-group
     inventory_items: [INV-007, INV-008, INV-009]
     rebuild: "The pipeline recreates node groups from the cluster template on the provider's hardened node image; base images come from the software factory"
-    baseline: "Cluster template at tag 1.5.0 on node image 2026.10 and base image 2026.09, Kubernetes STIG with the approved inherited deviations"
+    baseline: "Cluster template at tag 1.5.0 on node image 2026.10 and base image 2026.09, Kubernetes STIG (BM-01) with the provider-managed control plane checks recorded as not applicable to the program's configuration in the STIG summary"
   - id: CI-DATA
     label: "Data tier: managed PostgreSQL, object storage, keys and secrets"
     version: "1.5.0"
     kind: component-group
     inventory_items: [INV-010, INV-011, INV-012]
     rebuild: "The pipeline recreates the database, buckets and key policies from the data template; data comes back from snapshots and versioned objects"
-    baseline: "Data template at tag 1.5.0 with the PostgreSQL STIG settings the managed service exposes and the approved inherited deviations"
+    baseline: "Data template at tag 1.5.0 with the PostgreSQL STIG (BM-02) settings the managed service exposes; the engine settings it does not expose are the provider's (STG-003 to STG-006), and STG-001 and STG-002 are fixed in release 1.5.2"
   - id: CI-LOGS
     label: "Log pipeline and log store"
     version: "1.5.0"
@@ -75,7 +75,7 @@ tools:
   - name: "Component enterprise SCAP STIG scanner"
     purpose: "STIG and SRG compliance of the worker nodes and the database, monthly and at each release"
     scap: validated
-    false_positives: "Provider-managed settings are recorded as inherited deviations in the STIG summary, approved by the ISSM"
+    false_positives: "Provider-managed settings the scan marks inherited are recorded in the STIG summary as not applicable to the program's configuration, naming the cloud provider (LA-01); a deviation the program keeps is an exception only the AO or the AODR approves"
   - name: "Hourly drift scan"
     purpose: "Detects any difference between the deployed account and the templates"
     scap: none-available
@@ -99,4 +99,4 @@ manual_monitoring:
     process: "The managed notebook service exposes no scan interface; the ISSO reviews its settings by hand monthly against the sandbox template"
   - inventory_item: INV-001
     process: "The drift scan covers the load balancer settings; the WAF rule set is reviewed by hand at each release by the ISSE"
-sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan]
+sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan, ART-STIG, INT-138.A1]

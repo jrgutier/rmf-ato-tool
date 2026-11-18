@@ -2,8 +2,8 @@
 artifact_id: ART-INV
 run_id: 20261118-synthetic-01
 produced_by_task: P-10
-touched_by: [P-10]
-sources: [INT-023.A1, INT-023.A2, INT-023.A3, INT-023.A4, INT-024.A1, INT-024.A2, INT-024.A3, INT-024.A4, product/hw-sw-inventory.md#items, product/hw-sw-inventory.md#priority]
+touched_by: [P-10, I-2]
+sources: [INT-023.A1, INT-023.A2, INT-023.A3, INT-023.A4, INT-024.A1, INT-024.A2, INT-024.A3, INT-024.A4, product/hw-sw-inventory.md#items, product/hw-sw-inventory.md#priority, INT-139.A1, ART-STIG]
 ---
 # Hardware and software inventory
 
@@ -76,3 +76,15 @@ No item's presence or version is uncertain [[INT-023.A1]]. Two changes are plann
 fielded and are not in the inventory: release 1.5.2 replaces the base image and INV-015's
 version (2026-12-10), and release 1.6 may add an audit archive storage item (2027-01-15)
 [[INT-024.A2]].
+
+## Update Control Implementation Information (I-2)
+
+Implementation added or removed no item, so `inventory.yaml` is not rewritten: the same sixteen
+items, base image 2026.09, node image 2026.10, PostgreSQL 16.4 and example-imagelib 2.9.1
+[[INT-139.A1]]. Release 1.5.1 of 2026-11-07 (PT-1 export scoping fix, server header) runs in
+pre-production; nothing is in production yet. The container records keep version 1.5.0, as the
+program's inventory list does, because the inventory follows the release deployed to production
+and the pipeline updates it at the next production release tag [[INT-139.A1]]
+[[product/hw-sw-inventory.md#items]]. I-1 mapped every software, operating-system, database and
+virtual-machine item to a secure configuration benchmark or a not-applicable reason in the STIG
+summary (ART-STIG) [[ART-STIG]].

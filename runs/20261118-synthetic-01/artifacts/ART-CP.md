@@ -2,8 +2,8 @@
 artifact_id: ART-CP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4]
-sources: [INT-124.A1, INT-124.A2, INT-124.A3, INT-095.A1, INT-095.A2, INT-096.A1, INT-126.A2, ART-BIA, product/conops.md#availability, product/conops.md#limitations, product/test-results.md#dt-2]
+touched_by: [S-4, I-2]
+sources: [INT-124.A1, INT-124.A2, INT-124.A3, INT-095.A1, INT-095.A2, INT-096.A1, INT-126.A2, ART-BIA, product/conops.md#availability, product/conops.md#limitations, product/test-results.md#dt-2, INT-139.A2, INT-138.A1]
 ---
 # Contingency plan
 
@@ -173,6 +173,16 @@ the product data flows; the inventory is ART-INV with the configuration items of
 the interconnections are IC-1 (EMIS), IC-2 (supply status) and IC-3 (identity broker), each with
 its POC; recovery is constrained by the access point, the identity broker and the software
 factory (`appendices`) [[INT-124.A1]] [[product/architecture.md#interconnections]].
+
+## Implementation updates
+
+**2026-11-18, I-2.** Implementation changed nothing in this plan, so `contingency.yaml` is not
+rewritten. As built: point-in-time restore of the database works (DT-2, 3 h 10 min); the rebuild
+of the cluster in the second region exists as templates and has never been run, so EX-02 in
+2027-02 remains the first proof; release 1.5.1 changed nothing in backup, restore or failover
+[[INT-139.A2]] [[product/test-results.md#dt-2]]. The STIG summary's open database items
+(STG-001, STG-002) do not touch recovery [[ART-STIG]]. The PM's approval of this plan is still
+due by 2026-12-15 [[INT-138.A1]].
 
 <!-- I-2 appends "## Implementation updates" (dated: what changed during implementation and
      why) and adds I-2 to touched_by. -->

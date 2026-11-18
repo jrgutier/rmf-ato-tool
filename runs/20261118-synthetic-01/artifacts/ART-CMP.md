@@ -2,8 +2,8 @@
 artifact_id: ART-CMP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4]
-sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-126.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan]
+touched_by: [S-4, I-2]
+sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-126.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan, ART-STIG, INT-138.A1, INT-139.A1]
 handling: CUI
 ---
 # Configuration management plan
@@ -80,13 +80,17 @@ carries them, because they change only when that image is rebuilt [[INT-123.A1]]
 
 The basis is the DISA Kubernetes and PostgreSQL STIGs, the software factory's hardened base
 images and the provider's hardened node image. The approved baseline of each CI is its template
-and the release manifest at tag 1.5.0, which the board approved with the deviations the ISSM
-approved in the STIG summary: the provider-managed control plane checks and the four database
-settings the managed service does not expose, each justified as inherited [[INT-122.A2]]
-[[product/test-results.md#stig-scan]]. Two program-fixable database items (connection logging
-verbosity, break-glass role password complexity) are open, to be fixed in release 1.5.2
-(cm-6, partial) [[INT-093.A1]]. A baseline is approved by the board when it passes the gates and
-the STIG scan with only approved deviations [[INT-122.A2]].
+and the release manifest at tag 1.5.0, which the board approved [[INT-122.A2]]. The
+provider-managed control plane checks and the four database settings the managed service does
+not expose are the cloud provider's settings; the STIG summary records them as not applicable to
+the program's configuration, naming the provider, and no configuration exception has been
+approved (wording corrected at I-2; see `## Implementation updates`) [[ART-STIG]]
+[[INT-138.A1]] [[product/test-results.md#stig-scan]]. Two program-fixable database items
+(STG-001 connection logging verbosity, STG-002 break-glass role password complexity) are open,
+to be fixed in release 1.5.2 (cm-6, partial) [[INT-093.A1]]. A baseline is approved by the board
+when it passes the gates and the STIG scan with no open program item other than one tracked for
+a fix; a deviation the program keeps is an exception only the AO or the AODR approves
+[[INT-122.A2]] [[INT-138.A1]].
 
 ## Configuration change control
 
@@ -147,6 +151,19 @@ The ISSE maintains this plan; the board reviews it annually and with each major 
 after any change to the board, the tools or the baselines. An exception to the plan needs the
 ISSM's written approval and a board entry, and an exception that bypasses a security mechanism
 is recorded as a bypass with its procedure [[INT-123.A2]] [[INT-123.A3]].
+
+## Implementation updates
+
+**2026-11-18, I-2.** The STIG summary written at I-1 showed that the plan called the scan's
+provider-managed items "deviations the ISSM approves". Only the AO or the AODR approves an
+exception to configuration guidance, and these items are not program deviations but the cloud
+provider's settings under its IL4 provisional authorization [[ART-STIG]] [[INT-136.A1]]
+[[INT-137.A1]]. Corrected: `## Baseline configurations` above, the CI-PLATFORM and CI-DATA
+baselines and the SCAP scanner's false-positive handling in `artifacts/data/cm-plan.yaml`
+[[INT-138.A1]]. The CIs, the board, the change process, the bypass BYP-01 and the tools are
+unchanged; release 1.5.1 (2026-11-07, PT-1 fix and server header) went through the same pipeline
+and gates, and no inventory item was added or removed [[INT-139.A1]]. The PM's approval of this
+plan is still due by 2026-12-15 [[INT-138.A1]].
 
 <!-- I-2 appends "## Implementation updates" and M-1 appends "## Change updates" (dated:
      what changed in the plan, baselines or board, and why), each adding itself to

@@ -2,8 +2,8 @@
 artifact_id: ART-SD
 run_id: 20261118-synthetic-01
 produced_by_task: C-1
-touched_by: [C-1]
-sources: [INT-058.A1, INT-058.A2, INT-058.A3, INT-058.A4, INT-058.A5, INT-058.A6, INT-059.A1, INT-059.A2, INT-059.A3, INT-060.A1, INT-060.A2, INT-060.A3, INT-060.A4, INT-060.A5, INT-060.A6, ASM-015, ASM-016, product/conops.md#mission, product/conops.md#users, product/conops.md#environment, product/architecture.md#components, product/architecture.md#leveraged, product/architecture.md#interconnections, ART-BND, ART-INV, ART-REQ]
+touched_by: [C-1, I-2]
+sources: [INT-058.A1, INT-058.A2, INT-058.A3, INT-058.A4, INT-058.A5, INT-058.A6, INT-059.A1, INT-059.A2, INT-059.A3, INT-060.A1, INT-060.A2, INT-060.A3, INT-060.A4, INT-060.A5, INT-060.A6, ASM-015, ASM-016, product/conops.md#mission, product/conops.md#users, product/conops.md#environment, product/architecture.md#components, product/architecture.md#leveraged, product/architecture.md#interconnections, ART-BND, ART-INV, ART-REQ, INT-137.A1, INT-138.A3, INT-139.A1]
 ---
 # System description
 
@@ -136,3 +136,16 @@ providers, each an approved common control provider of P-5 [[INT-060.A1]] [[ART-
 **Reciprocity** (`reciprocity.yaml`). There are no Receiving organizations and no received
 systems. The system is deployed only into its own production account, and its providers are
 inherited, not received [[INT-057.A1]] [[INT-060.A1]].
+
+## Update Control Implementation Information (I-2)
+
+Implementation changed nothing this description records, so `users.yaml`,
+`leveraged-authorizations.yaml`, `system-description.yaml` and `reciprocity.yaml` are not
+rewritten [[INT-138.A3]]. The user groups, the three interconnections and the four leveraged
+authorizations are as above; the EMIS memorandum of agreement is still in legal review with
+signature targeted 2026-12-31 [[INT-138.A3]] [[product/conops.md#limitations]]. The cloud
+provider confirmed that the STIG settings of the managed Kubernetes control plane and the managed
+PostgreSQL engine are its own, applied to every tenant under LA-01, which the STIG summary
+records (ART-STIG) [[INT-137.A1]]. No system is received under reciprocity, so no Receiving AO
+acceptance is owed [[INT-138.A3]]. The release in pre-production is 1.5.1 of 2026-11-07 (PT-1
+fix and server header); nothing is in production yet [[INT-139.A1]].

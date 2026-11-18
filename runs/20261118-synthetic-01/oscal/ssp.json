@@ -2676,6 +2676,21 @@
               "name": "trace",
               "ns": "urn:rmf-tool:oscal",
               "value": "ART-ORG-CONTEXT"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "ART-CONMON"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-134.A2"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-138.A1"
             }
           ],
           "set-parameters": [
@@ -2700,25 +2715,25 @@
             {
               "param-id": "ca-07_odp.04",
               "values": [
-                "the AO and the Component risk board"
+                "the AO through the AODR, the PM and the ISSM"
               ]
             },
             {
               "param-id": "ca-07_odp.05",
               "values": [
-                "monthly to the AO, quarterly to the risk board"
+                "monthly roll-up to the PM, the ISSM and the AODR; quarterly posture report to the AO"
               ]
             },
             {
               "param-id": "ca-07_odp.06",
               "values": [
-                "the AO and the Component risk board"
+                "the AO through the AODR, the PM and the ISSM"
               ]
             },
             {
               "param-id": "ca-07_odp.07",
               "values": [
-                "monthly to the AO, quarterly to the risk board"
+                "monthly roll-up to the PM, the ISSM and the AODR; quarterly posture report to the AO"
               ]
             }
           ],
@@ -2734,7 +2749,7 @@
             {
               "component-uuid": "0f72ccea-6298-5fd2-b0b7-021e9a324398",
               "uuid": "93742923-fb5b-5052-bc5b-3d0205bb868e",
-              "description": "Planned. The system-level continuous monitoring strategy is written at S-5 under the Component strategy. Planned content: weekly vulnerability scanning and audit log review, monthly configuration baseline checks, quarterly account reviews, annual assessment of a third of the controls, correlation of results by the ISSM with the CSSP's alerts, response through the POA&M, and a monthly security and privacy status report to the AO with a quarterly report to the Component risk board.",
+              "description": "Planned. The system-level continuous monitoring strategy (ART-CONMON) was written at S-5 under the Component strategy and approved by the AODR, for the AO, on 2026-11-18. Its content: weekly vulnerability scanning and audit log review, monthly configuration baseline checks (the SCAP STIG scan and the drift reports), quarterly account reviews, annual assessment of a third of the controls, continuous correlation of the forwarded logs by the CSSP, response through the POA&M, a monthly roll-up to the PM, the ISSM and the AODR, and a quarterly security and privacy posture report to the AO through the AODR. Missing: monitoring has not yet run under the approved strategy. Plan: the first monitoring cycle runs after the authorization decision; ca-7 becomes implemented when it has.",
               "implementation-status": {
                 "state": "planned"
               }
@@ -2917,6 +2932,26 @@
               "name": "trace",
               "ns": "urn:rmf-tool:oscal",
               "value": "product/architecture.md#configuration"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "ART-STIG"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-136.A1"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-136.A2"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-138.A1"
             }
           ],
           "set-parameters": [
@@ -2951,7 +2986,7 @@
             {
               "component-uuid": "440a102d-8f5d-50d5-99b8-02e1d8aaae83",
               "uuid": "4b3f7c51-3686-5ae3-88ff-9932cff550f3",
-              "description": "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S), the software factory's hardened base images, the PostgreSQL STIG as far as the managed service allows (CMP-DB) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. The SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being provider-managed control plane checks recorded as inherited deviations, and the database 88% with six open items: four not configurable on the managed service (inherited deviations the ISSM approves in the STIG summary) and two program-fixable (connection logging verbosity, and password complexity for the local break-glass database role). Plan: both fixed in release 1.5.2, planned 2026-12-10.",
+              "description": "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S, BM-01), the software factory's hardened base image standard (BM-03), the PostgreSQL STIG as far as the managed service allows (CMP-DB, BM-02) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. As implemented (ART-STIG): the SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being control plane checks the managed Kubernetes service does not expose, and the database 88% with six open CAT II items. Four are engine settings not configurable on the managed service; they are the cloud provider's settings under its IL4 provisional authorization (LA-01) and are recorded in the STIG summary as not applicable to the program's configuration (STG-003 to STG-006), not as program deviations; no configuration exception has been approved, and any program deviation would need the AO's or AODR's approval. Two are program-fixable: connection logging verbosity (STG-001) and password complexity for the local break-glass database role (STG-002). No CAT I item is open. Missing as well: no Application Security and Development STIG review of the five application containers (BM-04) is recorded; the ISSE asks the assessor to perform it at assessment. Plan: STG-001 and STG-002 fixed in release 1.5.2, planned 2026-12-10, and rescanned.",
               "implementation-status": {
                 "state": "partial"
               }
@@ -2959,7 +2994,7 @@
             {
               "component-uuid": "e6a411b4-5ea0-5e95-b9d5-24a16ea8d65e",
               "uuid": "ca50aa3e-1bbc-58e0-b3bb-d218ba35ca71",
-              "description": "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S), the software factory's hardened base images, the PostgreSQL STIG as far as the managed service allows (CMP-DB) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. The SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being provider-managed control plane checks recorded as inherited deviations, and the database 88% with six open items: four not configurable on the managed service (inherited deviations the ISSM approves in the STIG summary) and two program-fixable (connection logging verbosity, and password complexity for the local break-glass database role). Plan: both fixed in release 1.5.2, planned 2026-12-10.",
+              "description": "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S, BM-01), the software factory's hardened base image standard (BM-03), the PostgreSQL STIG as far as the managed service allows (CMP-DB, BM-02) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. As implemented (ART-STIG): the SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being control plane checks the managed Kubernetes service does not expose, and the database 88% with six open CAT II items. Four are engine settings not configurable on the managed service; they are the cloud provider's settings under its IL4 provisional authorization (LA-01) and are recorded in the STIG summary as not applicable to the program's configuration (STG-003 to STG-006), not as program deviations; no configuration exception has been approved, and any program deviation would need the AO's or AODR's approval. Two are program-fixable: connection logging verbosity (STG-001) and password complexity for the local break-glass database role (STG-002). No CAT I item is open. Missing as well: no Application Security and Development STIG review of the five application containers (BM-04) is recorded; the ISSE asks the assessor to perform it at assessment. Plan: STG-001 and STG-002 fixed in release 1.5.2, planned 2026-12-10, and rescanned.",
               "implementation-status": {
                 "state": "partial"
               }
@@ -2967,7 +3002,7 @@
             {
               "component-uuid": "68153186-46ba-54e7-ba1f-4a2b829bca36",
               "uuid": "57c25d5f-a178-5090-888d-05e8b4869c44",
-              "description": "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S), the software factory's hardened base images, the PostgreSQL STIG as far as the managed service allows (CMP-DB) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. The SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being provider-managed control plane checks recorded as inherited deviations, and the database 88% with six open items: four not configurable on the managed service (inherited deviations the ISSM approves in the STIG summary) and two program-fixable (connection logging verbosity, and password complexity for the local break-glass database role). Plan: both fixed in release 1.5.2, planned 2026-12-10.",
+              "description": "Partial. Settings follow the Kubernetes STIG on the provider's hardened node image (CMP-K8S, BM-01), the software factory's hardened base image standard (BM-03), the PostgreSQL STIG as far as the managed service allows (CMP-DB, BM-02) and the edge and WAF settings in the templates (CMP-EDGE); the pipeline applies them and the drift scan monitors them. As implemented (ART-STIG): the SCA-witnessed scan of 2026-10-22 found the nodes 94% compliant, the open items being control plane checks the managed Kubernetes service does not expose, and the database 88% with six open CAT II items. Four are engine settings not configurable on the managed service; they are the cloud provider's settings under its IL4 provisional authorization (LA-01) and are recorded in the STIG summary as not applicable to the program's configuration (STG-003 to STG-006), not as program deviations; no configuration exception has been approved, and any program deviation would need the AO's or AODR's approval. Two are program-fixable: connection logging verbosity (STG-001) and password complexity for the local break-glass database role (STG-002). No CAT I item is open. Missing as well: no Application Security and Development STIG review of the five application containers (BM-04) is recorded; the ISSE asks the assessor to perform it at assessment. Plan: STG-001 and STG-002 fixed in release 1.5.2, planned 2026-12-10, and rescanned.",
               "implementation-status": {
                 "state": "partial"
               }
@@ -3770,6 +3805,26 @@
               "name": "trace",
               "ns": "urn:rmf-tool:oscal",
               "value": "product/stakeholders.md#roles"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-133.A1"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-134.A1"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-138.A1"
+            },
+            {
+              "name": "trace",
+              "ns": "urn:rmf-tool:oscal",
+              "value": "INT-138.A2"
             }
           ],
           "set-parameters": [
@@ -3804,7 +3859,7 @@
             {
               "component-uuid": "0f72ccea-6298-5fd2-b0b7-021e9a324398",
               "uuid": "a73dee71-8100-5903-96b6-e7528a085e5a",
-              "description": "Partial. The security and privacy plans are being written in this task: the per-family statements, then ART-SSP and the supporting plans. They draw on the earlier tasks' artifacts for the enterprise architecture fit, components (ART-INV), mission context and operating environment (ART-SD), roles (ART-STAKE), information types (ART-INFOTYPES), categorization and its rationale (ART-CAT), threats (ART-RA), requirements (ART-REQ), the baseline, overlays and tailoring rationale (ART-BASELINE) and the dependencies and connections (ART-BND). Planning and coordination run with the Component privacy officer, the ISSO, the ISSE, the CSSP and the common control providers. Missing: the plans are not complete; the privacy risk assessment result they must give is a draft PIA still with the Component privacy office (a.8); and the AO, through the AODR, has not yet reviewed and approved them (a.15), which happens at S-6 before the remaining items are implemented. Once approved, the ISSM distributes the plans and each change, reviews them annually and with each major release, updates them after changes and assessment findings, and keeps them in the program document repository and the eMASS record with role-based access.",
+              "description": "Partial. The security and privacy plans are written (the per-family statements, ART-SSP and the supporting plans) and were updated at I-2 to the as-implemented state (plan set version 1.1, 2026-11-18). They draw on the earlier tasks' artifacts for the enterprise architecture fit, components (ART-INV), mission context and operating environment (ART-SD), roles (ART-STAKE), information types (ART-INFOTYPES), categorization and its rationale (ART-CAT), threats (ART-RA), requirements (ART-REQ), the baseline, overlays and tailoring rationale (ART-BASELINE) and the dependencies and connections (ART-BND). Planning and coordination run with the Component privacy officer, the ISSO, the ISSE, the CSSP and the common control providers. The Component privacy officer approved the privacy plan and the AODR, for the AO, approved the plan set with changes on 2026-11-18 (a.15). Missing: the PM has not yet approved the contingency, incident response and configuration management plans (due 2026-12-15, a condition of the AODR's approval), and the privacy risk assessment result the plans give is a draft PIA still with the Component privacy office (a.8). The ISSM distributes the plans and each change, reviews them annually and with each major release, updates them after changes and assessment findings, and keeps them in the program document repository and the eMASS record with role-based access.",
               "implementation-status": {
                 "state": "partial"
               }

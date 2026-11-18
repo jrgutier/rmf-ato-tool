@@ -2,8 +2,8 @@
 artifact_id: ART-IRP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4]
-sources: [INT-125.A1, INT-125.A2, INT-125.A3, INT-127.A2, INT-126.A2, INT-098.A1, INT-098.A2, INT-099.A1, INT-099.A2, INT-099.A3, INT-118.A2]
+touched_by: [S-4, I-2]
+sources: [INT-125.A1, INT-125.A2, INT-125.A3, INT-127.A2, INT-126.A2, INT-098.A1, INT-098.A2, INT-099.A1, INT-099.A2, INT-099.A3, INT-118.A2, INT-139.A2, INT-138.A1]
 ---
 # Incident response plan
 
@@ -141,6 +141,16 @@ held with the contingency tabletop, and then yearly. Measures: time from discove
 reviews it annually and after every incident or exercise, updates it for system and
 organizational changes, and sends each change to the plan's holders, the CSSP and the privacy
 office [[INT-099.A3]] [[INT-124.A3]].
+
+## Implementation updates
+
+**2026-11-18, I-2.** Implementation changed nothing in this plan, so `incident-response.yaml`
+is not rewritten. As built: export audit events reach the CSSP within 5 minutes (DT-2), which
+supports the one-hour reporting target; release 1.5.1 changed nothing in logging or response
+[[INT-139.A2]] [[product/test-results.md#dt-2]]. The open database item STG-001 (connection
+logging verbosity below the STIG value) narrows what the database logs show an analyst until
+release 1.5.2 on 2026-12-10 [[ART-STIG]]. No incident and no exercise has happened yet. The PM's
+approval of this plan is still due by 2026-12-15 [[INT-138.A1]].
 
 <!-- I-2 appends "## Implementation updates" (dated: what changed during implementation and
      why) and adds I-2 to touched_by. -->

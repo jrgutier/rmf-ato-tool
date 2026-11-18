@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (17)
+## Assumptions (19)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -25,8 +25,10 @@ Mode: synthetic. Human respondents: none.
 | ASM-015 | C-1 | PER-PM | Release 1.5 (MVCR) was cut and deployed to pre-production on 2026-10-27, as the PM states in INT-058.A3; this date is the system_version release date. | C-1 must record a release date with the version (SYSD, CNSSI 1254); the product says release 1.5 is ready and running for pilot squadrons but gives no release date. |
 | ASM-016 | C-1 | PER-ISSM | The interconnected systems' authorizing officials are known only by fictional role labels (maintenance and supply systems AO for EMIS and the supply status service, Component enterprise services AO for the identity broker); the EMIS ISSM's interim e-mail approval is dated 2026-09-15; the CSSP alignment (GENSER, Component NOSC, USCYBERCOM-authorized ECSSP, mission support, private range 10.44.0.0/16) and the agreement reference ECSSP-SA-ARSPO-01 are as the ISSM states in INT-060; all are fictional. | The product gives the interconnections, their agreements and ATO dates, and the CSSP service agreement date, but no authorizing officials, interim approval date, NOSC, designation, register entry, address range or agreement identifier, which system-description.yaml and service-agreements.yaml require. |
 | ASM-017 | S-3 | PER-ISSM | The ATO of the Example Enterprise Cloud Access Point ends on 2028-01-10 and the ATO of the Example Software Factory ends on 2028-10-01, three years after each authorization date, as the ISSM states in INT-084.A3; both dates are fictional and to be confirmed in eMASS. | MLEV-001 needs the authorization termination date of each organizational system EFRAS inherits from; product/architecture.md#leveraged gives only the dates authorized. |
+| ASM-018 | I-1 | PER-DEV | The STIG release numbers and DISA rule IDs of the 2026-10-22 scan are not known to the run: stig-summary.yaml records each benchmark's version as the release current at the scan date and gives the six PostgreSQL items fictional placeholder rule IDs (SV-9002xx) standing for the IDs in the scan export; their CAT II category is as the developer states it in INT-135.A2. | product/test-results.md#stig-scan gives the benchmarks, compliance percentages and the six open PostgreSQL items by subject only, while stig-summary.schema.json requires a version for every benchmark and a V-/SV- rule ID and category for every finding; inventing real DISA IDs would mislead. |
+| ASM-019 | I-1 | PER-ISSE | The Application Security and Development STIG applies to the five EFRAS application containers (INV-002 to INV-006), and its checklist review has not been done for release 1.5.0; the ISSE asks the assessor to perform it at A-3. | The product names no benchmark for the application containers and no checklist review of them (product/test-results.md shows only pipeline gates and DT-2), while STIG-001 needs every software item mapped; the ISSE names the applicable checklist in INT-136.A2. |
 
-## Interview answers (344; SIMULATED 344)
+## Interview answers (358; SIMULATED 358)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -57,3 +59,5 @@ Mode: synthetic. Human respondents: none.
 | S-4 | 43 | 83 | 0 |
 | S-5 | 4 | 8 | 0 |
 | S-6 | 2 | 3 | 0 |
+| I-1 | 3 | 7 | 0 |
+| I-2 | 4 | 7 | 0 |

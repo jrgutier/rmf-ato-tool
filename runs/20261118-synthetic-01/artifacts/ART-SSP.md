@@ -2,8 +2,8 @@
 artifact_id: ART-SSP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4, S-6]
-sources: [INT-123.A3, INT-123.A4, INT-123.A5, INT-126.A1, INT-127.A1, INT-133.A1, INT-134.A1, INT-134.A2, INT-103.A1, INT-117.A2, INT-118.A1, INT-119.A1, INT-113.A1, INT-116.A1, INT-106.A1, product/conops.md#limitations, product/architecture.md#leveraged]
+touched_by: [S-4, S-6, I-2]
+sources: [INT-123.A3, INT-123.A4, INT-123.A5, INT-126.A1, INT-127.A1, INT-133.A1, INT-134.A1, INT-134.A2, INT-103.A1, INT-117.A2, INT-118.A1, INT-119.A1, INT-113.A1, INT-116.A1, INT-106.A1, product/conops.md#limitations, product/architecture.md#leveraged, ART-STIG, INT-138.A1, INT-138.A2, INT-139.A1, INT-140.A1, INT-141.A1]
 ---
 # System security plan
 
@@ -107,9 +107,12 @@ items.
 - **ca-3** (partial): the EMIS memorandum of agreement is under legal review and the connection
   runs on an interim e-mail approval; signature targeted 2026-12-31 [[INT-092.A2]].
 - **ca-5** (planned): no POA&M yet; A-6 writes it [[INT-092.A3]].
-- **ca-7** (planned): no system continuous monitoring strategy yet; S-5 writes it [[INT-092.A3]].
-- **cm-6** (partial): two program-fixable database STIG items (connection logging verbosity,
-  break-glass role password complexity); release 1.5.2, 2026-12-10 [[INT-093.A1]].
+- **ca-7** (planned): the strategy is approved (S-5, S-6) but monitoring has not yet run under it;
+  the first cycle follows the authorization decision (updated at I-2) [[INT-092.A3]] [[INT-138.A1]].
+- **cm-6** (partial): two program-fixable database STIG items (STG-001 connection logging
+  verbosity, STG-002 break-glass role password complexity); release 1.5.2, 2026-12-10; and the
+  Application Security and Development STIG review of the containers, owed at assessment (added
+  at I-2) [[INT-093.A1]] [[ART-STIG]].
 - **cp-2** (partial): the contingency plan (ART-CP) is written but not yet approved or
   distributed; PM approval by 2026-12-15 [[INT-095.A1]] [[INT-126.A2]].
 - **cp-4** (partial): only the database restore was tested (DT-2, 3 h 10 min); the regional
@@ -125,8 +128,9 @@ items.
   tabletop in 2027-02 [[INT-098.A1]] [[INT-099.A1]].
 - **ir-8** (planned): ART-IRP is written in this task; it becomes implemented when the PM approves
   it by 2026-12-15 [[INT-099.A3]] [[INT-126.A2]].
-- **pl-2** (partial): the plans are written in this task and await approval at S-6; the privacy
-  risk assessment rests on a draft PIA [[INT-103.A1]].
+- **pl-2** (partial): the plans are approved with changes (S-6); the PM's approval of the
+  contingency, incident response and CM plans is due 2026-12-15, and the privacy risk assessment
+  rests on a draft PIA (updated at I-2) [[INT-103.A1]] [[INT-138.A1]].
 - **pt-3** (partial): exports and the training extract keep an unsalted DoD ID hash; salted,
   rotated pseudonyms in release 1.6, 2027-01-15 [[INT-106.A2]] [[product/conops.md#limitations]].
 - **ra-5** (partial): two high vulnerabilities in CMP-REPORT exceed the 30-day remediation time;
@@ -168,3 +172,42 @@ official's signature.
   - pl-2 stays partial until the three supporting plans are approved;
   - ca-7 stays planned until monitoring runs under the approved strategy.
   The plans are next reviewed at the interval in `artifacts/data/plan-reviews.yaml`.
+
+## Update Control Implementation Information (I-2)
+
+The plan set is updated to the as-implemented state as version 1.1 of 2026-11-18, approved
+under change management by the configuration control board with the PM in the chair, and logged
+in `artifacts/data/plan-reviews.yaml` with the security and the privacy plan [[INT-138.A2]]
+[[INT-141.A1]]. The update corrects wording; it changes no control status and no tailored value
+the AODR approved, so the counts above stand (30 implemented, 14 partial, 4 planned, 2
+inherited) [[INT-138.A1]].
+
+- **What implementation showed.** I-1 recorded the secure configuration state in ART-STIG:
+  four benchmarks, no open CAT I item, two open CAT II database items (STG-001 connection
+  logging verbosity, STG-002 break-glass database role password complexity, both in release
+  1.5.2), four database engine settings and the Kubernetes control plane checks that are the
+  cloud provider's, and no Application Security and Development STIG review of the five
+  containers yet [[ART-STIG]] [[INT-136.A1]] [[INT-136.A2]].
+- **cm-6.** The statement now records the provider-managed items as not applicable to the
+  program's configuration, naming the provider, instead of "inherited deviations the ISSM
+  approves": only the AO or the AODR approves a configuration exception, and none has been
+  approved. It names STG-001 and STG-002 and the container checklist review owed at assessment
+  [[INT-138.A1]] [[INT-137.A1]]. Its open item above now names them.
+- **pl-2.** The statement now records the privacy officer's and the AODR's approvals of
+  2026-11-18; it stays partial for the three supporting plans the PM approves by 2026-12-15 and
+  for the draft PIA. Its open item above is updated to match [[INT-134.A1]] [[INT-138.A1]].
+- **ca-7.** The statement now states the approved strategy's reporting: a monthly roll-up to
+  the PM, the ISSM and the AODR, and a quarterly posture report to the AO. It stays planned until
+  the first cycle runs; its open item above is updated to match [[INT-134.A2]] [[INT-138.A1]].
+- **As built.** Release 1.5.1 of 2026-11-07 fixed the report export scoping check (PT-1, retest
+  pass 2026-11-10) and the verbose server header in pre-production; nothing is in production
+  yet, and no inventory item was added or removed [[INT-139.A1]]. The recovery and incident
+  mechanisms are built as the contingency and incident response plans describe; only the
+  database restore has been tested [[INT-139.A2]].
+- **Privacy plan.** Reviewed against the implementation with no change to its content: the
+  ingest field filter, the purge and the banner are in place; the PIA is still a draft and the
+  exports keep the unsalted hash until release 1.6 (PT-2) [[INT-140.A1]].
+- **Unchanged.** Provider arrangements, agreements, interconnections, user groups and
+  reciprocity records (no received system) [[INT-138.A3]].
+- **For the requirements.** Implementation raised no new security-relevant constraint on the
+  requirements; nothing goes back to P-15 [[INT-138.A1]] [[INT-136.A1]].
