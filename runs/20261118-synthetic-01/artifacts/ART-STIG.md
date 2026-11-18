@@ -2,8 +2,8 @@
 artifact_id: ART-STIG
 run_id: 20261118-synthetic-01
 produced_by_task: I-1
-touched_by: [I-1]
-sources: [product/test-results.md#stig-scan, product/test-results.md#pipeline-1-5, product/architecture.md#configuration, INT-135.A1, INT-135.A2, INT-135.A3, INT-136.A1, INT-136.A2, INT-137.A1, ASM-018, ASM-019]
+touched_by: [I-1, A-3]
+sources: [product/test-results.md#stig-scan, product/test-results.md#pipeline-1-5, product/architecture.md#configuration, INT-135.A1, INT-135.A2, INT-135.A3, INT-136.A1, INT-136.A2, INT-137.A1, ASM-018, ASM-019, INT-160.A2, INT-161.A1, ASM-021, ASM-024]
 handling: CUI
 ---
 # STIG and SRG summary
@@ -102,5 +102,21 @@ program's configuration, naming the provider, rather than as program deviations
 [[INT-136.A1]] [[INT-137.A1]]. The approved plan's cm-6 statement calls them "inherited
 deviations the ISSM approves"; I-2 corrects that wording [[INT-136.A1]].
 
-<!-- A-3 appends "## Assessor verification" (which results the assessor verified, how, and
-     any status corrected in artifacts/data/stig-summary.yaml) and adds A-3 to touched_by. -->
+## Assessor verification (A-3)
+
+The SCA team witnessed the 2026-10-22 scan and reused it as RR-001 for cm-2 and cm-6, then ran
+its own authenticated scan of release 1.5.1 on 2026-11-23 over the worker nodes, the images and
+the database instance in pre-production. That scan gave the same result for BM-01 and BM-02:
+STG-001 and STG-002 confirmed open, STG-003 to STG-006 confirmed as provider settings the
+managed service does not let the tenant configure, and no new item [[INT-160.A2]]
+[[product/test-results.md#stig-scan]]. The open items stand in the SAR as FND-007 (cm-6) and
+FND-013 (ia-5); release 1.5.2, which carries their fix, was not verified during the assessment,
+so neither status changed and `artifacts/data/stig-summary.yaml` is not rewritten [[ASM-024]].
+
+The assessor's Application Security and Development STIG checklist review of INV-002 to INV-006
+(BM-04) on 2026-11-24 had no documented secure configuration of the containers to compare
+against, so it produced no rule result; BM-04 stays "not reviewed", and the absence of an
+established configuration is FND-008 (cm-6) [[INT-161.A1]] [[ASM-021]]. BM-03 was not scanned;
+the factory's base image is taken as delivered under its ATO, and the late base image behind the
+two efras-report highs is assessed under ra-5 and si-2 (FND-019, FND-024), not as a STIG item
+[[product/test-results.md#pipeline-1-5]].

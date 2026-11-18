@@ -1,0 +1,76 @@
+# artifacts/sar/results/ra.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. ra-5 follows PRC-009 (the SCA's scan of release 1.5.1 on 2026-11-23); ra-8 PRC-003.
+family: ra
+determinations:
+  - control_id: ra-3
+    result: satisfied
+    methods: [examine, interview]
+    depth: focused
+    coverage: focused
+    summary: "Examined ART-RA and ra.yaml against the control: threats and vulnerabilities, likelihood and magnitude of harm, and the likelihood and impact on maintainers of processing their PII are assessed; the Component risk frame and the organizational risk assessment (ART-ORG-CONTEXT) are inputs; results are documented in the risk assessment report, sent under CUI rules to the AO's office, the AODR, the PM and the privacy representative (transmittal in the repository), and the review and update schedule (annual, each major release, R-2, significant change) is recorded. Interviewed the ISSM."
+    statements:
+      - {id: "RA-03a.01", result: satisfied}
+      - {id: "RA-03a.02", result: satisfied}
+      - {id: "RA-03a.03", result: satisfied}
+      - {id: "RA-03b.", result: satisfied}
+      - {id: "RA-03c.", result: satisfied}
+      - {id: "RA-03d.", result: satisfied}
+      - {id: "RA-03e.", result: satisfied}
+      - {id: "RA-03f.", result: satisfied}
+    reused: []
+    sources: [INT-167.A4, ART-RA, ART-ORG-CONTEXT]
+  - control_id: ra-5
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined a quarter of weekly scan reports, the pipeline gate records of 1.5.0 and 1.5.1, the CSSP's external scan reports and alert tickets, and every remediation ticket since 2026-10-20. Scanning is weekly on nodes and database, on every build for images and dependencies, and monthly at the edge by the CSSP, with SCAP content, CVE and CVSS and daily signature updates; results are analyzed by the ISSM and the engineers and shared with the ISSO, the CSSP and the software factory. Tested with the SCA's own authenticated scan of release 1.5.1 on 2026-11-23 (12 hosts, images and database instances): it confirmed the two high vulnerabilities of example-imagelib 2.9.1 in efras-report, found on 2026-10-20, past the 30-day remediation time; release 1.5.2 was not verified (ASM-024). Interviewed the CSSP liaison and the developer lead. The SSP records ra-5 as partial."
+    finding_refs: [FND-019]
+    statements:
+      - {id: "RA-05a.[01]", result: satisfied}
+      - {id: "RA-05a.[02]", result: satisfied}
+      - {id: "RA-05b.01", result: satisfied}
+      - {id: "RA-05b.02", result: satisfied}
+      - {id: "RA-05b.03", result: satisfied}
+      - {id: "RA-05c.", result: satisfied}
+      - {id: "RA-05d.", result: other-than-satisfied}
+      - {id: "RA-05e.", result: satisfied}
+      - {id: "RA-05f.", result: satisfied}
+    reused: []
+    sources: [INT-166.A4, INT-172.A1, ASM-024, product/test-results.md#pipeline-1-5, product/conops.md#limitations]
+  - control_id: ra-8
+    result: other-than-satisfied
+    methods: [examine, interview]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the whole draft PIA (version 0.9 of 2026-09-30, ART-PIA) and its coordination record against the system's PII inventory. It covers the five PII elements, the EMIS source and the uses, but it is not approved (privacy office review 2027-01-20, CIO approval 2027-01-25) and has the open item on the de-identified exports; development of EFRAS began before it was drafted. No real maintainer PII has been processed: the pre-production pilot uses synthetic data. EFRAS starts no collection from individuals. Interviewed the privacy officer. The SSP records ra-8 as partial."
+    finding_refs: [FND-020]
+    statements:
+      - {id: "RA-08a.", result: other-than-satisfied}
+      - {id: "RA-08b.[01]", result: not-applicable, reason: "No collection of real PII has been initiated: the pilot runs on synthetic data, and the PIA approval is scheduled before production data flows (FND-020 tracks it)."}
+      - {id: "RA-08b.[02]", result: not-applicable, reason: "EFRAS collects nothing from individuals; all PII arrives in the EMIS extract, so no information collection from ten or more persons arises."}
+    reused: []
+    sources: [INT-171.A3, ART-PIA, product/privacy.md#pia]
+findings:
+  - id: FND-019
+    control_id: ra-5
+    title: "Two high vulnerabilities in the report container are past the 30-day remediation time"
+    description: "RA-5 as specified requires critical and high vulnerabilities to be remediated within 30 days of discovery. The dependency and image scans of 2026-10-20 found two high vulnerabilities in example-imagelib 2.9.1 inside efras-report (CMP-REPORT); the due date of 2026-11-19 passed and the SCA's scan of 2026-11-23 confirmed both. The fix waits on the software factory's hardened base image; release 1.5.2 (planned 2026-12-10) was not verified during the assessment. Evidence: pipeline records, the SCA scan, remediation tickets, the developer's interview, conops limitation 2."
+    status: open
+    severity: moderate
+    recommendation: "Deploy release 1.5.2 with the hardened base image as soon as the factory delivers it and rescan; if the base image slips again, ask the factory for an interim image or isolate the report renderer further, and record the risk decision."
+    affected_statements: ["RA-05d."]
+    state_difference: "Expected: high vulnerabilities remediated within 30 days. Actual: two highs open since 2026-10-20, past the 2026-11-19 due date."
+    potential_compromise: [confidentiality, integrity]
+    sources: [INT-172.A1, ASM-024, product/test-results.md#pipeline-1-5, product/conops.md#limitations]
+  - id: FND-020
+    control_id: ra-8
+    title: "No approved privacy impact assessment; development began before the PIA was drafted"
+    description: "RA-8 requires a privacy impact assessment before developing information technology that processes PII. EFRAS was developed before the PIA was drafted, and the PIA is still the 0.9 draft with the privacy office, with an open item on the de-identified exports (FND-018). Approval is planned for 2027-01-25, before production data flows. Evidence: ART-PIA, the coordination record, the privacy officer's interview."
+    status: open
+    severity: low
+    recommendation: "Resolve the export item (release 1.6), complete the privacy office review on 2027-01-20 and obtain the CIO's approval before any production data flows; hold production ingest until then."
+    affected_statements: ["RA-08a."]
+    state_difference: "Expected: an approved PIA before development and before PII is processed. Actual: a draft PIA, after development, approval planned before production."
+    potential_compromise: [privacy]
+    sources: [INT-171.A3, ART-PIA, product/privacy.md#pia]

@@ -1,0 +1,44 @@
+# artifacts/sar/results/pt.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA
+# (the team's privacy-trained assessor, under the privacy office's methodology), simulated.
+# Privacy tests of 2026-12-07 (PRC-013, PRC-014) in pre-production with synthetic data.
+family: pt
+determinations:
+  - control_id: pt-2
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the SORN's authority and data elements, the privacy office's coverage confirmation of 2026-08-19 and the draft PIA's citation against the database schema and the data map: the five stored PII elements are exactly the SORN's. Tested the ingest field filter with a synthetic extract carrying every field outside the SORN: the worker dropped each one and stored only the five elements; EFRAS has no path that collects from individuals or writes back. Interviewed the privacy officer."
+    statements:
+      - {id: "PT-02a.", result: satisfied}
+      - {id: "PT-02b.", result: satisfied}
+    reused: []
+    sources: [INT-171.A1, product/privacy.md#authority, product/privacy.md#pii, ART-PIA]
+  - control_id: pt-3
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the SORN's purpose and routine-use sections (public), the draft PIA and the CCB records that route PII changes to the privacy representative, and every export path and the training extract. Re-performed the re-identification of a sample export with 50 DoD ID numbers drawn from the synthetic population, reusing the red team's PT-2 result (RR-002): the unsalted hash of the DoD ID number joined the export records back to the individuals, as PT-2 found; the design is unchanged until release 1.6. The exports and the training extract may be used only de-identified, so their processing is not restricted to what the purposes allow. The privacy office's metric (zero re-identifiable exports) is not met. Interviewed the privacy officer. The SSP records pt-3 as partial."
+    finding_refs: [FND-018]
+    statements:
+      - {id: "PT-03a.", result: satisfied}
+      - {id: "PT-03b.[01]", result: satisfied}
+      - {id: "PT-03b.[02]", result: satisfied}
+      - {id: "PT-03c.", result: other-than-satisfied}
+      - {id: "PT-03d.[01]", result: satisfied}
+      - {id: "PT-03d.[02]", result: satisfied}
+    reused: [RR-002]
+    sources: [INT-171.A2, product/conops.md#limitations, product/test-results.md#pentest, product/privacy.md#minimization]
+findings:
+  - id: FND-018
+    control_id: pt-3
+    title: "De-identified exports and the training extract are re-identifiable through an unsalted DoD ID hash"
+    description: "PT-3 as specified restricts processing to what the purposes allow: analysts' exports and the data scientists' training extract only de-identified. Both keep a stable, unsalted hash of the DoD ID number as the join key. The red team re-identified records with 50 DoD ID numbers (PT-2), and the assessor's re-performance on 2026-12-07 did the same. Anyone with a list of ID numbers can re-identify maintainers in an export. Evidence: the export pipeline, the re-identification test, conops limitation 1, the privacy officer's interview."
+    status: open
+    severity: moderate
+    recommendation: "Ship salted, rotated pseudonyms in release 1.6 (2027-01-15) and retest re-identification before production. Until then, restrict exports and the training extract to the analysts and data scientists who need them and keep the PIA's open item with the privacy office."
+    affected_statements: ["PT-03c."]
+    state_difference: "Expected: exports and extracts that cannot be linked back to maintainers. Actual: any holder of a list of DoD ID numbers can re-identify them."
+    potential_compromise: [privacy, confidentiality]
+    sources: [INT-171.A2, product/conops.md#limitations, product/test-results.md#pentest]

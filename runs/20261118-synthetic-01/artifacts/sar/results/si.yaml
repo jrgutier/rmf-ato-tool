@@ -1,0 +1,71 @@
+# artifacts/sar/results/si.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. si-2 follows PRC-009 (provider side confirmed against EXT-001, not tested); si-4
+# PRC-006; si-12 PRC-013 (privacy tests of 2026-12-07, synthetic data).
+family: si
+determinations:
+  - control_id: si-2
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: comprehensive
+    coverage: comprehensive
+    summary: "Examined the flaw tickets since 2026-10-20, the pipeline gates of 1.5.0 and 1.5.1 that test each fix in pre-production before release, the monthly node image rolls, the change records with ISSO sign-off (cm-3) and the cloud region's October deliverable for the hypervisor, control plane, database engine and host firmware patching it carries (EXT-001, not re-tested; none late). Flaws are identified, reported and tracked, and fixes are tested before installation and installed through configuration management. The SCA's scan of 2026-11-23 confirmed the two high vulnerabilities in example-imagelib 2.9.1 in efras-report not installed within 30 days of the fix's release, because the factory's hardened base image is late; 1.5.2 was not verified (ASM-024). Interviewed the developer lead and the provider's liaison. The SSP records si-2 as partial."
+    finding_refs: [FND-024]
+    statements:
+      - {id: "SI-02a.[01]", result: satisfied}
+      - {id: "SI-02a.[02]", result: satisfied}
+      - {id: "SI-02a.[03]", result: other-than-satisfied}
+      - {id: "SI-02b.[01]", result: satisfied}
+      - {id: "SI-02b.[02]", result: satisfied}
+      - {id: "SI-02b.[03]", result: satisfied}
+      - {id: "SI-02b.[04]", result: satisfied}
+      - {id: "SI-02c.[01]", result: other-than-satisfied}
+      - {id: "SI-02c.[02]", result: satisfied}
+      - {id: "SI-02d.", result: satisfied}
+    reused: []
+    sources: [INT-172.A1, INT-168.A2, ASM-024, product/test-results.md#pipeline-1-5, product/conops.md#limitations, product/architecture.md#updates]
+  - control_id: si-4
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the forwarding configuration of CMP-LOGS (edge and WAF, application sign-in, role change, export, admin and denied events, cluster audit, database audit, cloud account activity), the CSSP's use cases, baselines and threat intelligence matching (confirmed against its package and October report, EXT-004, not re-assessed), the paging alerts for break-glass use and export spikes, the missing-feed alert, the Component counsel's review of the monitoring, the monitoring notice in the banner and three months of the ISSO's weekly reviews and the CSSP's monthly summaries. Tested end to end: the eight event types triggered under au-2 reached the CSSP within 5 minutes, as in DT-2. The CSSP's detection during the second penetration test has no result the run can ground (ASM-022) and is not relied on. Interviewed the CSSP liaison and the ISSO."
+    statements:
+      - {id: "SI-04a.01", result: satisfied}
+      - {id: "SI-04a.02[01]", result: satisfied}
+      - {id: "SI-04a.02[02]", result: satisfied}
+      - {id: "SI-04a.02[03]", result: satisfied}
+      - {id: "SI-04b.", result: satisfied}
+      - {id: "SI-04c.01", result: satisfied}
+      - {id: "SI-04c.02", result: satisfied}
+      - {id: "SI-04d.[01]", result: satisfied}
+      - {id: "SI-04d.[02]", result: satisfied}
+      - {id: "SI-04e.", result: satisfied}
+      - {id: "SI-04f.", result: satisfied}
+      - {id: "SI-04g.", result: satisfied}
+    reused: []
+    sources: [INT-166.A3, INT-165.A2, ASM-022, product/architecture.md#logging, product/test-results.md#dt-2]
+  - control_id: si-12
+    result: satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Examined the retention rules (five-year analysis window for maintainer PII and readiness data under the SORN and the records schedule), three months of the ingest worker's purge log with the ISSO's monthly sign-off, the 30-day lifecycle rule on the report cache and the CUI marking on exports. Tested the purge with synthetic records dated outside the window: the monthly run removed them and kept the records inside it; a cached report older than 30 days was gone. Interviewed the ISSO."
+    statements:
+      - {id: "SI-12[01]", result: satisfied}
+      - {id: "SI-12[02]", result: satisfied}
+      - {id: "SI-12[03]", result: satisfied}
+      - {id: "SI-12[04]", result: satisfied}
+    reused: []
+    sources: [INT-170.A2, product/privacy.md#minimization, ART-PIA]
+findings:
+  - id: FND-024
+    control_id: si-2
+    title: "Security-relevant updates for the report container are not installed within 30 days"
+    description: "SI-2 as specified requires security-relevant software updates to be installed within 30 days of their release. The upstream fix for the two high vulnerabilities in example-imagelib 2.9.1 inside efras-report is released, but EFRAS may build only from the software factory's hardened base image, and the one carrying the fix is late; the SCA's scan of 2026-11-23 confirmed the vulnerable library in place, and release 1.5.2 (planned 2026-12-10) was not verified. Evidence: tickets, the SCA scan, the developer's interview, conops limitation 2. Same root cause as FND-019 (ra-5)."
+    status: open
+    severity: moderate
+    recommendation: "Install the fix through release 1.5.2 as soon as the factory's base image is available and rescan; agree with the factory an interim path (such as a patched intermediate image) for when its base image is late, and track that dependency with its POA&M item."
+    affected_statements: ["SI-02a.[03]", "SI-02c.[01]"]
+    state_difference: "Expected: security-relevant updates installed within 30 days of release. Actual: a released fix for two high vulnerabilities not installed, waiting on the provider's base image."
+    potential_compromise: [confidentiality, integrity]
+    sources: [INT-172.A1, ASM-024, product/conops.md#limitations, product/test-results.md#pipeline-1-5]

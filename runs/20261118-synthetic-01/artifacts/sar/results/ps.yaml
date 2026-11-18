@@ -1,0 +1,44 @@
+# artifacts/sar/results/ps.yaml (A-3; schema sar-results). Written whole. Assessor: PER-SCA,
+# simulated. ps-4 shares the leaver-timing test of 2026-12-01 (PRC-004) with ac-2: the same ten
+# leavers and the same result (ASM-020; FND-001 records the ac-2 side).
+family: ps
+determinations:
+  - control_id: ps-3
+    result: satisfied
+    methods: [examine, interview]
+    depth: focused
+    coverage: focused
+    summary: "Examined the access requests of the 30 sampled accounts (every privileged one included): each shows a valid CAC, issued only after a favorable investigation, and for the app-admins, the auditor and the ERST console roles the security office's confirmation of the higher investigation predates provisioning; all are enrolled in continuous vetting, which rescreens continuously and on adverse information, and the reassignment procedure requires screening before a privileged role. Interviewed the ISSM."
+    statements:
+      - {id: "PS-03a.", result: satisfied}
+      - {id: "PS-03b.[01]", result: satisfied}
+      - {id: "PS-03b.[02]", result: satisfied}
+    reused: []
+    sources: [INT-167.A6, product/architecture.md#identity]
+  - control_id: ps-4
+    result: other-than-satisfied
+    methods: [examine, interview, test]
+    depth: focused
+    coverage: focused
+    summary: "Tested ten leavers drawn from three months of out-processing records, the two of the 2026-10-06 review included, against their EFRAS disable times (the test shared with ac-2). No leaver's checklist records a notification to the account manager, and the two known leavers kept their EFRAS accounts until the quarterly review, so disabling within one working day (same day when involuntary) is not demonstrated for any of them (ASM-020). The rest of the checklist works: all ten show the CAC turned in to the security office, the supervisor's exit briefing with the CUI and PII topics signed, no privileged equipment or keys to retrieve, and the leavers' exports retained in CMP-OBJ for the ISSO and the information owner. Interviewed the ISSO."
+    finding_refs: [FND-017]
+    statements:
+      - {id: "PS-04a.", result: other-than-satisfied}
+      - {id: "PS-04b.", result: satisfied}
+      - {id: "PS-04c.", result: satisfied}
+      - {id: "PS-04d.", result: satisfied}
+      - {id: "PS-04e.", result: satisfied}
+    reused: []
+    sources: [INT-170.A1, INT-152.A3, ASM-020, product/test-results.md#account-review]
+findings:
+  - id: FND-017
+    control_id: ps-4
+    title: "Leavers' EFRAS access is not disabled within the set time; it waits for the inactivity disable or the quarterly review"
+    description: "PS-4 as specified requires system access to be disabled within one working day of a voluntary departure and the same day for an involuntary one. The leaver-timing test of ten leavers (2026-12-01) found no notification to the EFRAS account manager on any checklist, and the two leavers found at the 2026-10-06 review were still active when they were removed there. The same evidence is FND-001 under ac-2; this finding records the personnel security side, which the out-processing checklist owns. Evidence: the checklists, the account review record, the ISSO interviews (ASM-020)."
+    status: open
+    severity: moderate
+    recommendation: "Add a recorded, timestamped step to the squadrons' out-processing checklist that reaches the EFRAS account manager (or an automatic feed), disable the account within the set time, and sample leaver timing at each quarterly review; remediate together with FND-001."
+    affected_statements: ["PS-04a."]
+    state_difference: "Expected: a leaver's EFRAS access disabled within one working day (same day if involuntary). Actual: access remains until the 35-day inactivity disable or the next quarterly review."
+    potential_compromise: [confidentiality, privacy]
+    sources: [INT-170.A1, ASM-020, product/test-results.md#account-review]

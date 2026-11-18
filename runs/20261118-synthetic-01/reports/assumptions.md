@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (21)
+## Assumptions (24)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -29,8 +29,11 @@ Mode: synthetic. Human respondents: none.
 | ASM-019 | I-1 | PER-ISSE | The Application Security and Development STIG applies to the five EFRAS application containers (INV-002 to INV-006), and its checklist review has not been done for release 1.5.0; the ISSE asks the assessor to perform it at A-3. | The product names no benchmark for the application containers and no checklist review of them (product/test-results.md shows only pipeline gates and DT-2), while STIG-001 needs every software item mapped; the ISSE names the applicable checklist in INT-136.A2. |
 | ASM-020 | A-3 | PER-ISSO | The leaver-timing test (PRC-004, 2026-12-01) found no record that any of the ten sampled leavers reached the EFRAS account manager within 24 hours: the two leavers of the 2026-10-06 review were removed only at that review, and the other eight checklists carry a departure date but no notification time. The assessor treats the 24-hour notification as not demonstrated; no disable delay in days is asserted beyond what the product shows. | product/test-results.md#account-review shows only that two leavers' accounts were still present and removed at the quarterly review; the product holds no out-processing records or disable times, so a pass cannot be grounded and exact delays would be invented. |
 | ASM-021 | A-3 | PER-DEV | The assessor's Application Security and Development STIG checklist review of INV-002 to INV-006 (scheduled 2026-11-24) has no result the run can ground: the product holds no checklist, rule results or compliance figure for the containers. The review is recorded as not producing an established, documented secure configuration for the containers; no individual rule result, pass or fail, is asserted. | product/test-results.md covers the containers only through pipeline scans and DT-2; ASM-019 records that no program review exists. A pass would be invented and so would specific failures; the run records the absence of an established configuration, which the product supports. |
+| ASM-022 | A-3 | PER-SCA | The second penetration test (2026-11-30 to 2026-12-04, with the CSSP defending) has no result the run can ground: the product records only the first test (PT-1 to PT-3) and that the PT-3 retest is pending. The run records the test as held per the plan, asserts no new exploitation and no new detection by the CSSP, and treats the PT-3 retest as not demonstrated; PT-1 rests on its 2026-11-10 retest pass and PT-2 on the unchanged design until release 1.6. | product/test-results.md#pentest gives the first test's findings and says the sandbox allow-list was narrowed on 2026-11-03 with the retest pending; a retest pass or a new finding would be invented. |
+| ASM-023 | A-3 | PER-DEV | The REQ-11 standards registry review (APR-001) and the REQ-12 Section 508 test (APR-002) of 2026-12-03 have no result the run can ground: the product holds no list of the protocols and standards checked against the DoD IT Standards Registry and no accessibility test. Both requirements are recorded as not demonstrated; no conformance or failure of a particular standard or workflow is asserted. | product/test-results.md has no standards or accessibility result, and S-3 recorded that no developer test verified REQ-11 or REQ-12; a pass or a specific failure would be invented. |
+| ASM-024 | A-3 | PER-SCA | Release 1.5.2 (planned 2026-12-10) is treated as not deployed to the assessed environment before the out-brief of 2026-12-11: the fixes it carries (the two high vulnerabilities in CMP-REPORT, STG-001, STG-002) are not verified, and the SCA's scan of 2026-11-23 is the latest result the run records. | The product gives 1.5.2 only as planned (product/conops.md#limitations item 2) and the plan verifies its fixes only if they land before the out-brief; asserting that they did would be invented. |
 
-## Interview answers (406; SIMULATED 406)
+## Interview answers (432; SIMULATED 432)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -65,4 +68,4 @@ Mode: synthetic. Human respondents: none.
 | I-2 | 4 | 7 | 0 |
 | A-1 | 5 | 9 | 0 |
 | A-2 | 5 | 12 | 0 |
-| A-3 | 13 | 27 | 0 |
+| A-3 | 21 | 53 | 0 |
