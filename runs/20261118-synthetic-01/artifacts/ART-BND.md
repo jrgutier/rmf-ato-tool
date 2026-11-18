@@ -2,15 +2,28 @@
 artifact_id: ART-BND
 run_id: 20261118-synthetic-01
 produced_by_task: P-11
-touched_by: [P-11, P-16]
-sources: [INT-025.A1, INT-025.A2, INT-025.A3, INT-025.A4, INT-026.A1, INT-026.A2, INT-026.A3, INT-047.A1, INT-047.A2, INT-048.A1, INT-048.A2, INT-049.A1, INT-050.A1, INT-051.A1, product/architecture.md#boundary, product/architecture.md#network, product/data-flows.md#top, ASM-008, ART-INFOTYPES]
+touched_by: [P-11, P-16, C-1]
+sources: [INT-058.A6, INT-060.A1, INT-025.A1, INT-025.A2, INT-025.A3, INT-025.A4, INT-026.A1, INT-026.A2, INT-026.A3, INT-047.A1, INT-047.A2, INT-048.A1, INT-048.A2, INT-049.A1, INT-050.A1, INT-051.A1, product/architecture.md#boundary, product/architecture.md#network, product/data-flows.md#top, ASM-008, ART-INFOTYPES]
 ---
 # Authorization boundary, network architecture and data flows
 
 <!-- BEGIN rmf:facts -->
 | Fact | Value | Set by |
 |---|---|---|
+| System name | Example Fleet Readiness Analytics Service | C-1 |
+| Acronym | EFRAS | C-1 |
+| System ID | EFRAS | C-1 |
+| Aliases | none | C-1 |
 | Authorization boundary | EFRAS-BND-1 | P-11 |
+| Life-cycle state | under-development | C-1 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
+| Categorization approved | yes (PER-AODR) | C-3 |
+| Classification and handling markings | unclassified; markings: CUI | C-1 |
+| IT type | major-application, networked | C-1 |
+| Owning organization | Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional) | C-1 |
+| System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
+| Operational environment | production | C-1 |
+| Life-cycle phase | PH-PD | C-1 |
 <!-- END rmf:facts -->
 
 ## Authorization boundary
@@ -75,7 +88,11 @@ The PII belongs to information types INF-03 (maintainer records) and INF-05 (aud
 | CMP-ECSSP | monitoring, incident support, vulnerability alerts | service agreement under the CSSP's ATO |
 
 [[product/architecture.md#leveraged]] [[product/architecture.md#interconnections]] [[INT-026.A2]].
-C-1 adds the leveraged authorizations.
+C-1 linked the four providers EFRAS inherits from to their leveraged authorizations in
+`boundary.yaml`: CMP-CSP to LA-01, CMP-ECAP to LA-02, CMP-SWF to LA-03 and CMP-ECSSP to LA-04,
+all inherited as common control providers. The identity broker and the two source systems are
+interconnections, not leveraged authorizations; their agreements are ICX-01 to ICX-03 in
+`system-description.yaml` [[INT-060.A1]] [[INT-058.A6]].
 
 ## Enterprise Architecture (P-16)
 

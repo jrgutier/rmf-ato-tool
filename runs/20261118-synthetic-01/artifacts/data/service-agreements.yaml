@@ -1,4 +1,44 @@
 dodin_connected: true
 system_environments: [cloud]
-agreements: []
-sources: [INT-047.A1, INT-048.A1]
+# Written early: P-16 (HOST-001) wrote the environments, C-1 adds the CSSP agreement that
+# system-description.yaml service_alignment.cssp_agreement names (SYSD-002). S-4 rewrites the
+# file whole with the other providers' agreements.
+agreements:
+  - id: SVA-001
+    provider: "Example Cybersecurity Service Provider"
+    role: cssp
+    integration: external
+    instrument: support-agreement
+    reference: "ECSSP-SA-ARSPO-01 (fictional)"
+    environments: [cloud]
+    scope: "24x7 security monitoring of the logs EFRAS forwards, incident response support and vulnerability alerts for the production cloud account"
+    parameters: "Near-real-time log forwarding over TLS to the ECSSP collector; ECSSP keeps forwarded logs one year and alerts on its use cases"
+    approved_by: PER-AO
+    validation:
+      by: PER-ISSM
+      date: "2026-04-01"
+      covers: [roles, responsibilities, scope, applicability]
+    services:
+      - id: SRV-01
+        name: "Security monitoring of forwarded logs"
+        kind: monitoring
+        responsibilities:
+          - {party: service-provider, duty: "Monitor forwarded logs 24x7, keep them one year and alert on its use cases"}
+          - {party: subscriber, duty: "Forward application, cluster, database and cloud account logs in near real time"}
+        controls: [si-4, au-6]
+      - id: SRV-02
+        name: "Incident response support"
+        kind: incident-response
+        responsibilities:
+          - {party: service-provider, duty: "Support incident handling and reporting"}
+          - {party: subscriber, duty: "Report incidents to ECSSP and act on its direction"}
+        controls: [ir-4, ir-6]
+      - id: SRV-03
+        name: "Vulnerability alerts"
+        kind: vulnerability-detection
+        responsibilities:
+          - {party: service-provider, duty: "Send vulnerability alerts and directed actions"}
+          - {party: subscriber, duty: "Assess and remediate alerted vulnerabilities in the program's components"}
+        controls: [ra-5]
+    sources: [INT-060.A2, INT-060.A3, ASM-016, product/architecture.md#leveraged, product/architecture.md#logging]
+sources: [INT-047.A1, INT-048.A1, INT-060.A3]

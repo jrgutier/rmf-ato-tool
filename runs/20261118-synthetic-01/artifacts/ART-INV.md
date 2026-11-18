@@ -10,7 +10,20 @@ sources: [INT-023.A1, INT-023.A2, INT-023.A3, INT-023.A4, INT-024.A1, INT-024.A2
 <!-- BEGIN rmf:facts -->
 | Fact | Value | Set by |
 |---|---|---|
+| System name | Example Fleet Readiness Analytics Service | C-1 |
+| Acronym | EFRAS | C-1 |
+| System ID | EFRAS | C-1 |
+| Aliases | none | C-1 |
 | Authorization boundary | EFRAS-BND-1 | P-11 |
+| Life-cycle state | under-development | C-1 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
+| Categorization approved | yes (PER-AODR) | C-3 |
+| Classification and handling markings | unclassified; markings: CUI | C-1 |
+| IT type | major-application, networked | C-1 |
+| Owning organization | Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional) | C-1 |
+| System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
+| Operational environment | production | C-1 |
+| Life-cycle phase | PH-PD | C-1 |
 <!-- END rmf:facts -->
 
 ## How the inventory was compiled

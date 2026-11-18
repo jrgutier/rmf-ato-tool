@@ -2,15 +2,28 @@
 artifact_id: ART-BIA
 run_id: 20261118-synthetic-01
 produced_by_task: P-8
-touched_by: [P-8]
-sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-018.A4, INT-019.A1, product/conops.md#mission, product/conops.md#availability]
+touched_by: [P-8, C-2]
+sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-018.A4, INT-019.A1, product/conops.md#mission, product/conops.md#availability, INT-065.A4, INT-066.A1, INT-066.A2]
 ---
 # Business impact and criticality analysis
 
 <!-- BEGIN rmf:facts -->
 | Fact | Value | Set by |
 |---|---|---|
+| System name | Example Fleet Readiness Analytics Service | C-1 |
+| Acronym | EFRAS | C-1 |
+| System ID | EFRAS | C-1 |
+| Aliases | none | C-1 |
 | Authorization boundary | EFRAS-BND-1 | P-11 |
+| Life-cycle state | under-development | C-1 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
+| Categorization approved | yes (PER-AODR) | C-3 |
+| Classification and handling markings | unclassified; markings: CUI | C-1 |
+| IT type | major-application, networked | C-1 |
+| Owning organization | Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional) | C-1 |
+| System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
+| Operational environment | production | C-1 |
+| Life-cycle phase | PH-PD | C-1 |
 <!-- END rmf:facts -->
 
 ## Mission critical functions
@@ -60,3 +73,23 @@ and BP-03 third, then the Example Maintenance Information System, whose nightly 
 underpins all three processes, and the enterprise identity broker, a defensive item every
 process depends on for sign-in [[INT-018.A4]]. Boundary components join the list once P-11
 records them, at the Assess iteration of C-2 [[INT-018.A4]].
+
+## Categorization comparison and Assess iteration (C-2)
+
+C-2 set the availability impact of the categorization (the facts block shows it). Each process's
+disruption impact was compared with it: BP-01, BP-02 and BP-03 are all rated low, and none exceeds
+the availability impact. No process needs a reevaluation by the mission and data owners, and the
+`reevaluations` list stays empty. The sponsor confirmed that the 72-hour tolerance of BP-01 is
+the most demanding, and that the program's 24-hour recovery objective is a target, not a reason
+to raise availability [[INT-066.A1]].
+
+The Assess iteration of the criticality analysis was made on 2026-11-18 [[INT-065.A4]]
+[[INT-066.A2]]. The processes keep their Frame ranking, followed by EMIS and the identity
+broker. Three boundary components were added because they underpin all three processes:
+
+- rank 6, the ingest worker CMP-INGEST;
+- rank 7, the database CMP-DB;
+- rank 8, the key management service CMP-KMS, a defensive item.
+
+The API and the web front end can be redeployed from the pipeline within the recovery
+objective, so they were not added [[INT-065.A4]].

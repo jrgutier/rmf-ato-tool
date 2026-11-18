@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (14)
+## Assumptions (16)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -22,8 +22,10 @@ Mode: synthetic. Human respondents: none.
 | ASM-012 | P-14 | PER-PM | scrm.yaml criticality.functions holds CF-01 (nightly ingest and integrity of readiness data, on INV-004, INV-008 and INV-010) only because scrm.schema.json requires at least one entry; the BIA rates no EFRAS function mission-critical, and CF-01 is the program's most important function, not a mission-critical one. Treating its suppliers ERST (SUP-01) and the cloud provider (SUP-03) as critical, with the SCRAs SA-01 and SA-02, the focal point and TAC request TAC-01 and the added TSN practices, follows from that entry. | The honest value, an empty functions list, fails RUN-FM-001 (dry-run finding F-02-1); upstream fixes are deferred, so the run records the closest true entry and says why. |
 | ASM-013 | P-15 | PER-SPONSOR | The capability needs statement for fleet readiness analytics v1.0, validated by the fleet readiness directorate on 2025-08-01, exists with the protection content the sponsor describes in INT-041.A2 and the two key attributes the lead systems engineer describes in INT-046.A2; the ConOps mission section and user journeys stand in for an operational mode summary and mission profiles. | P-15 reads EXT-CAPDOC from the product directory, which holds no capability document; stakeholders.md#roles only names it, and the product has no OMS or mission profiles. |
 | ASM-014 | P-18 | PER-ISSM | EFRAS is registered in the Component's eMASS instance as record EFRAS-0001 since 2025-10-01, and port 443 through the access point is registered in the DoD PPSM Registry as PPSM-EFRAS-0443 since 2026-10-15, as the ISSM states in INT-056; both identifiers are fictional. | P-18 reads EXT-REGISTRY, which the product directory does not hold; the product names no registry, record or PPSM registration. |
+| ASM-015 | C-1 | PER-PM | Release 1.5 (MVCR) was cut and deployed to pre-production on 2026-10-27, as the PM states in INT-058.A3; this date is the system_version release date. | C-1 must record a release date with the version (SYSD, CNSSI 1254); the product says release 1.5 is ready and running for pilot squadrons but gives no release date. |
+| ASM-016 | C-1 | PER-ISSM | The interconnected systems' authorizing officials are known only by fictional role labels (maintenance and supply systems AO for EMIS and the supply status service, Component enterprise services AO for the identity broker); the EMIS ISSM's interim e-mail approval is dated 2026-09-15; the CSSP alignment (GENSER, Component NOSC, USCYBERCOM-authorized ECSSP, mission support, private range 10.44.0.0/16) and the agreement reference ECSSP-SA-ARSPO-01 are as the ISSM states in INT-060; all are fictional. | The product gives the interconnections, their agreements and ATO dates, and the CSSP service agreement date, but no authorizing officials, interim approval date, NOSC, designation, register entry, address range or agreement identifier, which system-description.yaml and service-agreements.yaml require. |
 
-## Interview answers (161; SIMULATED 161)
+## Interview answers (205; SIMULATED 205)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -45,3 +47,6 @@ Mode: synthetic. Human respondents: none.
 | P-16 | 5 | 7 | 0 |
 | P-17 | 4 | 7 | 0 |
 | P-18 | 2 | 4 | 0 |
+| C-1 | 3 | 16 | 0 |
+| C-2 | 6 | 19 | 0 |
+| C-3 | 3 | 9 | 0 |

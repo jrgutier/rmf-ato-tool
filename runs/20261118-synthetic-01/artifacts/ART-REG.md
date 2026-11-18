@@ -2,15 +2,28 @@
 artifact_id: ART-REG
 run_id: 20261118-synthetic-01
 produced_by_task: P-18
-touched_by: [P-18]
-sources: [INT-056.A1, INT-056.A2, INT-056.A3, INT-057.A1, ASM-014, ART-BND]
+touched_by: [P-18, C-1, C-3]
+sources: [INT-056.A1, INT-056.A2, INT-056.A3, INT-057.A1, ASM-014, ART-BND, INT-058.A2, ART-SD, INT-069.A2, ART-CAT]
 ---
 # System registration
 
 <!-- BEGIN rmf:facts -->
 | Fact | Value | Set by |
 |---|---|---|
+| System name | Example Fleet Readiness Analytics Service | C-1 |
+| Acronym | EFRAS | C-1 |
+| System ID | EFRAS | C-1 |
+| Aliases | none | C-1 |
 | Authorization boundary | EFRAS-BND-1 | P-11 |
+| Life-cycle state | under-development | C-1 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
+| Categorization approved | yes (PER-AODR) | C-3 |
+| Classification and handling markings | unclassified; markings: CUI | C-1 |
+| IT type | major-application, networked | C-1 |
+| Owning organization | Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional) | C-1 |
+| System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
+| Operational environment | production | C-1 |
+| Life-cycle phase | PH-PD | C-1 |
 <!-- END rmf:facts -->
 
 ## Registry and registration record
@@ -51,5 +64,13 @@ The ISSM updates the record at four points [[INT-056.A3]]:
 - at the authorization decision (R-5);
 - at disposal (M-7).
 
-Between those points, the ISSO keeps the contacts current. No update is recorded yet in
-`registration.yaml` [[INT-056.A3]].
+Between those points, the ISSO keeps the contacts current [[INT-056.A3]].
+
+## Registration updates made
+
+- C-1, 2026-11-18: the characterization from ART-SD entered in the record: the system
+  identifier (the eMASS record number stays the registry record, not the identifier), version,
+  owning organization, type, classification, users, interconnections, leveraged authorizations
+  and CSSP alignment [[INT-058.A2]] [[ART-SD]].
+- C-3, 2026-11-18: the approved categorization of ART-CAT and its Privacy Overlay sets, entered
+  after the AODR's approval [[INT-069.A2]] [[ART-CAT]].

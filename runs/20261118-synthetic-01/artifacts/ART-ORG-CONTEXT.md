@@ -10,7 +10,20 @@ sources: [INT-001.A1, INT-001.A2, INT-002.A1, INT-003.A1, INT-004.A2, INT-005.A1
 <!-- BEGIN rmf:facts -->
 | Fact | Value | Set by |
 |---|---|---|
+| System name | Example Fleet Readiness Analytics Service | C-1 |
+| Acronym | EFRAS | C-1 |
+| System ID | EFRAS | C-1 |
+| Aliases | none | C-1 |
 | Authorization boundary | EFRAS-BND-1 | P-11 |
+| Life-cycle state | under-development | C-1 |
+| Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
+| Categorization approved | yes (PER-AODR) | C-3 |
+| Classification and handling markings | unclassified; markings: CUI | C-1 |
+| IT type | major-application, networked | C-1 |
+| Owning organization | Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional) | C-1 |
+| System version | 1.5 (MVCR) (released 2026-10-27) | C-1 |
+| Operational environment | production | C-1 |
+| Life-cycle phase | PH-PD | C-1 |
 <!-- END rmf:facts -->
 
 ## RMF role assignments
@@ -140,7 +153,9 @@ the board's portfolio register within 30 days [[INT-005.A5]].
 **External entities and references.** The cloud provider, the software factory, the CSSP and
 the EMIS program are the external entities in an actual risk relationship; the AO accepted each
 one's ongoing risk, EMIS on an interim e-mail approval until its agreement is signed
-[[INT-004.A4]]. The governing references were checked for later editions on 2026-11-02 and
+[[INT-004.A4]]. The enterprise cloud access point, left off that list at P-2, was added at C-1
+as EXT-05, and the cloud entity carries its offering name, Example GovCloud IL4 region
+[[INT-060.A7]]. The governing references were checked for later editions on 2026-11-02 and
 none was found [[INT-004.A5]] [[ASM-004]]. The structured record is in
 `artifacts/data/org-context.yaml` (program, policies, resources, risk_frame, governance,
 risk_assessment_guidance, risk_response, external_entities, reference_currency) and the C-SCRM
