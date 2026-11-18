@@ -28,7 +28,7 @@ Mode: synthetic. Human respondents: none.
 | ASM-018 | I-1 | PER-DEV | The STIG release numbers and DISA rule IDs of the 2026-10-22 scan are not known to the run: stig-summary.yaml records each benchmark's version as the release current at the scan date and gives the six PostgreSQL items fictional placeholder rule IDs (SV-9002xx) standing for the IDs in the scan export; their CAT II category is as the developer states it in INT-135.A2. | product/test-results.md#stig-scan gives the benchmarks, compliance percentages and the six open PostgreSQL items by subject only, while stig-summary.schema.json requires a version for every benchmark and a V-/SV- rule ID and category for every finding; inventing real DISA IDs would mislead. |
 | ASM-019 | I-1 | PER-ISSE | The Application Security and Development STIG applies to the five EFRAS application containers (INV-002 to INV-006), and its checklist review has not been done for release 1.5.0; the ISSE asks the assessor to perform it at A-3. | The product names no benchmark for the application containers and no checklist review of them (product/test-results.md shows only pipeline gates and DT-2), while STIG-001 needs every software item mapped; the ISSE names the applicable checklist in INT-136.A2. |
 
-## Interview answers (358; SIMULATED 358)
+## Interview answers (379; SIMULATED 379)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -61,3 +61,5 @@ Mode: synthetic. Human respondents: none.
 | S-6 | 2 | 3 | 0 |
 | I-1 | 3 | 7 | 0 |
 | I-2 | 4 | 7 | 0 |
+| A-1 | 5 | 9 | 0 |
+| A-2 | 5 | 12 | 0 |
