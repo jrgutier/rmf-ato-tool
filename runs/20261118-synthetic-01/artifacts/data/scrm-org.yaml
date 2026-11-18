@@ -1,0 +1,430 @@
+# artifacts/data/scrm-org.yaml (ART-ORG-CONTEXT, P-1 to P-7; schema scrm-org). Written whole
+# (INV-8). Dry-run deviation: the playbook asks P-1 to fill governance only and leave the other
+# sections as placeholders, but RUN-PH-001 and the schema refuse that, so P-1 records every
+# section from the CISO's C-SCRM interview (INT-003); P-2, P-3, P-4 and P-7 confirm their
+# sections in their own interviews.
+frame:
+  supply_chain:
+    processes:
+      - "Acquisition of software, services and hardware for Component systems"
+    systems:
+      - "Component business and mission systems"
+      - "Shared platforms they run on: commercial cloud regions and DoD software factories"
+    services:
+      - "Cloud, software factory and cybersecurity services"
+    products:
+      - "Commercial software and open-source libraries"
+      - "Container base images"
+      - "End-user hardware and aviation support equipment (operational technology)"
+    ot_suppliers: true
+    dependencies: "Commercial cloud regions under DoD provisional authorizations, DoD software factories, and their upstream open-source and base image suppliers (critical fourth parties)"
+    review_interval: P1Y
+    sources:
+      - INT-003.A1
+  criticality:
+    factors:
+      - "Mission the supplier supports"
+      - "Difficulty of replacing the supplier"
+      - "Access the supplier gets to Component data or networks"
+      - "Whether the supplier delivers code that runs inside Component boundaries"
+    levels: "A supplier is as critical as the most critical mission (Level 1), mission area (Level 2) or system (Level 3) it supports"
+  assumptions:
+    - kind: threat
+      statement: "Capable adversaries target software supply chains, chiefly open-source dependencies and build pipelines"
+      basis: refined
+      information:
+        - "Component threat briefings"
+        - "Supply chain advisories shared through the sharing communities"
+      refined_at:
+        - P-3
+        - P-14
+      sources:
+        - INT-003.A2
+    - kind: vulnerability
+      statement: "Vulnerable third-party components reach production faster than hardened replacements can be issued"
+      basis: developed
+      information:
+        - "Program POA&Ms and scan results across the portfolio"
+      refined_at:
+        - P-14
+      sources:
+        - INT-003.A2
+    - kind: impact
+      statement: "A compromised shared platform affects every program that runs on it at once"
+      basis: inherited
+      information:
+        - "Component risk management strategy"
+      refined_at:
+        - P-3
+        - P-14
+      sources:
+        - INT-003.A2
+    - kind: likelihood
+      statement: "A software supplier compromise somewhere in the Component portfolio is likely within a year"
+      basis: refined
+      information:
+        - "Component incident history"
+        - "Sharing community reports"
+      refined_at:
+        - P-14
+      sources:
+        - INT-003.A2
+  threat_sources:
+    addressed:
+      - adversarial
+      - accidental
+      - structural
+      - environmental
+    not_addressed: []
+    ttps: "Dependency confusion, malicious package insertion, build pipeline compromise and tampered base images"
+    classified: "The Component consumes classified supply chain threat intelligence through its intelligence office; summaries reach the C-SCRM office unclassified"
+  impact_directions:
+    - top-down
+    - bottom-up
+  likelihood_horizon: P1Y
+  constraints:
+    agency:
+      - "Purchases go through shared contract vehicles"
+      - "Platform controls are inherited and cannot be changed by the Component"
+    supply_chain:
+      - "Limited sub-tier visibility; open-source projects sign no agreements with the Component"
+  appetite:
+    statement: "Moderate supply chain risk is accepted for business systems with a fallback; low risk for components that carry code into mission systems"
+    set_at: level-1
+    considered:
+      - threats
+      - vulnerabilities
+      - constraints
+      - criticality
+    outside: "A quarter outside appetite triggers a C-SCRM council review and a report to the risk board"
+  tolerance:
+    - level: level-2
+      statement: "No unmitigated high supplier risk in a mission area for more than 30 days"
+      thresholds:
+        - "High supplier risk open without mitigation for more than 30 days"
+    - level: level-3
+      statement: "No critical or high vulnerability in a supplied component past its remediation date without an AO-approved POA&M item"
+      thresholds:
+        - "Critical or high supplied-component vulnerability past its remediation date with no approved POA&M item"
+  priorities:
+    - statement: "Protect build pipelines and shared platforms first, trading speed of new supplier adoption for vetting"
+      considered:
+        - appetite
+        - tolerance
+        - threats
+        - vulnerabilities
+        - constraints
+        - criticality
+  outputs:
+    - output: policy
+      held_in: "Component C-SCRM policy"
+    - output: criticality
+      held_in: "Component C-SCRM strategy, critical supplier list"
+    - output: assessment-methodology
+      held_in: "Component C-SCRM strategy, assessment section"
+    - output: response-guidance
+      held_in: "Component C-SCRM strategy, response section"
+    - output: monitoring-guidance
+      held_in: "Component C-SCRM strategy, monitoring section"
+    - output: mission-requirements
+      held_in: "C-SCRM strategy annex A"
+    - output: revised-processes
+      held_in: "C-SCRM strategy annex B"
+    - output: operational-requirements
+      held_in: "C-SCRM strategy annex C"
+    - output: acquisition-guidance
+      held_in: "Component acquisition guide, C-SCRM chapter"
+  sources:
+    - INT-003.A1
+    - INT-003.A2
+    - INT-003.A3
+governance:
+  lead:
+    persona: PER-CISO
+    office: "Component cybersecurity office, C-SCRM program office (fictional)"
+  head: "The DoD Component head owns supply chain risk and is accountable for it; ownership for each system is delegated to its authorizing official"
+  owners:
+    - PER-AO
+  delegates:
+    - PER-AODR
+  escalation:
+    when: "A supplier or product risk exceeds the program's tolerance, or a supplier issue affects more than one program"
+    how: "The program raises it to the C-SCRM council; the council escalates to the Component risk board when the risk exceeds the council's tolerance"
+  council:
+    members:
+      - function: "Chair, Component cybersecurity office"
+        persona: PER-CISO
+      - function: "Acquisition and contracting lead"
+      - function: "Risk board representative"
+        persona: PER-RE
+      - function: "Lead systems engineer"
+        persona: PER-LSE
+    charter:
+      goals: "Keep supply chain risk to Component systems within the risk board's appetite and tolerance, and make supplier risk visible to AOs"
+      authorities: "Charter signed by the Component CIO; the council recommends, the AO decides for a system and the risk board for the Component"
+      cadence: P1M
+      responsibilities: "Review supplier risk assessments, track supplier incidents and advisories, approve the Component's C-SCRM practices and advise AOs on supplier risk"
+  pmo: matrixed
+  operating_model:
+    model: "Matrixed program office in the CISO's office drawing on acquisition, legal, logistics and engineering staff"
+    rationale: "The Component's program offices buy most software and services through shared vehicles, so a small central office with matrixed specialists fits its resources"
+  roles:
+    - persona: PER-CIO
+      duty: "Sets C-SCRM policy and secures its resources"
+    - persona: PER-CISO
+      duty: "Leads the C-SCRM program and chairs the council"
+    - persona: PER-RE
+      duty: "Sets supply chain risk appetite and tolerance for the Component"
+    - persona: PER-AO
+      duty: "Owns supply chain risk for the systems it authorizes and accepts residual supplier risk"
+    - persona: PER-PM
+      duty: "Builds C-SCRM requirements into contracts, task orders and the program's plans"
+    - persona: PER-ISSE
+      duty: "Applies C-SCRM in the system's security architecture and component selection"
+    - persona: PER-DEV
+      duty: "Uses only approved dependencies and base images and reports supplier issues found in the build"
+  cleared:
+    - PER-CISO
+    - PER-ISSM
+  sources:
+    - INT-001.A6
+    - ASM-003
+policy:
+  title: "Component Cyber Supply Chain Risk Management Policy (fictional)"
+  levels:
+    - level-1
+    - level-2
+  purpose: "Sets C-SCRM requirements for every Component acquisition of software, services and hardware; leadership intends to adhere to and enforce it through contract and ATO package review"
+  authorities:
+    - "Federal supply chain security law (FASCSA)"
+    - "DoDI 5200.44"
+    - "DoDI 8500.01"
+    - "NIST SP 800-161 Rev. 1"
+  statements:
+    - "Every acquisition for a Component system carries C-SCRM requirements; critical suppliers are assessed before award; supplier incidents are reported to the CISO's office within 72 hours"
+  roles:
+    - persona: PER-CISO
+      responsibility: "Owns the policy and runs the C-SCRM program"
+    - persona: PER-PM
+      responsibility: "Applies the policy in contracts and the program's plans"
+  integration_points:
+    - risk-management-process
+    - sdlc
+  enforcement: "Contract review, ATO package review and the annual program review"
+  responsible:
+    - persona: PER-CISO
+      role: "Component CISO (fictional role label)"
+  revisions:
+    interval: P1Y
+    table:
+      - date: '2026-01-15'
+        change: "Added software bill of materials requirements"
+  sources:
+    - INT-003.A4
+strategy:
+  purpose: "Directs how the Component vets suppliers and keeps visibility of software components; held by the CISO's office"
+  anchored_to: "Component risk management strategy (ART-ORG-CONTEXT, P-2)"
+  authorities:
+    - "DoDI 5200.44"
+    - "NIST SP 800-161 Rev. 1"
+  objectives:
+    - "Vet every critical supplier before award"
+    - "Keep visibility of software components through bills of materials"
+  acquisition: "C-SCRM clauses and supplier assessments are part of every acquisition for a Component system"
+  funding: "Funded from the Component cybersecurity budget line"
+  milestones:
+    - milestone: "Component-wide software bill of materials repository"
+      date: '2027-06-30'
+  escalation: "Program to C-SCRM council to risk board, with feedback to the program after each council review"
+  suppliers: "Critical: cloud regions, software factories and their base image suppliers; high: cybersecurity service providers; moderate: commercial software and end-user hardware"
+  contingency_acquisition: "Urgent buys may award before a full supplier assessment if the CISO's office completes it within 30 days of award"
+  responsible:
+    - persona: PER-CISO
+      role: "Component CISO (fictional role label)"
+  revisions:
+    interval: P1Y
+    table:
+      - date: '2026-01-15'
+        change: "Added software bill of materials objective and milestone"
+  sources:
+    - INT-003.A4
+levels:
+  - level: level-1
+    deliverables:
+      - strategy
+      - policy
+    informs:
+      - level-2
+  - level: level-2
+    deliverables:
+      - implementation-plan
+    informs:
+      - level-1
+      - level-3
+  - level: level-3
+    deliverables:
+      - c-scrm-plan
+    informs:
+      - level-1
+      - level-2
+process:
+  steps:
+    - step: frame
+      c_scrm: "Sets supplier criticality, appetite and tolerance"
+    - step: assess
+      c_scrm: "Rates suppliers and supplied components"
+    - step: respond
+      c_scrm: "Selects controls and contract terms for supplier risk"
+    - step: monitor
+      c_scrm: "Watches advisories, supplier changes and incidents"
+  sdlc: "At component selection, at build gates and at release gates"
+  adopted: "SP 800-161 Rev. 1 enterprise practices adopted with a Component supplier questionnaire replacing the generic one"
+  integration: "Supplier risk results enter the organization and system risk assessments and the AO's risk determination"
+  methodologies: "Component supplier questionnaire and the SP 800-161 supply chain risk assessment template"
+  handoff: "Levels 1 and 2 hand each system the criticality list, appetite, tolerance and approved suppliers for its P-14 risk assessment and its C-SCRM plan"
+  opsec: "The Component operations security office reviews what supplier risk information is shared"
+  sources:
+    - INT-003.A5
+sharing:
+  practices:
+    - practice: goals
+      how: "Sharing goals set by the C-SCRM council"
+    - practice: internal-sources
+      how: "Inventory of Component sources: CSSP alerts, program POA&Ms, supplier assessments"
+    - practice: scope
+      how: "Unclassified supplier names, advisories and assessment results only"
+    - practice: rules
+      how: "Handling rules approved by the operations security office"
+    - practice: join
+      how: "Member of the Defense Industrial Base sharing community and a DoD software assurance community"
+    - practice: enrich
+      how: "Adds Component context to received advisories"
+    - practice: automate
+      how: "Machine-readable advisory feeds into the C-SCRM repository"
+    - practice: agreements
+      how: "Community membership agreements kept by the CISO's office"
+    - practice: protect
+      how: "Received and held supplier information kept in the access-limited C-SCRM repository"
+    - practice: support
+      how: "Contributes Component findings back to the communities"
+  communities:
+    - name: "Defense Industrial Base sharing community (fictional membership)"
+      agreement: "Community membership agreement (fictional)"
+  fasc:
+    liaison: "The Department's liaison to the Federal Acquisition Security Council, through the DoD CIO"
+    process: "Supply chain risk information goes to and comes from the FASC through the DoD CIO"
+  scope:
+    classification: "Unclassified"
+    data_types:
+      - "Supplier names and advisories"
+      - "Supplier assessment results"
+  handling: "Voluntary sharing, marked with handling and confidence metadata"
+  feeds:
+    - P-3
+    - P-14
+  sources:
+    - INT-003.A6
+    - INT-008.A3
+maturity:
+  practices:
+    - practice: "Supplier inventories and contract clauses"
+      tier: foundational
+      status: implemented
+    - practice: "Software bill of materials review"
+      tier: sustaining
+      status: in-progress
+    - practice: "Automated supplier risk scoring"
+      tier: enhancing
+      status: not-started
+    - practice: "Supplier incident reporting"
+      tier: sustaining
+      status: implemented
+  next:
+    - "Automated supplier risk scoring"
+  sources:
+    - INT-003.A7
+measures:
+  framework: "Component C-SCRM scorecard"
+  stakeholders:
+    primary:
+      - PER-CIO
+      - PER-CISO
+    secondary:
+      - PER-PM
+  goals:
+    - goal: "C-SCRM requirements in every new contract and supplier risk kept within tolerance"
+      validated_with:
+        - PER-CIO
+  measures:
+    - id: MEAS-01
+      kind: implementation
+      indicator: kpi
+      against: objective
+      measure: "Share of new contracts with C-SCRM clauses"
+      target: "100%"
+      data_source: "Contract review log, quarterly scorecard"
+    - id: MEAS-02
+      kind: efficiency-effectiveness
+      indicator: kri
+      against: tolerance
+      measure: "Days an unmitigated high supplier risk stays open"
+      target: "30 days or fewer"
+      data_source: "C-SCRM repository, quarterly scorecard"
+    - id: MEAS-03
+      kind: mission-impact
+      indicator: kri
+      against: appetite
+      measure: "Supplier-caused outage hours for business systems"
+      target: "No outage above 72 hours"
+      data_source: "CSSP incident reports, quarterly scorecard"
+  feedback: "The council reviews the scorecard quarterly with the CIO and program managers"
+  monitoring:
+    purpose: "Show whether supplier risk stays within appetite and tolerance"
+    type: "Scorecard review of contract, repository and incident data"
+    frequency: P90D
+  supplier_data: "Kept in the C-SCRM repository with access limited to the CISO's office"
+  sources:
+    - INT-003.A8
+response_framework:
+  - level: level-1
+    threat_source: "Adversary targeting software supply chains"
+    threat_event: "Malicious code inserted into an open-source dependency through a build pipeline"
+    vulnerability: "Unpinned or unverified dependencies in build pipelines"
+    outcome: "Malicious code runs in Component systems"
+    likelihood: moderate
+    impact: high
+    exposure: moderate
+    mitigations:
+      - strategy: "Dependency pinning, signature verification and SBOM review at build gates (sr-3, sr-11, sa-11)"
+        cost: "Moderate: pipeline tooling and review effort"
+        effectiveness: "High against known insertion techniques"
+    baseline_changes: "None to the common control baselines; build gate requirements added to the C-SCRM policy"
+    references:
+      - "NIST SP 800-161 Rev. 1"
+  - level: level-2
+    threat_source: "Structural: platform patch latency"
+    threat_event: "A shared platform's base image carries a known vulnerability it cannot patch in time"
+    vulnerability: "Dependence on the platform's hardened image release cycle"
+    outcome: "Every program on the platform runs a vulnerable component for weeks"
+    likelihood: low
+    impact: moderate
+    exposure: low
+    mitigations:
+      - strategy: "Compensating controls at the program and tracked POA&M items until the hardened image arrives (ra-5, si-2)"
+        cost: "Low: program effort"
+        effectiveness: "Moderate: reduces exposure while the fix is pending"
+    baseline_changes: "None"
+    references:
+      - "NIST SP 800-161 Rev. 1"
+      - "Component C-SCRM strategy"
+training:
+  baseline: "Annual C-SCRM awareness for all personnel"
+  role_criteria: "Role-based C-SCRM training for buyers and engineers"
+  framework: "DoD Cyber Workforce Framework"
+  assessors: "Supplier risk assessors with acquisition and software assurance experience"
+  sources:
+    - INT-003.A7
+sources:
+  - INT-001.A6
+  - INT-003.A1
+  - ASM-003
