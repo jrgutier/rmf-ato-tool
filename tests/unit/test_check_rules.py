@@ -397,3 +397,18 @@ def test_gap_closed_note_answers_xcon_001(tmp_path):
               lambda d: d["determinations"][0].update(gap_closed="Audit of logons enabled."))
     run = open_run(run_dir, REPO_ROOT)
     assert not [f for f in engine.evaluate(run).findings if f.rule == "XCON-001"]
+
+
+@pytest.mark.parametrize(("provider", "flagged"), [("LA-01", False), ("LA-99", True)])
+def test_dodin_awareness_from_a_leveraged_provider(tmp_path, provider, flagged):
+    """F-16-2: an access point or CSP on record may give an awareness area for the system."""
+    run_dir = copy_run(VALID_MINIMAL, tmp_path / "run")
+
+    def provided(d):
+        dodin = d["reporting"]["dodin"]
+        dodin["awareness"] = [a for a in dodin["awareness"] if a != "bandwidth"]
+        dodin["provided_by"] = {"bandwidth": provider}
+    edit_yaml(run_dir / "artifacts/data/conmon.yaml", provided)
+    run = open_run(run_dir, REPO_ROOT)
+    found = [f.finding.message for f in engine.evaluate(run).findings if f.rule == "MRPT-001"]
+    assert any("bandwidth" in m for m in found) is flagged, found

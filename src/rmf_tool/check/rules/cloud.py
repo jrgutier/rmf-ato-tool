@@ -666,8 +666,10 @@ def hosting(ctx: Context) -> list[RunFinding]:
             "an assessment that it is, or can and would be, cloud-hosted")
     if environment == "cloud" and cloud != "cloud-hosted":
         err(f"the system is hosted in the cloud and its cloud assessment says {cloud}")
-    environments = _strings(_mapping(ctx.data(AGREEMENTS_FILE)).get("system_environments"))
-    if cloud == "cloud-hosted" and "cloud" not in environments:
+    # S-4 writes service-agreements.yaml; until then P-16 cannot be held to it (F-03-2)
+    agreements = ctx.data(AGREEMENTS_FILE)
+    environments = _strings(_mapping(agreements).get("system_environments"))
+    if cloud == "cloud-hosted" and isinstance(agreements, dict) and "cloud" not in environments:
         err("the cloud assessment says the system is cloud-hosted and service-agreements.yaml "
             "does not name the cloud among its environments")
     return out

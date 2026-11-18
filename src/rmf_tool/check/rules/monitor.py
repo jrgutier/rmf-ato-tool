@@ -397,7 +397,11 @@ def _dodin(ctx: Context, reports: list[Record], designation: str, err: Err) -> N
 
 
 def _awareness(ctx: Context, err: Err) -> None:
-    areas = _strings(_block(_block(ctx.data(CONMON_FILE), "reporting"), "dodin"), "awareness")
+    dodin = _block(_block(ctx.data(CONMON_FILE), "reporting"), "dodin")
+    areas = _strings(dodin, "awareness")
+    # an area a leveraged provider covers counts when that provider is on record (F-16-2)
+    leveraged = {r.get("id") for r in _items(ctx.data(LEVERAGED_FILE), "leveraged_authorizations")}
+    areas |= {area for area, la in _block(dodin, "provided_by").items() if la in leveraged}
     if missing := sorted(AWARENESS - areas):
         err(f"ISCM gives no ongoing awareness of {', '.join(missing)} to support DODIN operations")
     if EMPLOYEE_USE not in areas:
