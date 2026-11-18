@@ -18,6 +18,7 @@ sources: [INT-058.A1, INT-058.A2, INT-058.A3, INT-058.A4, INT-058.A5, INT-058.A6
 | Life-cycle state | under-development | C-1 |
 | Security categorization | C/I/A MODERATE/MODERATE/LOW; overlays: CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT | C-2 |
 | Categorization approved | yes (PER-AODR) | C-3 |
+| Control baseline | CNSSI1253-M-M-L-SUBSET-50 | S-1 |
 | Classification and handling markings | unclassified; markings: CUI | C-1 |
 | IT type | major-application, networked | C-1 |
 | Owning organization | Aviation Readiness Software Program Office (ARSPO), naval aviation PEO (fictional) | C-1 |

@@ -1,0 +1,246 @@
+# artifacts/data/tailoring.yaml (S-2; schema framework/schema/tailoring.schema.json).
+# Written whole. No add, remove or compensating action: the dry-run control_subset fixes the
+# set at 50 controls (INT-074.A4), so the supplementation the ISSM would make in a real run
+# (SI-10, SI-19, MP-3) is recorded as a gap in ART-BASELINE, not as add actions.
+actions:
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.04
+      value: "Component account policy, with each user's annual privacy training current; an account whose holder lets privacy training lapse is disabled"
+    rationale: "The Privacy Overlay assigns account actions in accordance with the annual privacy training requirement."
+    sources: [INT-074.A3, INT-075.A3]
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.05
+      value: "the EFRAS ISSO"
+    rationale: "The ISSO provisions roles, so the ISSO is notified with the account managers (Privacy Overlay AC-2 h)."
+    sources: [INT-074.A3, product/architecture.md#identity]
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.06
+      value: "24 hours"
+    rationale: "Privacy Overlay value for notification when accounts are no longer required."
+    sources: [INT-074.A3]
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.07
+      value: "24 hours"
+    rationale: "Privacy Overlay value for notification when users are terminated or transferred."
+    sources: [INT-074.A3]
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.08
+      value: "24 hours"
+    rationale: "Privacy Overlay value for notification when system usage or need-to-know changes."
+    sources: [INT-074.A3]
+  - control_id: ac-2
+    action: parameter
+    parameter:
+      param_id: ac-02_odp.10
+      value: "quarterly"
+    rationale: "The Component's account review frequency, stricter than the Privacy Overlay's at least annually."
+    sources: [INT-074.A3, INT-017.A1]
+  - control_id: cm-2
+    action: parameter
+    parameter:
+      param_id: cm-02_odp.01
+      value: "at least annually and at each release"
+    rationale: "Releases ship every three weeks from version-controlled templates; the annual review is the floor."
+    sources: [INT-074.A3, product/architecture.md#configuration]
+  - control_id: cm-2
+    action: parameter
+    parameter:
+      param_id: cm-02_odp.02
+      value: "a change affecting the administrative, technical or physical safeguards addressed in the published PIA or SORN, or a significant change"
+    rationale: "Privacy Overlay CM-2 b.2 circumstance."
+    sources: [INT-074.A3]
+  - control_id: cm-3
+    action: parameter
+    parameter:
+      param_id: cm-03_odp.02
+      value: "the EFRAS configuration control board"
+    rationale: "Major releases already go to the program's configuration control board."
+    sources: [INT-074.A3, product/architecture.md#configuration]
+  - control_id: cm-3
+    action: parameter
+    parameter:
+      param_id: cm-03_odp.04
+      value: "monthly"
+    rationale: "The board meets monthly in addition to the change-driven meetings."
+    sources: [INT-074.A3]
+  - control_id: cm-3
+    action: parameter
+    parameter:
+      param_id: cm-03_odp.05
+      value: "a change affecting safeguards addressed in the published PIA or SORN, or a major release"
+    rationale: "Privacy Overlay CM-3 g condition, plus the program's major-release rule."
+    sources: [INT-074.A3]
+  - control_id: sc-8
+    action: parameter
+    parameter:
+      param_id: sc-08_odp
+      value: "confidentiality; integrity"
+    rationale: "The Privacy Overlay requires both for PII in transit."
+    sources: [INT-074.A3]
+  - control_id: sc-12
+    action: parameter
+    parameter:
+      param_id: sc-12_odp
+      value: "centralized management of key generation, distribution, storage, access and destruction in the provider key service under program-owned keys, following NIST SP 800-57"
+    rationale: "Privacy Overlay SC-12 key management requirements, met by the program-owned keys in CMP-KMS."
+    sources: [INT-074.A3, product/architecture.md#components]
+  - control_id: sc-28
+    action: parameter
+    parameter:
+      param_id: sc-28_odp.01
+      value: "confidentiality; integrity"
+    rationale: "Privacy Overlay SC-28 value."
+    sources: [INT-074.A3]
+  - control_id: sc-28
+    action: parameter
+    parameter:
+      param_id: sc-28_odp.02
+      value: "PII and all CUI at rest in the database, object storage and backups"
+    rationale: "The Privacy Overlay names PII; the CUI handling marking extends it to all CUI."
+    sources: [INT-074.A3, ART-CAT]
+  - control_id: au-11
+    action: parameter
+    parameter:
+      param_id: au-11_odp
+      value: "one year"
+    rationale: "The Component's retention requirement (REQ-05); the program's 90-day store does not meet it today, which S-4 records as partial and A-6 tracks."
+    sources: [INT-074.A3, INT-072.A2, product/conops.md#limitations]
+  - control_id: si-12
+    action: specification
+    specification:
+      text: "Maintainer PII is kept only while the linked maintenance action is inside the 5-year analysis window; the ingest worker purges older records monthly."
+      placement: addendum
+    rationale: "SI-12 states no retention period; the addendum carries the program's minimization and retention rule behind REQ-14."
+    sources: [INT-075.A1, product/privacy.md#minimization]
+assumptions:
+  - id: AS-BL-1
+    holds: true
+    rationale: "Readiness data and maintainer PII persist for the 5-year analysis window in the database."
+    sources: [INT-074.A5, product/privacy.md#minimization]
+  - id: AS-BL-2
+    holds: true
+    rationale: "About 3,000 users share the system concurrently."
+    sources: [INT-074.A5]
+  - id: AS-BL-3
+    holds: true
+    rationale: "Users see only their own squadron or air wing unless they hold the analyst role."
+    sources: [INT-074.A5, product/architecture.md#identity]
+  - id: AS-BL-4
+    holds: true
+    rationale: "A networked web application reached over NIPRNet through the access point."
+    sources: [INT-074.A5]
+  - id: AS-BL-5
+    holds: true
+    rationale: "The program, ERST and four authorized providers carry the controls; known gaps have funded fixes."
+    sources: [INT-074.A5, INT-077.A2]
+  - id: AS-NSS-1
+    holds: true
+    rationale: "Privileged insiders in cloud accounts are a threat source in the risk assessment."
+    sources: [INT-074.A5, ART-RA]
+  - id: AS-NSS-2
+    holds: true
+    rationale: "Nation-state actors seeking readiness data are a threat source in the risk assessment."
+    sources: [INT-074.A5, ART-RA]
+  - id: AS-NSS-3
+    holds: true
+    rationale: "The Component selects under CNSSI 1253 for the practices beyond the NIST baselines."
+    sources: [INT-074.A5]
+  - id: AS-ADD-1
+    holds: false
+    rationale: "No classified information is stored, processed or transmitted."
+    sources: [INT-074.A5, ART-CAT]
+  - id: AS-ADD-2
+    holds: true
+    controls: [pt-2, pt-3, ra-8, sc-8, sc-28]
+    overlays: [CNSSI1253F-ATT6-PRIVACY-MODERATE, CNSSI1253F-ATT6-PRIVACY-ACCT]
+    rationale: "Maintainer PII under the Privacy Act and CUI need protection law and policy specify; the Privacy Overlays and the selected privacy and encryption controls address it."
+    sources: [INT-074.A5, ART-CAT]
+  - id: AS-ADD-3
+    holds: false
+    rationale: "No connection across security domains."
+    sources: [INT-074.A5, ART-CAT]
+  - id: AS-PRV-1
+    holds: true
+    rationale: "Component policy requires annual privacy training and role-based training before bulk PII access; roles are approved before provisioning."
+    sources: [INT-075.A3]
+assurance:
+  additional_needed: false
+  rationale: "Moderate assurance comes from the software factory's automated release evidence, SA-11 and the supply chain controls in the set."
+  sources: [INT-074.A6]
+privacy_implementation:
+  - control_id: au-6
+    by: PER-PRIV
+    implications: [1]
+    finding: "Review reads names and DoD ID numbers; reviewers see only what the review needs, and misuse found in review is reported to the privacy office."
+    sources: [INT-075.A2]
+  - control_id: cm-6
+    by: PER-PRIV
+    implications: [2]
+    finding: "Log fields, export defaults and sandbox egress settings must minimize PII; the sandbox egress wildcard must close."
+    sources: [INT-075.A2]
+  - control_id: ia-2
+    by: PER-PRIV
+    implications: [3]
+    finding: "The DoD ID number in the broker assertion is kept only as account key and audit identity; break-glass FIDO2 keys carry no personal data."
+    sources: [INT-075.A2]
+  - control_id: ia-5
+    by: PER-PRIV
+    implications: [3]
+    finding: "Authenticators are CAC certificates at the broker and sealed FIDO2 keys; EFRAS stores no authenticator holding PII."
+    sources: [INT-075.A2]
+  - control_id: pe-3
+    by: PER-PRIV
+    implications: [2]
+    finding: "The provider's physical access records concern its own staff and stay with the provider."
+    sources: [INT-075.A2]
+  - control_id: ps-3
+    by: PER-PRIV
+    implications: [1]
+    finding: "ERST screening records stay with ERST and the security office, not in EFRAS."
+    sources: [INT-075.A2]
+  - control_id: ps-4
+    by: PER-PRIV
+    implications: [1]
+    finding: "Termination records stay with ERST and the security office; EFRAS only disables the account."
+    sources: [INT-075.A2]
+  - control_id: sc-7
+    by: PER-PRIV
+    implications: [4]
+    finding: "The egress allow-list keeps extracts inside; the CSSP receives log PII only under its agreement."
+    sources: [INT-075.A2]
+  - control_id: sc-12
+    by: PER-PRIV
+    implications: [1]
+    finding: "Program-owned keys in the key service and their rotation keep a lost key from exposing PII."
+    sources: [INT-075.A2]
+  - control_id: si-4
+    by: PER-PRIV
+    implications: [2, 3]
+    finding: "Monitoring captures users' PII; notice is given at sign-in, monitoring data is encrypted and the CSSP holds it under its agreement."
+    sources: [INT-075.A2]
+trade_offs:
+  - factor: cost
+    controls: [au-11]
+    weighed: "An archive tier for one year of the program's own logs against relying on the CSSP's one-year copy."
+    outcome: implementation-chosen
+    sources: [INT-077.A1]
+  - factor: complexity
+    controls: [ia-2]
+    weighed: "Building console federation that survives an identity broker outage against two sealed, alerted FIDO2 break-glass accounts."
+    outcome: retained
+    sources: [INT-077.A1]
+  - factor: supply-chain
+    controls: [sa-11, sr-3, sr-11]
+    weighed: "Running the program's own pipeline security against taking the software factory's scanning, signing and base images, at the price of waiting on its base image fix."
+    outcome: implementation-chosen
+    sources: [INT-077.A1]

@@ -25,7 +25,7 @@ Mode: synthetic. Human respondents: none.
 | ASM-015 | C-1 | PER-PM | Release 1.5 (MVCR) was cut and deployed to pre-production on 2026-10-27, as the PM states in INT-058.A3; this date is the system_version release date. | C-1 must record a release date with the version (SYSD, CNSSI 1254); the product says release 1.5 is ready and running for pilot squadrons but gives no release date. |
 | ASM-016 | C-1 | PER-ISSM | The interconnected systems' authorizing officials are known only by fictional role labels (maintenance and supply systems AO for EMIS and the supply status service, Component enterprise services AO for the identity broker); the EMIS ISSM's interim e-mail approval is dated 2026-09-15; the CSSP alignment (GENSER, Component NOSC, USCYBERCOM-authorized ECSSP, mission support, private range 10.44.0.0/16) and the agreement reference ECSSP-SA-ARSPO-01 are as the ISSM states in INT-060; all are fictional. | The product gives the interconnections, their agreements and ATO dates, and the CSSP service agreement date, but no authorizing officials, interim approval date, NOSC, designation, register entry, address range or agreement identifier, which system-description.yaml and service-agreements.yaml require. |
 
-## Interview answers (205; SIMULATED 205)
+## Interview answers (245; SIMULATED 245)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -50,3 +50,6 @@ Mode: synthetic. Human respondents: none.
 | C-1 | 3 | 16 | 0 |
 | C-2 | 6 | 19 | 0 |
 | C-3 | 3 | 9 | 0 |
+| S-1 | 4 | 13 | 0 |
+| S-2 | 4 | 14 | 0 |
+| S-3 | 6 | 13 | 0 |
