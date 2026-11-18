@@ -26,7 +26,7 @@ Mode: synthetic. Human respondents: none.
 | ASM-016 | C-1 | PER-ISSM | The interconnected systems' authorizing officials are known only by fictional role labels (maintenance and supply systems AO for EMIS and the supply status service, Component enterprise services AO for the identity broker); the EMIS ISSM's interim e-mail approval is dated 2026-09-15; the CSSP alignment (GENSER, Component NOSC, USCYBERCOM-authorized ECSSP, mission support, private range 10.44.0.0/16) and the agreement reference ECSSP-SA-ARSPO-01 are as the ISSM states in INT-060; all are fictional. | The product gives the interconnections, their agreements and ATO dates, and the CSSP service agreement date, but no authorizing officials, interim approval date, NOSC, designation, register entry, address range or agreement identifier, which system-description.yaml and service-agreements.yaml require. |
 | ASM-017 | S-3 | PER-ISSM | The ATO of the Example Enterprise Cloud Access Point ends on 2028-01-10 and the ATO of the Example Software Factory ends on 2028-10-01, three years after each authorization date, as the ISSM states in INT-084.A3; both dates are fictional and to be confirmed in eMASS. | MLEV-001 needs the authorization termination date of each organizational system EFRAS inherits from; product/architecture.md#leveraged gives only the dates authorized. |
 
-## Interview answers (314; SIMULATED 314)
+## Interview answers (344; SIMULATED 344)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -54,4 +54,6 @@ Mode: synthetic. Human respondents: none.
 | S-1 | 4 | 13 | 0 |
 | S-2 | 4 | 14 | 0 |
 | S-3 | 8 | 18 | 0 |
-| S-4 | 36 | 64 | 0 |
+| S-4 | 43 | 83 | 0 |
+| S-5 | 4 | 8 | 0 |
+| S-6 | 2 | 3 | 0 |

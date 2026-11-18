@@ -99,7 +99,7 @@ requirements:
     statement: "The nightly ingest verifies the EMIS signature, the checksum and the schema of each extract, and stops the load without publishing when a check fails."
     kind: security
     needs: [NEED-01, NEED-03]
-    policy: [DP-SW-INPUT-VALIDATION]
+    policy: [DP-SW-INPUT-VALIDATION, DP-SW-SAFETY]
     priority: 1
     criticality: 1
     measure: {kind: performance, statement: "Tampered or malformed test extracts published: 0 of the injected cases."}
@@ -401,9 +401,13 @@ design_policy:
     requirements: [REQ-04]
     sources: [INT-046.A1]
   - statement: DP-SW-SAFETY
-    applies: false
-    reason: "EFRAS is decision support with no operational technology and no mission-critical function in the BIA; it commands nothing and writes nothing back to EMIS."
-    sources: [ART-BIA, product/conops.md#mission]
+    applies: true
+    requirements: [REQ-04]
+    # Corrected at S-4 (2026-11-18): software.yaml records covered software, and DoWI 8430.01's
+    # safety statement binds all covered software ("especially" OT and mission-critical systems).
+    # For decision support the safety hazard is wrong readiness data: REQ-04 stops tampered or
+    # malformed extracts from being published.
+    sources: [INT-128.A1, INT-046.A1, product/conops.md#mission]
   - statement: DP-SW-RESILIENCE
     applies: true
     requirements: [REQ-06]

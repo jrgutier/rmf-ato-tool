@@ -1,0 +1,322 @@
+# artifacts/data/contingency.yaml (S-4; schema contingency). Written whole (INV-8). ART-CP says why.
+# The plan is a draft awaiting the PM's approval (cp-2 partial); its regional failover has never been
+# tested (product/conops.md#limitations item 4, cp-4 partial).
+policy:
+  statement: "The EFRAS contingency plan restores daily readiness reporting within the recovery objectives after a disruption, under the Component RMF policy: the PM owns it, the ISSE coordinates it, the ERST on-call engineers carry it out and the ISSO checks security on the way back."
+  senior_management: "The PM, as system owner, approves the plan and funds its exercises in the sustainment line; the Component CIO's RMF policy requires a plan for every system."
+  impact_levels: "Availability impact low (FIPS 199 through CNSSI 1253); the plan reflects cp-2, cp-4 and cp-9 at that level, with a tabletop as the minimum exercise and a functional failover test because the regional failover is unproven."
+  activation_criteria:
+    - "The system or its database is unavailable, or expected to be, for more than 12 hours"
+    - "Loss of the cloud region, the production account or its connectivity through the access point"
+    - "An incident whose containment needs the account rebuilt (handed over from the incident response plan)"
+    - "Corruption of the readiness data that the nightly ingest cannot correct"
+  backup:
+    frequency: "Continuous point-in-time recovery of CMP-DB with daily snapshots; templates and manifests on every merge"
+    scope: "Full daily database snapshots plus continuous transaction logs; versioned objects in CMP-OBJ; full copies of templates, manifests and images in version control and the factory repository"
+    storage: "Snapshots kept 35 days in the region and copied daily to the provider's second IL4 region, named by date and instance, encrypted with program keys replicated to that region; no physical media to rotate or transport"
+scope:
+  plan_type: iscp
+  related_plans:
+    - plan: "EFRAS incident response plan (ART-IRP)"
+      kind: "incident response plan"
+      version: "1.0 draft"
+      location: "Program document repository"
+      poc: "EFRAS ISSO"
+    - plan: "EFRAS configuration management plan (ART-CMP)"
+      kind: "configuration management plan"
+      version: "1.0 draft"
+      location: "Program document repository"
+      poc: "EFRAS ISSE"
+    - plan: "Example GovCloud IL4 region customer contingency guidance"
+      kind: "provider continuity and disaster recovery documentation"
+      version: "as published with the provisional authorization package"
+      location: "eMASS, the provider's package"
+      poc: "Example GovCloud customer support (SVA-002)"
+    - plan: "Example Maintenance Information System contingency plan"
+      kind: "interconnected system contingency plan"
+      version: "EMIS program's current edition"
+      location: "EMIS program office"
+      poc: "EMIS ISSM"
+bia:
+  processes:
+    - id: BP-01
+      name: "Daily readiness reporting for squadron, air wing and fleet"
+      mtd_hours: 72
+      rto_hours: 24
+      rpo_hours: 24
+      reprocessing_hours: 4
+      priority: 1
+      essential_function: none
+    - id: BP-02
+      name: "Part failure forecasting for early part orders"
+      mtd_hours: 168
+      rto_hours: 48
+      rpo_hours: 24
+      reprocessing_hours: 2
+      priority: 2
+      essential_function: none
+    - id: BP-03
+      name: "Fleet readiness analysis and de-identified data set export"
+      mtd_hours: 168
+      rto_hours: 48
+      rpo_hours: 24
+      reprocessing_hours: 1
+      priority: 3
+      essential_function: none
+  resources:
+    - resource: "Database CMP-DB and its snapshots"
+      kind: data
+      supports: "BP-01, BP-02, BP-03"
+      depends_on: "CMP-KMS keys, the cloud region"
+    - resource: "Cluster CMP-K8S with the application services"
+      kind: component
+      supports: "BP-01, BP-02, BP-03"
+      depends_on: "Templates and signed images in the software factory, the cloud region"
+    - resource: "Key service CMP-KMS"
+      kind: component
+      supports: "BP-01, BP-02, BP-03"
+      depends_on: "The cloud region; keys replicated to the second region"
+    - resource: "Object storage CMP-OBJ"
+      kind: data
+      supports: "BP-01, BP-03"
+      depends_on: "The cloud region"
+    - resource: "Templates, manifests and signed images"
+      kind: software
+      supports: "Rebuild of every component"
+      depends_on: "Example Software Factory"
+    - resource: "ERST on-call engineers (two at a time)"
+      kind: personnel
+      supports: "Recovery of every component"
+      depends_on: "Privileged access workstations, the identity broker or the break-glass procedure"
+    - resource: "EMIS and supply nightly extracts"
+      kind: data
+      supports: "BP-01, BP-02"
+      depends_on: "IC-1 and IC-2"
+  impact_categories:
+    - category: "Readiness reporting delay"
+      scale: "Low: under 72 hours, reporting from EMIS reports; moderate: beyond 72 hours, fleet reporting manual and late"
+    - category: "Loss of forecasts"
+      scale: "Low: early part orders missed for up to a week; moderate: beyond a week"
+    - category: "Data integrity"
+      scale: "Low: one ingest lost and re-run; high: readiness figures wrong without detection"
+  objectives:
+    availability: "Low: an outage delays reporting by a day or more and grounds no aircraft"
+    integrity: "Moderate: restored data must be checked before users see it"
+    confidentiality: "Moderate: backups and the alternate region hold the same CUI and PII and are encrypted with program keys"
+  pocs:
+    - poc: "ERST on-call engineers"
+      relation: internal
+    - poc: "EMIS program ISSM"
+      relation: data-provider
+    - poc: "Supply status service operations"
+      relation: data-provider
+    - poc: "Fleet readiness directorate"
+      relation: end-user
+    - poc: "Enterprise identity broker operations"
+      relation: interconnected-system
+  cost_balance: "A 24-hour recovery point (one nightly ingest) and a cold alternate region: snapshot copies cost little, and a warm region would cost about four times the run cost for an availability need of 72 hours"
+  associated_priorities: "EMIS and the supply service must be up for the ingest; the identity broker for sign-in; the access point for any user traffic. Their outages are handled by their own plans, and EFRAS waits for them."
+  continuity_input: "The fleet readiness directorate's continuity plan falls back to EMIS reports; EFRAS supports no mission essential function and has no FCD-2 entry."
+preventive:
+  power: "Inherited from the cloud region's data centers (UPS, generators, fuel) under its provisional authorization; the program owns no hardware."
+  standardization: "All components are managed services or containers from templates and hardened images; nothing depends on specific hardware."
+  telecommunications_diagrams: "The network diagram and data flows in the boundary record and the product material are updated with each release that changes a flow."
+  single_points_of_failure: "The single region is the remaining single point of failure; zones are redundant (database standby, node groups over three zones). The access point and the identity broker are external single points the program cannot remove."
+  remote_access: "Engineers recover from government privileged access workstations through the provider's privileged access path; the break-glass procedure covers an identity broker outage."
+  wan: "NIPRNet through the access point is the only path for users; the access point provides its own redundancy."
+  design: "Multi-zone database with a managed standby, node groups across three zones, versioned object storage, keys replicated to the second region, and everything rebuilt from code."
+  failover: "Automatic failover between zones for the database and the cluster; regional failover is a manual rebuild in the second region and has never been tested."
+strategy:
+  fit: "BP-01 tolerates 72 hours; a zone loss recovers automatically, and a regional loss is answered by a rebuild in the second region estimated at 18 hours plus 4 hours of reprocessing, inside the 24-hour objective and the 72-hour tolerance, if the estimate holds."
+  availability_fit: "A cold alternate region fits a low availability impact in the development and early operations phase; the strategy is reviewed when the system enters operations and supports more users."
+  risk_basis: "A zone failure is absorbed by the multi-zone design; a regional loss or the loss of the account is answered by rebuilding from code and copied snapshots, weighed against a 72-hour tolerance, without paying for a second running environment."
+  alternatives:
+    - name: "Cold rebuild in the second IL4 region from templates and copied snapshots"
+      cost: "Snapshot copy storage and transfer, about $6K a year"
+      max_downtime_hours: 22
+      security: "Same templates and controls; keys replicated; no standing second environment to protect"
+      priority: "Chosen"
+      chosen: true
+    - name: "Warm standby region with a scaled-down cluster and a cross-region database replica"
+      cost: "About four times the run cost of the region"
+      max_downtime_hours: 2
+      security: "A second running environment to patch, monitor and assess"
+      priority: "Rejected: cost far above the need of a low availability system"
+      chosen: false
+    - name: "Hot active-active deployment across two regions"
+      cost: "Higher than the warm standby, with application changes"
+      max_downtime_hours: 0
+      security: "Two live environments and cross-region data synchronization"
+      priority: "Rejected: not needed for a 72-hour tolerance"
+      chosen: false
+  high_availability: "Zone-level high availability only (database standby, multi-zone node groups), because the system warrants no more; it is not extended to the alternate region."
+  equipment:
+    - item: "Database instance in the second region"
+      model_or_version: "Managed PostgreSQL 16.4"
+      specifications: "Same instance class as production, restored from the copied snapshot"
+      quantity: 1
+    - item: "Cluster node groups in the second region"
+      model_or_version: "Managed Kubernetes 1.33, node image 2026.10"
+      specifications: "Same node group template as production"
+      quantity: 3
+  budget: "The cold rebuild costs about $6K a year in the sustainment line; the warm and hot options were weighed against that line and rejected as costing far more than the outage they avoid for a 72-hour tolerance."
+  data_protection: "Snapshots and copies are encrypted with program-owned keys in CMP-KMS; the keys are replicated to the second region so copies stay readable, and the key policies are part of CI-DATA."
+  dynamic_allocation:
+    mechanism: "The pipeline re-creates the account's resources in the second region from the templates and points the access point and DNS to it"
+    proved_by: EX-02
+sites:
+  offsite_store:
+    selection: "The provider's second IL4 region, far enough from the primary to avoid shared hazards, reachable through the same access point, under the same provisional authorization, at no extra contract cost."
+    security: "Copies move over the provider's encrypted backbone; the region carries the same provisional authorization and personnel screening as the primary."
+  alternate_site:
+    type: cold
+    selection: "The second IL4 region of the same provider meets the BIA's 72-hour tolerance and the 24-hour objective with a rebuild, at a low availability level, and needs no new authorization."
+    location: "A separate geographic region of the provider; no transport: everything moves as data over the provider network."
+    control_compatibility: "The same templates deploy the same controls; the region is covered by the same provisional authorization, access point and CSSP service."
+  agreements:
+    - kind: commercial-contract
+      party: "Example GovCloud IL4 region"
+      terms: "The Component enterprise cloud contract and the EFRAS task order cover both regions, cross-region snapshot copies and key replication (SVA-002)"
+      legal_review: "Reviewed with the task order by Component counsel"
+      partner_testing: "The provider supports the failover test planned for 2027-02 under the task order"
+  vendor_agreements: "The provider's service-level agreement sets support response times by severity; there is no replacement equipment to ship."
+backup:
+  solution: "Managed point-in-time recovery and daily snapshots for the database, versioning for object storage and version control for code and templates: no media or backup software of our own."
+  system_software: "Templates, release manifests, signed images and SBOMs are in the program repository and the factory artifact repository, available to either region; managed services need no licenses or images of their own."
+  client_data: "No data is kept on user workstations; all user data is on the central database and storage, so no client backup is needed."
+  stand_alone: "No stand-alone systems are in the boundary."
+  multi_server: "Centralized storage is the managed database and object storage; backup traffic stays on the provider's network."
+teams:
+  activation_authority:
+    role: "PER-PM (system owner)"
+    successor: "PER-ISSM"
+  leadership:
+    director: "PER-PM"
+    coordinator: "PER-ISSE"
+    owner_poc: "PER-PM"
+    technical_poc: "ERST technical lead (PER-DEV)"
+  teams:
+    - name: "Recovery team"
+      leader: "ERST technical lead (PER-DEV)"
+      alternate_leader: "Senior ERST on-call engineer"
+      members: "ERST cloud operations engineers on call"
+      skills: "Templates and pipeline, managed Kubernetes and PostgreSQL, key management"
+    - name: "Notification and security team"
+      leader: "PER-ISSO"
+      alternate_leader: "PER-ISSM"
+      members: "ISSO, ISSM, CSSP liaison"
+      skills: "Notification, security checks on restored components, incident hand-off"
+  vendors:
+    - name: "Example GovCloud IL4 region"
+      contact: "Provider support portal, severity 1 line"
+      contract: "Component enterprise cloud contract and EFRAS task order (SVA-002)"
+      response: "Per the provider's service-level agreement by severity"
+      vetting: "Provider staff are screened under its provisional authorization"
+    - name: "Example Software Factory"
+      contact: "Factory operations desk"
+      contract: "Tenant service-level agreement (SVA-004)"
+      response: "Per the tenant SLA"
+      vetting: "Factory staff are screened under its ATO"
+activation:
+  notification:
+    with_notice: "For an announced provider outage, the ISSO tells users through the banner and the fleet readiness directorate a day ahead, and the recovery team stands by."
+    without_notice: "The on-call engineer who sees the outage pages the ISSE and the ISSO at any hour; the ISSE informs the PM, who decides on activation."
+    method: "The on-call engineer starts with the paging service, then a phone call down the call tree (ISSE, ISSO, PM, ISSM); e-mail is used only for status, since it may be down with the identity broker."
+    unreachable: "Each role has a primary and an alternate number in the contact list; after 30 minutes without an answer the alternate acts, and the successor activates when the PM cannot be reached."
+    external_pocs: "The CSSP (SVA-001), the provider (SVA-002), the EMIS program and the supply service operations, and the fleet readiness directorate, each through the POC in the contact list."
+    content: "What happened, which processes are affected, the expected recovery time, the fallback (EMIS reports) and when the next update comes."
+  outage_assessment:
+    team: "The recovery team leader and the ISSE, notified first"
+    areas: "Cause; potential for further damage; affected components and data; status of the region, the access point and the identity broker; what must be rebuilt; time to restore against the 24-hour objective"
+    follow_up: "The assessment decides between waiting for the provider, a zone recovery and a rebuild in the second region; the ISSO updates the notices with that decision."
+recovery:
+  format: "Stepwise checklists per configuration item in the runbook, each step stating its command or pipeline job, its expected result and its check, assuming no prior knowledge."
+  tailoring: "Detail is in the runbook steps because the rebuild is code; the plan keeps the decisions and order so it stays usable when tools change."
+  sequence: "1 keys and network (CI-DATA keys, templates), 2 database restore (CMP-DB), 3 ingest and data check (BP-01), 4 API and web, 5 edge and access point routing, 6 forecast and reports (BP-02, BP-03), 7 sandbox; BP-01 back within 24 hours, the rest within 48."
+  actions_by_team: "Recovery team: rebuild and restore through the pipeline. Notification and security team: notices, CSSP hand-off, signature and hash checks, the baseline scan before users return."
+  escalation: "If the rebuild is not finished in 12 hours, or the region's recovery time is unknown, the ISSE tells the PM and the fleet readiness directorate; past 48 hours the PM informs the AO."
+  shipment: "Nothing is shipped: backups, images and plans move as data to the second region."
+  supporting_systems: "The software factory (pipeline and images), the identity broker (sign-in) and the access point (routing); their operations desks are in the contact list."
+  alternate_processing: "Squadrons and the fleet use EMIS's own reports during the outage; forecasts pause."
+  activation_summary: "The PM, or the ISSM as successor, activates; the strategy then sets a zone recovery or a regional rebuild."
+reconstitution:
+  data_validation: "The ingest re-runs the missed extracts, and row counts and checksums are compared with EMIS and the supply service before dashboards open."
+  functionality_validation: "The release smoke tests run against the restored system: sign-in, role views, one export, one forecast."
+  test_plan: "The ISSO runs the baseline scan and compares the account with the templates; the ISSE signs off before users return."
+  cleanup: "The recovery team removes temporary resources and the primary-region remnants after the move or the return."
+  full_backup: "A fresh snapshot is taken once the restored database is validated."
+  offsite_return: "Snapshot copy to the other region resumes; nothing physical returns."
+  return_to_normal: "The PM declares normal operations; the ISSE judges whether running from the second region is a significant change, and the AO concurs before it becomes permanent."
+  event_documentation: "The ISSE keeps a log of the actions, times, problems and decisions during the event."
+  after_action: "The ISSE writes the after-action report within 10 working days and the plan is updated with its lessons."
+training:
+  covers: "Roles, the call tree, activation criteria, the runbook steps for each CI and the fallback to EMIS reports."
+  frequency_days: 365
+  new_personnel: "A new on-call engineer or role holder is trained before joining the rotation."
+testing:
+  backup_media: "The database restore is tested annually (first done in DT-2 on 2026-10-17, 3 h 10 min); restores into the second region are tested in the failover test."
+  readiness: "The first events are the tabletop EX-01 and the failover test EX-02 in 2027-02; the restore test EX-03 runs annually. Until EX-02, regional recovery is unproven."
+  triggers: "Annually; after a significant change to the architecture, region or providers; after new guidance; after a real activation."
+  improvement: "Each event's after-action report updates the plan, the runbook and training, and an unmet objective becomes a POA&M item."
+exercises:
+  - id: EX-01
+    type: tabletop
+    frequency_days: 365
+    objectives: "Walk the plan through a loss of the whole cloud account and its connectivity; test the call tree, activation decision, fallbacks and hand-offs with the CSSP and the providers."
+    success_criteria: "Activation decided within 2 hours of the scenario start; every role knows its first steps; the EMIS fallback reaches the fleet readiness directorate; gaps recorded."
+    scope: "All roles of the plan, the CSSP, both critical suppliers (ERST and the cloud provider) and the fleet readiness directorate"
+    scenario: "A ransomware-style compromise of the production account forces it offline; the identity broker is also unavailable."
+    logistics: "Two-hour session run by the ISSE in the program office with a remote bridge for the providers"
+    participants: "PM, ISSM, ISSO, ISSE, ERST technical lead and on-call engineers, CSSP liaison, cloud provider account team, fleet readiness directorate"
+    schedule: "2027-02, then annually"
+    conditions: [realistic-cyber]
+    tests: [work-arounds, fall-backs, notification, activation]
+    loss: all-information-resources-and-connectivity
+    evaluation_kind: exercise
+  - id: EX-02
+    type: functional
+    frequency_days: 365
+    objectives: "Prove the regional rebuild: re-create the account in the second region from the templates, restore the database from a copied snapshot, route users and meet the 24-hour objective."
+    success_criteria: "BP-01 back with validated data within 24 hours of activation; security checks passed; measured time recorded against the 18-hour estimate."
+    scope: "The pre-production account, rebuilt in the second IL4 region"
+    scenario: "Loss of the primary region"
+    logistics: "One working day in a planned window, pre-production only"
+    participants: "ISSE, ERST recovery team, ISSO, cloud provider support"
+    schedule: "2027-02, then annually"
+    conditions: [benign]
+    tests: [failover, restore, data-validation]
+    loss: partial
+    failover: true
+    evaluation_kind: exercise
+  - id: EX-03
+    type: functional
+    frequency_days: 365
+    objectives: "Restore the database point in time to a new instance and validate the data."
+    success_criteria: "Restore and validation within 6 hours"
+    scope: "CMP-DB in pre-production"
+    scenario: "Corrupted readiness data after a faulty ingest"
+    logistics: "Half a day, pre-production"
+    participants: "ERST on-call engineers, ISSE"
+    schedule: "First done in DT-2 (2026-10-17, 3 h 10 min); next 2027-10, then annually"
+    conditions: [benign]
+    tests: [restore, data-validation]
+    loss: partial
+    evaluation_kind: exercise
+maintenance:
+  review: "The ISSE reviews the plan annually and after any significant change, exercise or activation, checking the BIA, contacts, strategy, runbook steps, provider agreements and the exercise results."
+  copies: "Marked CUI; distributed to the PM, ISSM, ISSO, ISSE, the ERST on-call engineers, the CSSP and the EMIS POC; the ISSE keeps a record of holders; a copy and the contact list are kept with the templates in the repository, readable from either region."
+  record_of_changes:
+    - page: "Whole plan"
+      comment: "Version 1.0 draft written in S-4 from the earlier draft; awaiting the PM's approval"
+      date: "2026-11-18"
+  coordination: "Changes are coordinated with the CSSP, the providers and the EMIS program; the plan is versioned in the repository."
+  supporting_information: "The contact list and provider contacts are checked quarterly."
+  change_response: "The BIA in this plan is updated on a significant change, and the plan is kept until the system is disposed of."
+  approval: "The PM signs the plan once complete; it is affirmed as tested only after EX-01 and EX-02; the ISSE keeps it maintained."
+appendices:
+  personnel_contacts: "Contact list with office and mobile numbers for each role and alternate, kept with the plan in the repository"
+  diagrams: "The boundary and network diagrams of ART-BND and the data flows of the product material"
+  inventory: "The inventory record (ART-INV) and the configuration items of the CM plan"
+  interconnections: "IC-1 EMIS (nightly extract, EMIS ISSM), IC-2 supply status (nightly pull, service operations), IC-3 identity broker (sign-in, broker operations)"
+  constraints: "Recovery depends on the access point, the identity broker and the software factory; the incident response plan governs when an incident triggers the plan."
+sources: [INT-124.A1, INT-124.A2, INT-124.A3, INT-095.A1, INT-095.A2, INT-096.A1, ART-BIA, product/conops.md#availability, product/conops.md#limitations, product/test-results.md#dt-2]

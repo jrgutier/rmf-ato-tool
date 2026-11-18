@@ -1,0 +1,153 @@
+# artifacts/data/scrm-plan.yaml (ART-SSP, S-4; S-5 and M-5 add to it; schema scrm-plan). Written whole.
+# The system C-SCRM plan, consolidated in ART-SSP (ssp-records.yaml plan_structure).
+plan:
+  requirements: [REQ-07, REQ-17]
+  policy_implementations: "The Component C-SCRM policy applies through the ERST development contract and the cloud task order: REQ-07 (software supply chain integrity: signed images, SBOM, factory pipeline) and REQ-17 (supplier C-SCRM terms, notification of compromise and of change of ownership) are written into both; the software factory's ATO and the cloud region's provisional authorization carry their own supply chain controls, which EFRAS inherits through SVA-002 and SVA-004."
+  approach: "Supply chain risk is managed across the life cycle by building only on the authorized software factory and the provisionally authorized cloud region, pinning and signing what is built, screening suppliers before award, watching the two critical suppliers after award, and folding supply chain events into incident response and continuous monitoring."
+  lifecycle:
+    - phase: research-and-development
+      activities: "The data scientists' model work runs only in the analytics sandbox on the training extract; any new library goes through the factory repository and its scans."
+    - phase: design
+      activities: "The ISSE reviews each new managed service or third-party component against REQ-07 and REQ-17 before it enters the architecture, and the criticality analysis is repeated for new critical items."
+    - phase: manufacturing
+      activities: "No hardware is manufactured for EFRAS; the cloud provider's hardware supply chain is covered by its provisional authorization, and the factory's hardened base images are the program's build inputs."
+    - phase: acquisition
+      activities: "REQ-07 and REQ-17 are in the statement of work; suppliers are screened against the prohibited supplier lists before award; the ISSM is consulted on each procurement's control selection; best-value tradeoff, never LPTA."
+    - phase: delivery
+      activities: "Images are signed by the factory pipeline with signed provenance; the cluster admits only signed images; dependencies are hash-pinned from the factory repository."
+    - phase: integration
+      activities: "Each release passes the factory's static, dependency, image and dynamic scans and produces an SBOM before the ISSO signs off deployment."
+    - phase: operations-and-maintenance
+      activities: "SBOMs are rescanned daily; supplier advisories and the provider's monthly deliverables are reviewed; critical suppliers are monitored for compliance, effectiveness and change; supply chain events are handled under the incident response plan."
+    - phase: disposal
+      activities: "At contract end or system disposal, supplier access is removed, program keys are destroyed after the 30-day wait, and the provider's media sanitization is confirmed under its authorization."
+  risk_tolerance: "The Component's supply chain risk tolerance is moderate (scrm.yaml acceptable level); EFRAS supports no mission critical function and inherits the factory's and the provider's supply chain controls, so its residual supply chain risk sits within that tolerance once the late base image (release 1.5.2) is fixed."
+  suppliers:
+    - supplier: SUP-01
+      criticality: critical
+      roles: [PER-PM, PER-ISSE, PER-DEV]
+    - supplier: SUP-02
+      criticality: non-critical
+      roles: [PER-ISSE, PER-CCP]
+    - supplier: SUP-03
+      criticality: critical
+      roles: [PER-PM, PER-ISSM, PER-CCP]
+    - supplier: SUP-04
+      criticality: non-critical
+      roles: [PER-DEV]
+    - supplier: SUP-05
+      criticality: non-critical
+      roles: [PER-DEV]
+  relationships:
+    - supplier: SUP-01
+      responsibilities: "ERST builds and operates EFRAS under the development contract: it follows the factory pipeline, delivers a secure development attestation and SBOM with each release, reports suspected compromise of its tools or staff within 1 hour, and reports changes of ownership or key staff; the PM manages its performance through monthly deliverables."
+    - supplier: SUP-03
+      responsibilities: "The cloud provider operates the platform under the Component contract and the EFRAS task order: it keeps its provisional authorization and customer responsibility matrix current, delivers monthly continuous monitoring data in eMASS, reports incidents to the CSSP and notifies changes of sub-providers or ownership; the ISSM reviews its deliverables monthly and the agreement annually."
+  control_considerations: "SR-3 and SR-11 are hybrid with the software factory: the factory signs images and vets base images, EFRAS pins dependencies and admits only signed images (see the sr.yaml statements); SA-11 depends on the factory's scanners; CP-9 and SI-2 depend on the cloud provider; the dependencies are shown in the boundary diagrams of ART-BND."
+  profile: "A cloud-hosted, containerized web application: managed Kubernetes, PostgreSQL, object storage and key service from one cloud provider; government-contractor custom code built on a DoD software factory; two open-source libraries of note (an image-processing library in CMP-REPORT and a web framework in CMP-API)."
+  offboarding: "When a supplier relationship ends, its accounts and pipeline access are removed the same day, its keys and credentials rotated, data it held returned or destroyed with a certificate, and its remaining obligations (vulnerability notices for delivered software) kept by the contract."
+  considerations:
+    - kind: vendor-saas
+      applies: false
+      treatment: "EFRAS uses no vendor software-as-a-service; the identity broker is a DoD enterprise service, not a vendor SaaS."
+    - kind: hybrid-or-cloud
+      applies: true
+      treatment: "The cloud region (SUP-03) is a critical supplier, covered by its DoD provisional authorization, the contract clauses of DFARS 239.76 and the monitoring in this plan."
+    - kind: open-source
+      applies: true
+      treatment: "Open-source components (SUP-04, SUP-05) come only from the factory's vetted repository, are hash-pinned, in the SBOM and scanned daily; a component with an unfixed high vulnerability is replaced or the release waits (as for release 1.5.2)."
+    - kind: non-taa-ict-ot
+      applies: false
+      treatment: "The program buys no ICT or OT hardware; all hardware is the cloud provider's, under its authorization."
+    - kind: unauthorized-resellers
+      applies: false
+      treatment: "No product is bought through resellers; software comes from the factory and services from the Component cloud contract."
+    - kind: emerging-technology
+      applies: false
+      treatment: "No emerging technology is used; the forecast model is the program's own statistical model and no AI tool is used in development."
+  information_types: [INF-01, INF-02, INF-03, INF-04, INF-05, INF-06]
+  approval:
+    approved_by: PER-PM
+    pmo: coordinated
+    date: "2026-11-18"
+  review_interval: P1Y
+  sources: [INT-123.A4, INT-126.A2, INT-116.A1, INT-110.A1, INT-053.A1, INT-039.A2, INT-128.A1]
+controls:
+  decisions:
+    - control: sr-3
+      decision: selected
+      rationale: "The S-2 supply chain trade-off chose the software factory's signing, base images and scanning over a program-run pipeline; supply chain controls stay in the baseline."
+      cost: "Inside the factory tenancy and the ERST contract; no separate line"
+      cost_of_not_implementing: "Unsigned or unvetted images could carry a compromise into the readiness data path"
+      owner: PER-ISSE
+      plan: "Implemented with release 1.5; reviewed at each major release"
+    - control: sr-11
+      decision: selected
+      rationale: "Counterfeit and tampered components are excluded by admitting only factory-signed images and hash-pinned dependencies, as the S-2 trade-off chose."
+      cost: "Inside the factory tenancy"
+      cost_of_not_implementing: "Tampered dependencies could enter the build undetected"
+      owner: PER-DEV
+      plan: "Implemented with release 1.5; reviewed at each major release"
+  procurement:
+    - supplier: SUP-01
+      controls: [sa-9, sa-11, sr-3, sr-11]
+      consulted: [PER-ISSM, PER-ISSE]
+      source_selection: best-value-tradeoff
+    - supplier: SUP-03
+      controls: [sa-9, cp-9, si-2, pe-3, mp-6]
+      consulted: [PER-ISSM]
+      source_selection: other
+  cloud:
+    - supplier: SUP-03
+      fedramp: authorized
+      beyond_fedramp: "The DoD provisional authorization at Impact Level 4 under the Cloud Computing SRG (2024-09-18), the DFARS 239.76 clauses in the contract, and the reciprocity review recorded as LA-01."
+  coordinated: true
+  sources: [INT-077.A1, INT-053.A1, INT-123.A4, INT-117.A1]
+contingency:
+  activities:
+    - activity: contingency-planning
+      suppliers: [SUP-01, SUP-03]
+    - activity: incident-response
+      suppliers: [SUP-01, SUP-03]
+    - activity: disaster-recovery
+      suppliers: [SUP-01, SUP-03]
+    - activity: testing
+      suppliers: [SUP-01, SUP-03]
+  root_cause: "The incident response after-action report asks whether the cause came through a supplier: an image, a dependency, the pipeline or the provider's platform; the factory's provenance and the SBOM trace it."
+  compromise_criteria: "An incident is a supply chain compromise when a signed image, a dependency, the pipeline or a provider service was altered or abused before it reached EFRAS, or a supplier reports such a compromise."
+  sources: [INT-123.A4, INT-124.A3]
+monitoring:
+  suppliers:
+    - supplier: SUP-01
+      monitors: [compliance, effectiveness, change]
+      interval: P1Y
+      triggers: ["A change of ownership, key staff or subcontractor", "A suspected compromise of its tools or staff", "A missed release attestation or SBOM"]
+      disclosure: "The factory's scans of each release are compared with ERST's own vulnerability disclosures, and a mismatch is raised with the PM."
+    - supplier: SUP-03
+      monitors: [compliance, effectiveness, change]
+      interval: P1Y
+      triggers: ["A change to or loss of its provisional authorization", "A new sub-provider or change of ownership", "A provider incident affecting the region"]
+      disclosure: "The provider's monthly continuous monitoring deliverables and POA&M in eMASS are reviewed by the ISSM against its security bulletins."
+  software: "SBOMs of every release are rescanned daily by the factory scanners, and supplier advisories are reviewed weekly by the ISSO."
+  conmon: "Supplier monitoring results feed the system's continuous monitoring strategy and its quarterly C-SCRM report."
+  sources: [INT-123.A4, INT-128.A1]
+training:
+  awareness: "The annual awareness training adds supply chain content: report suspicious packages, images or supplier requests to the ISSO."
+  role_based:
+    - role: PER-DEV
+      content: "Dependency hygiene, the factory repository, signing and provenance, and reporting a suspected compromise"
+    - role: PER-ISSE
+      content: "Supplier criticality analysis, SBOM review and supply chain risk in design reviews"
+    - role: PER-PM
+      content: "C-SCRM contract terms and supplier performance management"
+  sources: [INT-123.A4]
+reporting:
+  - level: level-3
+    audience: [PER-PM, PER-AO]
+    content: [implementation, efficiency, effectiveness, exposure, metrics, urgent-conditions]
+    frequency: P90D
+    format: "A one-page quarterly summary in the security posture report: supplier monitoring results, open supply chain findings, SBOM vulnerability counts and any urgent condition"
+urgent:
+  notified: [PER-MDA, PER-AO, dod-cio]
+  sources: [INT-123.A4]
+sources: [INT-123.A4, INT-126.A2, INT-053.A1, INT-039.A2, INT-077.A1]

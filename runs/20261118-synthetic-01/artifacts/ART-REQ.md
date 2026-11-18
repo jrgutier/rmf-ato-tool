@@ -39,14 +39,17 @@ The requirements come from five sources:
 - the DoD design policy statements recorded in `artifacts/data/requirements.yaml`
   `design_policy`.
 
-Twenty design policy statements apply, and each is carried by a requirement. The software
-statements apply because ERST develops covered software for the program [[INT-046.A3]]. Eight
+Twenty-one design policy statements apply, and each is carried by a requirement. The software
+statements apply because ERST develops covered software for the program [[INT-046.A3]]. Seven
 conditional statements do not apply:
 
 - DP-BIOMETRICS: there is no biometric data.
 - The six BIOS and TPM statements: the program procures no hardware [[ART-INV]].
-- DP-SW-SAFETY: there is no operational technology, and the BIA rates no function
-  mission-critical [[ART-BIA]].
+
+DP-SW-SAFETY was first recorded as not applicable (no operational technology, no
+mission-critical function). S-4 corrected it on 2026-11-18 once `software.yaml` recorded the
+covered software: the statement binds all covered software, and for decision support the hazard
+is wrong readiness data, which REQ-04 guards against [[INT-128.A1]] [[ART-BIA]].
 
 `protection-requirements.yaml` records what P-15 read: PPP EFRAS-PPP, with no TAPP, S&T protection
 plan or horizontal protection guidance. It also records the capability document's protection
