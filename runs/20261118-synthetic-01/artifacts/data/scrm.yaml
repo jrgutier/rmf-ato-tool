@@ -1,0 +1,104 @@
+criticality:
+  method: "Criticality analysis in the PPP (EFRAS-PPP v1.1) against the business impact analysis: a function is mission critical when its loss would degrade a mission-essential function; EFRAS has none, since every business process tolerates at least 72 hours and squadrons fall back to EMIS. The readiness data processing function is criticality level III and protected by the PPP countermeasures."
+  functions: []
+  focal_point:
+    threat_analysis: not-required
+    guidance: "No mission-critical function or critical component, so no TSN threat analysis request was made; the Component C-SCRM program's supplier guidance applies."
+    sources: [INT-037.A5, ART-BIA]
+  tsn:
+    - criticality-analysis
+    - all-source-threat-assessment
+    - software-assurance
+    - procurement-strategies
+    - scrm-countermeasures
+    - cyber-test-and-evaluation
+  sources: [INT-037.A3, INT-037.A5, ART-BIA]
+suppliers:
+  - id: SUP-01
+    name: "Example Readiness Software Team (ERST)"
+    kind: developer
+    items: [INV-002, INV-003, INV-004, INV-005, INV-006]
+    supply_chain: SC-01
+    criticality: non-critical
+    priority: 1
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: SUP-02
+    name: "Example Software Factory"
+    kind: in-house-shared-service
+    items: [INV-007]
+    supply_chain: SC-02
+    criticality: non-critical
+    priority: 1
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: SUP-03
+    name: "Example GovCloud"
+    kind: cloud-service-provider
+    items: [INV-001, INV-008, INV-009, INV-010, INV-011, INV-012, INV-013, INV-014]
+    supply_chain: SC-03
+    criticality: non-critical
+    priority: 1
+    sources: [product/hw-sw-inventory.md#items, INT-023.A1]
+  - id: SUP-04
+    name: "example-imagelib open-source project"
+    kind: open-source
+    items: [INV-015]
+    supply_chain: SC-04
+    criticality: non-critical
+    priority: 2
+    sources: [product/hw-sw-inventory.md#items, INT-038.A2]
+  - id: SUP-05
+    name: "Example web framework open-source foundation"
+    kind: open-source
+    items: [INV-016]
+    supply_chain: SC-05
+    criticality: non-critical
+    priority: 3
+    sources: [product/hw-sw-inventory.md#items, INT-038.A2]
+threat_analysis:
+  data:
+    - attacks-observed
+    - incident-data
+    - ttps
+    - disasters
+  vulnerability_approach: "Supply chain vulnerabilities are characterized from the factory's dependency and image scans and provenance checks, consistent with the adversary TTPs in the Component threat assessment (TA-001)."
+  likelihood_inputs:
+    - threat-assumptions
+    - threat-information
+    - peer-history
+    - expert-perspective
+    - external-exposure
+  likelihood_horizon: P1Y
+  acceptable_level: moderate
+  sources: [INT-034.A2, INT-034.A4, INT-038.A2]
+assessments: []
+aggregation:
+  method: "Supplier risks are reported in the Component portfolio risk register by shared platform (cloud region, software factory) and aggregated by the C-SCRM program office."
+  reported_to:
+    - level-1
+    - level-2
+  sources: [INT-037.A5, ART-ORG-CONTEXT]
+sources: [INT-034.A4, INT-037.A5, INT-038.A2]
+pm_actions:
+  started: "2025-08-15"
+  risk_tolerance:
+    level: moderate
+    procurement: structured
+    basis: "Business-support system with no mission-critical function, bought through shared vehicles from authorized providers (INT-037.A5)."
+  actions: [foci-caution, approved-products-lists, industry-standards, balance-risk-mission, verifiable-vendor-processes, vendor-limitations-awareness, countermeasures-critical-risks]
+  not_taken: []
+  market_research:
+    - {vendor: "Example Readiness Software Team (ERST)", date: "2025-08-15", findings: "Prime on the shared contract vehicle; no reported intrusions; develops only on the authorized software factory."}
+  illumination:
+    maintained: false
+    considered: "No mission-critical item and authorized providers for every service; illumination judged not worth its cost at moderate tolerance."
+  tac_requests: []
+  reports: []
+  mission_critical:
+    - {item: CI-001, measure: scrm-countermeasure, detail: "PPP countermeasures CM-001 (factory gates, signed images, SBOMs) and CM-002 (boundary hardening)."}
+  unvalidated_products: []
+  threat_information:
+    - {id: TA-001, kind: all-source, date: "2026-07-15"}
+  mitigations:
+    - {id: SCM-01, kind: acquisition, measure: "Development only on the authorized software factory, required by the ERST task order", informed_by: [TA-001]}
+    - {id: SCM-02, kind: engineering, measure: "Signed images verified at admission; dependency and image scans gate every release", informed_by: [TA-001]}
+  sources: [INT-037.A5, ASM-010]

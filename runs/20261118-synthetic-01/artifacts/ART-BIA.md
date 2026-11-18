@@ -8,7 +8,9 @@ sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-018.A4, INT-019.A1, product/co
 # Business impact and criticality analysis
 
 <!-- BEGIN rmf:facts -->
-_No system facts are set yet (facts.yaml)._
+| Fact | Value | Set by |
+|---|---|---|
+| Authorization boundary | EFRAS-BND-1 | P-11 |
 <!-- END rmf:facts -->
 
 ## Mission critical functions

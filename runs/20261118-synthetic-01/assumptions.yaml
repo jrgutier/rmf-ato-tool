@@ -48,3 +48,31 @@ assumptions:
     persona: PER-CISO
     tag: ASSUMPTION
     sources: [product/architecture.md#leveraged]
+  - id: ASM-008
+    statement: "The boundary, network architecture and data flow diagrams in artifacts/diagrams/ are text drawings the agent made from the product's component, network and flow tables; they show nothing the tables do not state, and the ISSE accepted diagrams drawn that way."
+    rationale: "The product package holds no drawn diagrams, which PKG-003 and SUBS-002 require; the session may not add files to the product directory, so the drawings live in the run."
+    task: P-11
+    persona: PER-ISSE
+    tag: ASSUMPTION
+    sources: [product/architecture.md#components, product/architecture.md#network, product/data-flows.md#top, INT-025.A4]
+  - id: ASM-009
+    statement: "Extract files in the landing zone are deleted 7 days after a successful load, report exports and the report cache expire after 30 days, the training extract is replaced and the previous one deleted at each retraining, and supply status history follows the 5-year window, as the PM states in INT-032."
+    rationale: "product/privacy.md#minimization gives only the 5-year purge of maintainer PII; the product names no retention for landing files, exports, the report cache or the training extract, which the P-13 life cycle needs for each disposition stage."
+    task: P-13
+    persona: PER-PM
+    tag: ASSUMPTION
+    sources: [product/privacy.md#minimization, product/data-flows.md#main]
+  - id: ASM-010
+    statement: "The program protection plan EFRAS-PPP v1.1, the cybersecurity strategy v1.1 and its approvals and reviews, the acquisition strategy approval, the ERST task order award, the decision point dates and the PM's SCRM actions are as the PM states them in INT-037; the dates of the pathway decision (2025-09-15) and execution entry (2026-03-02) come from the PM and conops.md#program."
+    rationale: "P-14 reads EXT-PPP, EXT-CSS and EXT-SEP from the product directory, which holds none of them; protection.yaml, cybersecurity-strategy.yaml and scrm.yaml pm_actions need their content."
+    task: P-14
+    persona: PER-PM
+    tag: ASSUMPTION
+    sources: [product/conops.md#program, product/README.md#top]
+  - id: ASM-011
+    statement: "The PIA review, approval, submission and publication dates in pia.yaml (2027-01-20 to 2027-01-29) are planned dates the privacy officer gave, not events: as of 2026-11-18 the PIA is a draft (v0.9) that neither PER-CISO nor PER-PRIV has reviewed and PER-CIO has not approved."
+    rationale: "pia.schema.json requires reviews, an approval with a date, a submission and a publication, and has no way to record a draft PIA; product/conops.md#limitations item 7 discloses that the PIA is not approved."
+    task: P-14
+    persona: PER-PRIV
+    tag: ASSUMPTION
+    sources: [product/privacy.md#pia, product/conops.md#limitations, INT-036.A3]

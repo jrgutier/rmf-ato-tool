@@ -41,3 +41,30 @@ ART-STAKE written: 14 stakeholder rows with persona, interest, concerns and inte
 
 ## 2026-11-18T02:34Z · NOTE · run
 Session unit P-1..P-9 complete; session ends here as the unit requires. Next: P-10 Asset Identification. Upstream issues met are in dryrun-review/findings/01-prepare-org.md (docs/LESSONS.md not edited by instruction).
+
+## 2026-11-18T02:39Z · NOTE · run
+Dry-run session unit P-10..P-18 started. Findings go to dryrun-review/findings/02-prepare-system.md; docs/LESSONS.md is not edited by instruction.
+
+## 2026-11-18T02:39Z · CHECKPOINT · task P-10
+inventory.yaml: 16 items INV-001..INV-016 (6 service, 7 software, 1 operating-system, 1 virtual-machine, 1 database), all inside the boundary, owner ARSPO PM, held in the Component IT asset management repository record EFRAS-PROD; asset scope for all 10 classes (firmware not considered: no program-owned hardware); 7 non-inventory assets AST-001..AST-007; not an HVA (INT-024.A4). Product quantities (replicas, 6 nodes, DB standby) kept as one configuration item each per the developer (INT-023.A4). rmf build + rmf check --task P-10: 0 errors.
+
+## 2026-11-18T02:42Z · DECISION · task P-11 · by: PER-AO (simulated, INT-026.A1)
+The AO confirms the boundary EFRAS-BND-1: the program-owned production account and its 12 configured components; the cloud region, access point, identity broker, software factory, CSSP, EMIS and the supply status service stay outside as separately authorized (INT-026.A2). Condition: any new interconnection or component move is brought to the AODR first (INT-026.A3). No component moved across the boundary.
+
+## 2026-11-18T02:42Z · CHECKPOINT · task P-11
+boundary.yaml: 19 components (12 inside, 7 external), boundary, network and data flow descriptions with three diagrams drawn in artifacts/diagrams/ from the product tables (ASM-008; the product has no diagrams); data_flow carries_pii true, pii_types left for after P-12. facts.yaml boundary_id EFRAS-BND-1. rmf build + rmf check --task P-11: 0 errors.
+
+## 2026-11-18T02:46Z · NOTE · artifact ART-BND
+Once infotypes.yaml marked INF-03 and INF-05 as PII, PIIF-001 charged P-11 with 2 errors (data_flow.pii_types must name them) and rmf status sent the run back to P-11, while a plain rmf check showed 0 errors. P-11 runs before P-12 defines the INF IDs, so it could not name them. Added pii_types [INF-03, INF-05] to boundary.yaml during P-12 (finding F-02 in dryrun-review/findings/02-prepare-system.md); P-11 and P-12 checks: 0 errors.
+
+## 2026-11-18T02:46Z · CHECKPOINT · task P-12
+infotypes.yaml: 6 types INF-01..INF-06 with SP 800-60 IDs, provisional and owner-adjusted C/I/A (high-water M/M/L), selection basis and handling (all unclassified CUI, no CTI); PII in INF-03 (maintainers, federal personnel) and INF-05 (audit records, federal personnel and contractors), no PHI or SSN; privacy record: DoD 5400.11-R, DoDI 5400.16, DoDI 5015.02, SORNs published, records schedules coordinated, PIA required (new-system) due by 2027-02-01. Owners: data steward (INF-01/03/04), supply status owner (INF-02), ARSPO PM (INF-05/06). rmf build + rmf check --task P-12: 0 errors.
+
+## 2026-11-18T02:48Z · CHECKPOINT · task P-13
+infotypes.yaml life_cycle for INF-01..INF-06 (entry by collection or creation, storage, use, dissemination or disclosure, disposition, with components); ART-INFOTYPES section "Information Life Cycle (P-13)". Retention of landing files, exports, report cache and training extract rests on the PM's answer (ASM-009). nss-assessments.yaml, listed under ART-BND inputs, does not exist yet (P-16 writes it). rmf build + rmf check --task P-13: 0 errors.
+
+## 2026-11-18T02:57Z · RETRY · task P-14 · lesson: none — upstream schema defect, recorded as F-02-1 in dryrun-review/findings/02-prepare-system.md (docs/LESSONS.md not edited by instruction)
+First check: 8 RUN-FM-001 errors. ra.yaml external connections ECAP, IDB, SUPPLY, SWF, ECSSP and supply chain SC-01, SC-05 had empty introduces/vulnerabilities, which the schema forbids; fixed honestly by asking the ISSM (INT-034.A6) and recording predisposing conditions PC-03 (dependence on separately authorized services) and PC-04 (third-party and open-source code in ERST images) instead of inventing weaknesses. The remaining error, scrm.yaml criticality.functions [] must be non-empty, cannot be fixed honestly: EFRAS has no mission-critical function (ART-BIA, INT-037.A5), SCRM-002 explicitly handles an empty list, but scrm.schema.json requires minItems 1. Three attempts made; not fixed.
+
+## 2026-11-18T02:57Z · NOTE · run
+Session unit P-10..P-18 stopped at P-14 on a blocker, as the brief requires after 3 attempts. P-10..P-13 complete (0 errors each). P-14 artifacts (ART-RA, ART-PIA, ra.yaml, protection.yaml, cybersecurity-strategy.yaml, scrm.yaml, pia.yaml) are written; rmf check --task P-14 leaves 1 error (RUN-FM-001 on scrm.yaml criticality.functions). Next session: once upstream relaxes the schema (or rules on how to record "no mission-critical function"), rebuild, check P-14, write its CHECKPOINT and continue with P-15 (REQ-14..REQ-16 and privacy_act are owed to ra.yaml privacy.legal_requirements).

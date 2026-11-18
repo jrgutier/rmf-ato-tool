@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (7)
+## Assumptions (11)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -15,8 +15,12 @@ Mode: synthetic. Human respondents: none.
 | ASM-005 | P-3 | PER-RE | The Component's organization-level risk assessment (last updated 2026-09-30), its five enterprise risks and their ratings, and the threat sources and common vulnerabilities behind them are as the risk executive and the CISO state them in INT-007 and INT-008. | P-3 lists EXT-THREAT as an input, but the product package holds no organization-level threat information for the Prepare step; product/monitoring/ holds only the first monitoring cycle's records, which M-2 reads. |
 | ASM-006 | P-5 | PER-CISO | Each common control package (plan, assessment report, POA&M) was approved by the AO accountable for those controls on the provider's authorization date and made available to ARSPO on 2026-05-01, at onboarding; each provider's assessor was qualified and chosen by the provider; the CISO designated each provider as a common control provider. In org-context.yaml the persona PER-AO stands for the provider's own accountable AO, and the cloud region's DoD provisional authorization is recorded as AD-ATO. | architecture.md#leveraged gives each provider's decision and date but no package approval, availability date or assessor; the org-context schema has one PER-AO persona and no decision value for a DoD provisional authorization. |
 | ASM-007 | P-7 | PER-RE | The Component's continuous monitoring program (established 2024-10-01), its minimum frequencies, reviews, the 2026-03-16 program assessment and its vulnerability management program are as the risk executive and the CISO state them in INT-016 and INT-017. | P-7 reads EXT-ORG-POLICY for the organization-wide ISCM strategy, which the product package does not hold; product/monitoring/ describes only this system's first monitoring cycle. |
+| ASM-008 | P-11 | PER-ISSE | The boundary, network architecture and data flow diagrams in artifacts/diagrams/ are text drawings the agent made from the product's component, network and flow tables; they show nothing the tables do not state, and the ISSE accepted diagrams drawn that way. | The product package holds no drawn diagrams, which PKG-003 and SUBS-002 require; the session may not add files to the product directory, so the drawings live in the run. |
+| ASM-009 | P-13 | PER-PM | Extract files in the landing zone are deleted 7 days after a successful load, report exports and the report cache expire after 30 days, the training extract is replaced and the previous one deleted at each retraining, and supply status history follows the 5-year window, as the PM states in INT-032. | product/privacy.md#minimization gives only the 5-year purge of maintainer PII; the product names no retention for landing files, exports, the report cache or the training extract, which the P-13 life cycle needs for each disposition stage. |
+| ASM-010 | P-14 | PER-PM | The program protection plan EFRAS-PPP v1.1, the cybersecurity strategy v1.1 and its approvals and reviews, the acquisition strategy approval, the ERST task order award, the decision point dates and the PM's SCRM actions are as the PM states them in INT-037; the dates of the pathway decision (2025-09-15) and execution entry (2026-03-02) come from the PM and conops.md#program. | P-14 reads EXT-PPP, EXT-CSS and EXT-SEP from the product directory, which holds none of them; protection.yaml, cybersecurity-strategy.yaml and scrm.yaml pm_actions need their content. |
+| ASM-011 | P-14 | PER-PRIV | The PIA review, approval, submission and publication dates in pia.yaml (2027-01-20 to 2027-01-29) are planned dates the privacy officer gave, not events: as of 2026-11-18 the PIA is a draft (v0.9) that neither PER-CISO nor PER-PRIV has reviewed and PER-CIO has not approved. | pia.schema.json requires reviews, an approval with a date, a submission and a publication, and has no way to record a draft PIA; product/conops.md#limitations item 7 discloses that the PIA is not approved. |
 
-## Interview answers (67; SIMULATED 67)
+## Interview answers (123; SIMULATED 123)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -29,3 +33,8 @@ Mode: synthetic. Human respondents: none.
 | P-7 | 2 | 6 | 0 |
 | P-8 | 2 | 6 | 0 |
 | P-9 | 3 | 6 | 0 |
+| P-10 | 2 | 9 | 0 |
+| P-11 | 2 | 7 | 0 |
+| P-12 | 4 | 13 | 0 |
+| P-13 | 3 | 9 | 0 |
+| P-14 | 5 | 18 | 0 |

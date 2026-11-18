@@ -1,0 +1,582 @@
+purpose:
+  statement: "Initial system-level security and privacy risk assessment of the EFRAS production environment, producing the threats, vulnerabilities, likelihood, impact and resulting risks that categorization, control selection and tailoring, the POA&M and the authorization decision before MVCR deployment rely on."
+  decisions: ["security categorization (C-2)", "control selection and tailoring (S-1, S-2)", "POA&M priorities (A-6)", "authorization decision (R-2 to R-4)"]
+  kind: initial
+date: "2026-11-18"
+team:
+  - name: "ARSPO ISSM"
+    persona: PER-ISSM
+    role: "assessment lead"
+    contact: "issm.arspo@example.mil (fictional)"
+  - name: "ERST security engineer"
+    persona: PER-ISSE
+    role: "architecture and threat event analysis"
+    contact: "issm.arspo@example.mil (fictional)"
+  - name: "EFRAS ISSO"
+    persona: PER-ISSO
+    role: "operational weaknesses and workarounds"
+    contact: "issm.arspo@example.mil (fictional)"
+  - name: "Component privacy officer"
+    persona: PER-PRIV
+    role: "privacy risk assessment"
+    contact: "issm.arspo@example.mil (fictional)"
+rationales:
+  - decision: "PT-1 (cross-air-wing export) is not carried as a current vulnerability"
+    rationale: "Fixed in release 1.5.1 on 2026-11-07 and retested pass on 2026-11-10 (INT-034.A3)."
+  - decision: "Borderline ratings rounded up when the event touches personal data, down otherwise"
+    rationale: "The Component tolerance for harm to individuals is low, lower than for operations (INT-034.A5)."
+tailoring: []
+point_of_contact:
+  persona: PER-ISSM
+  name: "ARSPO ISSM"
+  phone: "555-0100 (fictional)"
+  email: issm.arspo@example.mil
+scope:
+  applicability: "Tier 3: the EFRAS production boundary EFRAS-BND-1 and its connections; organization-level risks come from ART-ORG-CONTEXT."
+  time_frame: "One year, or until a major release or a change in threat, whichever comes first."
+  architecture: "Containerized application in a program-owned account of a commercial IL4 cloud region, reached only over NIPRNet through the ECAP, deployed by a separately authorized software factory."
+assumptions:
+  - "The cloud region, access point, identity broker, software factory and CSSP keep their authorizations or agreements in force."
+  - "The ECAP and ECSSP keep providing boundary protection and monitoring."
+  - "The Component naval aviation cyber threat assessment describes the adversaries relevant to readiness data."
+constraints:
+  - "No program-specific intelligence threat product exists; only the Component assessment."
+  - "Tests ran in pre-production with synthetic data built from the production templates."
+information_sources:
+  - id: SRC-01
+    kind: threat
+    title: "Component naval aviation cyber threat assessment (Intelligence Community product, fictional)"
+    provider: "Component intelligence office"
+    date: "2026-07-15"
+    sources: [INT-034.A2]
+  - id: SRC-02
+    kind: threat
+    title: "ECSSP threat alerts"
+    provider: "Example Cybersecurity Service Provider"
+    date: "2026-11-01"
+    sources: [INT-034.A2]
+  - id: SRC-03
+    kind: vulnerability
+    title: "Pipeline security gates of release 1.5.0, STIG scan and penetration test"
+    provider: "Example Software Factory, SCA, Component red team"
+    date: "2026-10-31"
+    sources: [INT-034.A2, product/test-results.md#pipeline-1-5, product/test-results.md#stig-scan, product/test-results.md#pentest]
+  - id: SRC-04
+    kind: vulnerability
+    title: "Known limitations list"
+    provider: "ARSPO"
+    date: "2026-11-18"
+    sources: [product/conops.md#limitations]
+  - id: SRC-05
+    kind: impact
+    title: "Business impact analysis and information owners' impact levels"
+    provider: "ARSPO, fleet maintenance data steward, supply status owner"
+    date: "2026-11-18"
+    sources: [ART-BIA, ART-INFOTYPES]
+consultations:
+  - professional: "Cyber threat analyst"
+    organization: "Component intelligence office"
+    date: "2026-08-04"
+    sources: [INT-034.A2]
+  - professional: "Program security officer (counterintelligence)"
+    organization: "ARSPO"
+    date: "2026-08-04"
+    sources: [INT-034.A2]
+risk_model:
+  defined_in: risk-management-strategy
+  factors: [threat, vulnerability, impact, likelihood, predisposing-condition]
+  scales:
+    likelihood: "SP 800-30 Table G-5 (five levels)"
+    impact: "SP 800-30 Table H-3 (five levels)"
+    risk: "SP 800-30 Table I-2 (five levels)"
+  assessment_approach: semi-quantitative
+  analysis_approach: threat-oriented
+  combination: "Likelihood of initiation or occurrence and likelihood of adverse impact combine by Table G-5; overall likelihood and impact combine into risk by Table I-2."
+  time_period: "One year"
+  rationale: "The Component risk assessment guidance prescribes SP 800-30 semi-quantitative, threat-oriented assessment with a one-year horizon (ART-ORG-CONTEXT)."
+risk_tolerance:
+  statement: "The AO accepts risk up to moderate to mission operations and organizational assets and low to individuals; high or very high needs the Component CIO's concurrence."
+  consequences: ["loss of confidentiality of aggregated readiness data", "harm to maintainers from exposure of their records", "misleading readiness figures", "delayed fleet readiness reporting"]
+  tiers:
+    - tier: 1
+      tolerance: "Moderate for mission operations and organizational assets; low for individuals, other organizations and the Nation."
+      sources: [ART-ORG-CONTEXT]
+  operational: "No USCYBERCOM or NSA/CSS cyber operational risk tolerance specific to EFRAS was issued; the Component tolerance applies (ASM-004)."
+threat_sources:
+  - id: TS-01
+    title: "Nation-state cyber actors seeking aggregated readiness and logistics data"
+    type: adversarial
+    in_scope: true
+    capability: high
+    intent: high
+    targeting: moderate
+    range_of_effects: not-applicable
+    sources: [INT-034.A1, INT-034.A2]
+  - id: TS-02
+    title: "Criminal actors and phishers seeking personnel data"
+    type: adversarial
+    in_scope: true
+    capability: moderate
+    intent: moderate
+    targeting: low
+    range_of_effects: not-applicable
+    sources: [INT-034.A1]
+  - id: TS-03
+    title: "Privileged insiders (ERST engineers, app administrators, data scientists) acting in error"
+    type: accidental
+    in_scope: true
+    capability: not-applicable
+    intent: not-applicable
+    targeting: not-applicable
+    range_of_effects: moderate
+    sources: [INT-034.A1, INT-035.A1]
+  - id: TS-04
+    title: "Structural failure of the cloud region or a provider service"
+    type: structural
+    in_scope: true
+    capability: not-applicable
+    intent: not-applicable
+    targeting: not-applicable
+    range_of_effects: moderate
+    sources: [INT-034.A1]
+threat_events:
+  - id: TE-01
+    description: "Nation-state actor exploits the web application or API to reach the database and exfiltrate aggregated readiness data and maintainer records."
+    threat_sources: [TS-01]
+    relevance: expected
+    vulnerabilities: [VUL-02]
+    conditions: [PC-02]
+    likelihood_initiation: moderate
+    likelihood_impact: moderate
+    likelihood: moderate
+    likelihood_rationale: "Capable, intent-driven adversary; pipeline gates and the penetration test found no unauthenticated path, but the user population is large."
+    impacts:
+      - harm: operations
+        asset: "INF-01 maintenance and readiness data (CMP-DB, CMP-API)"
+      - harm: individuals
+        asset: "INF-03 maintainer PII"
+    impact: moderate
+    risk: moderate
+    uncertainty: "Moderate: no program-specific threat product."
+    sources: [INT-034.A1, INT-035.A2, product/test-results.md#pentest]
+  - id: TE-02
+    description: "Re-identification of maintainers from pseudonymized exports or the training extract by anyone holding a list of DoD ID numbers."
+    threat_sources: [TS-02, TS-03]
+    relevance: confirmed
+    vulnerabilities: [VUL-01, VUL-07]
+    conditions: []
+    likelihood_initiation: moderate
+    likelihood_impact: high
+    likelihood: moderate
+    likelihood_rationale: "Demonstrated by the red team with 50 DoD ID numbers (PT-2); exports leave the system as files."
+    impacts:
+      - harm: individuals
+        asset: "INF-03 maintainer PII in exports and the training extract"
+    impact: moderate
+    risk: moderate
+    uncertainty: "Low: demonstrated."
+    sources: [INT-034.A3, INT-036.A1, product/test-results.md#pentest]
+  - id: TE-03
+    description: "Exploitation of the two high-severity vulnerabilities in example-imagelib through a crafted report rendering request."
+    threat_sources: [TS-01]
+    relevance: anticipated
+    vulnerabilities: [VUL-02]
+    conditions: []
+    likelihood_initiation: low
+    likelihood_impact: moderate
+    likelihood: low
+    likelihood_rationale: "Reachable only by authenticated users through the report service; fix waits on release 1.5.2."
+    impacts:
+      - harm: operations
+        asset: "CMP-REPORT and INF-04 reports"
+    impact: moderate
+    risk: low
+    uncertainty: "Moderate."
+    sources: [INT-034.A3, product/test-results.md#pipeline-1-5]
+  - id: TE-04
+    description: "Tampered or spoofed maintenance extract over the EMIS interconnection corrupts readiness figures."
+    threat_sources: [TS-01]
+    relevance: possible
+    vulnerabilities: [VUL-03]
+    conditions: []
+    likelihood_initiation: low
+    likelihood_impact: low
+    likelihood: low
+    likelihood_rationale: "Mutual TLS and the signed, checksummed extract stop tampering in DT-2; the unsigned agreement weakens the governance, not the channel."
+    impacts:
+      - harm: operations
+        asset: "INF-01 integrity"
+    impact: moderate
+    risk: low
+    uncertainty: "Low."
+    sources: [INT-034.A3, INT-034.A4, product/test-results.md#dt-2]
+  - id: TE-05
+    description: "Privileged insider error or misuse of a break-glass or local database account changes configuration or data."
+    threat_sources: [TS-03]
+    relevance: possible
+    vulnerabilities: [VUL-04, VUL-09]
+    conditions: []
+    likelihood_initiation: low
+    likelihood_impact: moderate
+    likelihood: low
+    likelihood_rationale: "Few privileged staff, sealed and alerted break-glass accounts, hourly drift scan."
+    impacts:
+      - harm: assets
+        asset: "CMP-K8S, CMP-DB configuration"
+    impact: moderate
+    risk: low
+    uncertainty: "Moderate: break-glass opening never rehearsed."
+    sources: [INT-035.A1, INT-034.A3, product/test-results.md#stig-scan]
+  - id: TE-06
+    description: "Outage of the cloud region or a managed service makes EFRAS unavailable beyond the recovery objectives."
+    threat_sources: [TS-04]
+    relevance: anticipated
+    vulnerabilities: [VUL-05]
+    conditions: [PC-01]
+    likelihood_initiation: low
+    likelihood_impact: moderate
+    likelihood: low
+    likelihood_rationale: "Regional outages are rare; failover is untested."
+    impacts:
+      - harm: operations
+        asset: "BP-01 daily readiness reporting"
+    impact: low
+    risk: low
+    uncertainty: "Moderate."
+    sources: [INT-034.A3, product/conops.md#availability]
+  - id: TE-07
+    description: "An incident older than 90 days cannot be reconstructed from the program's own audit records."
+    threat_sources: [TS-01, TS-03]
+    relevance: possible
+    vulnerabilities: [VUL-06]
+    conditions: []
+    likelihood_initiation: low
+    likelihood_impact: low
+    likelihood: low
+    likelihood_rationale: "ECSSP keeps a one-year copy; the program depends on retrieving it."
+    impacts:
+      - harm: assets
+        asset: "INF-05 audit records"
+    impact: low
+    risk: low
+    uncertainty: "Low."
+    sources: [INT-035.A1, product/architecture.md#logging]
+  - id: TE-08
+    description: "Data scientist or malicious package moves the training extract out through the sandbox's outbound path."
+    threat_sources: [TS-03]
+    relevance: possible
+    vulnerabilities: [VUL-08]
+    conditions: []
+    likelihood_initiation: low
+    likelihood_impact: low
+    likelihood: low
+    likelihood_rationale: "Allow-list narrowed on 2026-11-03; retest pending."
+    impacts:
+      - harm: individuals
+        asset: "INF-03 in the training extract"
+    impact: moderate
+    risk: low
+    uncertainty: "Moderate until the retest."
+    sources: [INT-034.A3, product/test-results.md#pentest]
+threat_scenarios:
+  - id: SCN-01
+    description: "Adversary exfiltrates data and re-identifies maintainers from it."
+    events: [TE-01, TE-02]
+level_of_detail: "Threat events at the level of SP 800-30 Appendix E, tailored to EFRAS components, with one scenario coupling exfiltration and re-identification."
+vulnerabilities:
+  - id: VUL-01
+    description: "Pseudonymized exports and the training extract keep an unsalted hash of the DoD ID number (limitation 1, PT-2)."
+    severity: moderate
+    sources: [product/conops.md#limitations, product/test-results.md#pentest]
+  - id: VUL-02
+    description: "Two high-severity vulnerabilities in example-imagelib 2.9.1 inside efras-report (limitation 2)."
+    severity: high
+    sources: [product/conops.md#limitations, product/test-results.md#pipeline-1-5]
+  - id: VUL-03
+    description: "No signed interconnection agreement with EMIS; interim e-mail approval (limitation 3)."
+    severity: moderate
+    sources: [product/conops.md#limitations, product/architecture.md#interconnections]
+  - id: VUL-04
+    description: "Two break-glass console accounts use FIDO2 keys instead of CAC (limitation 5)."
+    severity: low
+    sources: [product/conops.md#limitations]
+  - id: VUL-05
+    description: "Contingency plan not exercised; regional failover never tested (limitation 4)."
+    severity: moderate
+    sources: [product/conops.md#limitations, product/test-results.md#dt-2]
+  - id: VUL-06
+    description: "Program audit log retention 90 days, short of the one-year Component requirement (limitation 6)."
+    severity: moderate
+    sources: [product/conops.md#limitations]
+  - id: VUL-07
+    description: "Privacy impact assessment drafted but not approved (limitation 7)."
+    severity: moderate
+    sources: [product/conops.md#limitations, product/privacy.md#pia]
+  - id: VUL-08
+    description: "Sandbox outbound allow-list wildcard (PT-3), narrowed 2026-11-03, retest pending."
+    severity: low
+    sources: [product/test-results.md#pentest]
+  - id: VUL-09
+    description: "Two program-fixable PostgreSQL STIG items: connection logging verbosity and break-glass database role password complexity."
+    severity: low
+    sources: [product/test-results.md#stig-scan]
+predisposing_conditions:
+  - id: PC-01
+    description: "Single cloud region hosts every component."
+    pervasiveness: high
+    sources: [INT-034.A3, product/conops.md#environment]
+  - id: PC-02
+    description: "About 3,000 fleet users reach the service over NIPRNet."
+    pervasiveness: moderate
+    sources: [INT-034.A3, product/conops.md#users]
+  - id: PC-03
+    description: "Access, sign-in, releases, monitoring and supply data depend on separately authorized services EFRAS does not run or see inside (access point, identity broker, software factory, CSSP, supply status service)."
+    pervasiveness: moderate
+    sources: [INT-034.A6, product/architecture.md#interconnections, product/architecture.md#leveraged]
+  - id: PC-04
+    description: "Every ERST-built image pulls in third-party and open-source components whose maintainers the program does not control."
+    pervasiveness: moderate
+    sources: [INT-034.A6, product/hw-sw-inventory.md#items]
+external:
+  services_provided: true
+  connections:
+    - component: CMP-CSP
+      information_exchange: "All EFRAS data at rest and in processing on provider infrastructure"
+      nss: true
+      introduces: [PC-01]
+      risk: low
+      sources: [INT-034.A4]
+    - component: CMP-ECAP
+      information_exchange: "All user traffic between NIPRNet and the edge"
+      nss: true
+      introduces: [PC-03]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6]
+    - component: CMP-IDB
+      information_exchange: "Authentication assertions with DoD ID number and groups (DF-2)"
+      nss: true
+      introduces: [PC-03]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6]
+    - component: CMP-EMIS
+      information_exchange: "Nightly maintenance extract with maintainer PII (DF-3)"
+      nss: true
+      introduces: [VUL-03]
+      risk: moderate
+      sources: [INT-034.A4]
+    - component: CMP-SUPPLY
+      information_exchange: "Nightly supply status (DF-4)"
+      nss: true
+      introduces: [PC-03]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6]
+    - component: CMP-SWF
+      information_exchange: "Signed images and infrastructure templates (DF-10)"
+      nss: true
+      introduces: [PC-03]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6]
+    - component: CMP-ECSSP
+      information_exchange: "Audit records with user identifiers (DF-9)"
+      nss: true
+      introduces: [PC-03]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6]
+  providers:
+    - id: EXP-01
+      name: "Example GovCloud"
+      kind: environment
+      component: CMP-CSP
+      services: ["IL4 infrastructure", "managed Kubernetes, database, storage, key, log and notebook services"]
+      meets_requirements: true
+      assurance: "DoD provisional authorization IL4 of 2024-09-18"
+      loss: "All EFRAS services and data"
+      impact: moderate
+      trust: sufficient
+      response: none
+      risk_acceptable: true
+      threat_intelligence: [component-intelligence]
+      sources: [INT-034.A4, product/architecture.md#leveraged]
+    - id: EXP-02
+      name: "Example Enterprise Cloud Access Point"
+      kind: service-provider
+      component: CMP-ECAP
+      services: ["boundary protection and inspection between NIPRNet and the cloud"]
+      meets_requirements: true
+      assurance: "ATO of 2025-01-10"
+      loss: "User access to EFRAS"
+      impact: low
+      trust: sufficient
+      response: none
+      risk_acceptable: true
+      threat_intelligence: [component-intelligence]
+      sources: [INT-034.A4, product/architecture.md#leveraged]
+    - id: EXP-03
+      name: "Enterprise identity broker"
+      kind: service-provider
+      component: CMP-IDB
+      services: ["CAC authentication and federation"]
+      meets_requirements: true
+      assurance: "Enterprise service ATO; onboarding approval 2026-05-12"
+      loss: "User sign-in"
+      impact: low
+      trust: sufficient
+      response: none
+      risk_acceptable: true
+      threat_intelligence: [component-intelligence]
+      sources: [INT-034.A4, product/architecture.md#interconnections]
+    - id: EXP-04
+      name: "Example Software Factory"
+      kind: service-provider
+      component: CMP-SWF
+      services: ["pipeline, scanning, image hardening and signing, deployment"]
+      meets_requirements: true
+      assurance: "ATO of 2025-10-01, with an open POA&M the ISSM tracks"
+      loss: "Ability to release and patch; integrity of images"
+      impact: moderate
+      trust: sufficient
+      response: none
+      risk_acceptable: true
+      threat_intelligence: [component-intelligence]
+      sources: [INT-034.A4, product/architecture.md#leveraged]
+    - id: EXP-05
+      name: "Example Cybersecurity Service Provider"
+      kind: service-provider
+      component: CMP-ECSSP
+      services: ["24x7 monitoring of forwarded logs", "incident response support", "vulnerability alerts"]
+      meets_requirements: true
+      assurance: "Service agreement of 2026-04-01 under the CSSP's ATO"
+      loss: "Security monitoring and the one-year audit copy"
+      impact: moderate
+      trust: sufficient
+      response: none
+      risk_acceptable: true
+      threat_intelligence: [component-intelligence]
+      sources: [INT-034.A4, product/architecture.md#leveraged]
+  supply_chain:
+    - id: SC-01
+      supplier: "Example Readiness Software Team (ERST)"
+      items: [INV-002, INV-003, INV-004, INV-005, INV-006]
+      vulnerabilities: [PC-04]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6, INT-023.A1]
+    - id: SC-02
+      supplier: "Example Software Factory"
+      items: [INV-007]
+      vulnerabilities: [VUL-02]
+      risk: low
+      sources: [INT-034.A4, INT-023.A1]
+    - id: SC-03
+      supplier: "Example GovCloud"
+      items: [INV-001, INV-008, INV-009, INV-010, INV-011, INV-012, INV-013, INV-014]
+      vulnerabilities: [PC-01]
+      risk: low
+      sources: [INT-034.A4, INT-023.A1]
+    - id: SC-04
+      supplier: "example-imagelib open-source project"
+      items: [INV-015]
+      vulnerabilities: [VUL-02]
+      risk: moderate
+      sources: [INT-034.A4, INT-038.A2]
+    - id: SC-05
+      supplier: "Example web framework open-source foundation"
+      items: [INV-016]
+      vulnerabilities: [PC-04]
+      risk: low
+      sources: [INT-034.A4, INT-034.A6, INT-038.A2]
+  nonconforming: []
+system_risk:
+  level: moderate
+  set_by: TE-01
+  rationale: "The most severe threat to any component is nation-state exfiltration from the database through the API (TE-01, moderate); no event, connection or supply chain record is rated above moderate."
+  sources: [INT-035.A2, INT-034.A4]
+prioritization:
+  method: "Among risks of the same level, those that harm individuals or the fleet's trust immediately come first, then integrity of readiness figures, then risks whose harm is in the future (retention, failover)."
+  factors: [immediate-impact, future-impact, coupling]
+  borderline: "Borderline values rounded up when the event touches personal data, down otherwise; uncertainty stated per event."
+  order: [TE-02, TE-01, TE-04, TE-08, TE-05, TE-03, TE-07, TE-06]
+  couplings:
+    - events: [TE-01, TE-02]
+      effect: increases
+      note: "Exfiltrated pseudonymized records become named records."
+communication:
+  recipients: [PER-AO, PER-AODR, PER-PM]
+  method: risk-assessment-report
+  shared: [source-information, intermediate-results, supporting-evidence]
+  policy: "Shared inside the Component under CUI marking; to the CIO and risk board on request."
+ai_capabilities:
+  - name: "Part-failure forecast model v3 (CMP-FORECAST)"
+    use_case_risks: "A wrong forecast orders parts for nothing or misses a failure; mitigated by advisory-only use, officers decide in EMIS."
+    benchmarks:
+      - metric: "precision and recall on a held-out year of data"
+        standard: "program model test plan acceptance thresholds, with the DoD responsible AI toolkit checklist"
+    verified_before_deployment: "Measured against the acceptance thresholds before v3 entered pre-production."
+    monitoring: "Weekly precision against actual removals; a drop below threshold opens a retraining ticket."
+    bias:
+      minimization: "Training covers every aircraft type with at least one year of data."
+      detection: "Performance checked per aircraft type at each retrain."
+      notification: "Weak forecasts per type are named in the release notes to maintenance officers."
+components:
+  - name: "example-imagelib 2.9.1"
+    kind: open-source
+    factors:
+      support: "Active maintainer group with a public security policy"
+      distribution_integrity: "Maintainer-signed releases pulled through the factory mirror with checksums"
+      sub_components: "Bundles two codec sub-libraries"
+      developer_practices: "Fixed both high findings upstream promptly"
+      integrity_mechanisms: "Signature and checksum verification in the pipeline"
+      adversarial_control: "No foreign adversary control found by the factory's provenance checks"
+    open_source: {governance: "Maintainer group with documented release process", community: "Widely used, active contributors", license: "Permissive; reviewed by ARSPO counsel"}
+    validation: {outcome: none-available}
+    suitable: true
+  - name: "example web framework 4.2"
+    kind: open-source
+    factors:
+      support: "Long-term support to 2028"
+      distribution_integrity: "Signed releases"
+      sub_components: "Standard dependency set listed in the SBOM"
+      developer_practices: "Published security process"
+      integrity_mechanisms: "Signature verification in the pipeline"
+      adversarial_control: "Foundation-governed; no adversary control found"
+    open_source: {governance: "Foundation governance", community: "Large active community", license: "Permissive; reviewed by ARSPO counsel"}
+    validation: {outcome: none-available}
+    suitable: true
+  - name: "sf-base-minimal 2026.09"
+    kind: gots
+    factors:
+      support: "Software factory, monthly rebuilds"
+      distribution_integrity: "Signed by the factory"
+      sub_components: "Minimal OS packages listed in the factory SBOM"
+      developer_practices: "Factory hardening under its own ATO"
+      integrity_mechanisms: "Signature verified at admission"
+      adversarial_control: "Government-controlled build"
+    validation: {outcome: none-available}
+    suitable: true
+executive_summary: "EFRAS carries moderate system risk, within the AO's tolerance for operations but at the edge of the low tolerance for individuals. The two moderate risks are re-identification of maintainers from exports (demonstrated, fix in release 1.6) and nation-state exfiltration of aggregated readiness data. Recommendations: deliver salted pseudonyms and an export retention rule in 1.6, pick up the imagelib fix in 1.5.2, sign the EMIS agreement, exercise failover, extend audit retention and approve the PIA before MVCR deployment."
+privacy:
+  processing: "Bulk ingest of about 30,000 maintainers' records from EMIS, kept five years, used to show qualifications and join actions to people, shared pseudonymized with analysts and data scientists; user identifiers in audit records."
+  impact_on_individuals: "Exposure of an export exposes named people (re-identification demonstrated): phishing, identity misuse, embarrassment over qualification gaps; altered records could show a maintainer unqualified. Rated moderate until salted pseudonyms ship."
+  legal_requirements:
+    - authority: OMB-A-130
+      applies: true
+      reason: "EFRAS is a federal information system processing PII."
+      beyond_baseline: ["Effective de-identification before data is treated as non-PII (Appendix II): salted, rotated pseudonyms in release 1.6", "Minimization review of analyst exports with the privacy office before release 1.6"]
+      requirements: [REQ-14]
+      sources: [INT-036.A2]
+    - authority: PRIVACY-ACT
+      applies: true
+      reason: "Records are retrieved by DoD ID number from a system of records covered by a published SORN."
+      requirements: [REQ-15]
+      sources: [INT-036.A2, INT-029.A3]
+    - authority: FIPPS
+      applies: true
+      reason: "Each FIPP was considered in the draft PIA."
+      requirements: [REQ-14]
+      sources: [INT-036.A2]
+    - authority: DODI5400.16
+      applies: true
+      reason: "A PIA is required for this new system holding PII in electronic form."
+      requirements: [REQ-16]
+      sources: [INT-029.A4, INT-036.A3]
+  sources: [INT-036.A1, INT-036.A2]
+sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-038.A1, INT-038.A2]

@@ -1,0 +1,273 @@
+information_types:
+  - id: INF-01
+    title: "Maintenance and readiness data"
+    description: "Maintenance actions, part removals and aircraft status by tail number and unit, pulled nightly from EMIS."
+    sp800_60_ids: [C.3.1.1]
+    confidentiality:
+      base: low
+      selected: moderate
+      adjustment_justification: "Aggregated across a fleet the data reveals readiness trends an adversary would value: serious, not limited, harm (INT-027.A2)."
+    integrity:
+      base: low
+      selected: moderate
+      adjustment_justification: "Tampering could hide degraded readiness or trigger wasteful part orders; integrity is the owner's first concern (INT-027.A2)."
+    availability:
+      base: low
+    privacy: false
+    selection_basis: "Supports MSN-03 daily readiness reporting and MSN-04 forecasting; governed by the fleet maintenance data steward's release rules and CUI policy."
+    system_information: false
+    handling:
+      classification: unclassified
+      cui: true
+      cti: false
+      software_artifacts: false
+    life_cycle:
+      - stage: collection
+        description: "Pulled nightly from EMIS over mutual TLS (DF-3) into the object storage landing zone."
+        components: [CMP-INGEST, CMP-OBJ]
+      - stage: processing
+        description: "Validated and joined with supply status by the ingest worker, then loaded (DF-5)."
+        components: [CMP-INGEST]
+      - stage: storage
+        description: "Held in the database for the 5-year analysis window; landing files kept 7 days after a successful load."
+        components: [CMP-DB, CMP-OBJ]
+      - stage: use
+        description: "Shown in squadron, air wing and fleet dashboards and scored by the forecast job (DF-1, DF-6)."
+        components: [CMP-API, CMP-WEB, CMP-FORECAST]
+      - stage: dissemination
+        description: "Leaves only inside reports and dashboards under the data steward's release rules; never written back to EMIS."
+        components: [CMP-API, CMP-REPORT]
+      - stage: disposition
+        description: "Purged monthly by the ingest worker once outside the 5-year window; landing files deleted by a bucket lifecycle rule after 7 days."
+        components: [CMP-INGEST, CMP-OBJ]
+    sources: [INT-027.A1, INT-027.A2, INT-033.A1, INT-032.A1, product/conops.md#information]
+  - id: INF-02
+    title: "Supply status"
+    description: "Part numbers, requisitions and expected delivery dates from the Example Supply Status Service."
+    sp800_60_ids: [C.3.4.2]
+    confidentiality:
+      base: low
+    integrity:
+      base: low
+      selected: moderate
+      adjustment_justification: "Wrong supply status joined to readiness data would make the forecasts order the wrong parts (INT-028.A2)."
+    availability:
+      base: low
+    privacy: false
+    selection_basis: "Supports MSN-04 part failure forecasting; governed by the service-level agreement with the supply status service signed 2026-06-30."
+    system_information: false
+    handling:
+      classification: unclassified
+      cui: true
+      cti: false
+      software_artifacts: false
+    life_cycle:
+      - stage: collection
+        description: "Pulled nightly from the supply status service API with a token from the secrets store (DF-4)."
+        components: [CMP-INGEST]
+      - stage: storage
+        description: "Replaced each night; history kept with the linked maintenance records in the database."
+        components: [CMP-DB]
+      - stage: use
+        description: "Joined with maintenance data by the forecast job and shown in dashboards."
+        components: [CMP-FORECAST, CMP-API]
+      - stage: disposition
+        description: "Purged with the linked maintenance records outside the 5-year window."
+        components: [CMP-INGEST]
+    sources: [INT-028.A1, INT-028.A2, INT-032.A1, ASM-009, product/conops.md#information]
+  - id: INF-03
+    title: "Maintainer PII"
+    description: "Name, DoD ID number, rate or rank, qualifications and work-center assignment of about 30,000 maintainers recorded on maintenance actions, including the pseudonymized analyst exports and training extract."
+    sp800_60_ids: [C.2.8.9, C.3.3.10]
+    confidentiality:
+      base: moderate
+    integrity:
+      base: moderate
+    availability:
+      base: moderate
+      selected: low
+      adjustment_justification: "EFRAS is not the authoritative copy; EMIS keeps the source records, and losing EFRAS's copy for days harms no individual or mission (INT-027.A3)."
+    privacy: true
+    pii_identification: "Walked the EMIS extract layout field by field with the program and the draft PIA; the DoD ID number identifies alone, and rate or rank, work center and qualifications identify in combination, so the unsalted DoD ID hash in exports keeps them PII (INT-029.A1)."
+    pii:
+      subjects: [federal-personnel]
+      phi: false
+      ssn: false
+    selection_basis: "Supports qualification coverage per work center within MSN-03 and joins actions to people; governed by the Privacy Act, the Component aviation maintenance records SORN and the data steward's release rules."
+    system_information: false
+    handling:
+      classification: unclassified
+      cui: true
+      cti: false
+      software_artifacts: false
+      special: [privacy-act]
+    life_cycle:
+      - stage: collection
+        description: "Arrives only in the nightly EMIS extract (DF-3); nothing is collected from individuals."
+        components: [CMP-INGEST, CMP-OBJ]
+      - stage: processing
+        description: "Validated and loaded with the maintenance actions (DF-5)."
+        components: [CMP-INGEST]
+      - stage: storage
+        description: "Held in the database while the linked action is inside the 5-year window."
+        components: [CMP-DB]
+      - stage: use
+        description: "Qualification coverage per work center and joins of actions to people."
+        components: [CMP-API, CMP-WEB]
+      - stage: dissemination
+        description: "Pseudonymized analyst exports (DF-7) and the training extract to the sandbox (DF-8), both keyed by an unsalted DoD ID hash and so still PII until release 1.6."
+        components: [CMP-REPORT, CMP-OBJ, CMP-SANDBOX]
+      - stage: disposition
+        description: "Purged monthly outside the 5-year window; exports expire with the 30-day cache; the training extract is deleted when replaced at retraining."
+        components: [CMP-INGEST, CMP-OBJ, CMP-SANDBOX]
+    sources: [INT-027.A3, INT-027.A4, INT-029.A1, INT-031.A1, INT-031.A2, INT-031.A3, INT-032.A2, ASM-009, product/privacy.md#pii]
+  - id: INF-04
+    title: "Forecasts and reports"
+    description: "Derived part-failure predictions, dashboards and exported PDF and slide reports."
+    sp800_60_ids: [C.3.4.3]
+    confidentiality:
+      base: low
+      selected: moderate
+      adjustment_justification: "Derived from aggregated readiness data and reveals the same trends (INT-027.A4)."
+    integrity:
+      base: low
+      selected: moderate
+      adjustment_justification: "A tampered forecast misleads part orders and readiness briefings (INT-027.A4)."
+    availability:
+      base: low
+    privacy: false
+    selection_basis: "Supports MSN-04 forecasting and MSN-05 fleet analysis and the briefing slides senior leaders receive; governed by the data steward's release rules."
+    system_information: false
+    handling:
+      classification: unclassified
+      cui: true
+      cti: false
+      software_artifacts: false
+    life_cycle:
+      - stage: creation
+        description: "Forecasts created nightly by the forecast job; reports and slides rendered on request."
+        components: [CMP-FORECAST, CMP-REPORT]
+      - stage: storage
+        description: "Forecasts in the database with the maintenance data; rendered reports in the object storage report cache."
+        components: [CMP-DB, CMP-OBJ]
+      - stage: use
+        description: "Viewed and acknowledged in dashboards by maintenance officers and analysts."
+        components: [CMP-API, CMP-WEB]
+      - stage: dissemination
+        description: "Exported through signed short-lived links (DF-7); briefing slides e-mailed to senior leaders, after which the recipient's CUI handling applies."
+        components: [CMP-REPORT, CMP-OBJ]
+      - stage: disposition
+        description: "Report cache expires after 30 days; forecasts purged with the maintenance data outside the 5-year window."
+        components: [CMP-OBJ, CMP-INGEST]
+    sources: [INT-027.A4, INT-033.A2, INT-032.A1, ASM-009, product/conops.md#information]
+  - id: INF-05
+    title: "Audit records"
+    description: "Sign-in, role change, data export, admin action and failed authorization events, cluster audit, database audit and cloud account activity logs, including user names and DoD ID numbers."
+    sp800_60_ids: [C.3.5.8]
+    confidentiality:
+      base: moderate
+    integrity:
+      base: moderate
+    availability:
+      base: low
+    privacy: true
+    pii_identification: "The identity broker's assertion carries each user's DoD ID number, and sign-in, role-change and export events record it with the user's name (INT-029.A2)."
+    pii:
+      subjects: [federal-personnel, contractors]
+      phi: false
+      ssn: false
+    selection_basis: "Supports accountability and incident response for the whole service; governed by DoD audit retention policy and the Component SORN for computer access and security records."
+    system_information: false
+    handling:
+      classification: unclassified
+      cui: true
+      cti: false
+      software_artifacts: false
+      special: [privacy-act]
+    life_cycle:
+      - stage: creation
+        description: "Created by the edge, the application services, the cluster, the database audit extension and the cloud account."
+        components: [CMP-EDGE, CMP-API, CMP-K8S, CMP-DB]
+      - stage: collection
+        description: "Collected by the log pipeline (DF-9)."
+        components: [CMP-LOGS]
+      - stage: storage
+        description: "Kept 90 days in the log store, short of the one-year Component retention (product limitation 6)."
+        components: [CMP-LOGS]
+      - stage: use
+        description: "Weekly ISSO review of privileged actions, exports and denied requests; break-glass and export-spike alerts."
+        components: [CMP-LOGS]
+      - stage: disclosure
+        description: "Forwarded in near real time to ECSSP, which keeps them one year under its agreement."
+        components: [CMP-LOGS, CMP-ECSSP]
+      - stage: disposition
+        description: "The program's copy is deleted after 90 days."
+        components: [CMP-LOGS]
+    sources: [INT-030.A1, INT-030.A2, INT-029.A2, INT-031.A4, INT-032.A3, product/architecture.md#logging]
+  - id: INF-06
+    title: "System security information"
+    description: "Program-owned keys and secrets, infrastructure configuration and security policy (security groups, WAF rules, role mappings)."
+    sp800_60_ids: [C.3.5.5]
+    confidentiality:
+      base: low
+      selected: moderate
+      adjustment_justification: "System information is held at the level of the most sensitive user information it protects (INT-030.A3)."
+    integrity:
+      base: moderate
+    availability:
+      base: low
+    privacy: false
+    selection_basis: "Supports operation of every component; governed by the Component's cryptographic key management and configuration management policies."
+    system_information: true
+    handling:
+      classification: unclassified
+      cui: true
+      cti: false
+      software_artifacts: false
+    life_cycle:
+      - stage: creation
+        description: "Created by the pipeline from the infrastructure templates and in the key service."
+        components: [CMP-KMS, CMP-K8S]
+      - stage: storage
+        description: "Keys and secrets in the key service and secrets store; configuration in the deployed resources."
+        components: [CMP-KMS]
+      - stage: use
+        description: "Used by every component to encrypt, authenticate and enforce policy."
+        components: [CMP-KMS, CMP-EDGE, CMP-API, CMP-DB]
+      - stage: maintenance
+        description: "Key rotation and template changes through the pipeline with ISSO sign-off."
+        components: [CMP-KMS]
+      - stage: disposition
+        description: "Scheduled key deletion when a key is retired."
+        components: [CMP-KMS]
+    sources: [INT-030.A1, INT-030.A3, INT-032.A3, product/architecture.md#components]
+information_owners:
+  - persona: PER-IO
+    organization: "Fictional fleet maintenance directorate (fleet maintenance data steward)"
+    types: [INF-01, INF-03, INF-04]
+    sources: [INT-027.A1, INT-027.A2, INT-027.A3, INT-027.A4]
+  - persona: PER-IO
+    organization: "Example Supply Status Service (supply status data owner)"
+    types: [INF-02]
+    sources: [INT-028.A1, INT-028.A2]
+  - persona: PER-PM
+    organization: "ARSPO"
+    types: [INF-05, INF-06]
+    sources: [INT-030.A1, INT-030.A2, INT-030.A3]
+privacy:
+  compliance: [DOD5400.11-R, DODI5400.16, DODI5015.02]
+  sorn:
+    status: published
+    id: "Component SORN for aviation maintenance records (fictional); Component SORN for computer access and security records (fictional) for audit records"
+    contractor_operated: false
+    sources: [INT-029.A3, product/privacy.md#authority]
+  records:
+    office: "Component records management office (fictional)"
+    schedule: "Aviation maintenance records schedule (fictional, 5-year analysis window) for INF-03; general records schedule for system access records for INF-05"
+    sources: [INT-029.A4]
+  pia:
+    determination: required
+    basis: new-system
+    due: "Approved before production deployment of release 1.5 (MVCR), no later than 2027-02-01"
+    sources: [INT-029.A4, product/privacy.md#pia]
+  sources: [INT-029.A1, INT-029.A3, INT-029.A4]

@@ -8,7 +8,9 @@ sources: [INT-020.A1, INT-020.A2, INT-020.A3, INT-021.A1, INT-021.A2, INT-022.A1
 # Stakeholder register
 
 <!-- BEGIN rmf:facts -->
-_No system facts are set yet (facts.yaml)._
+| Fact | Value | Set by |
+|---|---|---|
+| Authorization boundary | EFRAS-BND-1 | P-11 |
 <!-- END rmf:facts -->
 
 ## Stakeholders and interview roster

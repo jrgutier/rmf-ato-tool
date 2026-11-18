@@ -8,7 +8,9 @@ sources: [INT-001.A1, INT-001.A2, INT-002.A1, INT-003.A1, INT-004.A2, INT-005.A1
 # Organizational risk context
 
 <!-- BEGIN rmf:facts -->
-_No system facts are set yet (facts.yaml)._
+| Fact | Value | Set by |
+|---|---|---|
+| Authorization boundary | EFRAS-BND-1 | P-11 |
 <!-- END rmf:facts -->
 
 ## RMF role assignments
