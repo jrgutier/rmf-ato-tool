@@ -7,9 +7,11 @@ round-trip, so comments and key order survive updates.
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import io
 import json
+import pickle
 from pathlib import Path
 from typing import Any
 
@@ -41,22 +43,37 @@ def _yaml() -> YAML:
 
 
 def load_index(root: Path) -> Any:
-    """The parsed index (a round-trip mapping), validated against its JSON schema."""
+    """The parsed index (a round-trip mapping), validated against its JSON schema.
+
+    The parse and the validation are memoized on the texts of the index and its schema (a
+    check loads the index several times, about a second each); each caller gets its own
+    copy, a pickle, which keeps the comments and key order a later dump writes back."""
     path = root / INDEX_PATH
     try:
-        data = _yaml().load(path.read_text(encoding="utf-8"))
+        text = path.read_text(encoding="utf-8")
     except OSError as exc:
         raise IndexFileError(f"{INDEX_PATH}: {exc.strerror or exc}") from exc
+    schema = (root / SCHEMA_PATH).read_text(encoding="utf-8")
+    return pickle.loads(_load_index(text, schema))
+
+
+@functools.lru_cache(maxsize=8)
+def _load_index(text: str, schema: str) -> bytes:
+    try:
+        data = _yaml().load(text)
     except Exception as exc:  # ruamel raises several unrelated parser error types
         raise IndexFileError(f"{INDEX_PATH}: not valid YAML: {exc}") from exc
-    errors = schema_errors(root, data)
+    errors = _schema_errors(json.loads(schema), data)
     if errors:
         raise IndexFileError(f"{INDEX_PATH}: schema violation: " + "; ".join(errors[:5]))
-    return data
+    return pickle.dumps(data, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def schema_errors(root: Path, data: Any) -> list[str]:
-    schema = json.loads((root / SCHEMA_PATH).read_text(encoding="utf-8"))
+    return _schema_errors(json.loads((root / SCHEMA_PATH).read_text(encoding="utf-8")), data)
+
+
+def _schema_errors(schema: Any, data: Any) -> list[str]:
     validator = jsonschema.Draft202012Validator(schema)
     errors = []
     for err in sorted(validator.iter_errors(data), key=lambda e: [str(p) for p in e.absolute_path]):

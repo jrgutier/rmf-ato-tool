@@ -59,6 +59,11 @@ markers = [
 
 [tool.coverage.run]
 source = ["rmf_tool"]
+# sys.monitoring (Python 3.12+) measures lines at a third of the C tracer's cost: a negative
+# fixture ran 77 s under the tracer, 33 s under sysmon and 27 s without coverage. Python 3.11
+# lacks it and falls back to the tracer, so its warning is silenced.
+core = "sysmon"
+disable_warnings = ["no-sysmon"]
 
 [tool.ruff]
 line-length = 100

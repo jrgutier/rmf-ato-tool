@@ -10,6 +10,7 @@ from __future__ import annotations
 import functools
 import json
 import os
+import pickle
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
@@ -79,8 +80,27 @@ def _validator(schema_path: Path) -> Any:
 
 
 def schema_errors(repo: Path, name: str, data: Any) -> list[str]:
-    """Errors of ``data`` against ``framework/schema/<name>.schema.json``."""
-    validator = _validator((repo / SCHEMA_DIR / f"{name}.schema.json").resolve())
+    """Errors of ``data`` against ``framework/schema/<name>.schema.json``.
+
+    Memoized on the value of ``data`` (its pickle), like ``rmf_tool.yamlload`` on the text:
+    a check validates the same unchanged run and table files many times, and a negative
+    fixture spent a third of its time doing so. Equal pickles are equal values, so a changed
+    file is always validated afresh; data that cannot be pickled is never memoized."""
+    schema_path = (repo / SCHEMA_DIR / f"{name}.schema.json").resolve()
+    try:
+        blob = pickle.dumps(data, protocol=pickle.HIGHEST_PROTOCOL)
+    except Exception:  # an unpicklable value: validate it as it is
+        return _schema_errors(schema_path, data)
+    return list(_memo_schema_errors(schema_path, blob))
+
+
+@functools.lru_cache(maxsize=1024)
+def _memo_schema_errors(schema_path: Path, blob: bytes) -> tuple[str, ...]:
+    return tuple(_schema_errors(schema_path, pickle.loads(blob)))
+
+
+def _schema_errors(schema_path: Path, data: Any) -> list[str]:
+    validator = _validator(schema_path)
     errors = sorted(validator.iter_errors(data), key=lambda e: [str(p) for p in e.absolute_path])
     return [f"{'/'.join(map(str, e.absolute_path)) or '(root)'}: {e.message[:200]}"
             for e in errors]
