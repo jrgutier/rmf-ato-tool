@@ -11,7 +11,7 @@ nobody will answer questions during the session. Working directory: `/home/user/
 3. The `playbooks/_shared/*.md` files it points to, when a step needs them.
 4. For each task: its playbook `playbooks/<STEP>/<TASK>.md` and the persona cards its
    `## Interviews` section names.
-5. The journal `runs/20261118-synthetic-01/journal.md` and the earlier findings files in
+5. The journal `dryrun-review/efras/runs/20261118-synthetic-01/journal.md` and the earlier findings files in
    `dryrun-review/findings/` (skim, so you do not re-report a known issue).
 
 Do not read reference PDFs or whole text extractions; read cited passages with
@@ -21,9 +21,9 @@ or template leaves the expected shape unclear; if you need to, that is itself a 
 
 ## This run
 
-- **Run directory:** `runs/20261118-synthetic-01`. Pass it to every `rmf` command. Mode:
+- **Run directory:** `dryrun-review/efras/runs/20261118-synthetic-01`. Pass it to every `rmf` command. Mode:
   `synthetic`: you role-play every persona and tag every answer `SIMULATED`.
-- **Product:** the fictional Example Fleet Readiness Analytics Service (EFRAS) in `product/`
+- **Product:** the fictional Example Fleet Readiness Analytics Service (EFRAS) in `dryrun-review/efras/product/`
   (the run's `product` directory). Cite it as `product/<file>#<anchor>`; every heading has an
   explicit `{#anchor}`. Keep the product's `CMP-*` and `INV-###` IDs unchanged. Everything
   about it is fictional: never name a real product, vendor, unit or person.

@@ -28,8 +28,8 @@ was changed**: every defect is recorded for later.
 | Branch (acts as the fork) | `claude/project-thread-i5ojbm`, from main at `53fc0f0` |
 | Target system | **Example Fleet Readiness Analytics Service (EFRAS)**, invented for this run. The docs name only the UAS ground station, which is already fully run as `examples/uas-gcs`; a new system tests the process on ground it has not seen. |
 | System shape | cloud-hosted web app (IL4 PaaS), software acquisition pathway, maintainer PII, four leveraged authorizations (cloud region, access point, software factory, CSSP), seven disclosed weaknesses |
-| Product package | `product/` (written by the orchestrator as a program office would hand it over): CONOPS, architecture, data flows, inventory, test results, privacy, stakeholders, one monitoring cycle |
-| Run | `runs/20261118-synthetic-01`, synthetic mode, P-1 to R-5 plus M-1, M-2, M-3, M-5 (44 active tasks) |
+| Product package | `dryrun-review/efras/product/` (written by the orchestrator as a program office would hand it over): CONOPS, architecture, data flows, inventory, test results, privacy, stakeholders, one monitoring cycle |
+| Run | `dryrun-review/efras/runs/20261118-synthetic-01`, synthetic mode, P-1 to R-5 plus M-1, M-2, M-3, M-5 (44 active tasks) |
 | Controls | CNSSI 1253 M-M-L plus privacy overlay, cut to a **50-control subset** covering all 20 families (`baseline_id` CNSSI1253-M-M-L-SUBSET-50). A deviation: the schema marks `control_subset` as test-only (F-00-2). |
 | Sessions | 16 general-purpose agent sessions, one RMF step or a slice of it each, with the brief in `dryrun-review/session-prompt.md` (adapted from `tests/agent/prompts/example-uas-gcs.md`); each wrote a findings file |
 | Effort | about 5.5 hours of agent time, about 2,400 tool calls, about 3.7 M sub-agent tokens |
@@ -213,3 +213,10 @@ land; it would measure how much those fixes cut the cost per task.
 | `findings/15-authorize.md` | R-1 to R-5 | 14 |
 | `findings/16-monitor.md` | M-1, M-2, M-3, M-5, final check | 19 |
 | `findings/17-orchestrator.md` | fork CI, orchestration | 5 |
+
+## Layout note (after the review)
+
+The fork workspace was moved from the repository root into `dryrun-review/efras/` (`product/`
+and `runs/`) so the branch can merge into the template without fork-owned directories at the
+root. Paths inside the run (citations such as `product/conops.md#limitations`) are unchanged,
+because the run's `product: ../../product` still resolves.
