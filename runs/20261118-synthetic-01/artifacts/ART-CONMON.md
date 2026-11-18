@@ -2,8 +2,8 @@
 artifact_id: ART-CONMON
 run_id: 20261118-synthetic-01
 produced_by_task: S-5
-touched_by: [S-5]
-sources: [INT-129.A1, INT-129.A2, INT-129.A3, INT-130.A1, INT-130.A2, INT-130.A3, INT-131.A1, INT-132.A1, ART-ORG-CONTEXT, ART-SSP]
+touched_by: [S-5, M-2]
+sources: [INT-129.A1, INT-129.A2, INT-129.A3, INT-130.A1, INT-130.A2, INT-130.A3, INT-131.A1, INT-132.A1, ART-ORG-CONTEXT, ART-SSP, INT-208.A1, INT-208.A2]
 ---
 # Continuous monitoring strategy
 
@@ -187,6 +187,23 @@ logs), external providers (cloud account activity and provider notices) and comp
 node and database logs and the drift scan) (`detection_coverage`). The CSSP tunes its use cases
 quarterly and after each incident with the ISSO, and scanner false positives go through the
 allow-list or an approved justification (`tuning`) [[INT-132.A1]] [[INT-129.A2]].
+
+## Changes after ongoing assessment
+
+**2027-02-01, M-2, first cycle.** The frequencies and event triggers held; none is changed. The
+cycle cannot judge a frequency: the records that reached the RMF team cover only 2026-11-01 to
+2026-11-15 in pre-production, so no family was observed over a full period. What failed was the
+delivery the strategy's architecture describes, not the frequency: no monthly roll-up was
+compiled, and nothing for December or January reached the PM, the ISSM or the AODR (FND-006,
+POAM-024) [[INT-208.A1]]. The console change of 2026-11-04 needs no new trigger, since the drift
+scan caught it; it is a change control finding (FND-025) [[INT-208.A1]].
+
+The first measurement results are in `conmon.yaml` `measurement.results`, both outside their
+acceptable parameters and reported to the measures' users: MRS-01 (no high closed; the two open
+highs are 104 days old against 30) and MRS-02 (88% STIG compliance on the latest scan, against
+95%) [[INT-208.A2]]. The tools ran as their upkeep says as far as the fortnight shows (TOOL-02,
+TOOL-04, TOOL-05 and the provider's node scan); no TOOL-01 STIG scan and no TOOL-06 external scan
+result reached the records [[INT-208.A2]].
 
 <!-- M-2 updates artifacts/data/conmon.yaml when ongoing assessments change a frequency or
      method, appends "## Changes after ongoing assessment" (what changed and why), and adds

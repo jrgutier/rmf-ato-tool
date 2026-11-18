@@ -2,8 +2,8 @@
 artifact_id: ART-BIA
 run_id: 20261118-synthetic-01
 produced_by_task: P-8
-touched_by: [P-8, C-2]
-sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-018.A4, INT-019.A1, product/conops.md#mission, product/conops.md#availability, INT-065.A4, INT-066.A1, INT-066.A2]
+touched_by: [P-8, C-2, M-1]
+sources: [INT-018.A1, INT-018.A2, INT-018.A3, INT-018.A4, INT-019.A1, product/conops.md#mission, product/conops.md#availability, INT-065.A4, INT-066.A1, INT-066.A2, INT-204.A1, ART-CHG]
 ---
 # Business impact and criticality analysis
 
@@ -94,3 +94,14 @@ broker. Three boundary components were added because they underpin all three pro
 
 The API and the web front end can be redeployed from the pipeline within the recovery
 objective, so they were not added [[INT-065.A4]].
+
+## System and Environment Changes (M-1)
+
+Release 1.6 (CHG-003) is the one change of the cycle whose security impact is significant, so
+the criticality analysis has a Monitor iteration of 2027-02-01 naming it in `bia.yaml`
+[[ART-CHG]]. The pseudonyms, the archive tier and the configuration settings change no process,
+recovery time or interdependency; the archive tier is a setting of the existing log service,
+not a new component, and underpins no mission process. The ranking of BP-01 to BP-03 and the
+eight critical items holds, and no reevaluation of the recovery times is owed [[INT-204.A1]].
+The unauthorized console change (CHG-001) and the provider patch (CHG-002) are limited and need
+no iteration.

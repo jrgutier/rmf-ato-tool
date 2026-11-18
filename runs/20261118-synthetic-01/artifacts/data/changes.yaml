@@ -1,0 +1,93 @@
+# artifacts/data/changes.yaml (M-1; schema changes). Written whole (INV-8). ART-CHG says why.
+# First monitoring cycle, 2026-11-01 to 2027-01-31, recorded 2027-02-01. The monitoring data covers
+# only 2026-11-01 to 2026-11-15 in pre-production (ASM-026); release 1.6 rests on the R-3 milestone
+# records (ASM-025) and the board's simulated account (INT-204).
+monitoring:
+  unauthorized_changes:
+    from: "2026-11-01"
+    to: "2027-01-31"
+    method: "The hourly drift scan (TOOL-02) compares the whole account with the version-controlled templates and the pipeline reverts a difference; the ISSO matches each difference to an approved change request or the inventory, and an unmatched one is unauthorized. Records handed over cover 2026-11-01 to 2026-11-15 (360 scans of the pre-production account); no drift summary for 2026-11-16 to 2027-01-31 has reached the RMF team, so for that span no unauthorized change is asserted or ruled out (ASM-026)."
+    reconciled_against: [baseline, inventory, change-requests]
+changes:
+  - id: CHG-001
+    origin: unauthorized
+    date: "2026-11-04"
+    summary: "A cloud operations engineer widened a security group from the provider console while troubleshooting in the pre-production account; the drift scan flagged it within the hour and the pipeline reverted it the same hour."
+    requested_by: PER-ISSO
+    control: required
+    security_impact:
+      result: limited
+      analysis: "For under an hour the widened rule weakened subnet isolation (sc-7) in pre-production, which holds synthetic data only and is outside the authorization boundary; the same console permission exists in the production account, so the weakness is in the change process (cm-3), not in one setting."
+    privacy_impact: false
+    external_service: null
+    verification:
+      method: "Drift scan rerun after the automatic revert; the account matched the templates"
+      date: "2026-11-04"
+      result: pass
+    closed: "2026-11-15"
+    root_cause:
+      cause: process-failure
+      determined: "2026-11-04"
+      response: RSK-004
+    sources: [product/monitoring/cycle-2026-11.md#drift, INT-203.A1, INT-203.A2, INT-204.A3]
+  - id: CHG-002
+    origin: requested
+    date: "2026-11-09"
+    summary: "The cloud provider patched the managed Kubernetes control plane in its announced window after an ECSSP alert on the Kubernetes version."
+    requested_by: PER-CCP
+    control: pre-approved
+    security_impact:
+      result: limited
+      analysis: "Closes the vulnerability the ECSSP alert named in an inherited component (INV-008); no program setting, interface or data flow changes, and the node scan of 2026-11-14 found no high or critical item. The provider's authorization status is unchanged, so the leveraged service's status is not altered."
+    privacy_impact: false
+    external_service: null
+    implementation:
+      date: "2026-11-09"
+      notified: ["ISSO", "ERST on-call engineers", "CSSP"]
+    closed: "2026-11-15"
+    sources: [product/monitoring/cycle-2026-11.md#threat, product/monitoring/cycle-2026-11.md#vuln-scan, INT-203.A3]
+  - id: CHG-003
+    origin: requested
+    date: "2026-12-16"
+    summary: "Release 1.6: salted, rotated pseudonyms for exports and the training extract, the log archive tier, the PostgreSQL connection logging and break-glass password settings, the container baseline pipeline check and the sandbox egress probe; the report container is not rebuilt (efras-report stays 1.5.1)."
+    requested_by: PER-PM
+    control: required
+    security_impact:
+      result: significant
+      analysis: "Changes privacy safeguards (pt-3, the EV-02 trigger), audit retention (au-11), configuration settings (cm-6, ia-5) and boundary monitoring (sc-7); it introduces no new interface, data type or interconnection. It is meant to remove the weaknesses behind POAM-001, POAM-006, POAM-007, POAM-008, POAM-016 and POAM-019; the fixes are unverified by the SCA, and the report container's two high vulnerabilities remain (POAM-002, POAM-003). The decision of 2027-01-25 was made with this change in the package, and its conditions COND-01 and COND-05 are the reassessment EV-02 calls for."
+    privacy_impact: true
+    external_service: null
+    test:
+      result: pass
+      date: "2027-01-15"
+      presented_to: [PER-CCB, PER-AODR]
+    decision:
+      by: PER-CCB
+      outcome: approved
+      date: "2027-01-15"
+      communicated_to: [PER-PM, PER-ISSO, PER-ISSM, PER-AODR]
+    implementation:
+      date: "2027-01-15"
+      notified: ["pilot squadron users of pre-production", "ERST on-call engineers", "ISSO", "CSSP", "Component privacy office"]
+    root_cause:
+      cause: other
+      determined: "2027-01-20"
+      response: POAM-001
+    sources: [INT-204.A1, INT-204.A2, INT-205.A1, INT-202.A2, INT-193.A1, ASM-025]
+connections:
+  - id: CON-001
+    system: "Example Maintenance Information System (EMIS), IC-1"
+    component: CMP-EMIS
+    relationship: interconnected
+    decision: AD-ATO
+    authorization_termination_date: "2028-04-22"
+    action: restricted
+    sources: [product/architecture.md#interconnections, INT-202.A4, INT-198.A1]
+  - id: CON-002
+    system: "Example Supply Status Service, IC-2"
+    component: CMP-SUPPLY
+    relationship: interconnected
+    decision: AD-ATO
+    action: connected
+    sources: [product/architecture.md#interconnections, INT-202.A4]
+sources: [product/monitoring/cycle-2026-11.md#top, INT-202.A1, INT-203.A1, INT-204.A1, INT-205.A1, ASM-025, ASM-026]

@@ -2,7 +2,7 @@
 artifact_id: ART-RAR
 run_id: 20261118-synthetic-01
 produced_by_task: R-2
-touched_by: [R-2, R-3]
+touched_by: [R-2, R-3, M-3]
 sources: [ART-SAR, ART-POAM, ART-RA, ART-PKG, ART-ORG-CONTEXT, INT-186.A1, INT-186.A2, INT-187.A1, INT-188.A1, INT-189.A1, INT-190.A1, INT-191.A1, INT-191.A2, INT-192.A1, INT-192.A2, INT-193.A2]
 ---
 # Risk assessment report
@@ -102,3 +102,38 @@ The squadron maintenance officers and the information owner receive a notice of 
 fully mitigated at the decision: the unpatched report container, the EMIS feed held back until
 the agreement is signed, and untested regional recovery [[INT-193.A2]]. The decision authority's
 determination fixes only the deployment date and accepts no security risk [[INT-193.A2]].
+
+## Ongoing Risk Response (M-3)
+
+On 2027-02-01, after the first monitoring cycle, the PM and the ISSM made these changes
+[[INT-210.A1]] [[INT-211.A1]]:
+
+- **FND-025 joins RSK-004.** The console role that let a security group change bypass change
+  control is a configuration-drift weakness. RSK-004's selected course of action, mitigate (COA-01),
+  now also covers a read-only network console role with a break-glass path (POAM-025). The
+  alternative stays as weighed at R-3: accepting the weakness leaves drift to detection alone.
+  RSK-004 keeps its moderate level, and POAM-025 takes that level [[INT-209.A1]] [[INT-211.A1]].
+- **The medium vulnerability on INV-016 is not a risk of its own.** It is analysed and tracked as
+  VUL-001 and POAM-026 [[INT-210.A1]] [[INT-210.A2]].
+- **Three timelines are past.** RSK-001 (2027-01-25), RSK-003 (2027-01-22) and RSK-004
+  (2027-02-01) have their milestones recorded as met under ASM-025, but no record shows their
+  effectiveness criteria met, and the SCA has verified none. The responses go back to R-3's
+  implementation, and the residual levels are not claimed. The timelines move to COND-01
+  (2027-02-26) and COND-05 (2027-03-31) [[INT-211.A3]].
+- **RSK-002 is not yet carried out.** It is due 2027-02-15 under COND-02. If that date is missed,
+  the fallback weighed at R-3 applies: exports are switched off [[INT-211.A3]].
+- **No new risk is accepted** [[INT-211.A3]].
+
+The PM reports the state of each of the AO's six conditions in the monthly status report (M-5)
+[[INT-211.A2]]:
+
+| Condition | Due | State on 2027-02-01 |
+|---|---|---|
+| COND-01 | 2027-02-26 | Privacy review of release 1.6 done. Pseudonyms, the approved PIA and the leaver step are not yet verified by the SCA |
+| COND-02 | 2027-02-15 | Report container not rebuilt; waits on the factory's intermediate image |
+| COND-03 | 2027-03-05 | Memorandum with EMIS in legal review; no real EMIS records flow |
+| COND-04 | 2027-03-01 | Tabletop (2027-02-12) and failover test (2027-02-26) planned |
+| COND-05 | 2027-03-31 | Fixes said to be in release 1.6; no rescan yet |
+| COND-06 | 2027-02-28 | First monthly roll-up not yet compiled (M-5) |
+
+None of the conditions is met or overdue.

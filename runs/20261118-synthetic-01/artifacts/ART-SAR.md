@@ -2,8 +2,8 @@
 artifact_id: ART-SAR
 run_id: 20261118-synthetic-01
 produced_by_task: A-3
-touched_by: [A-3, A-4, A-5]
-sources: [ART-SAP, ART-SSP, ART-STIG, product/test-results.md#top, INT-152.A3, INT-160.A2, INT-162.A2, INT-165.A1, INT-167.A2, INT-169.A2, INT-171.A2, INT-172.A1, INT-172.A2, INT-173.A1, INT-174.A1, INT-175.A1, INT-176.A2, INT-177.A1, INT-177.A2, INT-178.A1, ASM-020, ASM-021, ASM-022, ASM-023, ASM-024]
+touched_by: [A-3, A-4, A-5, M-1, M-2, M-3]
+sources: [ART-SAP, ART-SSP, ART-STIG, product/test-results.md#top, INT-152.A3, INT-160.A2, INT-162.A2, INT-165.A1, INT-167.A2, INT-169.A2, INT-171.A2, INT-172.A1, INT-172.A2, INT-173.A1, INT-174.A1, INT-175.A1, INT-176.A2, INT-177.A1, INT-177.A2, INT-178.A1, ASM-020, ASM-021, ASM-022, ASM-023, ASM-024, ART-CHG, ASM-026]
 handling: CUI
 ---
 # Security assessment report
@@ -222,3 +222,53 @@ accept, not a fix [[INT-177.A2]] [[INT-177.A3]].
 
 Open for A-6: FND-001 to FND-024, 9 moderate and 15 low. The SSP's ca-2 statement was brought up
 to date (ART-SSP, "Changes from remediation (A-5)") [[INT-179.A1]].
+
+## System and Environment Changes (M-1)
+
+M-1 changes no determination or finding; the result files and the SAR data are not rewritten
+here. What the change log (ART-CHG) hands to the ongoing assessment [[ART-CHG]]:
+
+- Release 1.6 (CHG-003, significant) changed the implementation behind FND-018 (pt-3), FND-002
+  (au-11), FND-007 (cm-6, STG-001), FND-013 (ia-5, STG-002), FND-008 (cm-6, container baseline)
+  and FND-023 (sc-7, egress probe). It runs in pre-production only and no rescan or retest record
+  beyond the R-3 milestones is in the run, so each finding stays open for the SCA (COND-01,
+  COND-05) [[INT-204.A2]] [[ASM-026]].
+- The unauthorized console change CHG-001 is new evidence on cm-3 for M-2 [[INT-203.A2]].
+- The monitoring data that reached the run ends on 2026-11-15, ten weeks before the
+  authorization; it is the only data M-2 can assess against [[ASM-026]].
+
+## Ongoing assessment 2027-02-01 (M-2)
+
+The first ongoing assessment, by the same independent SCA team, on the cycle's monitoring
+records (2026-11-01 to 2026-11-15, pre-production), the change log and interviews with the ISSO,
+the CSSP, the ISSM and the PM [[INT-206.A1]] [[INT-207.A1]] [[INT-208.A1]] [[INT-209.A2]].
+Families assessed this session: cm, ra and ca (ART-SAP, "Ongoing assessment plan (M-2)"); the
+other families due are carried to the next session.
+
+- **cm**: cm-2 satisfied (the drift scan flagged and the pipeline reverted the one difference);
+  cm-3 moves from satisfied to other-than-satisfied with a new finding, FND-025 (low): a console
+  change of 2026-11-04 bypassed review and approval, and the console permission remains; cm-6 and
+  cm-8 keep their results (no STIG rescan; inventory updated late and unconfirmed against
+  production) [[INT-206.A1]] [[INT-206.A2]].
+- **ra**: ra-5 stays other-than-satisfied (the two highs now 104 days old; a new medium on
+  INV-016 for M-3's vulnerability analysis); ra-8 kept, since no signed PIA is in the run
+  [[INT-206.A3]] [[INT-205.A2]].
+- **ca**: ca-5 and ca-7 stay other-than-satisfied: the POA&M exists but its monthly cadence is not
+  shown, no roll-up has been compiled, and no record after 2026-11-15 reached the assessor
+  [[INT-206.A4]].
+
+Result mix of the 50 controls: unchanged except cm-3, so 27 satisfied and 23 other-than-satisfied.
+New findings: FND-025. Closed findings: none; the fixes release 1.6 is said to carry are verified
+only on evidence the assessor can examine (COND-01, COND-05). Reused evidence: the monitoring
+records (drift, image and node scans, log review, privacy and threat records) and the earlier
+determinations of controls not due [[ASM-026]].
+
+## Ongoing Risk Response (M-3)
+
+M-3 changes no determination and no finding record. The SAR results stay as M-2 left them
+[[INT-211.A1]]:
+
+- FND-025's triage (to the POA&M) is carried out as POAM-025 under RSK-004 [[INT-211.A1]].
+- The ra-5 medium on INV-016 is analysed as VUL-001 and tracked as POAM-026. It is not a SAR
+  finding [[INT-210.A2]].
+- No finding closes, because the SCA has verified no fix [[INT-211.A3]].

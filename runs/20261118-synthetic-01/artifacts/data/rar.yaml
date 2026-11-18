@@ -1,5 +1,7 @@
 # artifacts/data/rar.yaml (R-2, updated by R-3; schema rar). Written whole (INV-8). Each risk
 # groups the open findings that share a threat event; level from SP 800-30 Table I-2.
+# M-3 (2027-02-01): FND-025 and POAM-025 joined RSK-004; the timelines of RSK-001 and RSK-003
+# (passed, effectiveness unverified) and RSK-004 moved to COND-01 and COND-05 (INT-211.A3).
 risks:
   - id: RSK-001
     title: "Re-identification of maintainers from exports and the training extract"
@@ -37,12 +39,12 @@ risks:
       responsible: PER-PM
       effectiveness_criteria: "Retest re-identifies no maintainer from a list of DoD ID numbers; PIA approved by the Component CIO."
       dependencies: [POAM-001, POAM-010]
-      timeline: "2027-01-25"
+      timeline: "2027-02-26"
       monitoring_plan: "Monthly POA&M review by the ISSM; SCA verification at the first ongoing assessment."
       triggers: ["A failed retest", "Any export found with the unsalted hash", "A new re-identification technique in threat reporting"]
       interim_measures: "Only synthetic data loaded; exports limited to the analysts and data scientists who need them."
       informed: [PER-AO, PER-PM, PER-ISSM, PER-PRIV, PER-IO]
-    sources: [INT-186.A1, INT-189.A1, INT-191.A1, ART-RA]
+    sources: [INT-186.A1, INT-189.A1, INT-191.A1, ART-RA, INT-211.A3]
   - id: RSK-002
     title: "Exploitation of the unpatched report container"
     description: "Threat: an adversary with a signed-in session sends a crafted rendering request (TE-03). Weakness: two public high vulnerabilities in example-imagelib past the 30-day flaw remediation time, uncorrected developer test findings (VUL-02). Effect: compromise of CMP-REPORT and the reports it renders."
@@ -121,27 +123,27 @@ risks:
       responsible: PER-ISSO
       effectiveness_criteria: "Every sampled leaver disabled within 24 hours of departure."
       dependencies: [POAM-004, POAM-005]
-      timeline: "2027-01-22"
+      timeline: "2027-02-26"
       monitoring_plan: "Quarterly account review samples leaver timing; ISSO reports to the ISSM."
       triggers: ["A sampled leaver disabled late", "An account used after its owner left"]
       interim_measures: "35-day inactivity disable."
       informed: [PER-AO, PER-PM, PER-ISSM, PER-PRIV]
-    sources: [INT-186.A1, INT-186.A2, INT-191.A1, ART-RA]
+    sources: [INT-186.A1, INT-186.A2, INT-191.A1, ART-RA, INT-211.A3]
   - id: RSK-004
     title: "Insecure or drifting configuration of the database and application containers"
-    description: "Threat: a privileged insider error or an attacker exploiting a weak setting (TE-05, TE-10). Weakness: two open CAT II PostgreSQL STIG settings, no documented secure configuration for the five containers, an inventory not updated at release (VUL-09, VUL-11). Effect: an insecure setting or drift goes unnoticed, weakening audit and database account protection."
+    description: "Threat: a privileged insider error or an attacker exploiting a weak setting (TE-05, TE-10). Weakness: two open CAT II PostgreSQL STIG settings, no documented secure configuration for the five containers, an inventory not updated at release, and (M-3) a console role that can change security groups outside change control (VUL-09, VUL-11, VUL-13). Effect: an insecure setting or drift goes unnoticed, weakening audit and database account protection."
     likelihood: moderate
     impact: moderate
     level: moderate
-    finding_refs: [FND-007, FND-013, FND-008, FND-009, STG-001, STG-002]
-    poam_refs: [POAM-006, POAM-007, POAM-008, POAM-021]
+    finding_refs: [FND-007, FND-013, FND-008, FND-009, STG-001, STG-002, FND-025]
+    poam_refs: [POAM-006, POAM-007, POAM-008, POAM-021, POAM-025]
     priority: 4
     response: mitigate
     residual_level: low
     courses_of_action:
       - id: COA-01
         response: mitigate
-        description: "Two PostgreSQL STIG settings in release 1.6, a documented container baseline approved by the change board with a pipeline check, and the inventory updated at each release (POAM-006, POAM-007, POAM-008, POAM-021)."
+        description: "Two PostgreSQL STIG settings in release 1.6, a documented container baseline approved by the change board with a pipeline check, the inventory updated at each release (POAM-006, POAM-007, POAM-008, POAM-021), and (M-3) a read-only network console role with a break-glass path (POAM-025)."
         effectiveness: "Makes drift detectable and closes the open CAT II settings."
         feasibility: "In release 1.6."
         cost: "Within the current contract."
@@ -161,14 +163,14 @@ risks:
         rationale: "Leaves an assessed weakness unaddressed for no saving."
     selected_response:
       responsible: PER-PM
-      effectiveness_criteria: "SCA rescan closes STG-001 and STG-002; the container checklist has no open CAT I or CAT II item; inventory matches each environment."
-      dependencies: [POAM-006, POAM-007, POAM-008, POAM-021]
-      timeline: "2027-02-01"
+      effectiveness_criteria: "SCA rescan closes STG-001 and STG-002; the container checklist has no open CAT I or CAT II item; inventory matches each environment; no security group change outside the pipeline."
+      dependencies: [POAM-006, POAM-007, POAM-008, POAM-021, POAM-025]
+      timeline: "2027-03-31"
       monitoring_plan: "Monthly STIG scan and the pipeline check; inventory checked at each release."
       triggers: ["A new CAT I or CAT II finding", "Drift found by the hourly scan"]
       interim_measures: "Hourly drift scan of the account; the break-glass database role stays sealed."
       informed: [PER-AO, PER-PM, PER-ISSM]
-    sources: [INT-186.A2, INT-187.A1, INT-191.A1, ART-RA]
+    sources: [INT-186.A2, INT-187.A1, INT-191.A1, ART-RA, INT-209.A1, INT-210.A1, INT-211.A1, INT-211.A3]
   - id: RSK-005
     title: "Regional outage outlasts the recovery objectives"
     description: "Threat: failure of the cloud region or a managed service (TE-06). Weakness: failover never tested, contingency and incident response plans not approved, no exercise or lessons learned (VUL-05). Effect: daily readiness reporting unavailable beyond its objectives."
@@ -371,7 +373,7 @@ overall_risk: moderate
 controls_by_level:
   very-low: 0
   low: 13
-  moderate: 10
+  moderate: 11  # M-3: cm-3 joined RSK-004 with FND-025
   high: 0
   very-high: 0
 determination:
@@ -382,4 +384,4 @@ determination:
   rests_on: [ART-RA]
   risk_executive_input: "The software factory's late hardened base image is a shared dependency risk across the portfolio and is to be tracked as such; the 2027-02-01 fielding date is fixed by operational need, and the risk board prefers a conditioned authorization that keeps real maintainer data out until the privacy fixes land over a slipped fielding."
   sources: [INT-191.A2, INT-188.A1, INT-189.A1, INT-187.A1, INT-190.A1]
-sources: [ART-SAR, ART-POAM, ART-RA, ART-PKG, INT-191.A1, INT-191.A2, INT-192.A1, INT-192.A2]
+sources: [ART-SAR, ART-POAM, ART-RA, ART-PKG, INT-191.A1, INT-191.A2, INT-192.A1, INT-192.A2, INT-211.A1]

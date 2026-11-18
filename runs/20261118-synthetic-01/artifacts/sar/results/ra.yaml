@@ -24,7 +24,7 @@ determinations:
     methods: [examine, interview, test]
     depth: comprehensive
     coverage: comprehensive
-    summary: "Examined a quarter of weekly scan reports, the pipeline gate records of 1.5.0 and 1.5.1, the CSSP's external scan reports and alert tickets, and every remediation ticket since 2026-10-20. Scanning is weekly on nodes and database, on every build for images and dependencies, and monthly at the edge by the CSSP, with SCAP content, CVE and CVSS and daily signature updates; results are analyzed by the ISSM and the engineers and shared with the ISSO, the CSSP and the software factory. Tested with the SCA's own authenticated scan of release 1.5.1 on 2026-11-23 (12 hosts, images and database instances): it confirmed the two high vulnerabilities of example-imagelib 2.9.1 in efras-report, found on 2026-10-20, past the 30-day remediation time; release 1.5.2 was not verified (ASM-024). Interviewed the CSSP liaison and the developer lead. The SSP records ra-5 as partial."
+    summary: "Examined a quarter of weekly scan reports, the pipeline gate records of 1.5.0 and 1.5.1, the CSSP's external scan reports and alert tickets, and every remediation ticket since 2026-10-20. Scanning is weekly on nodes and database, on every build for images and dependencies, and monthly at the edge by the CSSP, with SCAP content, CVE and CVSS and daily signature updates; results are analyzed by the ISSM and the engineers and shared with the ISSO, the CSSP and the software factory. Tested with the SCA's own authenticated scan of release 1.5.1 on 2026-11-23 (12 hosts, images and database instances): it confirmed the two high vulnerabilities of example-imagelib 2.9.1 in efras-report, found on 2026-10-20, past the 30-day remediation time; release 1.5.2 was not verified (ASM-024). Interviewed the CSSP liaison and the developer lead. The SSP records ra-5 as partial. M-2 2027-02-01 (data to 2026-11-15): still other-than-satisfied. The factory's nightly rescan and the provider's node scan of 2026-11-14 show the two highs in efras-report still open (now 104 days, against 30) and one new medium in the web framework runtime of efras-api (INV-016), first seen on that scan; nodes show no high or critical. The CSSP's alert on the managed Kubernetes version was acted on by the provider (CHG-002). No scan after 2026-11-14 and no CSSP external scan report for the cycle reached the assessor, so whether release 1.6 carries the INV-016 fix is not known. FND-019 stays open; the INV-016 medium is listed for M-3's vulnerability analysis."
     finding_refs: [FND-019]
     statements:
       - {id: "RA-05a.[01]", result: satisfied}
@@ -37,20 +37,20 @@ determinations:
       - {id: "RA-05e.", result: satisfied}
       - {id: "RA-05f.", result: satisfied}
     reused: []
-    sources: [INT-166.A4, INT-172.A1, ASM-024, product/test-results.md#pipeline-1-5, product/conops.md#limitations]
+    sources: [INT-166.A4, INT-172.A1, ASM-024, product/test-results.md#pipeline-1-5, product/conops.md#limitations, product/monitoring/cycle-2026-11.md#vuln-scan, INT-206.A3, INT-207.A1, INT-207.A2]
   - control_id: ra-8
     result: other-than-satisfied
     methods: [examine, interview]
     depth: comprehensive
     coverage: comprehensive
-    summary: "Examined the whole draft PIA (version 0.9 of 2026-09-30, ART-PIA) and its coordination record against the system's PII inventory. It covers the five PII elements, the EMIS source and the uses, but it is not approved (privacy office review 2027-01-20, CIO approval 2027-01-25) and has the open item on the de-identified exports; development of EFRAS began before it was drafted. No real maintainer PII has been processed: the pre-production pilot uses synthetic data. EFRAS starts no collection from individuals. Interviewed the privacy officer. The SSP records ra-8 as partial."
+    summary: "Examined the whole draft PIA (version 0.9 of 2026-09-30, ART-PIA) and its coordination record against the system's PII inventory. It covers the five PII elements, the EMIS source and the uses, but it is not approved (privacy office review 2027-01-20, CIO approval 2027-01-25) and has the open item on the de-identified exports; development of EFRAS began before it was drafted. No real maintainer PII has been processed: the pre-production pilot uses synthetic data. EFRAS starts no collection from individuals. Interviewed the privacy officer. The SSP records ra-8 as partial. M-2 2027-02-01: due through POAM-010's milestones; not reassessed, result kept. pia.yaml records the privacy office review of 2027-01-20 and the CIO's approval of 2027-01-25, but both rest on P-14's assumption (ASM-011) and the R-3 progress rule (ASM-025), and no signed PIA is in the run for the assessor to examine; the privacy officer's monitoring record of 2026-11-13 still showed the PIA unapproved. FND-020 stays open."
     finding_refs: [FND-020]
     statements:
       - {id: "RA-08a.", result: other-than-satisfied}
       - {id: "RA-08b.[01]", result: not-applicable, reason: "No collection of real PII has been initiated: the pilot runs on synthetic data, and the PIA approval is scheduled before production data flows (FND-020 tracks it)."}
       - {id: "RA-08b.[02]", result: not-applicable, reason: "EFRAS collects nothing from individuals; all PII arrives in the EMIS extract, so no information collection from ten or more persons arises."}
     reused: []
-    sources: [INT-171.A3, ART-PIA, product/privacy.md#pia]
+    sources: [INT-171.A3, ART-PIA, product/privacy.md#pia, product/monitoring/cycle-2026-11.md#privacy, INT-205.A2]
 findings:
   - id: FND-019
     control_id: ra-5

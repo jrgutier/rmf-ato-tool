@@ -2,8 +2,8 @@
 artifact_id: ART-CP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4, I-2]
-sources: [INT-124.A1, INT-124.A2, INT-124.A3, INT-095.A1, INT-095.A2, INT-096.A1, INT-126.A2, ART-BIA, product/conops.md#availability, product/conops.md#limitations, product/test-results.md#dt-2, INT-139.A2, INT-138.A1]
+touched_by: [S-4, I-2, M-1]
+sources: [INT-124.A1, INT-124.A2, INT-124.A3, INT-095.A1, INT-095.A2, INT-096.A1, INT-126.A2, ART-BIA, product/conops.md#availability, product/conops.md#limitations, product/test-results.md#dt-2, INT-139.A2, INT-138.A1, INT-202.A3, ART-CHG]
 ---
 # Contingency plan
 
@@ -183,6 +183,17 @@ of the cluster in the second region exists as templates and has never been run, 
 [[INT-139.A2]] [[product/test-results.md#dt-2]]. The STIG summary's open database items
 (STG-001, STG-002) do not touch recovery [[ART-STIG]]. The PM's approval of this plan is still
 due by 2026-12-15 [[INT-138.A1]].
+
+## System and Environment Changes (M-1)
+
+**2027-02-01, M-1.** The PM approved version 1.0 of this plan on 2026-12-15 and the ISSM
+distributed it on 2026-12-18 to the named personnel, the EMIS point of contact and the CSSP
+(POAM-013); `contingency.yaml` records both in its record of changes [[INT-202.A3]]. The plan is
+still untested: the tabletop (2027-02-12) and the regional failover (2027-02-26) are POAM-009
+and condition COND-04, due by 2027-03-01. Of the cycle's changes (ART-CHG), release 1.6
+(CHG-003) changes no recovery objective, strategy or restoration order; its archive tier adds a
+year of audit records to what the log service restores. CHG-001 and CHG-002 do not touch
+recovery [[ART-CHG]].
 
 <!-- I-2 appends "## Implementation updates" (dated: what changed during implementation and
      why) and adds I-2 to touched_by. -->

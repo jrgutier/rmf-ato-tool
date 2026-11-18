@@ -2,8 +2,8 @@
 artifact_id: ART-SAP
 run_id: 20261118-synthetic-01
 produced_by_task: A-2
-touched_by: [A-2]
-sources: [INT-142.A1, INT-142.A2, INT-143.A1, INT-143.A2, INT-144.A1, INT-144.A3, INT-146.A1, INT-147.A1, INT-147.A2, INT-147.A3, INT-147.A4, INT-147.A5, INT-148.A1, INT-149.A1, INT-150.A1, INT-151.A1, INT-151.A2, INT-151.A3, ART-SSP, ART-RA, ART-CAT, product/test-results.md#top]
+touched_by: [A-2, M-2]
+sources: [INT-142.A1, INT-142.A2, INT-143.A1, INT-143.A2, INT-144.A1, INT-144.A3, INT-146.A1, INT-147.A1, INT-147.A2, INT-147.A3, INT-147.A4, INT-147.A5, INT-148.A1, INT-149.A1, INT-150.A1, INT-151.A1, INT-151.A2, INT-151.A3, ART-SSP, ART-RA, ART-CAT, product/test-results.md#top, ART-CONMON, INT-209.A2]
 ---
 # Security assessment plan
 
@@ -161,3 +161,16 @@ risk analysis before the decision.
 
 One constraint: the release 1.5.2 fixes, due 2026-12-10, are verified only if time allows.
 Otherwise they stay open findings with POA&M items [[INT-151.A3]].
+
+## Ongoing assessment plan (M-2)
+
+**2027-02-01, first cycle.** The ongoing assessment uses this plan's methods per control
+(`sap.yaml`) on the frequencies of the monitoring strategy, with the same assessor team and
+independence; `sap.yaml` is not changed [[ART-CONMON]]. Scope this session: cm, ra and ca, the
+families whose frequency makes them due and on which the cycle's records bear (at most three
+families per session). Also due but carried to the next ongoing assessment session: au, sa, sc,
+si, sr (weekly or monthly) and cp-9 (monthly), and the controls whose POA&M milestones fell due
+in other families (ac-2, ps-4, pt-3, ia-5, au-11, pl-2, cp-2, ir-8, sc-7, sa-11, ca-3).
+Evidence is the monitoring records, which end on 2026-11-15, the change log and interviews;
+fixes said to be in release 1.6 are verified only on a scan, retest or record the assessor can
+examine, which COND-01 and COND-05 schedule by 2027-02-26 and 2027-03-31 [[INT-209.A2]].

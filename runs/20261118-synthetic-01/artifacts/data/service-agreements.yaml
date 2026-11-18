@@ -3,6 +3,8 @@
 # SVA-001, kept here). One agreement per provider named in inherited_from in the family files,
 # the CSSP first, with the same provider string (SVCA-001). The enterprise identity broker
 # provides no inherited control; its onboarding approval is interconnection IC-3 in boundary.yaml.
+# M-2 (2027-02-01): one effectiveness record per agreement, measured by the ISSM on the cycle's
+# records (to 2026-11-15, ASM-026).
 dodin_connected: true
 system_environments: [cloud]
 agreements:
@@ -46,7 +48,20 @@ agreements:
           - {party: service-provider, duty: "Send vulnerability alerts and directed actions and scan the edge monthly from outside"}
           - {party: subscriber, duty: "Scan inside the account weekly, acknowledge alerts within one working day, remediate within the ra-5 response times and report status on the ticket"}
         controls: [ra-5]
-    sources: [INT-060.A2, INT-060.A3, INT-118.A1, INT-108.A1, INT-098.A1, INT-115.A1, ASM-016, product/architecture.md#leveraged, product/architecture.md#logging]
+    effectiveness:
+      - date: "2027-02-01"
+        service: SRV-01
+        measured_by: PER-ISSM
+        measure: "Monthly summary received and alerts triaged for the cycle's records (to 2026-11-15): summary of 2026-11-15 received, no incident, two export volume alerts resolved with the supervisor, no break-glass use"
+        rating: effective
+        issue: {status: none}
+      - date: "2027-02-01"
+        service: SRV-03
+        measured_by: PER-ISSM
+        measure: "Vulnerability alerts timely and acted on, and the monthly external scan received: the managed Kubernetes alert led to the provider's patch of 2026-11-09; no external scan report for the cycle is in the program's records"
+        rating: degraded
+        issue: {status: open, description: "The CSSP's monthly external scan report did not reach the program's monitoring records for the cycle; the ISSM asked the CSSP to send it with the next monthly summary."}
+    sources: [INT-060.A2, INT-060.A3, INT-118.A1, INT-108.A1, INT-098.A1, INT-115.A1, ASM-016, product/architecture.md#leveraged, product/architecture.md#logging, INT-208.A3, INT-207.A1, INT-207.A2]
   - id: SVA-002
     provider: "Example GovCloud IL4 region"
     role: cloud-service-provider
@@ -76,7 +91,14 @@ agreements:
           - {party: service-provider, duty: "Patch the hypervisor, control plane and database engine, publish the hardened node image monthly, and keep backups durable across availability zones"}
           - {party: subscriber, duty: "Roll worker nodes to the latest node image, patch containers, and configure and test database backups and point-in-time recovery"}
         controls: [si-2, cp-9]
-    sources: [INT-117.A2, INT-119.A1, INT-119.A2, INT-113.A2, INT-071.A1, INT-096.A1, product/architecture.md#leveraged]
+    effectiveness:
+      - date: "2027-02-01"
+        service: SRV-05
+        measured_by: PER-ISSM
+        measure: "Managed service patches applied in announced windows and node scans clean: control plane patched on 2026-11-09 after the CSSP alert; node scan of 2026-11-14 with no high or critical finding"
+        rating: effective
+        issue: {status: none}
+    sources: [INT-117.A2, INT-119.A1, INT-119.A2, INT-113.A2, INT-071.A1, INT-096.A1, product/architecture.md#leveraged, INT-208.A3, product/monitoring/cycle-2026-11.md#threat]
   - id: SVA-003
     provider: "Example Enterprise Cloud Access Point"
     role: common-control-provider
@@ -99,7 +121,14 @@ agreements:
           - {party: service-provider, duty: "Inspect and filter every session to the EFRAS edge and keep the traffic logs for the CSSP"}
           - {party: subscriber, duty: "Keep its subnets, security groups, WAF rules and egress allow-list, and notify before opening a new port"}
         controls: [sc-7]
-    sources: [INT-117.A2, INT-113.A1, INT-071.A2, product/architecture.md#network]
+    effectiveness:
+      - date: "2027-02-01"
+        service: SRV-06
+        measured_by: PER-ISSM
+        measure: "Evidence of inspection and filtering of sessions to the EFRAS edge in the cycle's records"
+        rating: degraded
+        issue: {status: open, description: "No access point inspection report or traffic log evidence reached the program's monitoring records for the cycle; the ISSM asked the access point service for its report for 2026-11 to 2027-01."}
+    sources: [INT-117.A2, INT-113.A1, INT-071.A2, product/architecture.md#network, INT-208.A3]
   - id: SVA-004
     provider: "Example Software Factory"
     role: common-control-provider
@@ -129,7 +158,20 @@ agreements:
           - {party: service-provider, duty: "Vet upstream sources, mirror approved packages, sign images, check ingested packages for counterfeits and report them"}
           - {party: subscriber, duty: "Pin dependencies by hash, pull only through the repository, refuse unsigned images at admission and stop a release on a failed check"}
         controls: [sr-3, sr-11]
-    sources: [INT-117.A2, INT-116.A1, INT-071.A3, INT-111.A2, product/architecture.md#leveraged]
+    effectiveness:
+      - date: "2027-02-01"
+        service: SRV-07
+        measured_by: PER-ISSM
+        measure: "Scans run on every build and nightly, and findings reported to the program: the nightly rescan of 2026-11-14 reported the two open highs and a new medium (INV-016)"
+        rating: effective
+        issue: {status: none}
+      - date: "2027-02-01"
+        service: SRV-08
+        measured_by: PER-ISSM
+        measure: "Hardened, signed base image delivered when the program needs it: the hardened base image the report container fix waits on is about three months late with no committed date"
+        rating: degraded
+        issue: {status: open, description: "The factory's late hardened base image holds the efras-report fix (POAM-002, POAM-003, COND-02); the program requested the factory's patched intermediate image and works the issue with the factory before raising it further."}
+    sources: [INT-117.A2, INT-116.A1, INT-071.A3, INT-111.A2, product/architecture.md#leveraged, INT-208.A3, product/monitoring/cycle-2026-11.md#vuln-scan]
   - id: SVA-005
     provider: "Component privacy office"
     role: common-control-provider
@@ -152,5 +194,12 @@ agreements:
           - {party: service-provider, duty: "Keep the SORN and its authority and purposes, deliver privacy training and review PII processing changes and the PIA"}
           - {party: subscriber, duty: "Keep the PII inventory, restrict processing to the SORN's elements and purposes, and route PII changes to the privacy representative"}
         controls: [at-2, pt-2, pt-3]
-    sources: [INT-117.A2, INT-106.A1, INT-106.A2, INT-080.A1, product/privacy.md#authority]
+    effectiveness:
+      - date: "2027-02-01"
+        service: SRV-09
+        measured_by: PER-ISSM
+        measure: "PII processing changes and the PIA reviewed: the office's review of 2026-11-13 and its review of release 1.6 against the PIA"
+        rating: effective
+        issue: {status: none}
+    sources: [INT-117.A2, INT-106.A1, INT-106.A2, INT-080.A1, product/privacy.md#authority, INT-208.A3, product/monitoring/cycle-2026-11.md#privacy, INT-205.A1]
 sources: [INT-047.A1, INT-048.A1, INT-060.A3, INT-117.A2]

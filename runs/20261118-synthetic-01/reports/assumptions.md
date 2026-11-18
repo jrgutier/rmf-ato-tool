@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (25)
+## Assumptions (27)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -33,8 +33,10 @@ Mode: synthetic. Human respondents: none.
 | ASM-023 | A-3 | PER-DEV | The REQ-11 standards registry review (APR-001) and the REQ-12 Section 508 test (APR-002) of 2026-12-03 have no result the run can ground: the product holds no list of the protocols and standards checked against the DoD IT Standards Registry and no accessibility test. Both requirements are recorded as not demonstrated; no conformance or failure of a particular standard or workflow is asserted. | product/test-results.md has no standards or accessibility result, and S-3 recorded that no developer test verified REQ-11 or REQ-12; a pass or a specific failure would be invented. |
 | ASM-024 | A-3 | PER-SCA | Release 1.5.2 (planned 2026-12-10) is treated as not deployed to the assessed environment before the out-brief of 2026-12-11: the fixes it carries (the two high vulnerabilities in CMP-REPORT, STG-001, STG-002) are not verified, and the SCA's scan of 2026-11-23 is the latest result the run records. | The product gives 1.5.2 only as planned (product/conops.md#limitations item 2) and the plan verifies its fixes only if they land before the out-brief; asserting that they did would be invented. |
 | ASM-025 | R-3 | PER-PM | The POA&M progress between the package submission (2026-12-14) and the authorization decision (2027-01-25) is simulated by one rule: each milestone was met on its planned date, except where the plan named an outside obstacle (the software factory's hardened base image for the report container; the EMIS program's legal review for the memorandum), which slipped again. The progress is recorded only in the POA&M; the records the met milestones would change (plan approvals in the S-4 plan records, the inventory, the container entries of stig-summary.yaml, the SAR finding statuses) are left to the monitoring cycle (M-1, M-2), and no finding is closed without the SCA's verification. | The decision cannot precede the PIA approval of 2027-01-25 (PRIV-003, P-14's ASM-011) or the before-authorization items scheduled by then (MPOA-001), so the run must reach 2027-01-25, two months past its clock (as_of 2026-11-18); a decision date in the ledger makes ASMT-010 judge every milestone due before it. Nothing in the product says how those weeks went, so a stated, uniform rule is used instead of case-by-case invention. |
+| ASM-026 | M-1 | PER-PM | The first monitoring cycle (2026-11-01 to 2027-01-31, recorded on 2027-02-01) rests on the only monitoring data the program has handed over, product/monitoring/cycle-2026-11.md, which covers 2026-11-01 to 2026-11-15 in the pre-production account and the pilot squadrons, an environment outside the authorization boundary that is built from the same templates. For 2026-11-16 to 2027-01-31 the run asserts no scan, drift event, account review, incident or production deployment; it holds only the milestone records R-3 made under ASM-025. Determinations are not refreshed on that data alone, and no finding is closed. | The authorization of 2027-01-25 (AUTH-001) postdates the monitoring data by ten weeks, and the product supplies nothing later. Inventing records for the gap would break traceability; treating the gap itself as a monitoring shortfall (ca-7, POAM-024) is the honest reading. |
+| ASM-027 | M-3 | PER-ISSM | For the medium vulnerability in the web framework runtime of efras-api (INV-016, VUL-001 of the POA&M), the CVSS 3.1 base score of 5.0, the public advisory, the impact (limited on confidentiality and integrity, none on availability) and the six cost factors (asset value 250,000; exposure factor 0.1; single loss expectancy 25,000; annual rate of occurrence 0.1; annualized loss expectancy 2,500; total cost of ownership of the fix 4,000) are the ISSM's estimates, not values from the product material. | The monitoring records give only the severity (medium), the component and that a fix exists (product/monitoring/cycle-2026-11.md#vuln-scan); VULN-004 and VULN-005 need a score, an impact rating and numeric cost factors, so they are recorded as stated estimates rather than presented as measured. |
 
-## Interview answers (495; SIMULATED 495)
+## Interview answers (533; SIMULATED 533)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -78,3 +80,7 @@ Mode: synthetic. Human respondents: none.
 | R-3 | 3 | 5 | 0 |
 | R-4 | 4 | 8 | 0 |
 | R-5 | 3 | 5 | 0 |
+| M-1 | 4 | 12 | 0 |
+| M-2 | 4 | 11 | 0 |
+| M-3 | 2 | 6 | 0 |
+| M-5 | 5 | 9 | 0 |

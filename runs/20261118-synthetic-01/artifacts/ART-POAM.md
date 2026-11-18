@@ -2,8 +2,8 @@
 artifact_id: ART-POAM
 run_id: 20261118-synthetic-01
 produced_by_task: A-6
-touched_by: [A-6, R-3]
-sources: [ART-SAR, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-180.A1, INT-180.A2, INT-180.A4, INT-180.A5, INT-181.A1, INT-181.A3, INT-182.A1, ASM-024]
+touched_by: [A-6, R-3, M-1, M-3]
+sources: [ART-SAR, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-180.A1, INT-180.A2, INT-180.A4, INT-180.A5, INT-181.A1, INT-181.A3, INT-182.A1, ASM-024, ART-CHG]
 handling: CUI  # at a minimum CUI, or the classification level of the system (DoDI 8530.01)
 ---
 # Plan of action and milestones
@@ -112,3 +112,42 @@ where an outside obstacle was named [[ASM-025]] [[INT-193.A1]] [[INT-194.A1]].
 No item is completed or closed: the SCA has verified none of the fixes, so the findings stay
 open until the first ongoing assessment [[INT-193.A1]]. POAM-020 stays open for the AO's decision
 on accepting RSK-007 [[INT-192.A2]].
+
+## System and Environment Changes (M-1)
+
+M-1 changes no item record; `items.yaml` is not rewritten here. The change log (ART-CHG) bears
+on the plan in three ways [[ART-CHG]]:
+
+- Release 1.6 (CHG-003) is the change that carries the fixes of POAM-001, POAM-006, POAM-007,
+  POAM-008, POAM-016 and POAM-019, deployed to pre-production only; their findings stay open
+  until the SCA verifies them (COND-01, COND-05) [[INT-204.A2]].
+- The unauthorized console change CHG-001 has a process-failure root cause; M-3 answers it under
+  RSK-004 [[INT-203.A2]].
+- No production deployment is recorded, so POAM-021's confirmation against production (due
+  2027-02-01) is not met; M-3 records the slip [[INT-202.A2]].
+
+## Ongoing Risk Response (M-3)
+
+On 2027-02-01 the plan takes the cycle's results [[INT-210.A1]] [[INT-211.A1]]:
+
+- **New POAM-025 (FND-025, cm-3).** A read-only network console role with a break-glass path. It
+  is checked by 2027-02-19 and done by 2027-03-12. The severity is low, but it carries RSK-004's
+  moderate risk, so it takes priority 12, after the moderate items. The low items move down one,
+  to priorities 13 to 25 [[INT-211.A1]].
+- **New POAM-026 (ra-5).** The medium vulnerability in the API's web framework runtime (INV-016),
+  found on 2026-11-14. It is fixed by the runtime upgrade said to be in release 1.6, and is done
+  only when two successive rescans show it absent, by 2027-02-12 (90 days). It takes priority 26,
+  since no risk in the risk assessment report links it. Its analysis record VUL-001 holds the
+  CVSS 3.1 rating (5.0, medium), the expected loss (limited, limited, none) and the cost factors
+  the method was weighed on. The score and the factors are the ISSM's estimates [[INT-210.A2]]
+  [[ASM-027]].
+- **Two missed milestones are recorded as changes; their original dates stay:**
+  - POAM-021's confirmation against production moves to 2027-03-31, and the item is now delayed.
+    Nothing is deployed to production [[INT-210.A3]].
+  - POAM-012's plan reference to the approved PIA moves to 2027-02-26, because the pl-2 statement
+    still cites the draft [[INT-202.A3]].
+- **No item is completed or closed.** The milestones recorded as met under ASM-025 stay unverified
+  [[INT-210.A3]] [[ASM-026]].
+
+The cycle brought no directed action, no outside inspection finding and no VDP report. The CSSP's
+Kubernetes alert was a provider advisory, patched by the provider [[INT-207.A1]].

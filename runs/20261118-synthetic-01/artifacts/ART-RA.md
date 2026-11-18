@@ -2,7 +2,7 @@
 artifact_id: ART-RA
 run_id: 20261118-synthetic-01
 produced_by_task: P-14
-touched_by: [P-14, R-2]
+touched_by: [P-14, R-2, M-3]
 sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-034.A6, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-037.A3, INT-037.A4, INT-037.A5, INT-038.A1, INT-038.A2, INT-039.A1, INT-039.A2, INT-040.A1, INT-040.A2, ASM-010, ASM-012, ART-ORG-CONTEXT, ART-BIA, ART-INFOTYPES, ART-BND, ART-INV]
 ---
 # System risk assessment
@@ -185,3 +185,33 @@ Updated on 2026-12-21 with the assessment results; `purpose.kind` is now `subseq
   among the moderate events; the system risk stays moderate, set by TE-01 and now shared by four
   other moderate events [[INT-191.A1]]. The risks built on these events are in ART-RAR
   [[ART-SAR]].
+
+## Ongoing Risk Response (M-3)
+
+Updated on 2027-02-01 with the first monitoring cycle; `purpose.update` names it. The cycle rests
+on records that end on 2026-11-15, from pre-production, so no likelihood or impact is lowered on
+fixes nobody has verified [[ASM-026]] [[INT-210.A1]].
+
+- New VUL-13 under TE-10: the cloud operations engineers' console role can write security groups
+  in both accounts, so a change can bypass review and approval (FND-025, CHG-001). TE-10 keeps its
+  moderate likelihood: the drift scan caught the change and the pipeline reverted it within the
+  hour, which is what that rating already assumes, and the same role exists in production
+  [[INT-203.A2]] [[INT-210.A1]].
+- New VUL-14 under TE-01: a medium vulnerability in the API's web framework runtime (INV-016),
+  found on 2026-11-14, within its 90-day remediation time. TE-01 stays moderate while the API is
+  reachable only through the access point and CAC sign-in [[INT-206.A3]] [[INT-210.A1]].
+- No threat event's likelihood, impact or risk level changes, and the system risk stays moderate
+  [[INT-210.A1]] [[INT-211.A1]].
+
+M-2 found no response ineffective; it could verify none. Three responses have passed their
+timelines with their milestones recorded as met only under ASM-025: RSK-001, RSK-003 and RSK-004.
+No record shows their effectiveness criteria met. This is a compliance gap, not an effectiveness
+failure, so it goes back to R-3's implementation. The timelines move to COND-01 (2027-02-26) and
+COND-05 (2027-03-31), and the risks stay at their assessed levels until the SCA verifies the
+fixes. RSK-002's report container fix is plainly not implemented and stays due on 2027-02-15
+under COND-02 [[INT-211.A3]].
+
+The CSSP's alert on the managed Kubernetes version was patched by the provider on 2026-11-09. It
+names no IAVM number or issuing authority, so it is treated as a provider advisory, not a directed
+action. No readiness inspection, outside evaluation or VDP report reached the program in the cycle
+[[INT-207.A1]] [[product/monitoring/cycle-2026-11.md#threat]].

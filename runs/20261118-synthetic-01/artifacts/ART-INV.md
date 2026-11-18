@@ -2,8 +2,8 @@
 artifact_id: ART-INV
 run_id: 20261118-synthetic-01
 produced_by_task: P-10
-touched_by: [P-10, I-2]
-sources: [INT-023.A1, INT-023.A2, INT-023.A3, INT-023.A4, INT-024.A1, INT-024.A2, INT-024.A3, INT-024.A4, product/hw-sw-inventory.md#items, product/hw-sw-inventory.md#priority, INT-139.A1, ART-STIG]
+touched_by: [P-10, I-2, M-1]
+sources: [INT-023.A1, INT-023.A2, INT-023.A3, INT-023.A4, INT-024.A1, INT-024.A2, INT-024.A3, INT-024.A4, product/hw-sw-inventory.md#items, product/hw-sw-inventory.md#priority, INT-139.A1, ART-STIG, INT-202.A2, ART-CHG]
 ---
 # Hardware and software inventory
 
@@ -88,3 +88,17 @@ and the pipeline updates it at the next production release tag [[INT-139.A1]]
 [[product/hw-sw-inventory.md#items]]. I-1 mapped every software, operating-system, database and
 virtual-machine item to a secure configuration benchmark or a not-applicable reason in the STIG
 summary (ART-STIG) [[ART-STIG]].
+
+## System and Environment Changes (M-1)
+
+The assessment found that the inventory was not updated at release 1.5.1 (FND-009, POAM-021),
+whose fix is to record which release each environment runs. `inventory.yaml` is rewritten for
+release 1.6 (CHG-003): efras-web, efras-api, efras-ingest and efras-forecast (INV-002 to
+INV-005) are at 1.6.0 and efras-report (INV-006) at 1.5.1, because the report container was not
+rebuilt; each record says these run in pre-production since 2027-01-15 and that no production
+deployment is recorded [[INT-202.A2]] [[ART-CHG]]. No item is added or removed: the log archive
+tier is a setting of the existing log service (INV-013), not a new storage item, so the note under
+"Uncertain items" that release 1.6 "may add" one is answered. Base image 2026.09 and example-imagelib 2.9.1
+(INV-015) stay, with their open vulnerabilities. The provider's control plane patch of
+2026-11-09 (CHG-002) changes no program-managed version (INV-008 stays 1.33). The confirmation
+against the production deployment, POAM-021's second milestone, is still open [[INT-202.A2]].

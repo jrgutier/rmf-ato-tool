@@ -2,8 +2,8 @@
 artifact_id: ART-SVCA
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4]
-sources: [INT-060.A3, INT-110.A1, INT-117.A1, INT-117.A2, INT-118.A1, INT-118.A2, INT-119.A1, INT-119.A2, INT-120.A1, INT-120.A2, INT-121.A1, INT-113.A1, INT-116.A1, INT-106.A1, ASM-016, product/architecture.md#leveraged]
+touched_by: [S-4, M-2]
+sources: [INT-060.A3, INT-110.A1, INT-117.A1, INT-117.A2, INT-118.A1, INT-118.A2, INT-119.A1, INT-119.A2, INT-120.A1, INT-120.A2, INT-121.A1, INT-113.A1, INT-116.A1, INT-106.A1, ASM-016, product/architecture.md#leveraged, INT-208.A3]
 ---
 # Cybersecurity service agreements
 
@@ -85,3 +85,22 @@ with the access point's traffic logs [[INT-118.A2]].
 No measurement is due yet: M-2 measures each service of the agreements against its duties and
 carries any issue the provider and the program cannot resolve to the Component CIO
 [[INT-117.A2]].
+
+### First measurement (M-2, 2027-02-01)
+
+The ISSM measured one or more services under each agreement from the program's side, on the
+cycle's records, which end on 2026-11-15 (ASM-026); the records are `effectiveness` entries in
+`artifacts/data/service-agreements.yaml` [[INT-208.A3]]:
+
+- SVA-001 (CSSP): SRV-01 log monitoring effective; SRV-03 degraded, because the monthly external
+  scan report did not reach the program's records (issue open) [[INT-207.A2]].
+- SVA-002 (cloud provider): SRV-05 patching effective (control plane patch of 2026-11-09).
+- SVA-003 (access point): SRV-06 degraded on evidence, no inspection report for the cycle (issue
+  open).
+- SVA-004 (software factory): SRV-07 scanning effective; SRV-08 degraded, the hardened base image
+  about three months late, holding the report container fix (issue open, intermediate image
+  requested).
+- SVA-005 (privacy office): SRV-09 effective.
+
+No issue is beyond the parties to resolve yet, so none is reported to the Component CIO
+[[INT-208.A3]].

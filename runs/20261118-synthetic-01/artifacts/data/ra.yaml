@@ -3,9 +3,9 @@ purpose:
   decisions: ["security categorization (C-2)", "control selection and tailoring (S-1, S-2)", "POA&M priorities (A-6)", "authorization decision (R-2 to R-4)"]
   kind: subsequent
   update:
-    circumstances: "The independent assessment (SAR delivered 2026-12-11) and the R-2 risk analysis: confirmed and re-rated events, and weaknesses the initial assessment did not hold (leaver access, container configuration, monitoring not yet running)."
-    previous: "Initial system risk assessment of 2026-11-18 (P-14, ART-RA as first written)"
-date: "2026-12-21"
+    circumstances: "The first monitoring cycle (M-1, M-2 of 2027-02-01) on records to 2026-11-15: an unauthorized console change showing the console role can bypass change control (FND-025) and a new medium vulnerability in the API's web framework runtime (VUL-001 of the POA&M). Earlier, at R-2: the independent assessment (SAR delivered 2026-12-11), confirmed and re-rated events, and weaknesses the initial assessment did not hold (leaver access, container configuration, monitoring not yet running)."
+    previous: "Subsequent risk assessment of 2026-12-21 (R-2), itself updating the initial assessment of 2026-11-18 (P-14)"
+date: "2027-02-01"
 team:
   - name: "ARSPO ISSM"
     persona: PER-ISSM
@@ -30,6 +30,8 @@ rationales:
     rationale: "The Component tolerance for harm to individuals is low, lower than for operations (INT-034.A5)."
   - decision: "R-2 update: TE-03 likelihood raised from low to moderate; TE-09, TE-10 and TE-11 and VUL-10 to VUL-12 added from the assessment"
     rationale: "The imagelib highs are public, past the 30-day window and the fix slipped twice; the assessment found the leaver gap, the undocumented container configuration and monitoring not yet running, which P-14 did not hold (INT-186.A1, INT-186.A2, INT-191.A1)."
+  - decision: "M-3 update: VUL-13 (console role can write security groups outside change control) added to TE-10, and VUL-14 (medium vulnerability in the API's web framework runtime) added to TE-01; no likelihood, impact or risk level changes"
+    rationale: "The drift scan caught and the pipeline reverted the console change within the hour, which is what TE-10's moderate likelihood already assumes; the medium vulnerability is within its 90-day remediation time and adds nothing to TE-01's moderate rating while the API stays reachable only through the access point and CAC sign-in (INT-210.A1, INT-211.A1)."
 tailoring: []
 point_of_contact:
   persona: PER-ISSM
@@ -149,7 +151,7 @@ threat_events:
     description: "Nation-state actor exploits the web application or API to reach the database and exfiltrate aggregated readiness data and maintainer records."
     threat_sources: [TS-01]
     relevance: expected
-    vulnerabilities: [VUL-02]
+    vulnerabilities: [VUL-02, VUL-14]
     conditions: [PC-02]
     likelihood_initiation: moderate
     likelihood_impact: moderate
@@ -306,7 +308,7 @@ threat_events:
     description: "An insecure or drifted setting in an application container or the database goes unnoticed and is exploited or causes loss of audit detail."
     threat_sources: [TS-01, TS-03]
     relevance: possible
-    vulnerabilities: [VUL-09, VUL-11]
+    vulnerabilities: [VUL-09, VUL-11, VUL-13]
     conditions: [PC-04]
     likelihood_initiation: moderate
     likelihood_impact: moderate
@@ -390,6 +392,14 @@ vulnerabilities:
     description: "Continuous monitoring governance not yet running: no ongoing assessment, status report or recurring assessment schedule; REQ-11 and REQ-12 not demonstrated (FND-003, FND-005, FND-006, FND-016, FND-022)."
     severity: low
     sources: [ART-SAR, INT-187.A1]
+  - id: VUL-13
+    description: "The cloud operations engineers' console role can write security groups in both accounts, so a configuration change can bypass review and approval (FND-025, CHG-001)."
+    severity: low
+    sources: [ART-SAR, ART-CHG, INT-203.A2]
+  - id: VUL-14
+    description: "Medium vulnerability in the open-source web framework runtime of efras-api (INV-016), found by the factory's nightly rescan of 2026-11-14; no scan shows whether release 1.6 fixed it (VUL-001 of the POA&M)."
+    severity: moderate
+    sources: [product/monitoring/cycle-2026-11.md#vuln-scan, INT-206.A3]
 predisposing_conditions:
   - id: PC-01
     description: "Single cloud region hosts every component."

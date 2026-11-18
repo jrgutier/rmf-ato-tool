@@ -2,8 +2,8 @@
 artifact_id: ART-CMP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4, I-2]
-sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-126.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan, ART-STIG, INT-138.A1, INT-139.A1]
+touched_by: [S-4, I-2, M-1]
+sources: [INT-122.A1, INT-122.A2, INT-123.A1, INT-123.A2, INT-126.A2, INT-093.A1, INT-094.A1, product/architecture.md#configuration, product/architecture.md#updates, product/test-results.md#stig-scan, ART-STIG, INT-138.A1, INT-139.A1, INT-202.A3, INT-203.A2, INT-204.A1, ART-CHG]
 handling: CUI
 ---
 # Configuration management plan
@@ -164,6 +164,22 @@ baselines and the SCAP scanner's false-positive handling in `artifacts/data/cm-p
 unchanged; release 1.5.1 (2026-11-07, PT-1 fix and server header) went through the same pipeline
 and gates, and no inventory item was added or removed [[INT-139.A1]]. The PM's approval of this
 plan is still due by 2026-12-15 [[INT-138.A1]].
+
+## System and Environment Changes (M-1)
+
+**2027-02-01, M-1.** The PM approved this plan on 2026-12-15, meeting the AODR's condition
+(POAM-012); the plan text and `cm-plan.yaml`, which has no approval field, said otherwise until
+now [[INT-202.A3]]. The change log for the first monitoring cycle is ART-CHG
+(`artifacts/data/changes.yaml`): the board approved release 1.6 (CHG-003) on 2027-01-15 after
+its gates and developmental test, with the security impact analysis rated significant and
+presented to the AODR [[INT-204.A1]]; the provider's control plane patch (CHG-002) went through
+as a pre-approved provider patch; and the drift scan caught one unauthorized console change
+(CHG-001) [[ART-CHG]]. CHG-001 shows a gap in this plan's change control: the engineers' console
+role can still write security groups, so a change can bypass the pipeline and the board, and the
+emergency path in the procedures was not used. The plan's CIs, board, tools and baselines are
+not changed here; the response to the root cause is M-3's, under RSK-004 [[INT-203.A2]]. The
+container baseline check that release 1.6 added to the pipeline (POAM-008) is not yet written
+into CI-APP's baseline; that is owed when the SCA verifies it.
 
 <!-- I-2 appends "## Implementation updates" and M-1 appends "## Change updates" (dated:
      what changed in the plan, baselines or board, and why), each adding itself to

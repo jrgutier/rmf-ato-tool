@@ -1,5 +1,9 @@
 # artifacts/data/conmon.yaml (S-5; updated by M-2; schema conmon). Written whole (INV-8).
-# ART-CONMON says why. S-6 adds the AO's or AODR's approval.
+# ART-CONMON says why. S-6 adds the AO's or AODR's approval. M-2 (2027-02-01): measurement results
+# MRS-01 and MRS-02 appended; no frequency or trigger changed (INT-208.A1, INT-208.A2).
+# M-5 (2027-02-01): reporting.dodin.awareness records the three areas the strategy gives DODIN
+# awareness of; faults, performance, bandwidth, routes and network management are not claimed
+# (INT-213.A2) and go to P-7 through the organization tier review (INT-215.A1).
 frequencies:
   - family: ac
     frequency: quarterly
@@ -409,6 +413,21 @@ measurement:
     analysis: "The ISSO computes the monthly values; the ISSM compares them with the acceptable parameters"
     access: "The program, the AO's office and the Component CISO working group"
     reporting: "Monthly roll-up and quarterly posture report"
+  results:
+    - id: MRS-01
+      measure: MSR-01
+      date: "2027-02-01"
+      value: 104
+      within_parameters: false
+      analysis: "No high or critical finding was closed in the cycle, so the mean time to remediate has no value; the value recorded is the age on 2027-02-01 of the two open highs in efras-report (found 2026-10-20), which is the floor of the mean once they close and far above the 30-day limit (POAM-002, POAM-003, COND-02)."
+      informed: [PER-ISSM, PER-AODR]
+    - id: MRS-02
+      measure: MSR-02
+      date: "2027-02-01"
+      value: 88
+      within_parameters: false
+      analysis: "No STIG scan reached the cycle's records; the latest, the SCA's scan of 2026-11-23, left the database at 88% and the nodes at 94%, both below the 95% minimum. Release 1.6 is said to carry the STG-001 and STG-002 fixes, unverified until a rescan (COND-05)."
+      informed: [PER-ISSM, PER-ISSE]
 minimum_review:
   by: PER-PM
   sufficient: true
@@ -545,8 +564,9 @@ reporting:
   frequency: quarterly
   dodin:
     designation: GENSER
+    awareness: [threats, traffic, employee-use]
 approval:
   approved_by: PER-AODR
   date: "2026-11-18"
   sources: [INT-134.A2]
-sources: [INT-129.A1, INT-129.A2, INT-129.A3, INT-130.A1, INT-130.A2, INT-130.A3, INT-131.A1, INT-132.A1, INT-134.A2, ART-ORG-CONTEXT, ART-SSP]
+sources: [INT-129.A1, INT-129.A2, INT-129.A3, INT-130.A1, INT-130.A2, INT-130.A3, INT-131.A1, INT-132.A1, INT-134.A2, ART-ORG-CONTEXT, ART-SSP, INT-208.A1, INT-208.A2, INT-213.A2]

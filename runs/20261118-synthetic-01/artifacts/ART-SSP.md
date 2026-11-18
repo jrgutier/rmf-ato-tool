@@ -2,8 +2,8 @@
 artifact_id: ART-SSP
 run_id: 20261118-synthetic-01
 produced_by_task: S-4
-touched_by: [S-4, S-6, I-2, A-5]
-sources: [INT-123.A3, INT-123.A4, INT-123.A5, INT-126.A1, INT-127.A1, INT-133.A1, INT-134.A1, INT-134.A2, INT-103.A1, INT-117.A2, INT-118.A1, INT-119.A1, INT-113.A1, INT-116.A1, INT-106.A1, product/conops.md#limitations, product/architecture.md#leveraged, ART-STIG, INT-138.A1, INT-138.A2, INT-139.A1, INT-140.A1, INT-141.A1, INT-177.A4, INT-179.A1]
+touched_by: [S-4, S-6, I-2, A-5, M-1]
+sources: [INT-123.A3, INT-123.A4, INT-123.A5, INT-126.A1, INT-127.A1, INT-133.A1, INT-134.A1, INT-134.A2, INT-103.A1, INT-117.A2, INT-118.A1, INT-119.A1, INT-113.A1, INT-116.A1, INT-106.A1, product/conops.md#limitations, product/architecture.md#leveraged, ART-STIG, INT-138.A1, INT-138.A2, INT-139.A1, INT-140.A1, INT-141.A1, INT-177.A4, INT-179.A1, INT-204.A1, INT-205.A1, ART-CHG]
 ---
 # System security plan
 
@@ -230,3 +230,22 @@ plan [[INT-179.A1]]:
 
 The control counts are now 30 implemented, 15 partial, 3 planned and 2 inherited. The privacy
 plan's content is unchanged [[INT-179.A1]].
+
+## System and Environment Changes (M-1)
+
+Release 1.6 (CHG-003) is a significant change, so the plan is updated with it and the update is
+logged as plan change 1.3 of 2027-02-01 in `artifacts/data/plan-reviews.yaml`, approved by the
+board and tracked by CHG-003 [[ART-CHG]] [[INT-204.A1]]. Four statements record the release as
+deployed to pre-production, each keeping its status (partial) until the SCA verifies the fix:
+
+- **pt-3**: salted, rotated pseudonyms; the retest of 2027-01-20 and the PIA approval of
+  2027-01-25 (COND-01); the privacy plan changes with it, and the privacy officer confirmed the
+  approved PIA describes the release [[INT-205.A1]].
+- **au-11**: the archive tier and the amended CSSP agreement (POAM-019).
+- **cm-6**: the STG-001 setting and the container baseline pipeline check (COND-05).
+- **ia-5**: the break-glass database password policy and reset (STG-002).
+
+The control counts are unchanged. The pl-2, cp-2 and ir-8 statements still describe the plans as
+awaiting the PM's approval, which he gave on 2026-12-15 (POAM-012 to POAM-014); updating them is
+plan maintenance owed at M-4, not a change of the system, and is left for that task
+[[INT-202.A3]].
