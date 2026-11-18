@@ -1,8 +1,11 @@
 purpose:
   statement: "Initial system-level security and privacy risk assessment of the EFRAS production environment, producing the threats, vulnerabilities, likelihood, impact and resulting risks that categorization, control selection and tailoring, the POA&M and the authorization decision before MVCR deployment rely on."
   decisions: ["security categorization (C-2)", "control selection and tailoring (S-1, S-2)", "POA&M priorities (A-6)", "authorization decision (R-2 to R-4)"]
-  kind: initial
-date: "2026-11-18"
+  kind: subsequent
+  update:
+    circumstances: "The independent assessment (SAR delivered 2026-12-11) and the R-2 risk analysis: confirmed and re-rated events, and weaknesses the initial assessment did not hold (leaver access, container configuration, monitoring not yet running)."
+    previous: "Initial system risk assessment of 2026-11-18 (P-14, ART-RA as first written)"
+date: "2026-12-21"
 team:
   - name: "ARSPO ISSM"
     persona: PER-ISSM
@@ -25,6 +28,8 @@ rationales:
     rationale: "Fixed in release 1.5.1 on 2026-11-07 and retested pass on 2026-11-10 (INT-034.A3)."
   - decision: "Borderline ratings rounded up when the event touches personal data, down otherwise"
     rationale: "The Component tolerance for harm to individuals is low, lower than for operations (INT-034.A5)."
+  - decision: "R-2 update: TE-03 likelihood raised from low to moderate; TE-09, TE-10 and TE-11 and VUL-10 to VUL-12 added from the assessment"
+    rationale: "The imagelib highs are public, past the 30-day window and the fix slipped twice; the assessment found the leaver gap, the undocumented container configuration and monitoring not yet running, which P-14 did not hold (INT-186.A1, INT-186.A2, INT-191.A1)."
 tailoring: []
 point_of_contact:
   persona: PER-ISSM
@@ -182,17 +187,17 @@ threat_events:
     relevance: anticipated
     vulnerabilities: [VUL-02]
     conditions: []
-    likelihood_initiation: low
+    likelihood_initiation: moderate
     likelihood_impact: moderate
-    likelihood: low
-    likelihood_rationale: "Reachable only by authenticated users through the report service; fix waits on release 1.5.2."
+    likelihood: moderate
+    likelihood_rationale: "Reachable only by authenticated users through the report service, but the vulnerabilities are public, past the 30-day remediation time and the fix has slipped twice; about 3,000 users can reach the renderer (R-2 revision)."
     impacts:
       - harm: operations
         asset: "CMP-REPORT and INF-04 reports"
     impact: moderate
-    risk: low
+    risk: moderate
     uncertainty: "Moderate."
-    sources: [INT-034.A3, product/test-results.md#pipeline-1-5]
+    sources: [INT-034.A3, product/test-results.md#pipeline-1-5, INT-186.A1, INT-191.A1]
   - id: TE-04
     description: "Tampered or spoofed maintenance extract over the EMIS interconnection corrupts readiness figures."
     threat_sources: [TS-01]
@@ -278,6 +283,59 @@ threat_events:
     risk: low
     uncertainty: "Moderate until the retest."
     sources: [INT-034.A3, product/test-results.md#pentest]
+  - id: TE-09
+    description: "A departed or transferred maintainer, or someone using that account, keeps reading readiness data and maintainer records after leaving."
+    threat_sources: [TS-03]
+    relevance: anticipated
+    vulnerabilities: [VUL-10]
+    conditions: [PC-02]
+    likelihood_initiation: moderate
+    likelihood_impact: moderate
+    likelihood: moderate
+    likelihood_rationale: "Squadron turnover is routine and no leaver notice reaches the account manager; only the 35-day inactivity disable and the quarterly review catch it (assessment, R-2)."
+    impacts:
+      - harm: individuals
+        asset: "INF-03 maintainer PII"
+      - harm: operations
+        asset: "INF-01 maintenance and readiness data"
+    impact: moderate
+    risk: moderate
+    uncertainty: "Moderate: leaver timing never measured."
+    sources: [INT-186.A1, INT-186.A2, INT-191.A1]
+  - id: TE-10
+    description: "An insecure or drifted setting in an application container or the database goes unnoticed and is exploited or causes loss of audit detail."
+    threat_sources: [TS-01, TS-03]
+    relevance: possible
+    vulnerabilities: [VUL-09, VUL-11]
+    conditions: [PC-04]
+    likelihood_initiation: moderate
+    likelihood_impact: moderate
+    likelihood: moderate
+    likelihood_rationale: "No documented container configuration to compare against, and two database STIG settings open; signed images and admission control limit what runs, not how it is set (assessment, R-2)."
+    impacts:
+      - harm: assets
+        asset: "CMP-WEB, CMP-API, CMP-INGEST, CMP-FORECAST, CMP-REPORT and CMP-DB configuration"
+    impact: moderate
+    risk: moderate
+    uncertainty: "Moderate."
+    sources: [INT-186.A2, INT-187.A1, INT-191.A1]
+  - id: TE-11
+    description: "A control degrades unnoticed because ongoing assessment, status reporting and the recurring assessment have not started."
+    threat_sources: [TS-01, TS-03, TS-04]
+    relevance: possible
+    vulnerabilities: [VUL-12]
+    conditions: []
+    likelihood_initiation: low
+    likelihood_impact: moderate
+    likelihood: low
+    likelihood_rationale: "Scanning, log review and drift checks already run; only the governance layer of monitoring is missing until after the decision (assessment, R-2)."
+    impacts:
+      - harm: operations
+        asset: "Every control of the security plan"
+    impact: moderate
+    risk: low
+    uncertainty: "Low."
+    sources: [INT-187.A1, INT-191.A1]
 threat_scenarios:
   - id: SCN-01
     description: "Adversary exfiltrates data and re-identifies maintainers from it."
@@ -320,6 +378,18 @@ vulnerabilities:
     description: "Two program-fixable PostgreSQL STIG items: connection logging verbosity and break-glass database role password complexity."
     severity: low
     sources: [product/test-results.md#stig-scan]
+  - id: VUL-10
+    description: "No leaver notification reaches the account manager, so leavers' accounts stay active until the 35-day inactivity disable or the quarterly review (FND-001, FND-017)."
+    severity: moderate
+    sources: [ART-SAR, INT-186.A2]
+  - id: VUL-11
+    description: "No documented secure configuration for the five application containers (FND-008)."
+    severity: moderate
+    sources: [ART-SAR, INT-186.A2]
+  - id: VUL-12
+    description: "Continuous monitoring governance not yet running: no ongoing assessment, status report or recurring assessment schedule; REQ-11 and REQ-12 not demonstrated (FND-003, FND-005, FND-006, FND-016, FND-022)."
+    severity: low
+    sources: [ART-SAR, INT-187.A1]
 predisposing_conditions:
   - id: PC-01
     description: "Single cloud region hosts every component."
@@ -496,7 +566,7 @@ prioritization:
   method: "Among risks of the same level, those that harm individuals or the fleet's trust immediately come first, then integrity of readiness figures, then risks whose harm is in the future (retention, failover)."
   factors: [immediate-impact, future-impact, coupling]
   borderline: "Borderline values rounded up when the event touches personal data, down otherwise; uncertainty stated per event."
-  order: [TE-02, TE-01, TE-04, TE-08, TE-05, TE-03, TE-07, TE-06]
+  order: [TE-02, TE-09, TE-01, TE-03, TE-10, TE-04, TE-08, TE-05, TE-11, TE-07, TE-06]
   couplings:
     - events: [TE-01, TE-02]
       effect: increases
@@ -554,7 +624,7 @@ components:
       adversarial_control: "Government-controlled build"
     validation: {outcome: none-available}
     suitable: true
-executive_summary: "EFRAS carries moderate system risk, within the AO's tolerance for operations but at the edge of the low tolerance for individuals. The two moderate risks are re-identification of maintainers from exports (demonstrated, fix in release 1.6) and nation-state exfiltration of aggregated readiness data. Recommendations: deliver salted pseudonyms and an export retention rule in 1.6, pick up the imagelib fix in 1.5.2, sign the EMIS agreement, exercise failover, extend audit retention and approve the PIA before MVCR deployment."
+executive_summary: "EFRAS carries moderate system risk, within the AO's tolerance for operations but above the low tolerance for individuals while real PII is present. After the assessment (R-2 update) the moderate risks are re-identification of maintainers from exports (demonstrated, fix in release 1.6), leavers keeping access (no leaver notification), nation-state exfiltration of aggregated readiness data, exploitation of the unpatched report container (fix slipped twice) and undocumented container configuration. Recommendations: a leaver step on the squadrons' out-processing, a documented container baseline, deliver salted pseudonyms and an export retention rule in 1.6, pick up the imagelib fix in 1.5.2, sign the EMIS agreement, exercise failover, extend audit retention and approve the PIA before MVCR deployment."
 privacy:
   processing: "Bulk ingest of about 30,000 maintainers' records from EMIS, kept five years, used to show qualifications and join actions to people, shared pseudonymized with analysts and data scientists; user identifiers in audit records."
   impact_on_individuals: "Exposure of an export exposes named people (re-identification demonstrated): phishing, identity misuse, embarrassment over qualification gaps; altered records could show a maintainer unqualified. Rated moderate until salted pseudonyms ship."
@@ -581,4 +651,4 @@ privacy:
       requirements: [REQ-16]
       sources: [INT-029.A4, INT-036.A3]
   sources: [INT-036.A1, INT-036.A2]
-sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-038.A1, INT-038.A2]
+sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-038.A1, INT-038.A2, INT-186.A1, INT-186.A2, INT-187.A1, INT-191.A1]

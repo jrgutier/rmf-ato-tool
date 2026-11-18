@@ -2,7 +2,7 @@
 artifact_id: ART-RA
 run_id: 20261118-synthetic-01
 produced_by_task: P-14
-touched_by: [P-14]
+touched_by: [P-14, R-2]
 sources: [INT-034.A1, INT-034.A2, INT-034.A3, INT-034.A4, INT-034.A5, INT-034.A6, INT-035.A1, INT-035.A2, INT-036.A1, INT-036.A2, INT-037.A1, INT-037.A2, INT-037.A3, INT-037.A4, INT-037.A5, INT-038.A1, INT-038.A2, INT-039.A1, INT-039.A2, INT-040.A1, INT-040.A2, ASM-010, ASM-012, ART-ORG-CONTEXT, ART-BIA, ART-INFOTYPES, ART-BND, ART-INV]
 ---
 # System risk assessment
@@ -165,3 +165,23 @@ minimum frequencies of ART-ORG-CONTEXT; the assessment is updated at R-2 with th
 findings, at each major release, after a significant change in threat and at least yearly
 [[ART-ORG-CONTEXT]] [[INT-037.A1]]. The purpose, scope and assumptions hold as of 2026-11-18
 [[INT-037.A1]].
+
+## Update after assessment (R-2)
+
+Updated on 2026-12-21 with the assessment results; `purpose.kind` is now `subsequent`
+[[INT-191.A1]]. Changes:
+
+- TE-03 (exploitation of the report container) rises from low to moderate likelihood and risk:
+  the two imagelib highs are public, past the 30-day remediation time, and their fix has slipped
+  twice on the software factory's base image [[INT-186.A1]] [[INT-191.A1]].
+- New TE-09 (leavers keep access) with VUL-10, moderate likelihood and impact, moderate risk:
+  no leaver notification reaches the account manager (FND-001, FND-017) [[INT-186.A2]].
+- New TE-10 (insecure or drifted container or database setting) with VUL-11, moderate risk: no
+  documented container configuration (FND-008) beside the open database STIG settings (VUL-09)
+  [[INT-186.A2]] [[INT-187.A1]].
+- New TE-11 (control degradation unnoticed before monitoring starts) with VUL-12, low risk
+  [[INT-187.A1]].
+- The prioritization order places TE-09 after TE-02 (both harm individuals) and TE-03 and TE-10
+  among the moderate events; the system risk stays moderate, set by TE-01 and now shared by four
+  other moderate events [[INT-191.A1]]. The risks built on these events are in ART-RAR
+  [[ART-SAR]].

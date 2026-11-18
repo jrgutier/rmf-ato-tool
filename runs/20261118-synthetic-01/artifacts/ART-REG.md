@@ -2,8 +2,8 @@
 artifact_id: ART-REG
 run_id: 20261118-synthetic-01
 produced_by_task: P-18
-touched_by: [P-18, C-1, C-3]
-sources: [INT-056.A1, INT-056.A2, INT-056.A3, INT-057.A1, ASM-014, ART-BND, INT-058.A2, ART-SD, INT-069.A2, ART-CAT]
+touched_by: [P-18, C-1, C-3, R-5]
+sources: [INT-056.A1, INT-056.A2, INT-056.A3, INT-057.A1, ASM-014, ART-BND, INT-058.A2, ART-SD, INT-069.A2, ART-CAT, INT-201.A1, ART-AODM]
 ---
 # System registration
 
@@ -75,3 +75,6 @@ Between those points, the ISSO keeps the contacts current [[INT-056.A3]].
   and CSSP alignment [[INT-058.A2]] [[ART-SD]].
 - C-3, 2026-11-18: the approved categorization of ART-CAT and its Privacy Overlay sets, entered
   after the AODR's approval [[INT-069.A2]] [[ART-CAT]].
+- R-5, 2027-01-26: the authorization decision AUTH-001 (ATO with conditions of 2027-01-25,
+  terminating 2028-01-25), its six conditions and the decision memo, entered by the ISSM
+  [[INT-201.A1]] [[ART-AODM]].

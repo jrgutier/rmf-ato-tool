@@ -2,8 +2,8 @@
 artifact_id: ART-AUTHREC
 run_id: 20261118-synthetic-01
 produced_by_task: A-2
-touched_by: [A-2]
-sources: [INT-147.A4, INT-151.A3, product/architecture.md#boundary]
+touched_by: [A-2, R-4]
+sources: [INT-147.A4, INT-151.A3, product/architecture.md#boundary, INT-198.A1, INT-198.A2]
 ---
 # Authorization ledger
 
@@ -29,10 +29,16 @@ sources: [INT-147.A4, INT-151.A3, product/architecture.md#boundary]
 
 ## Decisions in force
 
-None. The ledger (`artifacts/data/authorizations.yaml`) holds no record, and its system status
-is `none`: the system has never been authorized, and no interim authorization to test is in
-force or needed. Every event in the assessment plan runs in the pre-production account with
-synthetic data, which is a separate environment outside this authorization boundary; nothing
-runs on production, on live data or on a network beyond the access point path the pilot
-squadrons already use [[INT-147.A4]] [[product/architecture.md#boundary]]. The AODR approved
-the plan on that basis [[INT-151.A3]]. The first record is the authorization decision at R-4.
+AUTH-001, an authorization to operate with conditions (AD-ATOC) issued by the AO on 2027-01-25,
+terminating 2028-01-25, with conditions COND-01 to COND-06 due between 2027-02-15 and
+2027-03-31; the ledger's system status is `ATO-with-conditions`, and the last security review
+is the assessment delivered on 2026-12-11. The decision memo is ART-AODM [[INT-198.A1]]
+[[INT-198.A2]].
+
+## History (A-2)
+
+At A-2 the ledger held no record and its system status was `none`: the system had never been
+authorized, and no interim authorization to test was in force or needed. Every event in the
+assessment plan ran in the pre-production account with synthetic data, a separate environment
+outside this authorization boundary [[INT-147.A4]] [[product/architecture.md#boundary]]. The
+AODR approved the plan on that basis [[INT-151.A3]].

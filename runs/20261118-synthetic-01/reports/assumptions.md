@@ -4,7 +4,7 @@
 
 Mode: synthetic. Human respondents: none.
 
-## Assumptions (24)
+## Assumptions (25)
 
 | ID | Task | Persona | Statement | Rationale |
 |---|---|---|---|---|
@@ -32,8 +32,9 @@ Mode: synthetic. Human respondents: none.
 | ASM-022 | A-3 | PER-SCA | The second penetration test (2026-11-30 to 2026-12-04, with the CSSP defending) has no result the run can ground: the product records only the first test (PT-1 to PT-3) and that the PT-3 retest is pending. The run records the test as held per the plan, asserts no new exploitation and no new detection by the CSSP, and treats the PT-3 retest as not demonstrated; PT-1 rests on its 2026-11-10 retest pass and PT-2 on the unchanged design until release 1.6. | product/test-results.md#pentest gives the first test's findings and says the sandbox allow-list was narrowed on 2026-11-03 with the retest pending; a retest pass or a new finding would be invented. |
 | ASM-023 | A-3 | PER-DEV | The REQ-11 standards registry review (APR-001) and the REQ-12 Section 508 test (APR-002) of 2026-12-03 have no result the run can ground: the product holds no list of the protocols and standards checked against the DoD IT Standards Registry and no accessibility test. Both requirements are recorded as not demonstrated; no conformance or failure of a particular standard or workflow is asserted. | product/test-results.md has no standards or accessibility result, and S-3 recorded that no developer test verified REQ-11 or REQ-12; a pass or a specific failure would be invented. |
 | ASM-024 | A-3 | PER-SCA | Release 1.5.2 (planned 2026-12-10) is treated as not deployed to the assessed environment before the out-brief of 2026-12-11: the fixes it carries (the two high vulnerabilities in CMP-REPORT, STG-001, STG-002) are not verified, and the SCA's scan of 2026-11-23 is the latest result the run records. | The product gives 1.5.2 only as planned (product/conops.md#limitations item 2) and the plan verifies its fixes only if they land before the out-brief; asserting that they did would be invented. |
+| ASM-025 | R-3 | PER-PM | The POA&M progress between the package submission (2026-12-14) and the authorization decision (2027-01-25) is simulated by one rule: each milestone was met on its planned date, except where the plan named an outside obstacle (the software factory's hardened base image for the report container; the EMIS program's legal review for the memorandum), which slipped again. The progress is recorded only in the POA&M; the records the met milestones would change (plan approvals in the S-4 plan records, the inventory, the container entries of stig-summary.yaml, the SAR finding statuses) are left to the monitoring cycle (M-1, M-2), and no finding is closed without the SCA's verification. | The decision cannot precede the PIA approval of 2027-01-25 (PRIV-003, P-14's ASM-011) or the before-authorization items scheduled by then (MPOA-001), so the run must reach 2027-01-25, two months past its clock (as_of 2026-11-18); a decision date in the ledger makes ASMT-010 judge every milestone due before it. Nothing in the product says how those weeks went, so a stated, uniform rule is used instead of case-by-case invention. |
 
-## Interview answers (463; SIMULATED 463)
+## Interview answers (495; SIMULATED 495)
 
 | Task | Interviews | SIMULATED | HUMAN |
 |---|---|---|---|
@@ -72,3 +73,8 @@ Mode: synthetic. Human respondents: none.
 | A-4 | 4 | 14 | 0 |
 | A-5 | 3 | 7 | 0 |
 | A-6 | 3 | 10 | 0 |
+| R-1 | 3 | 6 | 0 |
+| R-2 | 6 | 8 | 0 |
+| R-3 | 3 | 5 | 0 |
+| R-4 | 4 | 8 | 0 |
+| R-5 | 3 | 5 | 0 |

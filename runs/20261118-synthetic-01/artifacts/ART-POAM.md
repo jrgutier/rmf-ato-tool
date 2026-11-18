@@ -2,7 +2,7 @@
 artifact_id: ART-POAM
 run_id: 20261118-synthetic-01
 produced_by_task: A-6
-touched_by: [A-6]
+touched_by: [A-6, R-3]
 sources: [ART-SAR, ART-STIG, ART-RA, ART-ORG-CONTEXT, INT-180.A1, INT-180.A2, INT-180.A4, INT-180.A5, INT-181.A1, INT-181.A3, INT-182.A1, ASM-024]
 handling: CUI  # at a minimum CUI, or the classification level of the system (DoDI 8530.01)
 ---
@@ -88,3 +88,27 @@ counted from the finding [[ART-ORG-CONTEXT]]. The latest moderate item, POAM-009
 period even at their new date of 2027-01-15. Their image library vulnerabilities are, however,
 already past the 30-day flaw remediation time for high vulnerabilities, which is why FND-024 exists
 [[INT-180.A1]] [[ART-SAR]].
+
+## Risk Response (R-3)
+
+R-3 linked every item to its risk in ART-RAR and took the risk level from the RAR: POAM-009 is
+now low (RSK-005, availability impact low) and POAM-010, POAM-017 and POAM-021 moderate (RSK-001,
+RSK-002, RSK-004); priorities were re-ranked so the eleven moderate items come first
+[[ART-RAR]] [[INT-192.A1]]. The progress to the decision day, 2027-01-25, is recorded milestone
+by milestone under one stated rule (ASM-025): milestones were met on their planned dates except
+where an outside obstacle was named [[ASM-025]] [[INT-193.A1]] [[INT-194.A1]].
+
+- Met: release 1.6 on 2027-01-15 with the pseudonyms, the archive tier, the container baseline
+  and the two PostgreSQL settings (POAM-001, -006, -007, -008, -019, -021); the re-identification
+  retest of 2027-01-20 and the PIA approval of 2027-01-25 (POAM-001, POAM-010); the plan
+  approvals of 2026-12-15 (POAM-012 to POAM-014); the leaver step and its first sample
+  (POAM-004, POAM-005); the egress retest and probe (POAM-016, POAM-017's egress ticket); REQ-11
+  and REQ-12 (POAM-018); eMASS entry and the first monthly update (POAM-023); the break-glass
+  deviation submitted in the package (POAM-020) [[INT-193.A1]] [[INT-194.A1]].
+- Slipped: the rebuilt report container, still waiting on the software factory, to 2027-02-15
+  (POAM-002, POAM-003, POAM-017), and the EMIS memorandum, in the EMIS program's legal review, to
+  2027-02-26 (POAM-011, now delayed) [[INT-193.A1]].
+
+No item is completed or closed: the SCA has verified none of the fixes, so the findings stay
+open until the first ongoing assessment [[INT-193.A1]]. POAM-020 stays open for the AO's decision
+on accepting RSK-007 [[INT-192.A2]].

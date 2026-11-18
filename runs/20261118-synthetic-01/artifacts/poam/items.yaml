@@ -2,6 +2,9 @@
 # finding (24); the open CAT II STIG items STG-001 and STG-002 share the items of the same control
 # and weakness (POAM-006, POAM-007). Priority follows the risk level, then the risk assessment's
 # order (ART-RA risk summary). ao_review is added at R-3 or R-4, once a decision is in the ledger.
+# R-3 (2027-01-25): risk_level aligned with the RAR (POAM-009 low; POAM-010, -017, -021
+# moderate), priorities re-ranked moderate first, and milestone progress to the decision
+# recorded (INT-193.A1, INT-194.A1, ASM-025). No item is closed: the SCA has verified no fix yet.
 items:
   - id: POAM-001
     finding_ref: FND-018
@@ -24,11 +27,13 @@ items:
     milestones:
       - description: "Release 1.6 with salted, rotated pseudonyms deployed to pre-production"
         due: "2027-01-15"
+        completed: "2027-01-15"
       - description: "Privacy-trained assessor retests re-identification with a list of DoD ID numbers"
         due: "2027-01-20"
+        completed: "2027-01-20"
     milestone_changes: []
-    comments: "Carries PT-2 of the reused penetration test (RR-002). The PIA approval (POAM-010) waits on this item."
-    sources: [ART-SAR, INT-180.A2, INT-173.A2, INT-171.A2]
+    comments: "Carries PT-2 of the reused penetration test (RR-002). The PIA approval (POAM-010) waits on this item. R-3: both milestones met; the retest of 2027-01-20 re-identified no one; FND-018 stays open until the SCA verifies it in production configuration (ASM-025)."
+    sources: [ART-SAR, INT-180.A2, INT-173.A2, INT-171.A2, INT-193.A1]
   - id: POAM-002
     finding_ref: FND-019
     control_id: ra-5
@@ -54,9 +59,12 @@ items:
       - milestone: "Release 1.5.2 with the rebuilt report container deployed and rescanned"
         new_date: "2027-01-15"
         reason: "The software factory has not published the hardened base image and gives no date; the fix ships with release 1.5.2 when the image arrives, or with release 1.6 at the latest."
+      - milestone: "Release 1.5.2 with the rebuilt report container deployed and rescanned"
+        new_date: "2027-02-15"
+        reason: "R-3: release 1.6 shipped on 2027-01-15 without the rebuilt report container because the factory's hardened base image is still unpublished; the PM requested the factory's patched intermediate image."
     obstacles: [dependency]
-    comments: "Delayed: release 1.5.2, planned for 2026-12-10, did not ship because the factory's hardened base image is late (an open item on the factory's own POA&M). The factory can supply a patched intermediate image on request. Same vulnerabilities as POAM-003."
-    sources: [ART-SAR, INT-180.A1, INT-178.A1, INT-182.A1, ASM-024]
+    comments: "Delayed: release 1.5.2, planned for 2026-12-10, did not ship because the factory's hardened base image is late (an open item on the factory's own POA&M). The factory can supply a patched intermediate image on request. Same vulnerabilities as POAM-003. R-3: slipped again to 2027-02-15 on the intermediate image; condition COND-02 of the decision."
+    sources: [ART-SAR, INT-180.A1, INT-178.A1, INT-182.A1, ASM-024, INT-193.A1]
   - id: POAM-003
     finding_ref: FND-024
     control_id: si-2
@@ -82,9 +90,12 @@ items:
       - milestone: "Fix installed through release 1.5.2 and verified by rescan"
         new_date: "2027-01-15"
         reason: "The software factory's hardened base image is late with no committed date; the fix ships with release 1.6 at the latest."
+      - milestone: "Fix installed through release 1.5.2 and verified by rescan"
+        new_date: "2027-02-15"
+        reason: "R-3: release 1.6 shipped without the rebuilt report container; the fix now waits on the factory's patched intermediate image."
     obstacles: [dependency]
-    comments: "Delayed for the same reason as POAM-002, which tracks the same vulnerabilities under ra-5."
-    sources: [ART-SAR, INT-180.A1, INT-182.A1, ASM-024]
+    comments: "Delayed for the same reason as POAM-002, which tracks the same vulnerabilities under ra-5. R-3: slipped again to 2027-02-15."
+    sources: [ART-SAR, INT-180.A1, INT-182.A1, ASM-024, INT-193.A1]
   - id: POAM-004
     finding_ref: FND-001
     control_id: ac-2
@@ -106,11 +117,13 @@ items:
     milestones:
       - description: "Squadrons agree a timestamped leaver step on their out-processing checklist"
         due: "2027-01-08"
+        completed: "2027-01-08"
       - description: "Quarterly account review samples leaver timing against the 24-hour disable"
         due: "2027-01-22"
+        completed: "2027-01-22"
     milestone_changes: []
-    comments: "Same cause and fix as POAM-005 (ps-4)."
-    sources: [ART-SAR, INT-181.A2, INT-174.A3]
+    comments: "Same cause and fix as POAM-005 (ps-4). R-3: both milestones met; FND-001 open until the SCA verifies the leaver step."
+    sources: [ART-SAR, INT-181.A2, INT-174.A3, INT-194.A1]
   - id: POAM-005
     finding_ref: FND-017
     control_id: ps-4
@@ -132,11 +145,13 @@ items:
     milestones:
       - description: "Squadrons agree a timestamped leaver step on their out-processing checklist"
         due: "2027-01-08"
+        completed: "2027-01-08"
       - description: "Quarterly account review samples leaver timing against the one-working-day disable"
         due: "2027-01-22"
+        completed: "2027-01-22"
     milestone_changes: []
-    comments: "Same cause and fix as POAM-004 (ac-2)."
-    sources: [ART-SAR, INT-181.A2, INT-174.A3]
+    comments: "Same cause and fix as POAM-004 (ac-2). R-3: both milestones met; FND-017 open until the SCA verifies the leaver step."
+    sources: [ART-SAR, INT-181.A2, INT-174.A3, INT-194.A1]
   - id: POAM-006
     finding_ref: FND-007
     control_id: cm-6
@@ -151,20 +166,21 @@ items:
     mitigation_approach: "Ship the corrected setting in release 1.5.2, or release 1.6 at the latest, rescan and close STG-001."
     priority: 6
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-23"}
-    status: delayed
+    status: ongoing
     point_of_contact: PER-PM
     resources_required: "ERST and the operations team under the current contract; the release depends on the factory's base image"
     scheduled_completion: "2026-12-10"
     milestones:
       - description: "Release 1.5.2 with the corrected logging setting deployed and rescanned"
         due: "2026-12-10"
+        completed: "2027-01-15"
     milestone_changes:
       - milestone: "Release 1.5.2 with the corrected logging setting deployed and rescanned"
         new_date: "2027-01-15"
         reason: "Release 1.5.2 ships as one with the rebuilt report container, which waits on the factory's late base image."
     obstacles: [dependency]
-    comments: "Also carries the open CAT II STIG finding STG-001 (ART-STIG). Delayed with release 1.5.2."
-    sources: [ART-SAR, ART-STIG, INT-180.A1, ASM-024]
+    comments: "Also carries the open CAT II STIG finding STG-001 (ART-STIG). Delayed with release 1.5.2. R-3: the setting shipped with release 1.6 on 2027-01-15 (the changed date); STG-001 and FND-007 stay open until the SCA rescans."
+    sources: [ART-SAR, ART-STIG, INT-180.A1, ASM-024, INT-193.A1]
   - id: POAM-007
     finding_ref: FND-013
     control_id: ia-5
@@ -179,20 +195,21 @@ items:
     mitigation_approach: "Ship the password policy in release 1.5.2, or release 1.6 at the latest, reset the break-glass password under it, rescan and close STG-002; the role stays sealed meanwhile."
     priority: 7
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-23"}
-    status: delayed
+    status: ongoing
     point_of_contact: PER-PM
     resources_required: "ERST and the operations team under the current contract; the release depends on the factory's base image"
     scheduled_completion: "2026-12-10"
     milestones:
       - description: "Release 1.5.2 with the database password policy deployed, password reset and rescanned"
         due: "2026-12-10"
+        completed: "2027-01-15"
     milestone_changes:
       - milestone: "Release 1.5.2 with the database password policy deployed, password reset and rescanned"
         new_date: "2027-01-15"
         reason: "Release 1.5.2 ships as one with the rebuilt report container, which waits on the factory's late base image."
     obstacles: [dependency]
-    comments: "Also carries the open CAT II STIG finding STG-002 (ART-STIG). Delayed with release 1.5.2."
-    sources: [ART-SAR, ART-STIG, INT-180.A1, ASM-024]
+    comments: "Also carries the open CAT II STIG finding STG-002 (ART-STIG). Delayed with release 1.5.2. R-3: the policy shipped with release 1.6 on 2027-01-15 (the changed date) and the password was reset; STG-002 and FND-013 stay open until the SCA rescans."
+    sources: [ART-SAR, ART-STIG, INT-180.A1, ASM-024, INT-193.A1]
   - id: POAM-008
     finding_ref: FND-008
     control_id: cm-6
@@ -214,11 +231,13 @@ items:
     milestones:
       - description: "Application Security and Development STIG checklist completed for the five containers"
         due: "2027-01-08"
+        completed: "2027-01-08"
       - description: "Documented container baseline approved and pipeline check shipped with release 1.6"
         due: "2027-01-15"
+        completed: "2027-01-15"
     milestone_changes: []
-    comments: "Open checklist items will be recorded in stig-summary.yaml when the review is done."
-    sources: [ART-SAR, INT-180.A3, ASM-021]
+    comments: "Open checklist items will be recorded in stig-summary.yaml when the review is done. R-3: both milestones met; the checklist results reach stig-summary.yaml in the monitoring cycle (ASM-025); FND-008 open until the SCA verifies."
+    sources: [ART-SAR, INT-180.A3, ASM-021, INT-193.A1]
   - id: POAM-009
     finding_ref: FND-011
     control_id: cp-4
@@ -228,10 +247,10 @@ items:
     recommended_completion: after-authorization
     severity: moderate
     residual_risk: moderate
-    risk_level: moderate
+    risk_level: low
     criticality: moderate
     mitigation_approach: "Hold the combined incident and contingency tabletop, run the regional failover test, and record corrective actions in the plan and this POA&M."
-    priority: 9
+    priority: 12
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-12-02"}
     status: planned
     point_of_contact: PER-PM
@@ -256,10 +275,10 @@ items:
     recommended_completion: before-authorization
     severity: low
     residual_risk: low
-    risk_level: low
+    risk_level: moderate
     criticality: low
     mitigation_approach: "Close the export item (POAM-001), complete the privacy office review and obtain the CIO's approval before any production data flows; production ingest waits until then."
-    priority: 10
+    priority: 9
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-12-07"}
     status: ongoing
     point_of_contact: PER-PRIV
@@ -268,11 +287,13 @@ items:
     milestones:
       - description: "Privacy office reviews the PIA"
         due: "2027-01-20"
+        completed: "2027-01-20"
       - description: "Component CIO approves the PIA"
         due: "2027-01-25"
+        completed: "2027-01-25"
     milestone_changes: []
-    comments: "Depends on POAM-001."
-    sources: [ART-SAR, INT-171.A3, INT-176.A2]
+    comments: "Depends on POAM-001. R-3: the PIA was approved on 2027-01-25 as pia.yaml records; FND-020 stays open until the SCA verifies the approved PIA."
+    sources: [ART-SAR, INT-171.A3, INT-176.A2, INT-193.A1]
   - id: POAM-011
     finding_ref: FND-004
     control_id: ca-3
@@ -285,9 +306,9 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "Sign the memorandum of agreement with the security and privacy terms before production data flows and record it in the boundary record and the ca-3 statement."
-    priority: 11
+    priority: 13
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
-    status: ongoing
+    status: delayed
     point_of_contact: PER-ISSM
     resources_required: "Legal review in both programs; no funding"
     scheduled_completion: "2027-01-08"
@@ -296,9 +317,16 @@ items:
         due: "2026-12-31"
       - description: "Agreement recorded in the boundary record and the ca-3 statement"
         due: "2027-01-08"
-    milestone_changes: []
-    comments: "The memorandum is drafted and under legal review."
-    sources: [ART-SAR, INT-181.A3, product/conops.md#limitations]
+    milestone_changes:
+      - milestone: "EFRAS-EMIS memorandum of agreement signed by both sides"
+        new_date: "2027-02-26"
+        reason: "The EMIS program's legal review of the memorandum is not finished."
+      - milestone: "Agreement recorded in the boundary record and the ca-3 statement"
+        new_date: "2027-03-05"
+        reason: "Follows the signature."
+    obstacles: [dependency]
+    comments: "The memorandum is drafted and under legal review. R-3: delayed on the EMIS program's legal review; the decision keeps real EMIS records out until it is signed (COND-03)."
+    sources: [ART-SAR, INT-181.A3, product/conops.md#limitations, INT-193.A1]
   - id: POAM-012
     finding_ref: FND-016
     control_id: pl-2
@@ -311,20 +339,21 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "PM approves the three plans and records that the AODR's condition is met; the plan references the approved PIA once the CIO approves it."
-    priority: 12
+    priority: 14
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
-    status: planned
+    status: ongoing
     point_of_contact: PER-PM
     resources_required: "PM and ISSM time; no funding"
     scheduled_completion: "2027-01-25"
     milestones:
       - description: "PM approves the contingency, incident response and configuration management plans"
         due: "2026-12-15"
+        completed: "2026-12-15"
       - description: "Plan references the approved PIA"
         due: "2027-01-25"
     milestone_changes: []
-    comments: "The approvals also serve POAM-013 and POAM-014."
-    sources: [ART-SAR, INT-180.A4, INT-181.A3]
+    comments: "The approvals also serve POAM-013 and POAM-014. R-3: the PM approved the three plans on 2026-12-15; the plan records reflect it in the monitoring cycle (ASM-025)."
+    sources: [ART-SAR, INT-180.A4, INT-181.A3, INT-193.A1]
   - id: POAM-013
     finding_ref: FND-010
     control_id: cp-2
@@ -337,20 +366,22 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "PM approves the plan, the ISSM distributes it to the named personnel, EMIS and the CSSP, and the annual review date is recorded."
-    priority: 13
+    priority: 15
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
-    status: planned
+    status: ongoing
     point_of_contact: PER-PM
     resources_required: "PM and ISSM time; no funding"
     scheduled_completion: "2026-12-18"
     milestones:
       - description: "PM approves the contingency plan"
         due: "2026-12-15"
+        completed: "2026-12-15"
       - description: "Approved plan distributed to the named personnel, EMIS and the CSSP"
         due: "2026-12-18"
+        completed: "2026-12-18"
     milestone_changes: []
-    comments: "Exercise of the plan is POAM-009."
-    sources: [ART-SAR, INT-180.A4]
+    comments: "Exercise of the plan is POAM-009. R-3: both milestones met; FND-010 open until the SCA verifies."
+    sources: [ART-SAR, INT-180.A4, INT-193.A1]
   - id: POAM-014
     finding_ref: FND-015
     control_id: ir-8
@@ -363,20 +394,22 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "PM approves the plan after the ISSM's review, the ISSM distributes and communicates it, and the annual review date is recorded."
-    priority: 14
+    priority: 16
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
-    status: planned
+    status: ongoing
     point_of_contact: PER-PM
     resources_required: "PM and ISSM time; no funding"
     scheduled_completion: "2026-12-18"
     milestones:
       - description: "PM approves the incident response plan"
         due: "2026-12-15"
+        completed: "2026-12-15"
       - description: "Approved plan distributed to and communicated with the named personnel and organizations"
         due: "2026-12-18"
+        completed: "2026-12-18"
     milestone_changes: []
-    comments: "Exercise of the plan is POAM-015."
-    sources: [ART-SAR, INT-180.A4]
+    comments: "Exercise of the plan is POAM-015. R-3: both milestones met; FND-015 open until the SCA verifies."
+    sources: [ART-SAR, INT-180.A4, INT-193.A1]
   - id: POAM-015
     finding_ref: FND-014
     control_id: ir-4
@@ -389,7 +422,7 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "Approve the incident response and contingency plans (POAM-013, POAM-014) and hold the combined tabletop with an after-action report that feeds the runbooks, training and the next exercise."
-    priority: 15
+    priority: 17
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
     status: planned
     point_of_contact: PER-ISSM
@@ -415,20 +448,22 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "Red team retest of egress from the sandbox against public destinations, and a periodic automated egress probe."
-    priority: 16
+    priority: 18
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
-    status: planned
+    status: ongoing
     point_of_contact: PER-ISSE
     resources_required: "Component red team retest slot; ERST security engineer for the probe"
     scheduled_completion: "2027-01-15"
     milestones:
       - description: "Red team retests sandbox egress against public destinations"
         due: "2027-01-15"
+        completed: "2027-01-15"
       - description: "Automated egress probe added in the sandbox"
         due: "2027-01-15"
+        completed: "2027-01-15"
     milestone_changes: []
-    comments: "PT-3 of the reused penetration test (RR-002). The retest also closes the egress part of POAM-017."
-    sources: [ART-SAR, INT-180.A5, INT-178.A2, ASM-022]
+    comments: "PT-3 of the reused penetration test (RR-002). The retest also closes the egress part of POAM-017. R-3: both milestones met; FND-023 open until the SCA verifies the retest result."
+    sources: [ART-SAR, INT-180.A5, INT-178.A2, ASM-022, INT-194.A1]
   - id: POAM-017
     finding_ref: FND-021
     control_id: sa-11
@@ -438,10 +473,10 @@ items:
     recommended_completion: before-authorization
     severity: low
     residual_risk: low
-    risk_level: low
+    risk_level: moderate
     criticality: low
     mitigation_approach: "Rescan efras-report after the release that carries the rebuilt container, close PT-3 on the red team's retest, then close both tickets."
-    priority: 17
+    priority: 10
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-12-03"}
     status: delayed
     point_of_contact: PER-DEV
@@ -452,13 +487,17 @@ items:
         due: "2026-12-10"
       - description: "Red team retest closes the sandbox egress ticket"
         due: "2027-01-15"
+        completed: "2027-01-15"
     milestone_changes:
       - milestone: "efras-report rescanned after release 1.5.2"
         new_date: "2027-01-15"
         reason: "Release 1.5.2 waits on the software factory's late hardened base image; the rescan follows release 1.6 at the latest."
+      - milestone: "efras-report rescanned after release 1.5.2"
+        new_date: "2027-02-15"
+        reason: "R-3: release 1.6 shipped without the rebuilt report container; the rescan follows the factory's patched intermediate image."
     obstacles: [dependency]
-    comments: "Delayed with release 1.5.2 (POAM-002, POAM-003); the egress retest is POAM-016."
-    sources: [ART-SAR, INT-180.A1, INT-182.A1, ASM-024]
+    comments: "Delayed with release 1.5.2 (POAM-002, POAM-003); the egress retest is POAM-016. R-3: the egress ticket closed on the retest of 2027-01-15; the rescan slipped to 2027-02-15."
+    sources: [ART-SAR, INT-180.A1, INT-182.A1, ASM-024, INT-193.A1, INT-194.A1]
   - id: POAM-018
     finding_ref: FND-022
     control_id: sa-11
@@ -471,20 +510,22 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "Add a standards registry review of each interface and a Section 508 conformance check with assistive technology to the release 1.6 DT event, and record both results against REQ-11 and REQ-12."
-    priority: 18
+    priority: 19
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-12-03"}
-    status: planned
+    status: ongoing
     point_of_contact: PER-ISSM
     resources_required: "ERST test staff in the release 1.6 DT event; SCA verification"
     scheduled_completion: "2027-01-22"
     milestones:
       - description: "Standards registry review and Section 508 check run in the release 1.6 DT event"
         due: "2027-01-15"
+        completed: "2027-01-15"
       - description: "SCA verifies the results recorded against REQ-11 and REQ-12"
         due: "2027-01-22"
+        completed: "2027-01-22"
     milestone_changes: []
-    comments: "No specific nonconformance is asserted (ASM-023)."
-    sources: [ART-SAR, INT-181.A3, ASM-023]
+    comments: "No specific nonconformance is asserted (ASM-023). R-3: both milestones met; what the results show is not recorded in the run, and FND-022 is closed only by the SAR update of the monitoring cycle (ASM-025)."
+    sources: [ART-SAR, INT-181.A3, ASM-023, INT-194.A1]
   - id: POAM-019
     finding_ref: FND-002
     control_id: au-11
@@ -497,7 +538,7 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "Interim: a CSSP agreement clause for the one-year copy and its return on request; fix: the archive tier in release 1.6."
-    priority: 19
+    priority: 20
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
     status: ongoing
     point_of_contact: PER-ISSM
@@ -506,11 +547,13 @@ items:
     milestones:
       - description: "CSSP agreement amended for the one-year copy and its return on request"
         due: "2027-01-08"
+        completed: "2027-01-08"
       - description: "Archive tier deployed with release 1.6"
         due: "2027-01-15"
+        completed: "2027-01-15"
     milestone_changes: []
-    comments: "The archive tier is in development for release 1.6."
-    sources: [ART-SAR, INT-181.A3, INT-180.A2]
+    comments: "The archive tier is in development for release 1.6. R-3: both milestones met; FND-002 open until the SCA verifies one-year retention."
+    sources: [ART-SAR, INT-181.A3, INT-180.A2, INT-194.A1]
   - id: POAM-020
     finding_ref: FND-012
     control_id: ia-2
@@ -523,20 +566,22 @@ items:
     risk_level: low
     criticality: low
     mitigation_approach: "Risk acceptance: submit the deviation with its compensating measures (sealed keys, two-person opening, alerting on use, review of each use against the seal log within one working day) for the AO's decision."
-    priority: 20
+    priority: 21
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-20"}
-    status: planned
+    status: risk-accepted
     point_of_contact: PER-ISSM
     resources_required: "ISSM time; no funding"
     scheduled_completion: "2027-01-25"
     milestones:
       - description: "Deviation and compensating measures submitted to the AO through the AODR"
         due: "2026-12-18"
+        completed: "2026-12-14"
       - description: "AO decides on accepting the deviation with the authorization"
         due: "2027-01-25"
+        completed: "2027-01-25"
     milestone_changes: []
-    comments: "No fix is planned (conops limitation 5). The status becomes risk-accepted only when the AO accepts the risk (R-3, R-4)."
-    sources: [ART-SAR, INT-181.A4, INT-177.A3, product/conops.md#limitations]
+    comments: "No fix is planned (conops limitation 5). The status becomes risk-accepted only when the AO accepts the risk (R-3, R-4). R-3: submitted in the package of 2026-12-14; RSK-007 response accept, put to the AO. R-4: the AO accepted the deviation in AUTH-001 on 2027-01-25 (INT-198.A3)."
+    sources: [ART-SAR, INT-181.A4, INT-177.A3, product/conops.md#limitations, INT-194.A1, INT-192.A2, INT-198.A3]
   - id: POAM-021
     finding_ref: FND-009
     control_id: cm-8
@@ -546,23 +591,24 @@ items:
     recommended_completion: after-authorization
     severity: low
     residual_risk: low
-    risk_level: low
+    risk_level: moderate
     criticality: low
     mitigation_approach: "Update the inventory at each release, recording which release each environment runs, and confirm it against the production deployment."
-    priority: 21
+    priority: 11
     identified: {event: security-control-assessment, reviewing_organization: "Component independent assessment activity, business systems SCA team", date: "2026-11-23"}
-    status: planned
+    status: ongoing
     point_of_contact: PER-ISSM
     resources_required: "ISSM and ISSO time; no funding"
     scheduled_completion: "2027-02-01"
     milestones:
       - description: "Inventory reviewed and updated at release 1.6"
         due: "2027-01-15"
+        completed: "2027-01-15"
       - description: "Inventory confirmed against the production deployment"
         due: "2027-02-01"
     milestone_changes: []
-    comments: "Checked again at each release in the monitoring cycle."
-    sources: [ART-SAR, INT-181.A3]
+    comments: "Checked again at each release in the monitoring cycle. R-3: risk level raised to moderate with RSK-004 (configuration); the inventory record reflects release 1.6 in the monitoring cycle (ASM-025)."
+    sources: [ART-SAR, INT-181.A3, INT-194.A1, ART-RAR]
   - id: POAM-022
     finding_ref: FND-003
     control_id: ca-2
@@ -608,8 +654,10 @@ items:
     milestones:
       - description: "POA&M items entered in eMASS"
         due: "2026-12-18"
+        completed: "2026-12-18"
       - description: "First monthly POA&M update"
         due: "2027-01-15"
+        completed: "2027-01-15"
       - description: "Assessor verifies the POA&M and its updates at the first ongoing assessment"
         due: "2027-03-31"
     milestone_changes: []
@@ -641,3 +689,4 @@ items:
     milestone_changes: []
     comments: "The annual assessment schedule is POAM-022."
     sources: [ART-SAR, INT-181.A1, INT-181.A3]
+ao_review: {by: PER-AO, reviewed: "2027-01-25", agreed: true}

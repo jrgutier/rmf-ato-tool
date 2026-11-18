@@ -1,0 +1,385 @@
+# artifacts/data/rar.yaml (R-2, updated by R-3; schema rar). Written whole (INV-8). Each risk
+# groups the open findings that share a threat event; level from SP 800-30 Table I-2.
+risks:
+  - id: RSK-001
+    title: "Re-identification of maintainers from exports and the training extract"
+    description: "Threat: anyone holding an export or the training extract and a list of DoD ID numbers (TE-02). Weakness: the unsalted DoD ID hash used as the join key, and a PIA not approved before development (VUL-01, VUL-07). Effect: maintainers named in data treated as de-identified, beyond the SORN and PIA purposes; harm to about 30,000 individuals."
+    likelihood: moderate
+    impact: moderate
+    level: moderate
+    finding_refs: [FND-018, FND-020]
+    poam_refs: [POAM-001, POAM-010]
+    priority: 1
+    response: mitigate
+    residual_level: low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Salted, rotated pseudonyms in release 1.6, a re-identification retest by the privacy-trained assessor, and the PIA approved before any production data (POAM-001, POAM-010)."
+        effectiveness: "Removes the stable join key; residual risk low once retested."
+        feasibility: "In the current contract and release plan."
+        cost: "ERST development already funded; assessor time."
+        mission_impact: "None: qualification joins keep working inside the system."
+        privacy_impact: "Positive: exports become effectively de-identified."
+        selected: true
+        rationale: "Brings the risk to individuals within the low tolerance without losing the mission joins."
+      - id: COA-02
+        response: avoid
+        description: "Drop the DoD ID from every export and the training extract."
+        effectiveness: "Removes the risk from exports."
+        feasibility: "Quick to build."
+        cost: "Low."
+        mission_impact: "Breaks the qualification-coverage analyses that need a per-person join."
+        privacy_impact: "Positive."
+        selected: false
+        rationale: "Mission cost too high when mitigation reaches the same residual level."
+    selected_response:
+      responsible: PER-PM
+      effectiveness_criteria: "Retest re-identifies no maintainer from a list of DoD ID numbers; PIA approved by the Component CIO."
+      dependencies: [POAM-001, POAM-010]
+      timeline: "2027-01-25"
+      monitoring_plan: "Monthly POA&M review by the ISSM; SCA verification at the first ongoing assessment."
+      triggers: ["A failed retest", "Any export found with the unsalted hash", "A new re-identification technique in threat reporting"]
+      interim_measures: "Only synthetic data loaded; exports limited to the analysts and data scientists who need them."
+      informed: [PER-AO, PER-PM, PER-ISSM, PER-PRIV, PER-IO]
+    sources: [INT-186.A1, INT-189.A1, INT-191.A1, ART-RA]
+  - id: RSK-002
+    title: "Exploitation of the unpatched report container"
+    description: "Threat: an adversary with a signed-in session sends a crafted rendering request (TE-03). Weakness: two public high vulnerabilities in example-imagelib past the 30-day flaw remediation time, uncorrected developer test findings (VUL-02). Effect: compromise of CMP-REPORT and the reports it renders."
+    likelihood: moderate
+    impact: moderate
+    level: moderate
+    finding_refs: [FND-019, FND-024, FND-021]
+    poam_refs: [POAM-002, POAM-003, POAM-017]
+    priority: 3
+    response: mitigate
+    residual_level: low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Rebuild the report container on the factory's hardened or patched intermediate image, rescan and retest (POAM-002, POAM-003, POAM-017)."
+        effectiveness: "Removes both high vulnerabilities."
+        feasibility: "Depends on the software factory's image."
+        cost: "Within the current contract."
+        mission_impact: "None."
+        privacy_impact: "None."
+        selected: true
+        rationale: "Fixes the cause; the dependency is tracked with the risk board as a shared portfolio risk."
+      - id: COA-02
+        response: avoid
+        description: "Switch off PDF and slide exports until the container is rebuilt."
+        effectiveness: "Removes the attack path."
+        feasibility: "A configuration switch."
+        cost: "Low."
+        mission_impact: "Squadrons lose their briefing products."
+        privacy_impact: "None."
+        selected: false
+        rationale: "Kept as the fallback if the fix misses the date the AO sets."
+    selected_response:
+      responsible: PER-PM
+      effectiveness_criteria: "Rescan of efras-report shows no high vulnerability."
+      dependencies: [POAM-002, POAM-003, POAM-017, "software factory patched image"]
+      timeline: "2027-02-15"
+      monitoring_plan: "Weekly factory status in the ISSM's roll-up; image scans at every build."
+      triggers: ["The fix misses 2027-02-15", "Exploitation of the library reported in threat feeds"]
+      interim_measures: "Renderer has no outbound access; only signed-in users reach it."
+      informed: [PER-AO, PER-PM, PER-ISSM, PER-RE]
+    sources: [INT-186.A1, INT-187.A1, INT-191.A1, ART-RA]
+  - id: RSK-003
+    title: "Leavers keep access to readiness data and maintainer records"
+    description: "Threat: a departed or transferred maintainer who still holds a CAC, or anyone using that account (TE-09). Weakness: no leaver notification reaches the account manager; only the 35-day inactivity disable and the quarterly review catch it (VUL-10). Effect: unauthorized reading of maintainer PII and readiness data."
+    likelihood: moderate
+    impact: moderate
+    level: moderate
+    finding_refs: [FND-001, FND-017]
+    poam_refs: [POAM-004, POAM-005]
+    priority: 2
+    response: mitigate
+    residual_level: low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Timestamped leaver step on the squadrons' out-processing that reaches the account manager, disable within 24 hours, leaver timing sampled at each quarterly review (POAM-004, POAM-005)."
+        effectiveness: "Closes the gap to one working day."
+        feasibility: "Procedural; squadrons agreed."
+        cost: "Staff time only."
+        mission_impact: "None."
+        privacy_impact: "Positive: limits access to maintainer records to current staff."
+        selected: true
+        rationale: "Cheap and fixes the cause."
+      - id: COA-02
+        response: accept
+        description: "Rely on the 35-day inactivity disable and the quarterly review."
+        effectiveness: "Leaves up to 35 days of access."
+        feasibility: "Already in place."
+        cost: "None."
+        mission_impact: "None."
+        privacy_impact: "Negative: outside the low tolerance for individuals."
+        selected: false
+        rationale: "Outside tolerance."
+    selected_response:
+      responsible: PER-ISSO
+      effectiveness_criteria: "Every sampled leaver disabled within 24 hours of departure."
+      dependencies: [POAM-004, POAM-005]
+      timeline: "2027-01-22"
+      monitoring_plan: "Quarterly account review samples leaver timing; ISSO reports to the ISSM."
+      triggers: ["A sampled leaver disabled late", "An account used after its owner left"]
+      interim_measures: "35-day inactivity disable."
+      informed: [PER-AO, PER-PM, PER-ISSM, PER-PRIV]
+    sources: [INT-186.A1, INT-186.A2, INT-191.A1, ART-RA]
+  - id: RSK-004
+    title: "Insecure or drifting configuration of the database and application containers"
+    description: "Threat: a privileged insider error or an attacker exploiting a weak setting (TE-05, TE-10). Weakness: two open CAT II PostgreSQL STIG settings, no documented secure configuration for the five containers, an inventory not updated at release (VUL-09, VUL-11). Effect: an insecure setting or drift goes unnoticed, weakening audit and database account protection."
+    likelihood: moderate
+    impact: moderate
+    level: moderate
+    finding_refs: [FND-007, FND-013, FND-008, FND-009, STG-001, STG-002]
+    poam_refs: [POAM-006, POAM-007, POAM-008, POAM-021]
+    priority: 4
+    response: mitigate
+    residual_level: low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Two PostgreSQL STIG settings in release 1.6, a documented container baseline approved by the change board with a pipeline check, and the inventory updated at each release (POAM-006, POAM-007, POAM-008, POAM-021)."
+        effectiveness: "Makes drift detectable and closes the open CAT II settings."
+        feasibility: "In release 1.6."
+        cost: "Within the current contract."
+        mission_impact: "None."
+        privacy_impact: "None."
+        selected: true
+        rationale: "Fixes the cause at low cost."
+      - id: COA-02
+        response: accept
+        description: "Rely on signed images and admission control alone."
+        effectiveness: "Leaves configuration drift invisible."
+        feasibility: "Already in place."
+        cost: "None."
+        mission_impact: "None."
+        privacy_impact: "None."
+        selected: false
+        rationale: "Leaves an assessed weakness unaddressed for no saving."
+    selected_response:
+      responsible: PER-PM
+      effectiveness_criteria: "SCA rescan closes STG-001 and STG-002; the container checklist has no open CAT I or CAT II item; inventory matches each environment."
+      dependencies: [POAM-006, POAM-007, POAM-008, POAM-021]
+      timeline: "2027-02-01"
+      monitoring_plan: "Monthly STIG scan and the pipeline check; inventory checked at each release."
+      triggers: ["A new CAT I or CAT II finding", "Drift found by the hourly scan"]
+      interim_measures: "Hourly drift scan of the account; the break-glass database role stays sealed."
+      informed: [PER-AO, PER-PM, PER-ISSM]
+    sources: [INT-186.A2, INT-187.A1, INT-191.A1, ART-RA]
+  - id: RSK-005
+    title: "Regional outage outlasts the recovery objectives"
+    description: "Threat: failure of the cloud region or a managed service (TE-06). Weakness: failover never tested, contingency and incident response plans not approved, no exercise or lessons learned (VUL-05). Effect: daily readiness reporting unavailable beyond its objectives."
+    likelihood: low
+    impact: low
+    level: low
+    finding_refs: [FND-011, FND-010, FND-014, FND-015]
+    poam_refs: [POAM-009, POAM-013, POAM-014, POAM-015]
+    priority: 10
+    response: mitigate
+    residual_level: very-low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Approved and distributed contingency and incident response plans, the combined tabletop and the regional failover test with an after-action report (POAM-009, POAM-013, POAM-014, POAM-015)."
+        effectiveness: "Proves recovery within the objectives."
+        feasibility: "Scheduled and funded in the sustainment line."
+        cost: "An operations weekend and staff time."
+        mission_impact: "A planned failover window."
+        privacy_impact: "None."
+        selected: true
+        adequacy: adequate
+        rationale: "Availability impact is low; this is the standard response."
+    selected_response:
+      responsible: PER-PM
+      effectiveness_criteria: "Failover meets the recovery time and point objectives; after-action items recorded."
+      dependencies: [POAM-009, POAM-015]
+      timeline: "2027-03-01"
+      monitoring_plan: "Monthly POA&M review."
+      triggers: ["The failover test fails or slips past 2027-03-01", "A regional outage"]
+      interim_measures: "Daily snapshots copied to the second region and tested point-in-time restore."
+      informed: [PER-AO, PER-PM, PER-ISSM, PER-IO]
+    sources: [INT-187.A1, INT-191.A1, ART-RA]
+  - id: RSK-006
+    title: "EMIS exchange governed by an interim approval only"
+    description: "Threat: a tampered extract or a breach at either end with no agreed notification (TE-04). Weakness: no signed memorandum of agreement with security, privacy and breach terms (VUL-03). Effect: integrity and breach handling of maintainer PII rest on goodwill."
+    likelihood: low
+    impact: moderate
+    level: low
+    finding_refs: [FND-004]
+    poam_refs: [POAM-011]
+    priority: 6
+    response: mitigate
+    residual_level: very-low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Sign the EFRAS-EMIS memorandum of agreement with security, privacy and breach terms, and keep real EMIS records out until it is signed (POAM-011)."
+        effectiveness: "Agreed responsibilities and breach notification."
+        feasibility: "Depends on the EMIS program's legal review."
+        cost: "Legal review time."
+        mission_impact: "Production readiness views lack maintenance data until signed."
+        privacy_impact: "Positive."
+        selected: true
+        adequacy: adequate
+        rationale: "The channel is already protected; the gap is governance."
+    selected_response:
+      responsible: PER-ISSM
+      effectiveness_criteria: "Memorandum signed by both sides and recorded in the boundary record."
+      dependencies: [POAM-011]
+      timeline: "2027-02-26"
+      monitoring_plan: "Monthly POA&M review."
+      triggers: ["Signature slips past 2027-02-26"]
+      interim_measures: "No real EMIS records ingested; mutual TLS and signed extracts."
+      informed: [PER-AO, PER-PM, PER-IO, PER-PRIV]
+    sources: [INT-187.A1, INT-191.A1, ART-RA]
+  - id: RSK-007
+    title: "Break-glass console accounts authenticate without CAC"
+    description: "Threat: misuse or error with a break-glass account (TE-05). Weakness: two sealed FIDO2 accounts attributed only through the seal log (VUL-04). Effect: privileged console actions not tied to a proofed identity."
+    likelihood: low
+    impact: moderate
+    level: low
+    finding_refs: [FND-012]
+    poam_refs: [POAM-020]
+    priority: 7
+    response: accept
+    residual_level: low
+    courses_of_action:
+      - id: COA-01
+        response: accept
+        description: "Accept the FIDO2 break-glass deviation with its compensating measures (POAM-020)."
+        effectiveness: "Keeps console recovery possible when the broker is down; misuse is detected at once."
+        feasibility: "In place."
+        cost: "None."
+        mission_impact: "Positive: recovery path kept."
+        privacy_impact: "None."
+        selected: true
+        adequacy: adequate
+        rationale: "No fix exists while the console cannot federate without the broker."
+    selected_response:
+      responsible: PER-ISSM
+      effectiveness_criteria: "Every use reviewed against the seal log within one working day; no unexplained use."
+      dependencies: [POAM-020]
+      timeline: "2027-01-25"
+      monitoring_plan: "Alert on every use; monthly roll-up."
+      triggers: ["Any unexplained use", "The provider console gains broker-independent CAC federation"]
+      interim_measures: "Sealed keys, two-person opening, paging of the on-call engineer and the ISSO."
+      informed: [PER-AO, PER-PM, PER-ISSM]
+    sources: [INT-184.A2, INT-191.A1, INT-191.A2, ART-RA]
+  - id: RSK-008
+    title: "Training extract leaves through the sandbox's outbound path"
+    description: "Threat: a data scientist or a malicious package (TE-08). Weakness: the narrowed NAT allow-list is not retested (VUL-08). Effect: maintainer PII in the training extract leaves the boundary."
+    likelihood: low
+    impact: moderate
+    level: low
+    finding_refs: [FND-023]
+    poam_refs: [POAM-016]
+    priority: 5
+    response: mitigate
+    residual_level: very-low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Red team retest of sandbox egress and an automated egress probe (POAM-016)."
+        effectiveness: "Confirms the narrowed allow-list holds."
+        feasibility: "Scheduled."
+        cost: "Red team slot and engineer time."
+        mission_impact: "None."
+        privacy_impact: "Positive."
+        selected: true
+        adequacy: adequate
+        rationale: "The fix is in; only verification is missing."
+    selected_response:
+      responsible: PER-ISSE
+      effectiveness_criteria: "Retest reaches no public destination; the probe alerts on any."
+      dependencies: [POAM-016]
+      timeline: "2027-01-15"
+      monitoring_plan: "Probe results in the monthly roll-up."
+      triggers: ["The probe reaches a public destination"]
+      interim_measures: "Narrowed allow-list of 2026-11-03."
+      informed: [PER-AO, PER-ISSM]
+    sources: [INT-187.A1, INT-191.A1, ART-RA]
+  - id: RSK-009
+    title: "Incidents older than 90 days cannot be reconstructed from program records"
+    description: "Threat: an incident discovered late (TE-07). Weakness: 90-day program audit retention against the one-year requirement (VUL-06). Effect: investigation depends on the CSSP's copy."
+    likelihood: low
+    impact: low
+    level: low
+    finding_refs: [FND-002]
+    poam_refs: [POAM-019]
+    priority: 9
+    response: mitigate
+    residual_level: very-low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "CSSP agreement clause for the one-year copy, then the archive tier in release 1.6 (POAM-019)."
+        effectiveness: "One-year retention under program control."
+        feasibility: "In release 1.6."
+        cost: "Within the current contract."
+        mission_impact: "None."
+        privacy_impact: "None."
+        selected: true
+        adequacy: adequate
+        rationale: "Meets the retention requirement."
+    selected_response:
+      responsible: PER-ISSM
+      effectiveness_criteria: "Audit records retrievable for one year from program storage."
+      dependencies: [POAM-019]
+      timeline: "2027-01-15"
+      monitoring_plan: "Retention checked at the monthly log review."
+      triggers: ["A retrieval older than 90 days fails"]
+      interim_measures: "The CSSP's one-year copy."
+      informed: [PER-AO, PER-ISSM]
+    sources: [INT-187.A1, INT-191.A1, ART-RA]
+  - id: RSK-010
+    title: "Control degradation goes unnoticed before monitoring and recurring assessment start"
+    description: "Threat: any of the threat sources acting on a control that degrades unnoticed (TE-11). Weakness: no ongoing assessment or status reporting yet, no recurring assessment scheduled, no POA&M at assessment, plan approval conditional, REQ-11 and REQ-12 not demonstrated (VUL-12). Effect: weaknesses found late."
+    likelihood: low
+    impact: moderate
+    level: low
+    finding_refs: [FND-003, FND-005, FND-006, FND-016, FND-022]
+    poam_refs: [POAM-022, POAM-023, POAM-024, POAM-012, POAM-018]
+    priority: 8
+    response: mitigate
+    residual_level: very-low
+    courses_of_action:
+      - id: COA-01
+        response: mitigate
+        description: "Start the monitoring cycle after the decision: POA&M in eMASS with monthly updates, the monthly roll-up and quarterly posture report, the annual third of controls, plan approval follow-through and REQ-11 and REQ-12 verified (POAM-012, POAM-018, POAM-022, POAM-023, POAM-024)."
+        effectiveness: "Detects degradation within a month."
+        feasibility: "Staffed and funded in the sustainment line."
+        cost: "ISSM and ISSO time."
+        mission_impact: "None."
+        privacy_impact: "Positive: privacy posture reported quarterly."
+        selected: true
+        adequacy: adequate
+        rationale: "The monitoring strategy is approved; it only needs to start."
+    selected_response:
+      responsible: PER-ISSM
+      effectiveness_criteria: "Monthly roll-ups and the first quarterly report delivered on time."
+      dependencies: [POAM-022, POAM-023, POAM-024]
+      timeline: "2027-04-30"
+      monitoring_plan: "AODR reviews the monthly roll-up."
+      triggers: ["A missed monthly roll-up"]
+      interim_measures: "Scanning, log review, drift checks and account reviews already run."
+      informed: [PER-AO, PER-AODR, PER-PM, PER-ISSM]
+    sources: [INT-187.A1, INT-191.A1, ART-RA]
+overall_risk: moderate
+controls_by_level:
+  very-low: 0
+  low: 13
+  moderate: 10
+  high: 0
+  very-high: 0
+determination:
+  by: PER-AODR
+  date: "2026-12-21"
+  collaborated_with: [PER-CISO, PER-PRIV]
+  technical_advisor: PER-ISSM
+  rests_on: [ART-RA]
+  risk_executive_input: "The software factory's late hardened base image is a shared dependency risk across the portfolio and is to be tracked as such; the 2027-02-01 fielding date is fixed by operational need, and the risk board prefers a conditioned authorization that keeps real maintainer data out until the privacy fixes land over a slipped fielding."
+  sources: [INT-191.A2, INT-188.A1, INT-189.A1, INT-187.A1, INT-190.A1]
+sources: [ART-SAR, ART-POAM, ART-RA, ART-PKG, INT-191.A1, INT-191.A2, INT-192.A1, INT-192.A2]

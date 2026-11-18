@@ -1,0 +1,11 @@
+# artifacts/data/dias.yaml (R-1; schema dias). Written whole (INV-8). The assurance levels the
+# enterprise CAC and identity broker give EFRAS, on which the ia-2 and ia-5 statements rest.
+assurance:
+  identity_proofing: IAL3
+  authentication: AAL3
+  federation: FAL1
+controls: [ia-2, ia-5]
+processes: "IAL3: CAC issuance by the DoD credentialing process (in-person proofing against source documents with biometrics), outside EFRAS. AAL3: CAC PKI certificate on the hardware token with PIN at the enterprise identity broker for every user and engineer; workloads use short-lived workload identity tokens, no long-lived keys. FAL1: the broker's signed SAML/OIDC assertions reach EFRAS over TLS through the egress allow-list and are bound to the session and to every audit event; whether the onboarding profile also encrypts them to EFRAS (FAL2) is not recorded and the ISSO confirms it with the broker."
+compensating_controls:
+  - "Break-glass console accounts (two) authenticate with sealed FIDO2 hardware keys instead of CAC: two-person unsealing, paging of the on-call engineer and the ISSO at every use, full logging, and review of each use against the seal log the next working day (POAM-020, put to the AO for acceptance)."
+sources: [ART-SSP, INT-184.A1, INT-184.A2, INT-123.A5, product/architecture.md#identity]
