@@ -159,6 +159,13 @@ SPACE_SCOPE = ("space-platform", "link")
 SSP_RECORDS = "artifacts/data/ssp-records.yaml"
 
 
+def space_segments(ctx: Context) -> list[str] | None:
+    """The segments of a space NSS the system is part of (categorization.space_segments), or
+    None when it names none. SPCOV-001 and RAPT-001 read them here."""
+    segments = _categorization(ctx).get("space_segments")
+    return [s for s in segments if isinstance(s, str)] if isinstance(segments, list) else None
+
+
 def space_scope(ctx: Context) -> list[RunFinding]:
     """The overlay's scope is the space platform and the link segment interfacing with it, not
     the ground or user segment (its Section 1), and it applies to every space NSS in that scope
@@ -167,8 +174,7 @@ def space_scope(ctx: Context) -> list[RunFinding]:
     cat = _categorization(ctx)
     overlays = [o for o in cat.get("overlays") or () if isinstance(o, str)] \
         if isinstance(cat.get("overlays"), list) else []
-    segments = cat.get("space_segments")
-    segments = [s for s in segments if isinstance(s, str)] if isinstance(segments, list) else None
+    segments = space_segments(ctx)
     records = ctx.data(SSP_RECORDS)
     declared = isinstance(records, dict) and records.get("space_nss") is True
     out: list[RunFinding] = []

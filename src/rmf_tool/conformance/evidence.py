@@ -110,6 +110,8 @@ _ADJACENT = re.compile(r"\"\s*\n\s*f?\"")
 class Verdict:
     strength: str
     message: str = ""
+    # weak only for its presence claim: strong otherwise (the seam freeze_debt group B reads)
+    capped: bool = False
 
 
 @dataclass(frozen=True)
@@ -119,6 +121,8 @@ class Probe:
     framework: Framework
     rules: Mapping[str, Rule]
     sources: Mapping[str, str] = field(default_factory=dict)  # rule ID -> its source text
+    # judge() memo: one validate run asks for the same item's verdict from several rules
+    verdicts: dict[str, Verdict] = field(default_factory=dict, compare=False, repr=False)
 
     @property
     def requires_fields(self) -> frozenset[str]:
@@ -433,12 +437,16 @@ def _deletes(mutation: Mapping[str, Any]) -> bool:
     if op == SET_FIELD:
         return mutation.get("value") in (None, "", [], {})
     if op == REPLACE_TEXT:
-        old = str(mutation.get("old") or "").splitlines()
-        new = [line for line in str(mutation.get("new") or "").splitlines() if line.strip()]
-        # A heading removed or renamed erases the section a template rule reads.
-        if any(line.lstrip().startswith("#") and line not in new for line in old):
+        old = [line.strip() for line in str(mutation.get("old") or "").splitlines()
+               if line.strip()]
+        new = [line.strip() for line in str(mutation.get("new") or "").splitlines()
+               if line.strip()]
+        # A Markdown heading removed or renamed erases the section a template rule reads; in
+        # YAML, JSON or a script a `#` line is a comment, and spacing is no rename.
+        if str(mutation.get("file") or "").endswith(".md") and any(
+                line.startswith("#") and line not in new for line in old):
             return True
-        return all(line in old for line in new) and len(new) < len([o for o in old if o.strip()])
+        return all(line in old for line in new) and len(new) < len(old)
     return False
 
 
@@ -447,23 +455,40 @@ def _deletes(mutation: Mapping[str, Any]) -> bool:
 SCOPE_PATHS = ("scope", "include_after_stop", "seeded", "deferred")
 
 
-def _scaffolding(mutation: Mapping[str, Any]) -> bool:
-    """A mutation that only brings a rule into scope: the run's task list in run.yaml, or a
-    whole record appended (a ledger row) so the rule has something to read. What it refuses is
-    read from the other mutations, the ones that touch the record the rule judges. Any other
-    run.yaml mutation (the clock, the mode, the humans, the entry) is what a rule judges."""
-    if mutation["op"] == APPEND_TEXT:
-        return True
+def _in_scope(mutation: Mapping[str, Any]) -> bool:
+    """The run's task list in run.yaml: it only brings a rule into scope. Any other run.yaml
+    mutation (the clock, the mode, the humans, the entry) is what a rule judges."""
     return mutation.get("file") == "run.yaml" and str(mutation.get("path") or "").startswith(
         SCOPE_PATHS)
 
 
+def _changes(mutations: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    """The mutations of one base that touch the record a rule judges. The task list is
+    scaffolding, and so is a whole record appended (a ledger row) so the rule has something to
+    read, but only beside another change to a different file: an appended row that is the only
+    change, or lands in the file another change edits, can carry the wrong value the rule
+    refuses, and stays."""
+    kept = [m for m in mutations if not _in_scope(m)]
+    edited = {m.get("file") for m in kept if m["op"] != APPEND_TEXT}
+    return [m for m in kept if m["op"] != APPEND_TEXT or not edited
+            or m.get("file") in edited]
+
+
+def _per_base(spec: Mapping[str, Any]) -> Iterator[list[Mapping[str, Any]]]:
+    """The mutations each base of a fixture applies (a mutation's ``only`` names its bases)."""
+    mutations = list(spec.get("mutations") or ())
+    named = {b for m in mutations for b in m.get("only") or ()}
+    bases = list(spec.get("bases") or ()) or sorted(named) or [None]
+    for base in bases:
+        yield [m for m in mutations if not m.get("only") or base in m["only"]]
+
+
 def rule_claim(spec: Mapping[str, Any], source: str, expect: str) -> str:
     """What a rule item can refuse, read from its fixture and clause: a fixture that only deletes
-    and a clause that only tests absence refuse silence, not a wrong value. With no clause to
-    read, nothing shows a wrong value is refused."""
-    mutations = [m for m in spec.get("mutations") or () if not _scaffolding(m)]
-    if mutations and all(_deletes(m) for m in mutations):
+    (in any base: the rule then refuses silence, whatever else it refuses) and a clause that only
+    tests absence refuse silence, not a wrong value. With no clause to read, nothing shows a
+    wrong value is refused."""
+    if any(c and all(_deletes(m) for m in c) for c in map(_changes, _per_base(spec))):
         return PRESENCE
     clauses = failing_clauses(source, expect)
     plain = _plain_reads(source)
@@ -776,7 +801,7 @@ def _verdict(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) ->
     verdict = JUDGES[item["kind"]](probe, item, entry)
     if verdict.strength == STRONG and item.get("claim") == PRESENCE \
             and entry.get("kind") != TABLE_KIND:
-        return Verdict(WEAK, f"{item['target']}{PRESENCE_CAP}")
+        return Verdict(WEAK, f"{item['target']}{PRESENCE_CAP}", capped=True)
     return verdict
 
 
@@ -784,10 +809,19 @@ def presence_capped(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, A
     """Whether an item would judge strong but for its presence claim: the cap group B of
     ``freeze_debt`` rests on. An optional parent, a pin or a bare rule item is weak for another
     reason, so it is not."""
-    return judge(probe, item, entry).message.endswith(PRESENCE_CAP)
+    return judge(probe, item, entry).capped
 
 
 def judge(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) -> Verdict:
+    """An item's verdict, memoized on the probe: FW-REQ-003 and FW-REQ-004 judge one item
+    more than once in a run. Keyed by content, so an edited item or entry is judged again."""
+    key = json.dumps([item, entry], sort_keys=True, default=str)
+    if key not in probe.verdicts:
+        probe.verdicts[key] = _judge(probe, item, entry)
+    return probe.verdicts[key]
+
+
+def _judge(probe: Probe, item: Mapping[str, Any], entry: Mapping[str, Any]) -> Verdict:
     verdict = _verdict(probe, item, entry)
     if verdict.strength != STRONG:
         return verdict
