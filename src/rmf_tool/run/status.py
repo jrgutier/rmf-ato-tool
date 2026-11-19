@@ -105,7 +105,11 @@ def _artifact_problems(run: Run, task: str) -> list[str]:
         if not md.is_file():
             problems.append(f"{shown} missing ({run.rel(md)})")
             continue
-        data: Any = frontmatter.parse(md.read_text(encoding="utf-8")).data or {}
+        try:
+            text = md.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):  # RUN-FM-001 reports it; nothing is recorded
+            text = ""
+        data: Any = frontmatter.parse(text).data or {}
         if task not in (data.get("touched_by") or []):
             problems.append(f"{aid} touched_by does not list {task}")
         if art.get("producer") == task and data.get("produced_by_task") != task:

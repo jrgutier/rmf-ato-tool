@@ -35,16 +35,23 @@ class SeedNeed:
 
 
 def scope_tasks(run: Run) -> set[str]:
-    tasks = (run.config.get("scope") or {}).get("tasks", "all")
-    return set(run.tasks) if tasks == "all" else {t for t in tasks or [] if t in run.tasks}
+    """run.yaml of the wrong shape (RUN-CFG-001 reports it) reads as what it does say: a scope
+    that is no mapping is the default, a task list that is no list names no task."""
+    scope = run.config.get("scope")
+    tasks = scope.get("tasks", "all") if isinstance(scope, dict) else "all"
+    if tasks == "all":
+        return set(run.tasks)
+    return {t for t in (tasks if isinstance(tasks, list) else [])
+            if isinstance(t, str) and t in run.tasks}
 
 
 def task_scopes(run: Run) -> dict[str, TaskScope]:
     in_scope = scope_tasks(run)
-    explicit: dict[str, Any] = run.config.get("deferred") or {}
+    deferred, after = run.config.get("deferred"), run.config.get("include_after_stop")
+    explicit: dict[str, Any] = deferred if isinstance(deferred, dict) else {}
     stop = run.config.get("lifecycle_stop")
-    include = set(run.config.get("include_after_stop") or [])
-    stop_at = run.position.get(stop) if stop else None
+    include = {t for t in (after if isinstance(after, list) else []) if isinstance(t, str)}
+    stop_at = run.position.get(stop) if isinstance(stop, str) else None
     out: dict[str, TaskScope] = {}
     for t in run.order:
         if t not in in_scope:
@@ -65,7 +72,8 @@ def active_tasks(run: Run) -> list[str]:
 
 
 def seeded(run: Run) -> list[dict[str, Any]]:
-    return [s for s in run.config.get("seeded") or [] if isinstance(s, dict)]
+    listed = run.config.get("seeded")
+    return [s for s in (listed if isinstance(listed, list) else []) if isinstance(s, dict)]
 
 
 def seed_needs(run: Run) -> list[SeedNeed]:

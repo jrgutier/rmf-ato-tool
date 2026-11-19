@@ -257,6 +257,8 @@ def new_workspace(directory: Path, slug: str, repo: Path, mode: str = "synthetic
         if not src.is_file() or src.name.startswith("."):
             continue
         dest = product / src.relative_to(source)
+        if dest.exists():
+            continue  # --force reuses product/: a file the fork already filled in stays
         dest.parent.mkdir(parents=True, exist_ok=True)
         try:
             dest.write_text(_render(src.read_text(encoding="utf-8"), slug=slug),

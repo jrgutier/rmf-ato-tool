@@ -37,6 +37,11 @@ class StepResult:
     findings: list[Finding] = field(default_factory=list)
     output: str = ""
 
+    @property
+    def skipped(self) -> bool:
+        """The step stood down for this profile and says so; it judged nothing."""
+        return self.ok and not self.findings and " skipped (" in self.output
+
 
 @dataclass(frozen=True)
 class Context:

@@ -131,7 +131,7 @@ def write_check(run: Run, data: dict[str, Any], selection: str) -> None:
 
 def _journal_counts(run: Run) -> dict[str, int]:
     path = run.path(JOURNAL_FILE)
-    text = path.read_text(encoding="utf-8") if path.is_file() else ""
+    text = path.read_text(encoding="utf-8", errors="replace") if path.is_file() else ""
     heads = [line for line in text.splitlines() if line.startswith("## ")]
     return {"checkpoints": sum(" · CHECKPOINT · " in h for h in heads),
             "retries": sum(" · RETRY · " in h for h in heads),

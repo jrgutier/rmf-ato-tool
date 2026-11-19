@@ -161,7 +161,7 @@ def ci(
             "ok": ok,
             "tests": not no_tests,
             "steps": [
-                {"name": r.name, "rules": list(r.rules), "ok": r.ok,
+                {"name": r.name, "rules": list(r.rules), "ok": r.ok, "skipped": r.skipped,
                  "findings": report(r.findings, list(r.rules))["findings"], "output": r.output}
                 for r in results
             ],
@@ -172,7 +172,11 @@ def ci(
                 console.print(f.render(), markup=False)
         for r in results:
             label = f"{r.name} ({', '.join(r.rules)})" if r.rules else r.name
-            console.print(f"{'PASS' if r.ok else 'FAIL'}  {label}", markup=False)
+            verdict = "SKIP" if r.skipped else "PASS" if r.ok else "FAIL"
+            # a step's own note (why it was skipped, what is stale) is its only explanation
+            note = f": {r.output.strip()}" if r.output.strip() and (r.skipped or not r.ok) \
+                else ""
+            console.print(f"{verdict}  {label}{note}", markup=False)
     raise typer.Exit(EXIT_OK if ok else EXIT_VIOLATIONS)
 
 
@@ -883,12 +887,18 @@ def build(run: RunArg = None) -> None:
     package/manifest.yaml when present. Run it before every `rmf check` (INV-6)."""
     from rmf_tool import assemble as assemble_mod
     from rmf_tool import build as build_mod
+    from rmf_tool.run.model import YamlError
 
     r = _open(run)
     try:
         changed, notes = build_mod.build(r)
     except assemble_mod.AssembleError as exc:
         typer.echo(str(exc), err=True)
+        raise typer.Exit(EXIT_VIOLATIONS) from exc
+    except (YamlError, UnicodeDecodeError) as exc:
+        # a run file that is not readable text: `rmf check` names it (RUN-FM-001)
+        typer.echo(f"cannot build: a run file is unreadable ({exc}); `rmf check` names it",
+                   err=True)
         raise typer.Exit(EXIT_VIOLATIONS) from exc
     _changed(changed, "wrote")
     for rel, why in notes.items():

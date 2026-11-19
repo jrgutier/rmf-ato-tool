@@ -28,7 +28,7 @@ from rmf_tool.oscal.common import (
 from rmf_tool.oscal.uuids import uuid_for
 from rmf_tool.run import facts as facts_mod
 from rmf_tool.run import frontmatter
-from rmf_tool.run.model import OSCAL_DIR, Run
+from rmf_tool.run.model import OSCAL_DIR, Run, YamlError
 from rmf_tool.run.trace import HEADING, PROSE, strip_generated
 
 __all__ = ["RMF_NS", "NotBuildable", "PROFILE_FILE", "SSP_FILE", "build_profile", "build_ssp"]
@@ -184,9 +184,13 @@ def build_ssp(run: Run) -> str:
     org = run.path("artifacts/data/org-context.yaml")
     registered = {}  # PRV-## -> name: an OSCAL party carries the provider's name (F-04-1)
     if org.is_file():
-        data = run.data("artifacts/data/org-context.yaml")
+        try:
+            data = run.data("artifacts/data/org-context.yaml")
+        except YamlError:  # RUN-FM-001 reports it; the SSP then shows the PRV IDs as they are
+            data = None
+        providers = data.get("providers") if isinstance(data, dict) else None
         registered = {str(p["id"]): str(p.get("name") or p["id"])
-                      for p in (data.get("providers") or [] if isinstance(data, dict) else [])
+                      for p in (providers if isinstance(providers, list) else [])
                       if isinstance(p, dict) and "id" in p}
     for la in (leveraged or {}).get("leveraged_authorizations", []):
         parties.append({"uuid": uuid_for(sid, "ssp", f"party/{la['id']}"),

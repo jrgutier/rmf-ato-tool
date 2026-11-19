@@ -911,7 +911,8 @@ def _original(i: dict[str, Any], frozen: dict[str, Any], err: Err) -> None:
         err(f"{iid}: the scheduled completion date should not be changed, from "
             f"{first.get('scheduled_completion')} to {i.get('scheduled_completion')}")
     now = {m.get("description"): m.get("due") for m in _records(i, "milestones")}
-    for description, due in (first.get("milestones") or {}).items():
+    milestones = first.get("milestones")
+    for description, due in (milestones if isinstance(milestones, dict) else {}).items():
         if now.get(description) != due:
             err(f"{iid}: the initial milestone {description!r} and its completion date {due} "
                 "should not be changed; record it in milestone_changes")
@@ -941,7 +942,11 @@ def poam_dates_kept(ctx: Context) -> list[RunFinding]:
     if items is None:
         return []
     out, err = _reporter("ASMT-010", POAM_FILE)
-    frozen, latest = poam_dates.load(ctx.run), _latest(ctx)
+    (frozen, unreadable), latest = poam_dates.read(ctx.run), _latest(ctx)
+    if unreadable is not None:
+        err(f"{poam_dates.ORIGINAL_FILE} cannot be read ({unreadable}), so no original date "
+            "can be shown unchanged; restore the file from version control, `rmf build` does "
+            "not rewrite it")
     for i in items:
         iid = i.get("id")
         _original(i, frozen, err)

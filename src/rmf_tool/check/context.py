@@ -28,7 +28,8 @@ class Context:
     def processes_pii(self) -> bool:
         data = self.data("artifacts/data/infotypes.yaml")
         items = data.get("information_types") if isinstance(data, dict) else None
-        return any(i.get("privacy") is True for i in items or ())
+        return any(isinstance(i, dict) and i.get("privacy") is True
+                   for i in (items if isinstance(items, list) else ()))
 
     @cached_property
     def interviews(self) -> list[interviews.Interview]:
@@ -43,7 +44,13 @@ class Context:
         """Every artifacts/*.md, parsed."""
         out = {}
         for path in sorted((self.run.dir / ARTIFACTS_DIR).glob("*.md")):
-            out[self.run.rel(path)] = frontmatter.parse(path.read_text(encoding="utf-8"))
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError) as exc:  # RUN-FM-001 reports the document
+                out[self.run.rel(path)] = frontmatter.Document(
+                    None, f"cannot read as UTF-8 text: {exc}", "", 1)
+                continue
+            out[self.run.rel(path)] = frontmatter.parse(text)
         return out
 
     @cached_property

@@ -228,7 +228,10 @@ def fetch_entry(client: httpx.Client, root: Path, entry: Any, *, accept_new: boo
             tmp.unlink(missing_ok=True)
         result.log = log
         return result
-    entry["status"] = "manual-required"
+    # A download that failed says nothing about the pinned file: one that is on disk with its
+    # pinned SHA-256 keeps its status, so an outage does not rewrite a healthy index entry.
+    if not is_present(root, entry):
+        entry["status"] = "manual-required"
     return Result(entry["id"], "manual-required", "; ".join(errors) or "no URLs", log)
 
 
