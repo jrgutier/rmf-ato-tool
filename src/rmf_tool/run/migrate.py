@@ -105,11 +105,17 @@ def migrate_providers(run: Run) -> list[str]:
     if added:
         text = texts.get(ORG_CONTEXT, org_path.read_text(encoding="utf-8"))
         rows = "".join(f"  - {{id: {pid}, name: {json.dumps(n)}}}\n" for pid, n in added)
-        if registry:
-            text = re.sub(r"^providers:[^\n]*\n((?:[ \t-].*\n)*)",
+        if not text.endswith("\n"):
+            text += "\n"
+        if org.get("providers"):  # a block list: the rows go after its last item
+            text = re.sub(r"^providers:[^\n]*\n((?:[ \t-].*\n|\n(?=[ \t-]))*)",
                           lambda m: m.group(0) + rows, text, count=1, flags=re.M)
+        elif "providers" in org:  # `providers: []` or an empty key: the rows replace its value
+            text = re.sub(r"^providers:[ \t]*(?:\[[ \t]*\]|null|~)?[ \t]*(#[^\n]*)?\n",
+                          lambda m: "providers:" + (f"  {m.group(1)}" if m.group(1) else "")
+                          + "\n" + rows, text, count=1, flags=re.M)
         else:
-            text = text.rstrip("\n") + "\nproviders:\n" + rows
+            text += "providers:\n" + rows
         texts[ORG_CONTEXT] = text
     for name, text in sorted(texts.items()):
         run.path(name).write_text(text, encoding="utf-8")
@@ -124,11 +130,9 @@ def migrate_providers(run: Run) -> list[str]:
 def migrate(run: Run) -> list[str]:
     """Convert the run; return one line per change."""
     version = str(read_yaml(run.repo / FRAMEWORK_DIR / META_FILE)["framework_version"])
-    providers = migrate_providers(run) if version_key(run.contract) >= version_key("0.2.0") \
-        else []
     if version_key(run.contract) >= version_key(version):
-        return [*providers, f"{run.dir.name}: already on contract {run.contract}"]
-    lines = list(providers)
+        return [*migrate_providers(run), f"{run.dir.name}: already on contract {run.contract}"]
+    lines: list[str] = []
     records = []
     legacy, target = run.path(ledger.LEGACY_FILE), run.path(ledger.LEDGER_FILE)
     if legacy.is_file():
@@ -160,5 +164,7 @@ def migrate(run: Run) -> list[str]:
         lines.append(f"removed {ledger.LEGACY_FILE}")
     _bump(run, version)
     lines.append(f"run.yaml: framework_version {run.contract} -> {version}")
+    # in the same pass: a run brought up from the old contract must not need a second call
+    lines += migrate_providers(run)
     lines.append("next: uv run rmf build, then uv run rmf check, and fill what it reports")
     return lines

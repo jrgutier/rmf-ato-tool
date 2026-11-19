@@ -17,13 +17,25 @@ SINCE = "0.2.0"
 A6_CHECKPOINT = "CHECKPOINT · task A-6"
 
 
-def load(run: Run) -> dict[str, Any]:
+def read(run: Run) -> tuple[dict[str, Any], str | None]:
+    """(the frozen dates, why the file cannot be read). A file that exists but does not hold
+    ``items`` as a mapping is a problem, never an empty record: reading it as empty would let
+    the next build freeze today's dates over the original ones."""
     path = run.path(ORIGINAL_FILE)
+    if not path.is_file():
+        return {}, None
     try:
-        data = read_yaml(path) if path.is_file() else None
-    except YamlError:
-        return {}
-    return data.get("items") or {} if isinstance(data, dict) else {}
+        data = read_yaml(path)
+    except YamlError as exc:
+        return {}, str(exc)
+    items = data.get("items") if isinstance(data, dict) else None
+    if not isinstance(items, dict):
+        return {}, "expected a mapping `items` of POA&M item IDs"
+    return items, None
+
+
+def load(run: Run) -> dict[str, Any]:
+    return read(run)[0]
 
 
 def _dates(item: dict[str, Any]) -> dict[str, Any]:
@@ -33,18 +45,27 @@ def _dates(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def freeze(run: Run) -> str | None:
-    """The file with any new item added, or None when nothing is to be frozen yet."""
+    """The file with any new item added, or None when nothing is to be frozen yet or the
+    record or the POA&M cannot be read: an unreadable record is left as it is for the person to
+    restore (ASMT-010 reports it), not rewritten from the current dates."""
     journal = run.path("journal.md")
     if not run.holds(SINCE) or not run.path(POAM_FILE).is_file() or not journal.is_file():
         return None
-    if A6_CHECKPOINT not in journal.read_text(encoding="utf-8"):
+    if A6_CHECKPOINT not in journal.read_text(encoding="utf-8", errors="replace"):
         return None
-    data = run.data(POAM_FILE)
+    known, problem = read(run)
+    if problem is not None:
+        return None
+    try:
+        data = run.data(POAM_FILE)
+    except YamlError:
+        return None
     items = data.get("items") if isinstance(data, dict) else None
-    frozen = dict(load(run))
-    for item in items or ():
-        if isinstance(item, dict) and item.get("id") not in frozen:
-            frozen[item.get("id")] = _dates(item)
+    frozen = dict(known)
+    for item in items if isinstance(items, list) else ():
+        if isinstance(item, dict) and isinstance(item.get("id"), str) \
+                and item["id"] not in frozen:
+            frozen[item["id"]] = _dates(item)
     yaml = YAML()
     yaml.default_flow_style = False
     buf = io.StringIO()

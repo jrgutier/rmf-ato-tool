@@ -17,8 +17,8 @@ from dataclasses import dataclass
 
 from rmf_tool.check import rules_by_id
 from rmf_tool.check.context import Context
-from rmf_tool.check.findings import RunFinding
-from rmf_tool.check.rules import IMPLEMENTED, JOURNAL_RULE, RULES, UNFILTERED
+from rmf_tool.check.findings import RunFinding, make
+from rmf_tool.check.rules import IMPLEMENTED, JOURNAL_RULE, RULES, UNFILTERED, Rule
 from rmf_tool.check.rules.journal import journal
 from rmf_tool.findings import Finding
 from rmf_tool.run import status as status_mod
@@ -44,15 +44,33 @@ def _owned(ctx: Context, f: RunFinding) -> RunFinding:
     return RunFinding(f.finding, frozenset(owners), f.family, f.run_wide)
 
 
+# What a rule raises when run data has a value of the wrong type (a string where a mapping
+# belongs, a mapping used as an ID) or a file that is not text. The schema error is RUN-FM-001's
+# to report; the rule that could not read past it must not end the check with a traceback.
+UNREADABLE = (TypeError, AttributeError, KeyError, IndexError, ValueError)
+SHAPE_RULE = "RUN-FM-001"
+
+
+def _judged(ctx: Context, rid: str, rule: Rule) -> list[RunFinding]:
+    """The rule's findings, or one run-wide error when the run's data stopped it."""
+    try:
+        return rule(ctx)
+    except UNREADABLE as exc:
+        return [make(SHAPE_RULE, f"{rid} could not judge the run: its data has a value of the "
+                     f"wrong type or an unreadable file ({type(exc).__name__}: "
+                     f"{' '.join(str(exc).split())[:160]}); fix the schema errors reported "
+                     "here, then check again", run_wide=True)]
+
+
 def evaluate(run: Run) -> Evaluation:
     ctx = Context(run)
     registry = rules_by_id()
     if unlisted := sorted(set(RULES) - set(registry)):
         raise ValueError(f"rule(s) with no entry in registry.yaml: {', '.join(unlisted)}")
     findings = [_owned(ctx, f) for rid, rule in RULES.items() if run.holds(registry[rid].since)
-                for f in rule(ctx)]
+                for f in _judged(ctx, rid, rule)]
     st = status_mod.derive(run, findings)
-    findings += journal(ctx, st.done_tasks)
+    findings += _judged(ctx, JOURNAL_RULE, lambda c: journal(c, st.done_tasks))
     findings.sort(key=lambda f: (f.finding.path or "", f.finding.line or 0, f.rule,
                                  f.finding.message))
     return Evaluation(findings, st)

@@ -49,7 +49,8 @@ def write_output(run: Run, rel: str, text: str | None) -> bool:
             path.unlink()
             return True
         return False
-    if path.is_file() and path.read_text(encoding="utf-8") == text:
+    # compared as bytes: a generated file that is no longer text is rewritten, not a crash
+    if path.is_file() and path.read_bytes() == text.encode("utf-8"):
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
